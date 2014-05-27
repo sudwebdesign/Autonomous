@@ -1,0 +1,22 @@
+<present: />
+<?php
+use model\R;
+ob_implicit_flush(true);
+ob_end_flush();
+
+if(isset($_GET['clean']))
+	R::nuke();
+
+print "<pre>Schema :\r\n";
+foreach(glob('model/schema.*.php') as $inc){
+	$name = substr(basename($inc),7,-4);
+	print "$name :\r\n";
+	$schema = include($inc);
+	print_r($schema);
+	foreach((array)$clean as $wipe)
+		R::wipe($wipe);
+	R::storeMulti($schema);
+	print "\r\n\r\n";
+}
+print '</pre>';
+?>

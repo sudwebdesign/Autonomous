@@ -1,0 +1,118 @@
+@media (min-width: 768px){
+	body > nav >a{
+		display: none;
+	}
+	body>nav ul-dropdown{
+		>li>ul{
+			position: absolute;
+			>li>a{
+				color: #333;
+			}
+		}
+		&,
+		&.collapse {
+			display: block;
+			overflow: visible;
+			border: none;
+			display: block;
+			width: auto;
+		}
+		> li {
+			float: left;
+			height:100%;
+			border-left: 1px solid #4A4A4A;
+			border-right: 1px solid #292929;
+			width: auto;
+			margin-bottom: 0;
+			text-align: center;
+			width:#{(100%/7)};
+			> a{
+				color: #888;
+				&:hover {
+					color: #ccc;
+				}
+				&::before{
+					display: block;
+					padding-bottom: 0.2em;
+					padding-top: 0.4em;
+				}
+			}
+			>ul{
+				width: auto;
+				position: absolute;
+				background-color: #fff;
+				border: 1px solid #ccc; // IE8 fallback
+				border: 1px solid rgba(0,0,0,.15);
+				border-radius: 4px;
+				@include box-shadow(0 6px 12px rgba(0,0,0,.175));
+				&::before,
+				&::after {
+					display: inline-block;
+				}
+				
+			}
+		}				
+	}
+}
+
+body>nav>ul-dropdown>li{
+	@include box-sizing();
+	>a{
+		overflow:hidden;
+	}
+}
+<?global $screens;?>
+<?foreach($screens as $screen):?>
+	<?
+		if($screen<768)
+			continue;
+		$fs = round($screen/60);
+	?>
+	@media(min-width: <?=$screen?>px){
+		body>nav{
+			ul-dropdown{
+				>li{
+					padding-bottom:<?=$fs-10?>px;
+					>a{
+						font-size: <?=$fs?>px;
+						&::before{
+							font-size: <?=$fs+10?>px;
+						}
+					}
+				}
+			}
+			ul{
+				>li>a{
+					font-size: <?=$fs-1?>px;
+				}
+			}
+		}
+	}
+<?endforeach;?>
+
+@media screen and (min-width: 896px) and (min-height:600px) {
+	body>main{
+	    padding-bottom: 4em;
+		>article {
+			float: left;
+			margin-left: 27.5%;
+			width: 45%;
+			p{
+				padding: 0 1em;
+			}
+		}
+		>aside {
+			float: left;
+			margin-left: -72.5%;
+			width: 26%;
+		}
+		>aside+aside {
+			float: right;
+		}
+	}
+	footer {
+	    display: block;
+	    position: fixed;
+	    bottom:0;
+    }
+}

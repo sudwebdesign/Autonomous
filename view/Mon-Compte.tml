@@ -1,0 +1,50 @@
+<extend>
+	<div id="main">
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="col-md-12">
+					<div class="widget stacked">
+						<div class="widget-header">
+							<i class="icon-th"></i>
+							<h3>Mon Compte</h3>
+						</div> <!-- /.widget-header -->
+						<div class="widget-content">		
+							<form action="<?=view::param(0)?>" method="POST" enctype="multipart/form-data" role="form" class="form-horizontal col-md-12">
+								<div class="form-group ">
+									<label class="col-md-4">Email</label>
+									<div class="col-md-8">
+										<input type="email" name="email" class="form-control" value="" required="" />
+									</div>
+								</div><!-- /.form-group -->
+								<div class="form-group ">
+									<label class="col-md-4">Site Web</label>
+									<div class="col-md-8">
+										<input type="url" name="url" class="form-control" value="">
+									</div>
+								</div><!-- /.form-group -->
+								<div class="form-group ">
+									<label class="col-md-4">Téléphone</label>
+									<div class="col-md-8">
+										<input type="tel" name="tel" class="form-control" maxlength="20" value="">
+									</div>
+								</div><!-- /.form-group -->
+								<div class="form-group ">
+									<label class="col-md-4">Personne physique ou morale</label>
+									<div class="col-md-8">
+										<select name="entite" class="form-control" db-cast="enum">
+											<option value="Association">Association</option>
+											<option value="Collectivité">Collectivité</option>
+											<option value="Collectivité">Particulier</option>
+											<option value="Collectivité">Pro</option>
+										</select>
+									</div>
+								</div><!-- /.form-group -->
+
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</extend>

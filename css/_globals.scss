@@ -1,5 +1,5 @@
 <?
-global $img,$resolutions;
+global $img,$resolutions,$screens;
 if(!isset($img))
 	$img = '../img/';
 if(!isset($resolutions))

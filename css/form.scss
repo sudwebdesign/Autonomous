@@ -1,0 +1,28 @@
+@import 'jquery-ui/core';
+@import 'jquery-ui/autocomplete';
+@import 'jquery-ui/datepicker';
+@import "jquery-ui/timepicker";
+@import "jquery-ui/themes/sunny";
+@import "jquery-ui/theme";
+@import "form-dom";
+
+body>main>form{
+	>fieldset{
+		@?include grid( *, 100 );
+		@?include grid( 4-24-2 , 2-64-4, 768px );
+		margin-top:0.5em;
+		margin-bottom:0.5em;
+		padding-bottom:1em;
+		padding-top:1em;
+		padding-left:1em;
+		padding-right:1em;
+	}
+	label>*{
+		float:left;
+	}
+	&#evenement{
+		>h1{
+			@?include icon(calendar);
+		}
+	}
+}

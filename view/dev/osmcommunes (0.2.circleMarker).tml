@@ -1,0 +1,84 @@
+<P: />
+<extend>
+	<append selector="head">
+		<link href="apt/portal/jquery-ui-1.10.0.custom.css" rel="stylesheet" media="screen"/>
+		<link href="apt/leaflet/leaflet.css" rel="stylesheet" media="screen"/>
+		<link href="apt/portal/plugins/lightbox/themes/white-green/jquery.lightbox.css" rel="stylesheet" media="screen"/>
+		<script src="apt/portal/plugins/lightbox/jquery.lightbox.min.js"></script>
+		<script src="apt/portal/jquery-ui-1.10.0.custom.min.js"></script>
+		<script src="../apt/leaflet/leaflet.js" ></script>
+		<script>$(function(){
+			$('a.lightbox-type').lightbox({
+					imagePath:'apt/portal/plugins/lightbox/themes/white-green/images'
+			});
+		});
+		</script>
+	</append>
+	<title>essais leaflet popup1</title>
+	<write selector="#main">
+
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="col-md-12">
+					<div class="widget stacked">
+						<div class="widget-header">		
+							<i class="icon-picture"></i>							
+							<h3>Open Street Map with leaflet.js</h3>						
+						</div> <!-- /.widget-header -->
+						<div class="widget-content">	
+										<h3>test communes</h3>
+										<div id="map" style="height: 640px; width: 100%;"></div>
+										<?php //var_export($communesByDefDptGeo);exit;?>
+											<foreach e="$communesByDefDptGeo">
+												<?php //var_export($val);exit; ?>
+												<h4> key: <?=$key?>: label: <?=$val['label']?>, lat: <?=$val['lat']?>, lon: <?=$val['lon']?>, CP: <?=$val['code']?></h4>
+											</foreach>
+						</div> <!-- /.widget-content -->	
+					</div> <!-- /.widget -->
+				</div> <!-- /col-md-12 -->
+			</div> <!-- /row -->
+		</div> <!-- /container -->	
+		
+<?='<script>'?>		
+var geosmjsonFeatures = {
+    "type": "FeatureCollection",
+    "features": [		
+<foreach e="$communesByDefDptGeo">		
+			{
+				"geometry": {
+					"type": "Point",
+					"coordinates": ['<?=$val['lat']?>', '<?=$val['lon']?>']
+				},
+				"type": "Feature",
+				"properties": {
+					"popupContent": "<?=$val['label']?>"
+				},
+				"id": '<?=$key?>'
+			},
+</foreach>			
+		]
+	};
+	
+	var map = L.map('map').setView([42.6, 2.5], 10);
+	//L.tileLayer('http://otile1.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png', {//https://wiki.openstreetmap.org/wiki/Tiles
+	L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		attribution: 'Map data © OpenStreetMap.org',
+		maxZoom: 18
+	}).addTo(map);
+
+	function onEachFeature(feature, layer) {
+		var popupContent = feature.properties.popupContent;
+		layer.bindPopup(popupContent);
+	}	
+	L.geoJson(geosmjsonFeatures, {
+		style: function (feature) {return feature.properties && feature.properties.style;},
+		onEachFeature: onEachFeature /**/,
+		pointToLayer: function (feature, latlng) {return L.circleMarker(latlng, {radius: 7,fillColor: "#ff7800",color: "#000",weight: 1,opacity: 1,fillOpacity: 0.8});}
+	}).addTo(map);
+	
+	
+<?='</script>'?>		
+		
+			
+	</write>
+</extend>

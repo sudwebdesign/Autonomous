@@ -1,0 +1,17 @@
+<extend>
+<div id="main">
+	<!-- new version inspiré par http://nicolahibbert.com/form-widgets-jquery-ui/ -->
+	<form action="Contact" class="contact-form">		
+		<fieldset>
+			<legend>Formulaire de contact:</legend>
+			<p style="padding-top: 25px"><label class="contact" for="email">Courriel</label><input id="email" name="email" type="email" /></p>
+			<p><label for="telephone">Téléphone</label><input id="phone" name="phone" type="tel" /></p>
+			<p><label for="name">Nom</label><input id="name" name="name" type="text" /></p>
+			<p><label for="message">Message</label><textarea class="" id="message" name="message" rows="5"></textarea></p>
+			<!-- <label for="message">Message</label><div class="contact-message-editor"><textarea id="message" name="message" rows="5"></textarea></div> -->
+			<input type="submit" name="titre" class="required" value="Envoyer le message" />
+		</fieldset>	
+	</form>
+	<link rel="stylesheet" type="text/css" href="theme/contact.css" media="screen">
+</div>
+</extend>

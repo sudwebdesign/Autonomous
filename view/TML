@@ -2,7 +2,7 @@
 <html lang="fr">
   <head>
     <meta charset="utf-8">
-    <title><?=$u=view::param(0)?$u.' - ':''?>Surikat Framework - &copy; wildSurikat.com</title>
+    <title><?=$title?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
 	<base href="http://<?=$_SERVER['SERVER_NAME']?>/">
@@ -10,20 +10,72 @@
   </head>
 <body>
 	<header>
-		
+		<a href="" title="Accueil"><img src="img/udac.png" alt="L'UDAC 66" /></a>
+		<form role="search">
+			<input type="search" placeholder="Rechercher">
+		</form>
+		<ul-dropdown>
+			<li>
+				<a href="javascript:;" class="login">Se connecter</a>
+			</li>
+		</ul-dropdown>
 	</header>
 	<nav>
-		
+		<a href="#" onclick="return false;" is="collapser">Menu Principal</a>
+		<ul-dropdown>
+			<li>
+				<a href="Evenements">Évènements</a>
+				<ul>
+					<foreach e="$taxonomyEvenements as $key=>$val">
+						<li><a href="Evenements|<?=$val?>"><?=$val?></a></li>
+					</foreach>
+				</ul> 	
+			</li>
+			<li>
+				<a href="Ressources">Ressources</a>
+				<ul>
+					<foreach e="$taxonomyRessources as $key=>$val">
+						<li><a href="Ressources|<?=$val?>"><?=$val?></a></li>
+					</foreach>
+				</ul> 	
+			</li>
+			<li><a href="Projets">Projets</a></li>
+			<li><a href="Associations">Associations</a></li>
+			<li>
+				<a href="Annonces">Annonces</a>	    				
+				<ul>
+					<li><a href="Annonces|Offres">Offres</a></li>
+					<li><a href="Annonces|Demandes">Demandes</a></li>
+				</ul> 	
+			</li>
+			<li><a href="Mediatheque">Mediathèque</a></li>
+			
+				<li>
+					<a href="javascript:;" class="ajouter">Ajouter</a>
+					<ul>
+						<li><a href="Ajouter-Evenement">Évènement</a></li>
+						<li><a href="Ajouter-Ressource">Ressource</a></li>
+						<li><a href="Ajouter-Projet">Projet</a></li>
+						<li><a href="Ajouter-Association">Association</a></li>
+						<li><a href="Ajouter-Annonce">Annonce</a></li>
+						<li><a href="Ajouter-Mediatheque">Médiathèque</a></li>
+					</ul> 				
+				</li>
+		</ul-dropdown>
 	</nav>
 	<main></main>
 	<footer>
-		
+		<a href="Autonomie-et-Partage">Qui sommes nous ?</a>
+		<a href="Newsletter">Newsletter</a>
+		<a href="Partenaires">Partenaires</a>
+		<a href="Contact">Nous Contacter</a>
 	</footer>
 	<script type="text/javascript" src="js/js.pack.js"></script>
 	<script type="text/javascript">
 		<?if(control::devHas(control::dev_css)):?>$css().dev=true;<?endif;?>
 		<?if(control::devHas(control::dev_js)):?>$js().dev=true;<?endif;?>
 		$js('script');
+		<?if(control::devHas(control::dev_control)):?>if(console) console.log('PHP: <?=control\Chrono::get()?>');<?endif;?>
 	</script>
 </body>
 </html>

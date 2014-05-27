@@ -1,0 +1,32 @@
+body>footer{
+	@?include grid( *, 100 );
+	@?include grid( *, 50, 480px);
+	@?include grid( *, 25, 960px);
+	@include clearfix();
+	background: #111;
+	clear: both;
+	width: 100%;
+	>a {
+		text-align:center;
+		margin-top:1%;
+		margin-bottom:1%;
+		font-size: 1.2em;
+		color: #FFF;
+		&:hover {
+		  color: $brand-primary;
+		  text-decoration:none;
+		}
+		&[href="Autonomie-et-Partage"]{
+			@?include icon(info);
+		}
+		&[href="Newsletter"]{
+			@?include icon(envelope-alt);
+		}
+		&[href="Partenaires"]{
+			@?include icon(heart);
+		}
+		&[href="Contact"]{
+			@?include icon(envelope);
+		}
+	}
+}

@@ -1,0 +1,10 @@
+<extend>
+	<write selector="#main">
+		<foreach e="glob(__DIR__.'/*.tml')">
+			<?php $name = pathinfo($val,PATHINFO_FILENAME); if($name=='index') continue;?>
+			<ul>
+				<li><a href="<?=V::param(0).$name?>"><?=$name?></a></li>
+			</ul>
+		</foreach>
+	</write>
+</extend>

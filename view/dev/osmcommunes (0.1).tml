@@ -1,0 +1,63 @@
+<P: />
+<extend>
+	<append selector="head">
+		<link href="apt/portal/jquery-ui-1.10.0.custom.css" rel="stylesheet" media="screen"/>
+		<link href="apt/leaflet/leaflet.css" rel="stylesheet" media="screen"/>
+		<link href="apt/portal/plugins/lightbox/themes/white-green/jquery.lightbox.css" rel="stylesheet" media="screen"/>
+		<script src="apt/portal/plugins/lightbox/jquery.lightbox.min.js"></script>
+		<script src="apt/portal/jquery-ui-1.10.0.custom.min.js"></script>
+		<script src="apt/leaflet/leaflet.js" ></script>
+		<script>$(function(){
+			$('a.lightbox-type').lightbox({
+					imagePath:'apt/portal/plugins/lightbox/themes/white-green/images'
+			});
+		});
+		</script>
+	</append>
+	<title>essais leaflet popup1</title>
+	<write selector="#main">
+<?='<script>'?>		
+var geosmjsonFeatures = {
+    "type": "FeatureCollection",
+    "features": [		
+<foreach e="$communesByDefDptGeo">		
+			{
+				"geometry": {
+					"type": "Point",
+					"coordinates": ['<?=$val['lon']?>', '<?=$val['lat']?>']
+				},
+				"type": "Feature",
+				"properties": {
+					"popupContent": "<?=$val['label']?>"
+				},
+				"id": '<?=$key?>'
+			},
+</foreach>			
+		]
+	};
+<?='</script>'?>		
+
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="col-md-12">
+					<div class="widget stacked">
+						<div class="widget-header">		
+							<i class="icon-picture"></i>							
+							<h3>Open Street Map with leaflet.js</h3>						
+						</div> <!-- /.widget-header -->
+						<div class="widget-content">	
+										<h3>test communes</h3>
+										<?php //var_export($communesByDefDptGeo);exit;?>
+											<foreach e="$communesByDefDptGeo">
+												<?php //var_export($val);exit; ?>
+												<h4> key: <?=$key?>: label: <?=$val['label']?>, lat: <?=$val['lat']?>, lon: <?=$val['lon']?>, CP: <?=$val['code']?></h4>
+											</foreach>
+		
+							<div id="map"></div>
+						</div> <!-- /.widget-content -->	
+					</div> <!-- /.widget -->
+				</div> <!-- /col-md-12 -->
+			</div> <!-- /row -->
+		</div> <!-- /container -->		
+	</write>
+</extend>

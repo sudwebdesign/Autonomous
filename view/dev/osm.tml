@@ -1,0 +1,56 @@
+<extend>
+	<append selector="head">
+		<link href="css/portal/jquery-ui-1.10.0.custom.css" rel="stylesheet" media="screen"/>
+		<link href="css/leaflet/leaflet.css" rel="stylesheet" media="screen"/>
+		<link href="css/portal/plugins/lightbox/themes/white-green/jquery.lightbox.css" rel="stylesheet" media="screen"/>
+		<script src="js/portal/plugins/lightbox/jquery.lightbox.min.js"></script>
+		<script src="js/portal/jquery-ui-1.10.0.custom.min.js"></script>
+		<script src="js/leaflet/leaflet.js" ></script>
+		<script>$(function(){
+			$('a.lightbox-type').lightbox({
+				imagePath:'img'
+			});
+		});</script>
+	</append>
+	<title>essais leaflet popup1</title>
+	<write main>
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="col-md-8">
+				<div class="widget stacked">
+					<div class="widget-header">		
+						<i class="icon-picture"></i>							
+						<h3>Open Street Map with leaflet.js</h3>						
+					</div> <!-- /.widget-header -->
+					<div class="widget-content">				
+							<div id="map"></div>
+							<div id="popupTemplate">
+								<strong class="text-success">Titre dans osm.tml</strong>
+								<br>
+								<span class="toto"></span>
+								<br>
+								<input type="text" class="distance" name="distance">
+								<br>
+								<a class="btn search" href="javascript:void(0)" onclick="">search osm</a>
+							</div>
+						</div> <!-- /.widget-content -->	
+					</div> <!-- /.widget -->
+				</div> <!-- /col-md-8 -->
+				<div class="col-md-4">
+					<div class="widget stacked">
+						<div class="widget-header">		
+							<i class="icon-picture"></i>							
+							<h3>Lightbox</h3>						
+						</div> <!-- /.widget-header -->
+						<div class="widget-content">
+							<a href="dev/poposm?lightbox[width]=760&lightbox[height]=400" class="btn btn-warning lightbox-type">Show OpenStreetMap</a>
+							<a href="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=+paris+eiffel&amp;ie=UTF8&amp;hq=eiffel&amp;hnear=Paris,+Ile-de-France,+France&amp;ll=48.855708,2.300434&amp;spn=0.013243,0.042272&amp;z=15&amp;lightbox[width]=610&amp;lightbox[height]=360" class="btn btn-warning lightbox-type">Show GGMaps</a>
+							<a href="img/oeil.jpg" class="btn btn-warning lightbox-type">Show Image Lightbox</a>							
+							<a href="http://www.youtube.com/watch?v=TsUD1za9TA4" class="btn btn-warning lightbox-type">Show Video</a>						
+						</div> <!-- /.widget-content -->	
+					</div> <!-- /.widget -->
+				</div><!-- /col-md-8 -->
+			</div> <!-- /row -->
+		</div> <!-- /container -->		
+	</write>
+</extend>
