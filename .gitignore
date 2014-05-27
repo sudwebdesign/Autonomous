@@ -1,1 +1,3 @@
 /.tmp
+/.htaccess
+/model/config.php
