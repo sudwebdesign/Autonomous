@@ -1,4 +1,8 @@
 <?php
+control::dev(
+	control::dev_default
+	|control::dev_js
+);
 class view extends surikat\view{
 	static $xDom = false;
 	#<workflow>
