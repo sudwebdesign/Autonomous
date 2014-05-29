@@ -5,7 +5,7 @@ class present extends surikat\present{
 		return array(
 			'title'=>(($u=view::param(0))?$u.' - ':'').'Autonomie et Partage',
 			'timeCompiled'=>time(),
-			'communesByDefDpt'=>model::getCommunesByDefDpt(),
+			//'communesByDefDpt'=>model::getCommunesByDefDpt(),
 			'taxonomyRessources'=>model::getTaxonomy('Ressource'),
 			'taxonomyEvenements'=>model::getTaxonomy('Évènement'),
 		);

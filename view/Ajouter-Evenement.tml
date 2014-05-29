@@ -3,11 +3,17 @@
 	<js+css form>
 	<attr selector="main" addClass="add-event">
 	<write main>
-		<form id="evenement" action="<?=$action?>" method="POST" enctype="multipart/form-data" role="form">
+		<form id="evenement" action="<?=$action?>" method="POST" enctype="multipart/form-data" role="form" <?=isset($formPosted)?'class="form-posted"':''?>>
 			<h1>Ajouter un Évènement</h1>
-			<?if(isset($formPosted)&&$formPosted):?>
-				<h4>Ajout ok !</h4>
-			<?endif; ?>
+			<if e="isset($formPosted)">
+				<h4>
+					<if e="$formPosted">
+						Ajout ok !
+					<else>
+						Ajout not ok !
+					</if>
+				</h4>
+			</if>
 			<fieldset>
 				<legend>Titre</legend>
 				<input type="text" name="titre" value="" placeholder="">
@@ -88,4 +94,8 @@
 			}
 		?>
 	</after>
+	<attr selector="form[action] input[name]" value="<?=isset($_POST['{{this:name}}'])?htmlentities($_POST['{{this:name}}']):''?>">
+	<write selector="form[action] textarea[name]">
+		<?=isset($_POST['{{this:name}}'])?htmlentities($_POST['{{this:name}}']):''?>
+	</write>
 </apply>

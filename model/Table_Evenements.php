@@ -3,8 +3,8 @@ final class Table_Evenements extends \surikat\model\Table{
 	#<workflow CRUD>
 	private $minLabelLength = 8;
 	function onValidate(){
-		if(strlen($this->label)<$this->minLabelLength){
-			$this->errors['label'] = 'Le titre doit comporter minimum '.$this->minLabelLength.' caractères';
+		if(strlen($this->titre)<$this->minLabelLength){
+			$this->errors['titre'] = 'Le titre doit comporter minimum '.$this->minLabelLength.' caractères';
 		}
 	}
 	function onCreate(){}
