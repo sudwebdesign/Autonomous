@@ -151,6 +151,7 @@ $js([
 					updateMarker(place);
 				//updateInfoWindow(place);
 				input_validate.val('true');
+				input.trigger('change');
 			};
 			//var autocompleteService = new google.maps.places.AutocompleteService();
 			google.maps.event.addListener(circle, 'radius_changed', function(){

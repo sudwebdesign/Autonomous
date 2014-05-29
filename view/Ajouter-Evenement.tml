@@ -5,16 +5,16 @@
 	<write main>
 		<form id="evenement" action="<?=$action?>" method="POST" enctype="multipart/form-data" role="form">
 			<h1>Ajouter un Évènement</h1>
-			<?php if(isset($formPosted)&&$formPosted):?>
+			<?if(isset($formPosted)&&$formPosted):?>
 				<h4>Ajout ok !</h4>
-			<?php endif; ?>
+			<?endif; ?>
 			<fieldset>
 				<legend>Titre</legend>
 				<input type="text" name="titre" value="" placeholder="">
 			</fieldset>
 			<fieldset>
 				<legend>Présentation</legend>
-				<textarea placeholder="" is="ckeditor"></textarea>
+				<textarea name="presentation" placeholder="" is="ckeditor"></textarea>
 			</fieldset>
 			<fieldset>
 				<legend>Mots clefs (séparés par des virgules)</legend>
@@ -53,6 +53,9 @@
 						<legend>Début</legend>
 						<input type="date" class="date-start" name="dates[date_start][]" value="" placeholder="Jour">
 						<input type="time" name="dates[time_start][]" value="" placeholder="Horaire">
+						<label>Préciser la durée
+							<input name="date_with_end" type="checkbox">
+						</label>
 					</fieldset>
 					<fieldset>
 						<legend>Fin</legend>
@@ -79,7 +82,7 @@
 </extend>
 <apply>
 	<after selector="form[action] input[name], form[action] select[name], form[action] textarea[name]">
-		<?php
+		<?
 			if(isset($formErrors)&&isset($formErrors['{{this:name}}'])){
 				?><small class="help-block"><?=$formErrors['{{this:name}}']?></small><?
 			}
