@@ -1,10 +1,11 @@
 @import 'jquery-ui/core';
 @import 'jquery-ui/autocomplete';
 @import 'jquery-ui/datepicker';
-@import "jquery-ui/timepicker";
-@import "jquery-ui/themes/sunny";
-@import "jquery-ui/theme";
-@import "form-dom";
+@import 'jquery-ui/timepicker';
+@import 'jquery-ui/slider';
+@import 'jquery-ui/themes/sunny';
+@import 'jquery-ui/theme';
+@import 'form-dom';
 
 body>main>form{
 	>fieldset{
