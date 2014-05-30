@@ -2,6 +2,7 @@
 use model;
 use model\R;
 use control\dates;
+use control\filter;
 final class evenements extends \present\ajouter{
 	static function exec(){
 		parent::POST('evenements');
@@ -30,6 +31,9 @@ final class evenements extends \present\ajouter{
 		if(!dates::validate_time($time_end))
 			$bean->error('dates[time_end]'.$se,'invalid format');
 
+		$_POST['presentation'] = Filter::basic_tags($_POST['presentation']);
+		
+		
 		if($multi){
 			foreach(array_keys($date_start) as $i){
 				$date = array();
