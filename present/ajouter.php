@@ -3,6 +3,7 @@ use view;
 use model;
 use model\R;
 use surikat\control\post;
+use surikat\control\filter;
 use surikat\control\Uploader;
 use surikat\model\Exception_Validation;
 class ajouter extends \present{
