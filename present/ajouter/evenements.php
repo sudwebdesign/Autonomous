@@ -31,7 +31,7 @@ final class evenements extends \present\ajouter{
 		if(!dates::validate_time($time_end))
 			$bean->error('dates[time_end]'.$se,'invalid format');
 
-		$_POST['presentation'] = Filter::basic_tags($_POST['presentation']);
+		$_POST['presentation'] = filter::strip_tags_basic($_POST['presentation']);
 		
 		
 		if($multi){
