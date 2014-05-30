@@ -28,7 +28,7 @@ class ajouter extends \present{
 		if(isset($_POST['label']))
 			$bean->label = $_POST['label'];
 		if(isset($_POST['presentation']))
-			$bean->presentation = $_POST['presentation'];
+			$bean->presentation = filter::strip_tags_basic($_POST['presentation']);
 		if(isset($_POST['tags'])){
 			$tags = explode(',',$_POST['tags']);
 			foreach($tags as $tag)

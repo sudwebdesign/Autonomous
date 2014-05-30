@@ -24,16 +24,14 @@ final class evenements extends \present\ajouter{
 		$se = $multi?'[]':'';
 		if(!dates::validate_date($date_start,true))
 			$bean->error('dates[date_start]'.$se,'missing or invalid format');
-		if(!dates::validate_date($date_end))
-			$bean->error('dates[date_end]'.$se,'invalid format');
 		if(!dates::validate_time($time_start))
 			$bean->error('dates[time_start]'.$se,'invalid format');
-		if(!dates::validate_time($time_end))
-			$bean->error('dates[time_end]'.$se,'invalid format');
-
-		$_POST['presentation'] = filter::strip_tags_basic($_POST['presentation']);
-		
-		
+		if(isset($_POST['date_with_end'])){
+			if(!dates::validate_date($date_end))
+				$bean->error('dates[date_end]'.$se,'invalid format');
+			if(!dates::validate_time($time_end))
+				$bean->error('dates[time_end]'.$se,'invalid format');
+		}		
 		if($multi){
 			foreach(array_keys($date_start) as $i){
 				$date = array();
