@@ -18,13 +18,13 @@ class ajouter extends \present{
 		$bean = R::newOne($type,array(
 			'created'=>date('Y-m-d H:i:s',time()),
 		));
-		//$bean->onCreated(function($bean,$id)use($type){
-			//Uploader::image('content/'.$type.'/'.$id.'/','image','90','90')
-		//});
-		if(isset($_SESSION['email'])&&($user=R::findOne('users','email=?',array($_SESSION['email']))))
-			$bean->user = $user;
-		else
-			$bean->error('user','required');
+		$bean->on('created',function($bean)use($type){
+			Uploader::image('content/'.$type.'/'.$bean->id.'/','image','90','90');
+		});
+		//if(isset($_SESSION['email'])&&($user=R::findOne('users','email=?',array($_SESSION['email']))))
+			//$bean->user = $user;
+		//else
+			//$bean->error('user','required');
 		if(isset($_POST['label']))
 			$bean->label = $_POST['label'];
 		if(isset($_POST['presentation']))

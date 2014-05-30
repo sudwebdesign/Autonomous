@@ -5,10 +5,10 @@ final class Table_Evenements extends \surikat\model\Table{
 	private $maxLabelLength = 250;
 	function onValidate(){
 		$l = strlen($this->titre);
-		if($l<$this->minLabelLength)
-			$this->errors['titre'] = 'Le titre doit comporter minimum '.$this->minLabelLength.' caractères';
-		elseif($l>$this->maxLabelLength)
-			$this->errors['titre'] = 'Le titre doit comporter maximum '.$this->maxLabelLength.' caractères';
+		//if($l<$this->minLabelLength)
+			//$this->errors['titre'] = 'Le titre doit comporter minimum '.$this->minLabelLength.' caractères';
+		//elseif($l>$this->maxLabelLength)
+			//$this->errors['titre'] = 'Le titre doit comporter maximum '.$this->maxLabelLength.' caractères';
 	}
 	function onCreate(){}
 	function onCreated(){}
