@@ -19,16 +19,18 @@ final class evenements extends \present\ajouter{
 		foreach($vars as $k) $$k = isset($_POST['dates'][$k])?$_POST['dates'][$k]:null;
 		dates::dp_to_date($date_start);
 		dates::dp_to_date($date_end);
+		$multi = is_array($date_start);
+		$se = $multi?'[]':'';
 		if(!dates::validate_date($date_start))
-			$bean->error('date_start','invalid format');
+			$bean->error('dates[date_start]'.$se,'invalid format');
 		if(!dates::validate_date($date_end))
-			$bean->error('date_end','invalid format');
+			$bean->error('dates[date_end]'.$se,'invalid format');
 		if(!dates::validate_time($time_start))
-			$bean->error('time_start','invalid format');
+			$bean->error('dates[time_start]'.$se,'invalid format');
 		if(!dates::validate_time($time_end))
-			$bean->error('time_end','invalid format');
+			$bean->error('dates[time_end]'.$se,'invalid format');
 
-		if(is_array($date_start)){
+		if($multi){
 			foreach(array_keys($date_start) as $i){
 				$date = array();
 				foreach($vars as $k)

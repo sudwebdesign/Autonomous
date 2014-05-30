@@ -1,4 +1,5 @@
 <present:ajouter:evenements uri="static" />
+<?use control\post;?>
 <extend>	
 	<js+css form>
 	<attr selector="main" addClass="add-event">
@@ -8,9 +9,10 @@
 			<if e="isset($formPosted)">
 				<h4>
 					<if e="$formPosted">
-						Ajout ok !
+						Votre évènement a bien été pris en compte
 					<else>
-						Ajout not ok !
+						Données manquantes ou erronées pour valider l'évènement
+						<pre><?=substr(print_r($formErrors,true),5);?></pre>
 					</if>
 				</h4>
 			</if>
@@ -94,8 +96,8 @@
 			}
 		?>
 	</after>
-	<attr selector="form[action] input[name]" value="<?=isset($_POST['{{this:name}}'])?htmlentities($_POST['{{this:name}}']):''?>">
+	<attr selector="form[action] input[name]" value="<?=post::get_text('{{this:name}}','{{this:value}}',true)?>">
 	<write selector="form[action] textarea[name]">
-		<?=isset($_POST['{{this:name}}'])?htmlentities($_POST['{{this:name}}']):''?>
+		<?=post::get_text('{{this:name}}','{{this:value}}',true)?>
 	</write>
 </apply>
