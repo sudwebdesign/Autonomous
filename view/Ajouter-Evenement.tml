@@ -12,13 +12,13 @@
 						Votre évènement a bien été pris en compte
 					<else>
 						Données manquantes ou erronées pour valider l'évènement
-						<pre><?=substr(print_r($formErrors,true),5);?></pre>
+						<dev><pre><?=substr(print_r($formErrors,true),6,-1);?></pre></dev>
 					</if>
 				</h4>
 			</if>
 			<fieldset>
 				<legend>Titre</legend>
-				<input type="text" name="titre" value="" placeholder="">
+				<input type="text" name="titre" value="Titre ..." placeholder="">
 			</fieldset>
 			<fieldset>
 				<legend>Présentation</legend>
@@ -87,17 +87,17 @@
 			<input type="submit" value="Proposer">									
 		</form>
 	</write>
+	<apply>
+		<after selector="form[action] input[name], form[action] select[name], form[action] textarea[name]">
+			<?
+				if(isset($formErrors)&&isset($formErrors['{{this:name}}'])){
+					?><small class="help-block"><?=$formErrors['{{this:name}}']?></small><?
+				}
+			?>
+		</after>
+		<attr selector="form[action] input[name]" value="<?=post::get_text('{{this:name}}','{{this:value}}',true)?>">
+		<write selector="form[action] textarea[name]">
+			<?=post::get_text('{{this:name}}','{{this:value}}',true)?>
+		</write>
+	</apply>
 </extend>
-<apply>
-	<after selector="form[action] input[name], form[action] select[name], form[action] textarea[name]">
-		<?
-			if(isset($formErrors)&&isset($formErrors['{{this:name}}'])){
-				?><small class="help-block"><?=$formErrors['{{this:name}}']?></small><?
-			}
-		?>
-	</after>
-	<attr selector="form[action] input[name]" value="<?=post::get_text('{{this:name}}','{{this:value}}',true)?>">
-	<write selector="form[action] textarea[name]">
-		<?=post::get_text('{{this:name}}','{{this:value}}',true)?>
-	</write>
-</apply>

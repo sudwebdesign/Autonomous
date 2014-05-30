@@ -21,7 +21,7 @@ final class evenements extends \present\ajouter{
 		dates::dp_to_date($date_end);
 		$multi = is_array($date_start);
 		$se = $multi?'[]':'';
-		if(!dates::validate_date($date_start))
+		if(!dates::validate_date($date_start,true))
 			$bean->error('dates[date_start]'.$se,'invalid format');
 		if(!dates::validate_date($date_end))
 			$bean->error('dates[date_end]'.$se,'invalid format');

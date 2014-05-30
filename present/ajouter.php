@@ -2,6 +2,7 @@
 use view;
 use model;
 use model\R;
+use surikat\control\post;
 use surikat\control\Uploader;
 use surikat\model\Exception_Validation;
 class ajouter extends \present{
@@ -43,6 +44,7 @@ class ajouter extends \present{
 		self::variable('formPosted',true);
 		try{
 			static::POST(self::commonCreate($type));
+			post::clearPersistance();
 		}
 		catch(Exception_Validation $e){
 			self::variable(array(

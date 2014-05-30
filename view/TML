@@ -75,7 +75,7 @@
 		<?if(control::devHas(control::dev_css)):?>$css().dev=true;<?endif;?>
 		<?if(control::devHas(control::dev_js)):?>$js().dev=true;<?endif;?>
 		$js('script');
-		<?if(control::devHas(control::dev_control)):?>if(console) console.log('PHP: <?=control\Chrono::get()?>');<?endif;?>
+		<?if(control::devHas(control::dev_control)):?>if(console) console.log('PHP <?=control::devHas(control::dev_view)?'Compilation +':''?>Execution : <?=control\Chrono::get()?>');<?endif;?>
 	</script>
 </body>
 </html>
