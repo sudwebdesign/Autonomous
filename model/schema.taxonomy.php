@@ -14,19 +14,19 @@ foreach(array(
 		'Fête',
 		'Actu',
 	),
-	'Ressources'=>array(
+	'Ressource'=>array(
 		'Compétence',
-		'Ressource humaines',
+		'Bénévolat',
 		'Lieu',
 		'Terrain',
 		'Salle',
 		'Outillage',
 		'Véhicule',
 	),
-	'Projets'=>array(
+	'Projet'=>array(
 		
 	),
-	'Annonces'=>array(
+	'Annonce'=>array(
 		'Loisirs',
 		'Alimentation',
 		'Santé',
@@ -43,6 +43,4 @@ foreach(array(
 		$a2[] = array('type'=>'taxonomy','label'=>$label2);
 	$a[] = array('type'=>'taxonomy','label'=>$label,'ownTaxonomy'=>$a2);
 }
-$clean = 'taxonomy';
 return $a;
-?>

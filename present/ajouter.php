@@ -26,8 +26,8 @@ class ajouter extends \present{
 			//$bean->user = $user;
 		//else
 			//$bean->error('user','required');
-		if(isset($_POST['label']))
-			$bean->label = $_POST['label'];
+		if(isset($_POST['titre']))
+			$bean->titre = $_POST['titre'];
 		if(isset($_POST['presentation']))
 			$bean->presentation = filter::strip_tags_basic($_POST['presentation']);
 		if(isset($_POST['tags'])){
@@ -110,7 +110,7 @@ class ajouter extends \present{
 			));
 			if($locality)
 				$geopoint->locality = $locality;
-			$bean->sharedGeopoints[] = $geopoint;
+			$bean->ownGeopoints[] = $geopoint;
 		}
 	}
 	

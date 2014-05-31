@@ -18,8 +18,8 @@ final class evenements extends \present\ajouter{
 		if(!isset($_POST['dates']))
 			return;
 		foreach($vars as $k) $$k = isset($_POST['dates'][$k])?$_POST['dates'][$k]:null;
-		dates::dp_to_date($date_start);
-		dates::dp_to_date($date_end);
+		dates::dp_to_date_fr($date_start);
+		dates::dp_to_date_fr($date_end);
 		$multi = is_array($date_start);
 		$se = $multi?'[]':'';
 		if(!dates::validate_date($date_start,true))
@@ -37,14 +37,14 @@ final class evenements extends \present\ajouter{
 				$date = array();
 				foreach($vars as $k)
 					$date[$k] = isset(${$k}[$i])?${$k}[$i]:null;
-				$bean->sharedDates[] = $date;
+				$bean->ownDates[] = R::newOne('date',$date);
 			}
 		}
 		else{
 			$date = array();
 			foreach($vars as $k)
 				$date[$k] = $$k;
-			$bean->sharedDates[] = $date;
+			$bean->ownDates[] = R::newOne('date',$date);
 		}
 	}
 	

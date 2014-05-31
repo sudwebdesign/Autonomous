@@ -1,4 +1,5 @@
 <?php
+use surikat\control;
 use surikat\model\W;
 class model extends surikat\model{	
 	const DEFAULT_COUNTRY_CODE = 'fr';
@@ -24,6 +25,7 @@ class model extends surikat\model{
 
 	}
 	static function getDepartementName(){
+		/*put auto schema*/
 		return W::cell('departements',array('where'=>'code = ?'),array(func_num_args()?func_get_arg(0):self::DEFAULT_DEPARTEMENT_CODE));
 	}
 	static function getCenterLatOfMainBound(){
@@ -45,6 +47,7 @@ class model extends surikat\model{
 		return 3.177833;
 	}
 	static function getTaxonomy($params=null){
+		self::schemaAuto('taxonomy');
 		if($params)
 			return self::col('taxonomy',array('where'=>'taxonomy_id=(SELECT id FROM taxonomy WHERE label=?)'),array($params));
 		else

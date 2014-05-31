@@ -1,4 +1,4 @@
-$js([
+$js(true,[
 	'jquery',
 	'/x-dom/ckeditor.js',
 	'/x-dom/daterange.js',

@@ -25,7 +25,7 @@
 				<textarea name="presentation" placeholder="" is="ckeditor"></textarea>
 			</fieldset>
 			<fieldset>
-				<legend>Mots clefs (séparés par des virgules)</legend>
+				<legend>Thématiques <small>(séparées par des virgules)</small></legend>
 				<input name="tags" type="text" value="" is="tagsinput" />
 			</fieldset>
 			<fieldset>
@@ -73,15 +73,11 @@
 				</div>
 			</fieldset>
 			<fieldset>
-				<legend>Lien URL</legend>
-				<input name="link" type="url" value="" >
+				<legend>Lien</legend>
+				<input name="link" type="url" value="" placeholder="http://">
 			</fieldset>
 			<fieldset>
-				<legend>Email public</legend>
-				<input name="email" type="email" value="">
-			</fieldset>
-			<fieldset>
-				<legend>Téléphone public</legend>
+				<legend>Téléphone</legend>
 				<input name="phone" type="phone" value="">
 			</fieldset>
 			<input type="submit" value="Proposer">									

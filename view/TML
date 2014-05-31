@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
+<head>
     <meta charset="utf-8">
     <title><?=$title?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
 	<base href="http://<?=$_SERVER['SERVER_NAME']?>/">
 	<link href="css/style.css" rel="stylesheet" type="text/css">
-  </head>
+</head>
 <body>
 	<header>
 		<a href="" title="Accueil"><img src="img/udac.png" alt="L'UDAC 66" /></a>
