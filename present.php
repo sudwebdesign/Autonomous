@@ -1,4 +1,5 @@
 <?php
+use surikat\control\session;
 class present extends surikat\present{
 	#<workflow>
 	static function compileVars(&$vars=array()){
@@ -14,8 +15,7 @@ class present extends surikat\present{
 		//
 	//}	
 	static function exec(){
-		if(!session_id())
-			session_start();
+		session::start();
 	}
 	static function execVars(&$vars=array()){
 		return array('time'=>time());
