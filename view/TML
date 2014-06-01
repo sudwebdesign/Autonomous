@@ -26,7 +26,7 @@
 			<li>
 				<a href="Evenements">Évènements</a>
 				<ul>
-					<foreach e="$taxonomyEvenements as $key=>$val">
+					<foreach e="$taxonomyEvenements as $key=>$val" cacheSync="taxonomy">
 						<li><a href="Evenements|<?=$val?>"><?=$val?></a></li>
 					</foreach>
 				</ul> 	
@@ -34,7 +34,7 @@
 			<li>
 				<a href="Ressources">Ressources</a>
 				<ul>
-					<foreach e="$taxonomyRessources as $key=>$val">
+					<foreach e="$taxonomyRessources as $key=>$val" cacheSync="taxonomy">
 						<li><a href="Ressources|<?=$val?>"><?=$val?></a></li>
 					</foreach>
 				</ul> 	
