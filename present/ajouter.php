@@ -4,7 +4,7 @@ use model;
 use model\R;
 use surikat\control\post;
 use surikat\control\filter;
-use surikat\control\Uploader;
+use surikat\control\uploader;
 use surikat\model\Exception_Validation;
 class ajouter extends \present{
 	static function compileVars(&$vars=array()){
@@ -20,7 +20,15 @@ class ajouter extends \present{
 			'created'=>date('Y-m-d H:i:s',time()),
 		));
 		$bean->on('created',function($bean)use($type){
-			Uploader::image('content/'.$type.'/'.$bean->id.'/','image','90','90');
+			uploader::image(array(
+				'dir'=>'content/'.$type.'/'.$bean->id.'/',
+				'key'=>'image',
+				'width'=>'90',
+				'height'=>'90',
+				//'rename'=>true,
+				'rename'=>$bean->titre,
+			));
+			uploader::files('content/'.$type.'/'.$bean->id.'/','files');
 		});
 		//if(isset($_SESSION['email'])&&($user=R::findOne('users','email=?',array($_SESSION['email']))))
 			//$bean->user = $user;
@@ -28,6 +36,11 @@ class ajouter extends \present{
 			//$bean->error('user','required');
 		if(isset($_POST['titre']))
 			$bean->titre = $_POST['titre'];
+		if(isset($_POST['tel']))
+			$bean->tel = $_POST['tel'];
+		if(isset($_POST['url']))
+			$bean->url = filter::url($_POST['url']);
+			
 		if(isset($_POST['presentation']))
 			$bean->presentation = filter::strip_tags_basic($_POST['presentation']);
 		if(isset($_POST['tags'])){

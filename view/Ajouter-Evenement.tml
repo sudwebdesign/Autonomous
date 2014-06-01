@@ -1,100 +1,22 @@
-<present:ajouter:evenements uri="static" />
-<?use control\post;?>
-<extend>	
-	<js+css form>
-	<attr selector="main" addClass="add-event">
-	<write main>
-		<form id="evenement" action="<?=$action?>" method="POST" enctype="multipart/form-data" role="form" <?=isset($formPosted)?'class="form-posted"':''?>>
-			<h1>Ajouter un Évènement</h1>
-			<if e="isset($formPosted)">
-				<h4>
-					<if e="$formPosted">
-						Votre évènement a bien été pris en compte
-					<else>
-						Données manquantes ou erronées pour valider l'évènement
-						<dev><pre><?=substr(print_r($formErrors,true),6,-1);?></pre></dev>
-					</if>
-				</h4>
-			</if>
-			<fieldset>
-				<legend>Titre</legend>
-				<input type="text" name="titre" value="Titre ..." placeholder="">
-			</fieldset>
-			<fieldset>
-				<legend>Présentation</legend>
-				<textarea name="presentation" placeholder="" is="ckeditor"></textarea>
-			</fieldset>
-			<fieldset>
-				<legend>Thématiques <small>(séparées par des virgules)</small></legend>
-				<input name="tags" type="text" value="" is="tagsinput" />
-			</fieldset>
-			<fieldset>
-				<legend>Joindre l'image principale</legend>
-				<input is="inputimg" type="file" name="image" accept="image/*" />
-			</fieldset>
-			<fieldset>
-				<legend>Joindre des fichiers ( images ou documents )</legend>
-				<input type="file" name="files[]" accept="application/*,text/*,image/*" title="Sélectionner des Fichiers" multiple />
-			</fieldset>
-			<fieldset>
-				<legend>Lieu / Adresse / Commune</legend>
-				<geo-completer>
-					<fieldset>
-						<input name="geo" type="text" placeholder="Rechercher un lieu, une adresse ou une commune" value="<?=model::getDepartementName().', '.model::DEFAULT_COUNTRY?>">
-					</fieldset>
-					<fieldset>
-						<legend>Détails de localisation</legend>
-						<label for="geocompleter-lat">Latitude</label>
-						<input id="geocompleter-lat" name="lat" type="text">
-						<label for="geocompleter-lng">Longitude</label>
-						<input id="geocompleter-lng" name="lng" type="text">
-						<label for="geocompleter-rayon">Rayon en km</label>
-						<input id="geocompleter-rayon" name="rayon" type="text">
-						<input type="hidden" name="geo-valid">
-					</fieldset>					
-				</geo-completer>
-			</fieldset>
-			<fieldset is="daterange">
-				<legend>Date</legend>
-				<div>
-					<fieldset>
-						<legend>Début</legend>
-						<input type="date" class="date-start" name="dates[date_start][]" value="" placeholder="Jour">
-						<input type="time" name="dates[time_start][]" value="" placeholder="Horaire">
-						<label>Préciser la durée
-							<input name="date_with_end" type="checkbox">
-						</label>
-					</fieldset>
-					<fieldset>
-						<legend>Fin</legend>
-						<input type="date" class="date-end" name="dates[date_end][]" value="" placeholder="Jour">
-						<input type="time" name="dates[time_end][]" value="" placeholder="Horaire">					
-					</fieldset>
-				</div>
-			</fieldset>
-			<fieldset>
-				<legend>Lien</legend>
-				<input name="link" type="url" value="" placeholder="http://">
-			</fieldset>
-			<fieldset>
-				<legend>Téléphone</legend>
-				<input name="phone" type="phone" value="">
-			</fieldset>
-			<input type="submit" value="Proposer">									
-		</form>
-	</write>
-	<apply>
-		<after selector="form[action] input[name][type!=checkbox], form[action] select[name], form[action] textarea[name]">
-			<?
-				if(isset($formErrors)&&isset($formErrors['{{this:name}}'])){
-					?><small class="help-block"><?=$formErrors['{{this:name}}']?></small><?
-				}
-			?>
-		</after>
-		<attrappend selector="form[action] input[name][type=checkbox]" append="<?=post::get_checked('{{this:name}}','',true)?>">
-		<attr selector="form[action] input[name][type!=checkbox]" value="<?=post::get_text('{{this:name}}','{{this:checked}}',true)?>">
-		<write selector="form[action] textarea[name]">
-			<?=post::get_text('{{this:name}}','{{this:value}}',true)?>
-		</write>
-	</apply>
+<extend file="Ajouter.atml">
+	<after selector="main form fieldset:has(geo-completer)">
+		<fieldset is="daterange">
+			<legend>Date</legend>
+			<div>
+				<fieldset>
+					<legend>Début</legend>
+					<input type="date" class="date-start" name="dates[date_start][]" value="" placeholder="Jour">
+					<input type="time" name="dates[time_start][]" value="" placeholder="Horaire">
+					<label>Préciser la durée
+						<input name="date_with_end" type="checkbox">
+					</label>
+				</fieldset>
+				<fieldset>
+					<legend>Fin</legend>
+					<input type="date" class="date-end" name="dates[date_end][]" value="" placeholder="Jour">
+					<input type="time" name="dates[time_end][]" value="" placeholder="Horaire">					
+				</fieldset>
+			</div>
+		</fieldset>
+	</after>
 </extend>

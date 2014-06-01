@@ -10,7 +10,8 @@ final class evenements extends \present\ajouter{
 	protected static function POST($bean){
 		self::POST_Dates($bean);
 		//exit(print('<pre>'.print_r($bean->getArray(),true)));
-		R::store($bean);
+		//R::transaction
+		R::storeTransactional($bean);
 	}
 	
 	protected static function POST_Dates($bean){
