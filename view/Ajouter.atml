@@ -1,11 +1,10 @@
-<present:ajouter:evenements uri="static" />
 <?use control\post;?>
 <extend>	
 	<js+css form>
 	<attr selector="main" addClass="add-event">
 	<write main>
 		<form id="evenement" action="<?=$action?>" method="POST" enctype="multipart/form-data" role="form" <?=isset($formPosted)?'class="form-posted"':''?>>
-			<h1>Ajouter un Évènement</h1>
+			<h1>Ajouter</h1>
 			<if e="isset($formPosted)">
 				<h4>
 					<if e="$formPosted">
@@ -33,7 +32,7 @@
 				<input is="inputimg" type="file" name="image" accept="image/*" />
 			</fieldset>
 			<fieldset>
-				<legend>Joindre des fichiers ( images ou documents )</legend>
+				<legend>Joindre des fichiers <small>(images ou documents)</small></legend>
 				<input type="file" name="files[]" accept="application/*,text/*,image/*" title="Sélectionner des Fichiers" multiple />
 			</fieldset>
 			<fieldset>

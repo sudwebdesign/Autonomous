@@ -1,4 +1,6 @@
+<present:ajouter:evenements uri="static" />
 <extend file="Ajouter.atml">
+	<h1>Ajouter un Évènement</h1>
 	<after selector="main form fieldset:has(geo-completer)">
 		<fieldset is="daterange">
 			<legend>Date</legend>

@@ -14,6 +14,7 @@ class ajouter extends \present{
 		
 	}
 	static function exec(){
+		//var_dump(func_get_args());
 	}
 	protected static function commonCreate($type){
 		$bean = R::newOne($type,array(
