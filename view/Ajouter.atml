@@ -1,16 +1,21 @@
 <?use control\post;?>
 <extend>	
 	<js+css form>
-	<attr selector="main" addClass="add-event">
+	<attr selector="main" addClass="ajouter">
 	<write main>
-		<form id="evenement" action="<?=$action?>" method="POST" enctype="multipart/form-data" role="form" <?=isset($formPosted)?'class="form-posted"':''?>>
-			<h1>Ajouter</h1>
+		<?
+			$x = explode('-',view::param(0));
+			$Type = ucfirst(end($x));
+			$type = strtolower($Type);
+		?>
+		<form id="<?=$type?>" action="<?=$action?>" method="POST" enctype="multipart/form-data" role="form" <?=isset($formPosted)?'class="form-posted"':''?>>
+			<h1>Ajouter <?=$Type?></h1>
 			<if e="isset($formPosted)">
 				<h4>
 					<if e="$formPosted">
-						Votre évènement a bien été pris en compte
+						Votre <?=strtolower($type)?> a bien été pris en compte
 					<else>
-						Données manquantes ou erronées pour valider l'évènement
+						Données manquantes ou erronées pour valider l'<?=$type?>
 						<dev><pre><?=substr(print_r($formErrors,true),6,-1);?></pre></dev>
 					</if>
 				</h4>

@@ -1,4 +1,2 @@
-<present:ajouter uri="static" />
-<extend file="Ajouter.atml">
-
-</extend>
+<present:ajouter:projet uri="static" />
+<extend file="Ajouter.atml"></extend>

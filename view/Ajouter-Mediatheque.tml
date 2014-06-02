@@ -1,4 +1,2 @@
-<present:ajouter uri="static" />
-<extend file="Ajouter.atml">
-
-</extend>
+<present:ajouter:mediatheque uri="static" />
+<extend file="Ajouter.atml"></extend>

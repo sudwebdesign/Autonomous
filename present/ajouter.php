@@ -2,6 +2,7 @@
 use view;
 use model;
 use model\R;
+use surikat\control\PHP;
 use surikat\control\post;
 use surikat\control\filter;
 use surikat\control\uploader;
@@ -14,7 +15,7 @@ class ajouter extends \present{
 		
 	}
 	static function exec(){
-		//var_dump(func_get_args());
+		self::POST();
 	}
 	protected static function commonCreate($type){
 		$bean = R::newOne($type,array(
@@ -48,20 +49,29 @@ class ajouter extends \present{
 			$tags = explode(',',$_POST['tags']);
 			foreach($tags as $tag)
 				if(!empty($tag))
-					$bean->sharedTags[] = R::findOrNewOne(array('taxonomy','tags'),array('label'=>$tag));
+					$bean->sharedTag[] = R::findOrNewOne(array('taxonomy','tag'),array('label'=>$tag));
 		}
+		//R::debug();
 		self::POST_Geo($bean);
 		return $bean;
 	}
-	protected static function POST($type){
-		if(empty($_POST))
+	protected static function POST(){
+		if(!count(self::$options['namespaces'])>count(explode('\\',__CLASS__))||empty($_POST))
 			return;
 		self::variable('formPosted',true);
+		$type = end(self::$options['namespaces']);
+		R::begin();
 		try{
-			static::POST(self::commonCreate($type));
+			$bean = self::commonCreate($type);
+			if(method_exists(($final=self::$final),'POST_Specifications'))
+				$final::POST_Specifications($bean);
+			//exit(print('<pre>'.print_r($bean->getArray(),true)));
+			R::store($bean);
+			R::commit();
 			post::clearPersistance();
 		}
 		catch(Exception_Validation $e){
+			R::rollback();
 			self::variable(array(
 				'formErrors'=>$e->getData(),
 				'formPosted'=>false
@@ -116,15 +126,17 @@ class ajouter extends \present{
 		$lng = (float)$_POST['lng'];
 		$latLngOk = $lat&&$lng&&$lat<=90.0&&$lat>=-90.0&&$lng<=180.0&&$lng>=-180.0;
 		if($latLngOk||$label||$locality){
-			$geopoint = R::newOne('geopoints',array(
+			//R::debug();
+			$geopoint = R::newOne('geopoint',array(
 				'label'=>$label,
 				'lat'=>$latLngOk?(float)$_POST['lat']:null,
 				'lng'=>$latLngOk?(float)$_POST['lng']:null,
+				'point'=>$latLngOk?'POINT('.$_POST['lat'].' '.$_POST['lng'].')':null,
 				'rayon'=>$latLngOk&&isset($_POST['rayon'])?(float)$_POST['rayon']:null,
 			));
 			if($locality)
 				$geopoint->locality = $locality;
-			$bean->ownGeopoints[] = $geopoint;
+			$bean->xownGeopoint[] = $geopoint;
 		}
 	}
 	

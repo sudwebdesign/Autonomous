@@ -3,17 +3,14 @@ use model;
 use model\R;
 use control\dates;
 use control\filter;
-final class evenements extends \present\ajouter{
+final class evenement extends \present\ajouter{
 	static function exec(){
-		parent::POST('evenements');
+
 	}
-	protected static function POST($bean){
+	static function POST_Specifications($bean){
 		self::POST_Dates($bean);
-		//exit(print('<pre>'.print_r($bean->getArray(),true)));
-		//R::transaction
-		R::storeTransactional($bean);
 	}
-	
+	protected static $datetimeCombine = true;
 	protected static function POST_Dates($bean){
 		static $vars = array('date_start','date_end','time_start','time_end');
 		if(!isset($_POST['dates']))
@@ -35,17 +32,33 @@ final class evenements extends \present\ajouter{
 		}		
 		if($multi){
 			foreach(array_keys($date_start) as $i){
-				$date = array();
-				foreach($vars as $k)
-					$date[$k] = isset(${$k}[$i])?${$k}[$i]:null;
-				$bean->ownDates[] = R::newOne('date',$date);
+				if(self::$datetimeCombine){
+					$date = array(
+						'start'=>$date_start[$i].' '.(isset($time_start[$i])?$time_start[$i]:'00:00:00'),
+						'end'=>$date_end[$i].' '.(isset($time_end[$i])?$time_end[$i]:'00:00:00'),
+					);
+				}
+				else{
+					$date = array();
+					foreach($vars as $k)
+						$date[$k] = isset(${$k}[$i])?${$k}[$i]:null;
+				}
+				$bean->xownDate[] = R::newOne('date',$date);
 			}
 		}
 		else{
-			$date = array();
-			foreach($vars as $k)
-				$date[$k] = $$k;
-			$bean->ownDates[] = R::newOne('date',$date);
+			if(self::$datetimeCombine){
+				$date = array(
+					'start'=>$date_start[$i].' '.(isset($time_start[$i])?$time_start[$i]:'00:00:00'),
+					'end'=>$date_end[$i].' '.(isset($time_end[$i])?$time_end[$i]:'00:00:00'),
+				);
+			}
+			else{
+				$date = array();
+				foreach($vars as $k)
+					$date[$k] = $$k;
+			}
+			$bean->xownDate[] = R::newOne('date',$date);
 		}
 	}
 	
