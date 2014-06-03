@@ -1,7 +1,4 @@
 [is=dropdown]{
-	&#moniddedropdown{
-		
-	}
 	height: auto;
 	padding: 0;
 	border-left: 1px solid #292929;
@@ -95,18 +92,13 @@
 					clear: both;
 					font-weight: normal;
 					line-height: 1.428571429; /* 20/14  ??? */
-					color: #CCC;
 					white-space: nowrap;  /* prevent links from randomly breaking onto new lines */
-					&:hover,&:focus {
-						text-decoration: none;
-						color: $brand-primary;
-						background-color: #f5f5f5;
-					}
 					padding: 5px 9px;
 					margin: 0 6px;
 					border-radius: 4px;
 					&:hover,
 					&:focus {
+						text-decoration: none;
 						color: #FFF;
 						background-color: $brand-primary;
 						text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
@@ -129,6 +121,49 @@
 		display: block;
 		& a {
 			outline: 0;
+		}
+	}
+	@media (min-width: 768px){
+		>li>ul{
+			position: absolute;
+			>li>a{
+				color: #333;
+			}
+		}
+		&,
+		&.collapse {
+			display: block;
+			overflow: visible;
+			border: none;
+			display: block;
+			width: auto;
+		}
+		> li {
+			float: left;
+			height:100%;
+			width: auto;
+			margin-bottom: 0;
+			text-align: center;
+			> a{
+				color: #888;
+				&:hover {
+					color: #ccc;
+				}
+			}
+			>ul{
+				width: auto;
+				position: absolute;
+				background-color: #fff;
+				border: 1px solid #ccc; // IE8 fallback
+				border: 1px solid rgba(0,0,0,.15);
+				border-radius: 4px;
+				@include box-shadow(0 6px 12px rgba(0,0,0,.175));
+				&::before,
+				&::after {
+					display: inline-block;
+				}
+				
+			}
 		}
 	}
 }

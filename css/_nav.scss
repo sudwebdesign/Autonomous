@@ -21,7 +21,6 @@ body>nav {
 				display:block;
 			}
 			>ul{
-				position: relative;
 				top: 100%;
 				left: 0;
 				z-index: 1000;
@@ -39,7 +38,6 @@ body>nav {
 					clear: both;
 					font-weight: normal;
 					line-height: 1.428571429; /* 20/14  ??? */
-					color: #CCC;
 					white-space: nowrap;  /* prevent links from randomly breaking onto new lines */
 					&:hover,&:focus {
 						text-decoration: none;
@@ -83,53 +81,16 @@ body>nav {
 			}
 		}
 		@media (min-width: 768px){
-			>li>ul{
-				position: absolute;
-				>li>a{
-					color: #333;
-				}
-			}
-			&,
-			&.collapse {
-				display: block;
-				overflow: visible;
-				border: none;
-				display: block;
-				width: auto;
-			}
 			> li {
-				float: left;
-				height:100%;
 				border-left: 1px solid #4A4A4A;
 				border-right: 1px solid #292929;
-				width: auto;
-				margin-bottom: 0;
-				text-align: center;
-				width:#{(100%/7)};
-				> a{
-					color: #888;
-					&:hover {
-						color: #ccc;
-					}
+				width:#{(100%/7)}; //adjust to number of element in menu
+				>a{
 					&::before{
 						display: block;
 						padding-bottom: 0.2em;
 						padding-top: 0.4em;
 					}
-				}
-				>ul{
-					width: auto;
-					position: absolute;
-					background-color: #fff;
-					border: 1px solid #ccc; // IE8 fallback
-					border: 1px solid rgba(0,0,0,.15);
-					border-radius: 4px;
-					@include box-shadow(0 6px 12px rgba(0,0,0,.175));
-					&::before,
-					&::after {
-						display: inline-block;
-					}
-					
 				}
 			}
 		}
