@@ -1,2 +1,2 @@
-<present:liste:evenement />
+<present:liste:mediatheque />
 <extend file="Liste.atml"></extend>

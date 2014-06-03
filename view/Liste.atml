@@ -1,0 +1,70 @@
+<extend>
+	<write main>
+		<article>
+			<h1><?=$title?></h1>
+			<foreach e="(array)@$liste">
+				<h2><a href="<?=$subUri.$label.'|'.$id?>"><?=$label?></a></h2>
+				<p><?=$presentation?></p>
+				<loop var="themes" prefix="theme">
+					<?=$theme_id?>
+					<?=$theme_label?>
+				</loop>
+				<loop var="communes" prefix="commune">
+					<?=$commune_id?>
+					<?=$commune_label?>
+				</loop>
+				<p class="lead">
+					<a href="<?=$subUri.":$label|$id"?>" class="btn btn-default">Read More</a>
+				</p>
+				<p class="pull-right">
+					<span class="label label-default">keyword</span>
+					<span class="label label-default">tag</span>
+					<span class="label label-default">post</span>
+				</p>
+				<ul class="list-inline">
+					<li>
+						<a href="#"><?=$datestart?></a>
+					</li>
+					<li>
+						<a href="#"><i class="icon-comment"></i> 2 Comments</a>
+					</li>
+					<li>
+						<a href="#"><i class="icon-share"></i> 14 Shares</a>
+					</li>
+				</ul>
+				<hr>
+			</foreach>
+			<if e="@$rowsTotal">
+				<ul class="simple-pagination light-theme">
+					<if e="$pageCurrent==1">
+						<li class="active"><span class="current prev">Début</span></li>
+						<li class="active"><span class="current prev">Précédent</span></li>
+					<else>
+						<li><a class="prev page-link" href="<?=view::param(0)?>">Début</a></li>
+						<li><a class="prev page-link" href="<?=view::param(0).($pageCurrent==2?'':$pagePrefix.($pageCurrent-1))?>">Précédent</a></li>
+					</if>
+					<for e="$i=$start;$i<=$end;$i++">
+						<if e="$pageCurrent==$i">
+							<li class="active"><span class="current"><?=$i?></span></li>
+						<else>
+							<li>
+								<a class="page-link" href="<?=view::param(0).($i>1?$pagePrefix.$i:'')?>"><?=$i?></a>
+							</li>
+						</if>
+					</for>
+					<if e="$pageCurrent==$pagesTotal">
+						<li class="active">
+							<span class="current next">Suivant</span>
+						</li>
+					<else>
+						<li>
+							<a class="next page-link" href="<?=view::param(0).$pagePrefix.($pageCurrent+1)?>">Suivant</a>
+						</li>
+					</if>
+				</ul>
+			<else>
+				Aucune Entrée
+			</if>
+		</article>
+	</write>
+</extend>
