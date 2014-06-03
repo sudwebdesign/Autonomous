@@ -1,4 +1,4 @@
-ul-dropdown {
+[is=dropdown]{
 	&#moniddedropdown{
 		
 	}
@@ -78,17 +78,13 @@ ul-dropdown {
 			}
 		}
 	}
-}
-
-.open {
-	> ul-dropdown {
+	.open > & {
 		display: block;
-	}
-	> a {
-		outline: 0;
+		& a {
+			outline: 0;
+		}
 	}
 }
-
 .dropdown-backdrop { // Backdrop to catch body clicks on mobile, etc.
 	position: fixed;
 	left: 0;

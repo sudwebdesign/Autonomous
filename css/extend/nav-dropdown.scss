@@ -2,7 +2,7 @@
 	margin:auto;
 	position: relative;
 	@include clearfix();
-	ul-dropdown>li{
+	[is=dropdown]>li{
 		position: relative;
 		>a:focus{
 			outline: 0;

@@ -11,10 +11,10 @@ $js(true,[
 	else if(i!==-1)
 		loc = loc.substr(0,i2);
 	loc = decodeURIComponent(loc.substr(1));
-	var li = $('body>nav>ul-dropdown>li>a[href="'+loc+'"]').parent('li');
-	li.addClass('active');
-	li.parent('ul,ul-dropdown').parent('li').addClass('active');
-	var mls = 'body>nav>ul-dropdown>li>a[rel!="external"][target!="_blank"]:not([href^="javascript:"]):not([is=collapser])';
+	//var li = $('body>nav>[is=dropdown]>li>a[href="'+loc+'"]').parent('li');
+	//li.addClass('active');
+	//li.parent('ul,[is=dropdown]').parent('li').addClass('active');
+	//var mls = 'body>nav>[is=dropdown]>li>a[rel!="external"][target!="_blank"]:not([href^="javascript:"]):not([is=collapser])';
 	//$(mls).on('click',function(){
 		//$(mls).removeClass('active');
 		//$(this).addClass('active');

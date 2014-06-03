@@ -1,8 +1,8 @@
-$css('/x-dom/ul-dropdown');
+$css('/x-dom/dropdown');
 $js('jquery',function(){
  "use strict";
   var backdrop = '.dropdown-backdrop'
-  var toggle   = 'ul-dropdown>li:has(ul)>a'
+  var toggle   = '[is=dropdown]>li:has(ul)>a'
   var Dropdown = function (element) {
 	var $el = $(element).on('click.bs.dropdown', this.toggle)
   }

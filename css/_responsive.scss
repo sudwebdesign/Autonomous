@@ -2,7 +2,7 @@
 	body > nav >a{
 		display: none;
 	}
-	body>nav ul-dropdown{
+	body>nav [is=dropdown]{
 		>li>ul{
 			position: absolute;
 			>li>a{
@@ -55,7 +55,7 @@
 	}
 }
 
-body>nav>ul-dropdown>li{
+body>nav>[is=dropdown]>li{
 	@include box-sizing();
 	>a{
 		overflow:hidden;
@@ -70,7 +70,7 @@ body>nav>ul-dropdown>li{
 	?>
 	@media(min-width: <?=$screen?>px){
 		body>nav{
-			ul-dropdown{
+			[is=dropdown]{
 				>li{
 					padding-bottom:<?=$fs-10?>px;
 					>a{

@@ -6,7 +6,7 @@ body>header{
 	@include clearfix();
 	@include gradient-vertical(#3c3c3c,#222222);
 	display:block;
-	>ul-dropdown>li{
+	>[is=dropdown]>li{
 		position: relative;
 		>a:focus{
 			outline: 0;
