@@ -29,7 +29,9 @@ body>header{
 			width:100%;
 			border:0;
 			margin:0;
-			padding:0.2em 0.2em 0.2em 1em;
+			@media(min-width:768px){
+				padding:0.2em 0.2em 0.2em 1em;
+			}
 			border-radius: 8px;
 			border: solid #000 1px;
 			font-size:1.2em;
@@ -45,6 +47,17 @@ body>header{
 			&:nth-child(1)>a{
 				@?include icon(user);
 			}
+			>ul{
+				&.disabled{
+					display:none;
+				}
+			}
+			>a{
+				@media (min-width: 768px){
+					color: $brand-primary;
+				}
+			}
 		}
 	}
+	
 }
