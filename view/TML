@@ -16,7 +16,15 @@
 		</form>
 		<ul is="dropdown">
 			<li>
-				<a href="javascript:;" class="login">Se connecter</a>
+				<a is="persona" href="javascript:;">Se connecter</a>
+				<ul>
+					<li>
+						<a class="persona logout" href="javascript:;">Déconnexion</a>
+					</li>
+					<li>
+						<a href="Mon-Compte">Mon Compte</a>
+					</li>
+				</ul>
 			</li>
 		</ul>
 	</header>

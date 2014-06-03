@@ -1,4 +1,5 @@
 <?use control\post;?>
+<?use control\session;?>
 <extend>	
 	<js+css form>
 	<attr selector="main" addClass="ajouter">

@@ -6,6 +6,11 @@ body>footer{
 	background: #111;
 	clear: both;
 	width: 100%;
+	@media screen and (min-width: 896px) and (min-height:600px) {
+		display: block;
+		position: fixed;
+		bottom:0;
+	}
 	>a {
 		text-align:center;
 		margin-top:1%;
