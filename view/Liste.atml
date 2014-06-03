@@ -1,5 +1,8 @@
 <extend>
 	<write main>
+		<aside>
+			Search Options
+		</aside>
 		<article>
 			<h1><?=$title?></h1>
 			<foreach e="(array)@$liste">
@@ -66,5 +69,8 @@
 				Aucune Entrée
 			</if>
 		</article>
+		<aside>
+			Flux of others tables articles
+		</aside>
 	</write>
 </extend>

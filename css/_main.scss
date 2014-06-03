@@ -1,10 +1,18 @@
 body>main{
+	@?include grid(*,1-98-1);
+	@?include grid( 1-45-1, 1-51-1, 100,	800px);
+	@?include grid( 1-26-1, 1-45-1, 1-23-1,	1024px);
+	@?include grid( 1-30-1, 1-41-1, 1-23-1,	1260px);
+	height:100%;
+	>*{
+		height:100%;
+	}
+	
     @include clearfix();
+	padding-bottom: 4em;
 	>article,>aside,>form,>div{
 		margin-bottom:1em;
 		background: none repeat scroll 0 0 #FFFFFF;
-		margin-left:1%;
-		margin-right:1%;
 		min-height: 15em;
 		@include box-sizing();
 		background-color: #fff;
@@ -13,10 +21,12 @@ body>main{
 		border-radius: 4px;
 		@include box-shadow(0 6px 12px rgba(0,0,0,.175));
 		overflow:hidden;
+		padding:0.3em;
 	}
 	h1{
+		margin:-0.3em;
+		margin-bottom:0.5em;
 		border-bottom:solid 1px #000;
-		margin-bottom:0;
 		font-size:1.4em;
 		font-weight:bold;
 		padding-left: 1.5em;
@@ -30,33 +40,7 @@ body>main{
 		h1{
 			@?include icon(home);
 		}
-	}
-
-	@media screen and (min-width: 896px) and (min-height:600px) {
-		padding-bottom: 4em;
-	}
-	>article{
-		@media screen and (min-width: 896px) and (min-height:600px) {
-			float: left;
-			margin-left: 27.5%;
-			width: 45%;
-			p{
-				padding: 0 1em;
-			}
-		}
-	}
-	>aside{
-		border: 1px solid #D5D5D5;
-		border-radius: 5px;
-		@media screen and (min-width: 896px) and (min-height:600px) {
-			float: left;
-			margin-left: -72.5%;
-			width: 26%;
-			&+aside {
-				float: right;
-			}
-		}
-	}
+	}	
 	&.not-found{
 		a{
 			&[href=""]{
