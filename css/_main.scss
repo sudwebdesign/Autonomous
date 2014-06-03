@@ -1,6 +1,6 @@
 body>main{
     @include clearfix();
-	>article,>aside,>form{
+	>article,>aside,>form,>div{
 		margin-bottom:1em;
 		background: none repeat scroll 0 0 #FFFFFF;
 		margin-left:1%;
@@ -57,5 +57,20 @@ body>main{
 			}
 		}
 	}
+	&.not-found{
+		a{
+			&[href=""]{
+				@?include icon(chevron-left);
+			}
+			&[href="Contact"]{
+				@?include icon(envelope);
+			}
+		}
+		.error-details{
+			
+		}
+		.error-actions{
 
+		}
+	}
 }
