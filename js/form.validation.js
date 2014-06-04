@@ -1,12 +1,19 @@
 $js('jquery',function(){
 	<!--#include virtual="/js/validate.js" -->
-	$(function(){
-		
-		$('main form[action][id]').on('submit',function(e){
-			e.preventDefault();
-			$('body>header a.login').click();
-			//$(this).off('submit').submit();
-			return false;
-		});
-	});
+	var onSubmit = function(e){
+		e.preventDefault();
+		var email = $(document).data('persona.email');
+		var THIS = $(this);
+		var submit = function(){
+			THIS.off('submit',onSubmit).submit();
+		};
+		if(email){
+			submit();
+		}
+		else{
+			$(document).one('persona.login',submit);
+		}
+		return false;
+	};
+	$('main form[action][id]').on('submit',onSubmit);
 });

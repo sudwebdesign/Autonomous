@@ -30,6 +30,7 @@ $js([
 		var logonCALL = function(currentUser){
 			localStorage.setItem('email',currentUser);
 			$(document).data('persona.email',currentUser);
+			$(document).trigger('persona.login');
 			loginBTN.data('origin',loginBTN.html());
 			loginBTN.html(currentUser);
 			loginBTN.off('click',loginCALL);
@@ -72,5 +73,5 @@ $js([
 		else if(!localStorage.getItem('personaInitilized'))
 			initCALL();
 	});
+	$js(['jquery-ui/core','jquery-ui/effect','jquery-ui/effect-shake'],true);
 });
-$js(['jquery','jquery-ui/core','jquery-ui/effect','jquery-ui/effect-shake'],true);
