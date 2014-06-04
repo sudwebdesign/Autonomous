@@ -1,17 +1,6 @@
 /*
-
-	jQuery Tags Input Plugin 1.3.3
-	
-	Copyright (c) 2011 XOXCO, Inc
-	
-	Documentation for this plugin lives here:
-	http://xoxco.com/clickable/jquery-tags-input
-	
-	Licensed under the MIT license:
-	http://www.opensource.org/licenses/mit-license.php
-
-	ben@xoxco.com
-
+	jQuery Tags Input Plugin 1.3.3 Copyright (c) 2011 XOXCO, Inc - Documentation for this plugin lives here: http://xoxco.com/clickable/jquery-tags-input
+	Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php ben@xoxco.com
 	modified by surikat add option defaultTextRemove and lazy-loading off js and css
 */
 $css('/x-dom/tagsinput');
@@ -81,7 +70,7 @@ $js(true,[
   };
   
 	$.fn.addTag = function(value,options) {
-			options = jQuery.extend({focus:false,callback:true},options);
+			options = $.extend({focus:false,callback:true},options);
 			this.each(function() { 
 				var id = $(this).attr('id');
 
@@ -90,7 +79,7 @@ $js(true,[
 					tagslist = new Array();
 				}
 
-				value = jQuery.trim(value);
+				value = $.trim(value);
 		
 				if (options.unique) {
 					var skipTag = $(this).tagExist(value);
@@ -171,7 +160,7 @@ $js(true,[
 	$.fn.tagExist = function(val) {
 		var id = $(this).attr('id');
 		var tagslist = $(this).val().split(delimiter[id]);
-		return (jQuery.inArray(val, tagslist) >= 0); //true when tag exists, false when not
+		return ($.inArray(val, tagslist) >= 0); //true when tag exists, false when not
 	};
 	
 	// clear all existing tags and import new ones from a string
@@ -182,16 +171,14 @@ $js(true,[
 	}
 		
 	$.fn.tagsInput = function(options) { 
-    var settings = jQuery.extend({
+    var settings = $.extend({
       interactive:true,
       defaultText:'add a tag',
       defaultTextRemove:'Removing tag',
       minChars:0,
       width:'auto',
       height:'auto',
-      autocomplete: {selectFirst: false },
       'hide':true,
-      'delimiter':',',
       'unique':true,
       removeWithBackspace:true,
       placeholderColor:'#666666',
@@ -209,7 +196,7 @@ $js(true,[
 				id = $(this).attr('id', 'tags' + new Date().getTime()).attr('id');
 			}
 			
-			var data = jQuery.extend({
+			var data = $.extend({
 				pid:id,
 				real_input: '#'+id,
 				holder: '#'+id+'_tagsinput',
@@ -259,51 +246,24 @@ $js(true,[
 					}
 					$(event.data.fake_input).css('color','#000000');		
 				});
-						
-				if (settings.autocomplete_url != undefined) {
-					autocomplete_options = {source: settings.autocomplete_url};
-					for (attrname in settings.autocomplete) { 
-						autocomplete_options[attrname] = settings.autocomplete[attrname]; 
-					}
+
+				$(data.fake_input).autocomplete(settings.autocomplete);
+				$(data.fake_input).bind('autocompleteselect',data,function(event,ui) {
+					$(event.data.real_input).addTag(ui.item.value,{focus:true,unique:(settings.unique)});
+					return false;
+				});
 				
-					if (jQuery.Autocompleter !== undefined) {
-						$(data.fake_input).autocomplete(settings.autocomplete_url, settings.autocomplete);
-						$(data.fake_input).bind('result',data,function(event,data,formatted) {
-							if (data) {
-								$('#'+id).addTag(data[0] + "",{focus:true,unique:(settings.unique)});
-							}
-					  	});
-					} else if (jQuery.ui.autocomplete !== undefined) {
-						$(data.fake_input).autocomplete(autocomplete_options);
-						$(data.fake_input).bind('autocompleteselect',data,function(event,ui) {
-							$(event.data.real_input).addTag(ui.item.value,{focus:true,unique:(settings.unique)});
-							return false;
-						});
-					}
-				
-					
-				} else {
-						// if a user tabs out of the field, create a new tag
-						// this is only available if autocomplete is not used.
-						$(data.fake_input).bind('blur',data,function(event) { 
-							var d = $(this).attr('data-default');
-							if ($(event.data.fake_input).val()!='' && $(event.data.fake_input).val()!=d) { 
-								if( (event.data.minChars <= $(event.data.fake_input).val().length) && (!event.data.maxChars || (event.data.maxChars >= $(event.data.fake_input).val().length)) )
-									$(event.data.real_input).addTag($(event.data.fake_input).val(),{focus:true,unique:(settings.unique)});
-							} else {
-								$(event.data.fake_input).val($(event.data.fake_input).attr('data-default'));
-								$(event.data.fake_input).css('color',settings.placeholderColor);
-							}
-							return false;
-						});
-				
-				}
 				// if user types a comma, create a new tag
 				$(data.fake_input).bind('keypress',data,function(event) {
 					if (event.which==event.data.delimiter.charCodeAt(0) || event.which==13 ) {
 					    event.preventDefault();
-						if( (event.data.minChars <= $(event.data.fake_input).val().length) && (!event.data.maxChars || (event.data.maxChars >= $(event.data.fake_input).val().length)) )
-							$(event.data.real_input).addTag($(event.data.fake_input).val(),{focus:true,unique:(settings.unique)});
+						if( (event.data.minChars <= $(event.data.fake_input).val().length) && (!event.data.maxChars || (event.data.maxChars >= $(event.data.fake_input).val().length)) ){
+							var addValue = $(event.data.fake_input).val();
+							addValue = addValue.split(settings.delimiter);
+							for (i=0; i<addValue.length; i++) { 
+								$(event.data.real_input).addTag(addValue[i],{focus:true,unique:(settings.unique)});
+							}
+						}
 					  	$(event.data.fake_input).resetAutosize(settings);
 						return false;
 					} else if (event.data.autosize) {
@@ -368,8 +328,12 @@ $js(true,[
 			minChars:0,
 			width:'auto',
 			height:'auto',
-			autocomplete_url: 'service/autocomplete/taxonomy',
-			autocomplete:{selectFirst:true,width:'100px',autoFill:true},
+			autocomplete:{
+				selectFirst:true,
+				width:'100px',
+				autoFill:true,
+				source:'service/autocomplete/taxonomy'
+			},
 			'hide':true,
 			'delimiter':',',
 			'unique':true,
