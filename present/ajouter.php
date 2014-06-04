@@ -3,6 +3,7 @@ use view;
 use model;
 use model\R;
 use surikat\control\PHP;
+use surikat\control\session;
 use surikat\control\post;
 use surikat\control\filter;
 use surikat\control\uploader;
@@ -15,6 +16,7 @@ class ajouter extends \present{
 		
 	}
 	static function exec(){
+		session::start(); //session auto start when get a key, if output not bufferised but direct flushed, have to start first
 		self::POST();
 	}
 	protected static function commonCreate($type){

@@ -1,16 +1,14 @@
 body>main{
-	@?include grid(*,1-98-1);
-	@?include grid( 1-45-1, 1-51-1, 100,	800px);
-	@?include grid( 1-26-1, 1-45-1, 1-23-1,	1024px);
-	@?include grid( 1-30-1, 1-41-1, 1-23-1,	1260px);
-	height:100%;
-	>*{
-		height:100%;
+	&.present-liste{
+		@?include grid(*,1-98-1);
+		@?include grid( 1-45-1, 1-51-1, 100,	800px);
+		@?include grid( 1-26-1, 1-45-1, 1-23-1,	1024px);
+		@?include grid( 1-30-1, 1-41-1, 1-23-1,	1260px);
 	}
 	
     @include clearfix();
 	padding-bottom: 4em;
-	>article,>aside,>form,>div{
+	>*{
 		margin-bottom:1em;
 		background: none repeat scroll 0 0 #FFFFFF;
 		min-height: 15em;

@@ -83,7 +83,7 @@
 		<?if(control::devHas(control::dev_css)):?>$css().dev=true;<?endif;?>
 		<?if(control::devHas(control::dev_js)):?>$js().dev=true;<?endif;?>
 		$js('script');
-		<?if(control::devHas(control::dev_control)):?>if(console) console.log('Server : <?=control\Chrono::get()?>');<?endif;?>
+		<?if(control::devHas(control::dev_control)):?>if(console) console.log('Server <?=$timeCompiled===$time?'Compilation+':''?>Exec: <?=control\Chrono::get()?> -  Exec <?=date('jMY-H:m:s',$time)?> - Compiled <?=date('jMY-H:m:s',$timeCompiled)?>');<?endif;?>
 	</script>
 </body>
 </html>

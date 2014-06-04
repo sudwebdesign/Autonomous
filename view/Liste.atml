@@ -1,4 +1,5 @@
 <extend>
+	<attr selector="main" addClass="present-liste">
 	<write main>
 		<aside>
 			Search Options
