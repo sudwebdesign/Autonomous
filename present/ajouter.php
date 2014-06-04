@@ -19,7 +19,34 @@ class ajouter extends \present{
 		session::start(); //session auto start when get a key, if output not bufferised but direct flushed, have to start first
 		self::POST();
 	}
-	protected static function commonCreate($type){
+	static function execVars(&$vars=array()){
+		
+	}
+	
+	protected static function POST(){
+		if(!count(self::$options['namespaces'])>count(explode('\\',__CLASS__))||empty($_POST))
+			return;
+		self::variable('formPosted',true);
+		$type = end(self::$options['namespaces']);
+		R::begin();
+		try{
+			$bean = self::POST_Common($type);
+			if(method_exists(($final=self::$final),'POST_Specifications'))
+				$final::POST_Specifications($bean);
+			//exit(print('<pre>'.print_r($bean->getArray(),true)));
+			R::store($bean);
+			R::commit();
+			post::clearPersistance();
+		}
+		catch(Exception_Validation $e){
+			R::rollback();
+			self::variable(array(
+				'formErrors'=>$e->getData(),
+				'formPosted'=>false
+			));
+		}
+	}
+	protected static function POST_Common($type){
 		$bean = R::newOne($type,array(
 			'created'=>date('Y-m-d H:i:s',time()),
 		));
@@ -29,7 +56,7 @@ class ajouter extends \present{
 				'key'=>'image',
 				'width'=>'90',
 				'height'=>'90',
-				//'rename'=>true,
+				//'rename'=>true, //image by default
 				'rename'=>$bean->titre,
 			));
 			uploader::files('content/'.$type.'/'.$bean->id.'/','files');
@@ -57,32 +84,8 @@ class ajouter extends \present{
 				if(!empty($tag))
 					$bean->sharedTag[] = R::findOrNewOne(array('taxonomy','tag'),array('label'=>$tag));
 		}
-		//R::debug();
 		self::POST_Geo($bean);
 		return $bean;
-	}
-	protected static function POST(){
-		if(!count(self::$options['namespaces'])>count(explode('\\',__CLASS__))||empty($_POST))
-			return;
-		self::variable('formPosted',true);
-		$type = end(self::$options['namespaces']);
-		R::begin();
-		try{
-			$bean = self::commonCreate($type);
-			if(method_exists(($final=self::$final),'POST_Specifications'))
-				$final::POST_Specifications($bean);
-			//exit(print('<pre>'.print_r($bean->getArray(),true)));
-			R::store($bean);
-			R::commit();
-			post::clearPersistance();
-		}
-		catch(Exception_Validation $e){
-			R::rollback();
-			self::variable(array(
-				'formErrors'=>$e->getData(),
-				'formPosted'=>false
-			));
-		}
 	}
 	static function POST_Geo($bean){
 		if(!isset($_POST['geo']))
@@ -144,9 +147,5 @@ class ajouter extends \present{
 				$geopoint->locality = $locality;
 			$bean->xownGeopoint[] = $geopoint;
 		}
-	}
-	
-	static function execVars(&$vars=array()){
-		
 	}
 }
