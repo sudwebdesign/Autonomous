@@ -34,10 +34,14 @@ class ajouter extends \present{
 			));
 			uploader::files('content/'.$type.'/'.$bean->id.'/','files');
 		});
-		//if(isset($_SESSION['email'])&&($user=R::findOne('users','email=?',array($_SESSION['email']))))
-			//$bean->user = $user;
-		//else
-			//$bean->error('user','required');
+		$email = session::get('email');
+		if(!$email)
+			$bean->error('user','required');
+		else{
+			$user = R::findOrNewOne('locality',array('label'=>$compo->long_name));
+			$bean->user = $user;
+		}
+			
 		if(isset($_POST['titre']))
 			$bean->titre = $_POST['titre'];
 		if(isset($_POST['tel']))

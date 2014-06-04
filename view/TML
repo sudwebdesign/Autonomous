@@ -17,7 +17,7 @@
 		<ul is="dropdown">
 			<li>
 				<a is="persona" href="javascript:;">Se connecter</a>
-				<ul>
+				<ul class="disabled">
 					<li>
 						<a class="persona logout" href="javascript:;">Déconnexion</a>
 					</li>

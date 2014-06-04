@@ -12,6 +12,7 @@ $js('jquery',function(){
 		}
 		else{
 			$(document).one('persona.login',submit);
+			$('[is=persona]:first').click();
 		}
 		return false;
 	};
