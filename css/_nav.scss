@@ -122,7 +122,7 @@ body>nav {
 		&.ajouter{
 			@?include icon(plus);
 		}
-		&[href^="Evenements"],&[href="Ajouter-Evenement"]{
+		&[href^="Évènements"],&[href="Ajouter-Évènement"]{
 			@?include icon(calendar);
 		}
 		&[href^="Ressources"],&[href="Ajouter-Ressource"]{
@@ -143,7 +143,7 @@ body>nav {
 		&[href="Annonces|Demandes"]{
 			@?include icon(chevron-left);
 		}
-		&[href="Mediatheques"],&[href="Ajouter-Mediatheque"]{
+		&[href="Mediathèques"],&[href="Ajouter-Mediathèque"]{
 			@?include icon(book);
 		}
 	}
