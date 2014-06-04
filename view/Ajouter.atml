@@ -9,7 +9,7 @@
 			$Type = ucfirst(end($x));
 			$type = strtolower($Type);
 		?>
-		<form id="<?=$type?>" action="<?=$action?>" method="POST" enctype="multipart/form-data" role="form" <?=isset($formPosted)?'class="form-posted"':''?>>
+		<form apply="Form-Validation.tpl" id="<?=$type?>" action="<?=$action?>" method="POST" enctype="multipart/form-data" role="form" <?=isset($formPosted)?'class="form-posted"':''?>>
 			<h1>Ajouter <?=$Type?></h1>
 			<if e="isset($formPosted)">
 				<h4>
@@ -70,18 +70,4 @@
 			<input type="submit" value="Proposer">									
 		</form>
 	</write>
-	<apply>
-		<after selector="form[action] input[name][type!=checkbox], form[action] select[name], form[action] textarea[name]">
-			<?
-				if(isset($formErrors)&&isset($formErrors['{{this:name}}'])){
-					?><small class="help-block"><?=$formErrors['{{this:name}}']?></small><?
-				}
-			?>
-		</after>
-		<attrappend selector="form[action] input[name][type=checkbox]" append="<?=post::get_checked('{{this:name}}','',true)?>">
-		<attr selector="form[action] input[name][type!=checkbox]" value="<?=post::get_text('{{this:name}}','{{this:checked}}',true)?>">
-		<write selector="form[action] textarea[name]">
-			<?=post::get_text('{{this:name}}','{{this:value}}',true)?>
-		</write>
-	</apply>
 </extend>
