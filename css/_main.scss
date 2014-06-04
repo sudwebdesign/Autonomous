@@ -54,4 +54,9 @@ body>main{
 		@?include grid( 1-26-1, 1-45-1, 1-23-1,	1024px);
 		@?include grid( 1-30-1, 1-41-1, 1-23-1,	1260px);
 	}
+	&.present-ajouter{
+		h1{
+			@?include icon(plus);
+		}
+	}
 }
