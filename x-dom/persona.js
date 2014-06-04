@@ -42,6 +42,8 @@ $js([
 		var logoffCALL = function(){
 			currentUser = false;
 			localStorage.removeItem('email');
+			$(document).data('persona.email',false);
+			$(document).trigger('persona.logout');
 			loginBTN.html(loginBTN.data('origin'));
 			loginBTN.next('ul').addClass('disabled');
 			loginBTN.on('click',loginCALL);
