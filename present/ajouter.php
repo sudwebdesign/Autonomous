@@ -65,7 +65,7 @@ class ajouter extends \present{
 		if(!$email)
 			$bean->error('user','required');
 		else{
-			$user = R::findOrNewOne('locality',array('label'=>$compo->long_name));
+			$user = R::findOrNewOne('user',array('email'=>$email));
 			$bean->user = $user;
 		}
 			
