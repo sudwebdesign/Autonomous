@@ -2,7 +2,7 @@
 <?use control\session;?>
 <extend>	
 	<js+css form>
-	<attr selector="main" addClass="ajouter">
+	<attr selector="main" addClass="present-ajouter">
 	<write main>
 		<?
 			$x = explode('-',view::param(0));
