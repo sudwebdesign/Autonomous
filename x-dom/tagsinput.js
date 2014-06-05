@@ -314,15 +314,15 @@ $js(true,[
 	};
 
 	$('[is=tagsinput]').each(function(){
+		$(this).wrap('<div class="tagsinput-wrap" />');
 		$(this).tagsInput({
-			defaultText:'Ajouter',
+			defaultText:$(this).attr('placeholder')?$(this).attr('placeholder'):'',
 			defaultTextRemove:'Supprimer ce tag',
 			minChars:0,
 			width:'auto',
 			height:'auto',
 			autocomplete:{
 				selectFirst:true,
-				width:'100px',
 				autoFill:true,
 				source:function(request,response){
 					var term = request.term;
@@ -333,11 +333,15 @@ $js(true,[
 						data:{
 							'term':term
 						},
-						complete:function(r){
-							response(r);
+						success:function(j){
+							response(j);
+						},
+						error:function(){
+							response([]);
 						}
 					});
 				}
+				,appendTo: $(this).parent()
 			},
 			'hide':true,
 			'delimiter':',',
