@@ -50,7 +50,7 @@
 				<input type="file" name="files[]" accept="application/*,text/*,image/*" title="Sélectionner des Fichiers" multiple />
 			</fieldset>
 			<fieldset>
-				<legend>Lieu / Adresse / Commune</legend>
+				<legend>Localité <small>(lieu,adresse ou commune)</small></legend>
 				<geo-completer>
 					<fieldset>
 						<input name="geo" type="text" placeholder="Rechercher un lieu, une adresse ou une commune" value="<?=model::getDepartementName().', '.model::DEFAULT_COUNTRY?>">
