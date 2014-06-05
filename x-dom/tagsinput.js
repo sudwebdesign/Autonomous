@@ -340,8 +340,13 @@ $js(true,[
 							response([]);
 						}
 					});
+				},
+				appendTo: $(this).parent(),
+				position: {
+					my: 'left top-3',
+					at: 'left bottom',
+					collision: 'none'
 				}
-				,appendTo: $(this).parent()
 			},
 			'hide':true,
 			'delimiter':',',
