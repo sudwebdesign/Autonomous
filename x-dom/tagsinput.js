@@ -10,7 +10,8 @@ $js(true,[
 	'jquery-ui/widget',
 	'jquery-ui/menu',
 	'jquery-ui/position',
-	'jquery-ui/autocomplete'
+	'jquery-ui/autocomplete',
+	'string'
 ],function(){
 	var delimiter = new Array();
 	var tags_callbacks = new Array();
@@ -315,9 +316,21 @@ $js(true,[
 			f.call(obj, obj, tags[i]);
 		}
 	};
-	var delimiter = ',';
+	var splitter = ',';
 	$('[is=tagsinput]').each(function(){
 		var THIS = $(this);
+		var suggest = THIS.parent().find('.tags-suggests');
+		var suggestion = [];
+		if(suggest){
+			var suggestion = suggest.text().trim();
+			suggest.text('');
+			var idf = suggestion.indexOf(':');
+			if(idf>-1)
+				suggestion = suggestion.substr(idf+1);
+			suggestion = suggestion.split(splitter);
+			for(var i in suggestion)
+				suggestion[i] = suggestion[i].trim();
+		}
 		THIS.wrap('<div class="tagsinput-wrap" />');
 		THIS.tagsInput({
 			defaultText:THIS.attr('placeholder')?THIS.attr('placeholder'):'',
@@ -331,21 +344,12 @@ $js(true,[
 				minLength: 0,
 				source:function(request,response){
 					var term = request.term;
-					var j = [];
-					var suggest = THIS.closest('.tagsinput-wrap').parent().find('.tags-suggests');
-					console.log(suggest);
-					if(suggest){
-						var suggestion = suggest.text().trim();
-						suggest.text('');
-						var idf = suggestion.indexOf(':');
-						if(idf>-1)
-							suggestion = suggestion.substr(idf);
-						//n.nodeValue = '';
-						suggestion = suggestion.split(delimiter);
-						for(var i in suggestion)
-							j.push(suggestion[i].trim());
-					}
-					console.log(j);
+					var suggesting = [];
+					var termSa = stripAccents(term);
+					for(var k in suggestion)
+						if(stripAccents(suggestion[k]).indexOf(termSa)===0)
+							suggesting.push(suggestion[k]);
+					response(suggesting);
 					if(term.length>=1){
 						$.ajax({
 							type:'GET',
@@ -354,16 +358,13 @@ $js(true,[
 							data:{
 								'term':term
 							},
-							success:function(rj){
-								response(j.concat(rj).unique());
-							},
-							error:function(){
-								response([]);
+							success:function(j){
+								for(var k in j)
+									if(suggesting.indexOf(j[k])<=-1)
+										suggesting.push(j[k]);
+								response(suggesting);
 							}
 						});
-					}
-					else{
-						response(j);
 					}
 				},
 				appendTo: $(this).parent(),
@@ -374,7 +375,7 @@ $js(true,[
 				}
 			},
 			'hide':true,
-			'delimiter':delimiter,
+			'delimiter':splitter,
 			'unique':true,
 			removeWithBackspace:true,
 			placeholderColor:'#666666',

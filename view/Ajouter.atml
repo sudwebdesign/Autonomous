@@ -33,8 +33,8 @@
 				<legend>Thématiques <small>(séparées par des virgules)</small></legend>
 				<input name="tags" type="text" value="" is="tagsinput" />
 				<?$dynVar='taxonomy'.ucfirst($taxonomy);?>
-				<if e="isset($$dynVar)">Suggestions:
-					<span class="tags-suggests">
+				<if e="isset($$dynVar)">
+					<span class="tags-suggests">Suggestions:
 						<foreach e="$$dynVar as $key=>$val" cacheSync="taxonomy">
 							<?=$val?>,
 						</foreach>

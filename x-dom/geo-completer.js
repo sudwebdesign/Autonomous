@@ -212,16 +212,10 @@ $js([
 		});
 	};
 	$js('http://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places&callback=geocallback');
+	/*
 	$(window).on('unload',function(){
 		//trying to resolve google map bug on unloading page that slow hard navigation
-		//http://stackoverflow.com/questions/10485582/what-is-the-proper-way-to-destroy-a-map-instance
-		
-		// First getting rid of the google.maps object (to avoid memory leaks)
-		// Then, we are also removing google-maps related script tags we can identify.
-		// After unloaded, if maps is reloaded more than once on the same page; 
-		// we'll also get a warning in the console saying: "Warning: you have included the
-		// Google Maps API multiple times on this page. This may cause unexpected errors."
-		// This script will also avoid that warning.
+		//$(this).off('unload');
 		if (window.google !== undefined && google.maps !== undefined){
 			delete google.maps;
 			$('script').each(function () {
@@ -234,4 +228,5 @@ $js([
 			});
 		}
 	});
+	*/
 });
