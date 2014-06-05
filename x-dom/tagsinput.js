@@ -230,11 +230,11 @@ $js(true,[
 			$(data.fake_input).css('color',settings.placeholderColor);
 			$(data.fake_input).resetAutosize(settings);
 	
-			$(data.holder).bind('click',data,function(event) {
+			$(data.holder).on('click',data,function(event) {
 				$(event.data.fake_input).focus();
 			});
 		
-			$(data.fake_input).bind('focus',data,function(event) {
+			$(data.fake_input).on('focus',data,function(event) {
 				if ($(event.data.fake_input).val()==$(event.data.fake_input).attr('data-default')) { 
 					$(event.data.fake_input).val('');
 				}
@@ -242,13 +242,16 @@ $js(true,[
 			});
 
 			$(data.fake_input).autocomplete(settings.autocomplete);
-			$(data.fake_input).bind('autocompleteselect',data,function(event,ui) {
+			$(data.fake_input).on('autocompleteselect',data,function(event,ui) {
 				$(event.data.real_input).addTag(ui.item.value,{focus:true,unique:(settings.unique)});
 				return false;
 			});
+			$(data.fake_input).on('focus',function(){
+				$(this).autocomplete('search','');
+			});
 			
 			// if user types a comma, create a new tag
-			$(data.fake_input).bind('keypress',data,function(event) {
+			$(data.fake_input).on('keypress',data,function(event) {
 				if (event.which==event.data.delimiter.charCodeAt(0) || event.which==13 ) {
 					event.preventDefault();
 					if( (event.data.minChars <= $(event.data.fake_input).val().length) && (!event.data.maxChars || (event.data.maxChars >= $(event.data.fake_input).val().length)) ){
@@ -266,7 +269,7 @@ $js(true,[
 				}
 			});
 			//Delete last tag on backspace
-			data.removeWithBackspace && $(data.fake_input).bind('keydown', function(event)
+			data.removeWithBackspace && $(data.fake_input).on('keydown', function(event)
 			{
 				if(event.keyCode == 8 && $(this).val() == '')
 				{
@@ -312,11 +315,12 @@ $js(true,[
 			f.call(obj, obj, tags[i]);
 		}
 	};
-
+	var delimiter = ',';
 	$('[is=tagsinput]').each(function(){
-		$(this).wrap('<div class="tagsinput-wrap" />');
-		$(this).tagsInput({
-			defaultText:$(this).attr('placeholder')?$(this).attr('placeholder'):'',
+		var THIS = $(this);
+		THIS.wrap('<div class="tagsinput-wrap" />');
+		THIS.tagsInput({
+			defaultText:THIS.attr('placeholder')?THIS.attr('placeholder'):'',
 			defaultTextRemove:'Supprimer ce tag',
 			minChars:0,
 			width:'auto',
@@ -324,22 +328,43 @@ $js(true,[
 			autocomplete:{
 				selectFirst:true,
 				autoFill:true,
+				minLength: 0,
 				source:function(request,response){
 					var term = request.term;
-					$.ajax({
-						type:'GET',
-						dataType:'json',
-						url:'service/autocomplete/taxonomy',
-						data:{
-							'term':term
-						},
-						success:function(j){
-							response(j);
-						},
-						error:function(){
-							response([]);
-						}
-					});
+					var j = [];
+					var suggest = THIS.closest('.tagsinput-wrap').parent().find('.tags-suggests');
+					console.log(suggest);
+					if(suggest){
+						var suggestion = suggest.text().trim();
+						suggest.text('');
+						var idf = suggestion.indexOf(':');
+						if(idf>-1)
+							suggestion = suggestion.substr(idf);
+						//n.nodeValue = '';
+						suggestion = suggestion.split(delimiter);
+						for(var i in suggestion)
+							j.push(suggestion[i].trim());
+					}
+					console.log(j);
+					if(term.length>=1){
+						$.ajax({
+							type:'GET',
+							dataType:'json',
+							url:'service/autocomplete/taxonomy',
+							data:{
+								'term':term
+							},
+							success:function(rj){
+								response(j.concat(rj).unique());
+							},
+							error:function(){
+								response([]);
+							}
+						});
+					}
+					else{
+						response(j);
+					}
 				},
 				appendTo: $(this).parent(),
 				position: {
@@ -349,7 +374,7 @@ $js(true,[
 				}
 			},
 			'hide':true,
-			'delimiter':',',
+			'delimiter':delimiter,
 			'unique':true,
 			removeWithBackspace:true,
 			placeholderColor:'#666666',

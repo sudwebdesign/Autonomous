@@ -4,8 +4,8 @@ class present extends surikat\present{
 	static function compileVars(&$vars=array()){
 		return array(
 			'title'=>(($u=view::param(0))?$u.' - ':'').'Autonomie et Partage',
-			'taxonomyRessources'=>model::getTaxonomy('Ressource'),
-			'taxonomyEvenements'=>model::getTaxonomy('Évènement'),
+			'taxonomyRessource'=>model::getTaxonomy('Ressource'),
+			'taxonomyEvenement'=>model::getTaxonomy('Évènement'),
 			'timeCompiled'=>time(),
 		);
 	}

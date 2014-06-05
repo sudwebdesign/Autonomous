@@ -18,6 +18,7 @@ class ajouter extends \present{
 	static function exec(){
 		session::start(); //session auto start when get a key, if output not bufferised but direct flushed, have to start first
 		self::POST();
+		self::variable('taxonomy',end(self::$options['namespaces']));
 	}
 	static function execVars(&$vars=array()){
 		
@@ -27,7 +28,7 @@ class ajouter extends \present{
 		if(!count(self::$options['namespaces'])>count(explode('\\',__CLASS__))||empty($_POST))
 			return;
 		self::variable('formPosted',true);
-		$type = end(self::$options['namespaces']);
+		$type = self::variable('taxonomy');
 		R::begin();
 		try{
 			$bean = self::POST_Common($type);
@@ -82,7 +83,7 @@ class ajouter extends \present{
 			$tags = explode(',',$_POST['tags']);
 			foreach($tags as $tag)
 				if(!empty($tag))
-					$bean->sharedTag[] = R::findOrNewOne(array('taxonomy','tag'),array('label'=>$tag));
+					$bean->sharedTag[] = R::findOrNewOne(array('taxonomy','tag'),array('label'=>trim($tag)));
 		}
 		self::POST_Geo($bean);
 		return $bean;

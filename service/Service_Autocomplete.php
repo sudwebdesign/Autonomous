@@ -28,9 +28,10 @@ class Service_Autocomplete {
 	}
 	static function taxonomy(){
 		$results = array();
-		if(isset($_GET['term'])&&strlen($term=$_GET['term'])>=2)
-			$results = array_values(model::col('taxonomy',array('where'=>'label LIKE ?'),array('%'.$term.'%')));
-		$results = array_merge($results,self::getKeywordSuggestionsFromGoogle($term));
+		if(isset($_GET['term'])&&strlen($term=trim($_GET['term']))>=1){
+			$results = array_values(model::col('tag',array('where'=>'label LIKE ?'),array($term.'%')));
+			//$results = array_merge($results,self::getKeywordSuggestionsFromGoogle($term));
+		}
 		header('Content-Type:application/json; charset=utf-8');
 		echo json_encode($results);
 	}
