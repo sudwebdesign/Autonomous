@@ -1,43 +1,43 @@
 .tagsinput {
-	border:1px solid #CCC;
 	background: #FFF;
-	padding:5px;
 	width:300px;
 	height:100px;
 	overflow-y: auto;
 	border-radius:3px;
 	span.tag {
-		border: 1px solid #a5d24a;
+		border: 1px solid #ccc;
 		border-radius:2px;
 		display: block;
 		float: left;
-		padding: 5px;
 		text-decoration:none;
-		background: #cde69c;
-		color: #638421;
-		margin-right: 5px;
-		margin-bottom:5px;
-		font-family: helvetica;
-		font-size:13px;
+		background: #fff;
+		color: #000;
+		font-size: 1.2em;
+		font-weight: normal;
+		line-height: 1.2em;
+		margin: 0 5px 5px 0;
+		height:2em;
+		display:block;
+		position:relative;
+		a,
+		span{
+			padding-top: 1.2em;
+			margin-left: 0.5em;
+			margin-right: 0.5em;
+		}
 		a {
-			font-weight: bold;
-			color: #82ad2b;
+			color: #ccc;
 			text-decoration:none;
-			font-size: 11px;
+			&:hover{
+				background: #f00;
+			}
 		}
 	}
 	input {
 		width:80px;
 		margin:0px;
-		font-family: helvetica;
-		font-size: 13px;
-		border:1px solid transparent;
 		padding:5px;
-		background: transparent;
 		color: #000;
-		outline:0px;
-		margin-right:5px;
-		margin-bottom:5px;
 	}
 	div{
 		display:block;

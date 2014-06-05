@@ -172,7 +172,6 @@ $js(true,[
 		
 	$.fn.tagsInput = function(options) { 
     var settings = $.extend({
-      interactive:true,
       defaultText:'add a tag',
       defaultTextRemove:'Removing tag',
       minChars:0,
@@ -214,11 +213,7 @@ $js(true,[
 			}
 	
 			var markup = '<div id="'+id+'_tagsinput" class="tagsinput"><div id="'+id+'_addTag">';
-			
-			if (settings.interactive) {
-				markup = markup + '<input id="'+id+'_tag" value="" data-default="'+settings.defaultText+'" />';
-			}
-			
+			markup = markup + '<input id="'+id+'_tag" value="" data-default="'+settings.defaultText+'" />';
 			markup = markup + '</div><div class="tags_clear"></div></div>';
 			
 			//$(markup).insertAfter(this);
@@ -231,70 +226,68 @@ $js(true,[
 			if ($(data.real_input).val()!='') { 
 				$.fn.tagsInput.importTags($(data.real_input),$(data.real_input).val());
 			}		
-			if (settings.interactive) { 
-				$(data.fake_input).val($(data.fake_input).attr('data-default'));
-				$(data.fake_input).css('color',settings.placeholderColor);
-		        $(data.fake_input).resetAutosize(settings);
+			$(data.fake_input).val($(data.fake_input).attr('data-default'));
+			$(data.fake_input).css('color',settings.placeholderColor);
+			$(data.fake_input).resetAutosize(settings);
+	
+			$(data.holder).bind('click',data,function(event) {
+				$(event.data.fake_input).focus();
+			});
 		
-				$(data.holder).bind('click',data,function(event) {
-					$(event.data.fake_input).focus();
-				});
-			
-				$(data.fake_input).bind('focus',data,function(event) {
-					if ($(event.data.fake_input).val()==$(event.data.fake_input).attr('data-default')) { 
-						$(event.data.fake_input).val('');
-					}
-					$(event.data.fake_input).css('color','#000000');		
-				});
-
-				$(data.fake_input).autocomplete(settings.autocomplete);
-				$(data.fake_input).bind('autocompleteselect',data,function(event,ui) {
-					$(event.data.real_input).addTag(ui.item.value,{focus:true,unique:(settings.unique)});
-					return false;
-				});
-				
-				// if user types a comma, create a new tag
-				$(data.fake_input).bind('keypress',data,function(event) {
-					if (event.which==event.data.delimiter.charCodeAt(0) || event.which==13 ) {
-					    event.preventDefault();
-						if( (event.data.minChars <= $(event.data.fake_input).val().length) && (!event.data.maxChars || (event.data.maxChars >= $(event.data.fake_input).val().length)) ){
-							var addValue = $(event.data.fake_input).val();
-							addValue = addValue.split(settings.delimiter);
-							for (i=0; i<addValue.length; i++) { 
-								$(event.data.real_input).addTag(addValue[i],{focus:true,unique:(settings.unique)});
-							}
-						}
-					  	$(event.data.fake_input).resetAutosize(settings);
-						return false;
-					} else if (event.data.autosize) {
-			            $(event.data.fake_input).doAutosize(settings);
-            
-          			}
-				});
-				//Delete last tag on backspace
-				data.removeWithBackspace && $(data.fake_input).bind('keydown', function(event)
-				{
-					if(event.keyCode == 8 && $(this).val() == '')
-					{
-						 event.preventDefault();
-						 var last_tag = $(this).closest('.tagsinput').find('.tag:last').text();
-						 var id = $(this).attr('id').replace(/_tag$/, '');
-						 last_tag = last_tag.replace(/[\s]+x$/, '');
-						 $('#' + id).removeTag(escape(last_tag));
-						 $(this).trigger('focus');
-					}
-				});
-				$(data.fake_input).blur();
-				
-				//Removes the not_valid class when user changes the value of the fake input
-				if(data.unique) {
-				    $(data.fake_input).keydown(function(event){
-				        if(event.keyCode == 8 || String.fromCharCode(event.which).match(/\w+|[áéíóúÁÉÍÓÚñÑ,/]+/)) {
-				            $(this).removeClass('not_valid');
-				        }
-				    });
+			$(data.fake_input).bind('focus',data,function(event) {
+				if ($(event.data.fake_input).val()==$(event.data.fake_input).attr('data-default')) { 
+					$(event.data.fake_input).val('');
 				}
-			} // if settings.interactive
+				$(event.data.fake_input).css('color','#000000');		
+			});
+
+			$(data.fake_input).autocomplete(settings.autocomplete);
+			$(data.fake_input).bind('autocompleteselect',data,function(event,ui) {
+				$(event.data.real_input).addTag(ui.item.value,{focus:true,unique:(settings.unique)});
+				return false;
+			});
+			
+			// if user types a comma, create a new tag
+			$(data.fake_input).bind('keypress',data,function(event) {
+				if (event.which==event.data.delimiter.charCodeAt(0) || event.which==13 ) {
+					event.preventDefault();
+					if( (event.data.minChars <= $(event.data.fake_input).val().length) && (!event.data.maxChars || (event.data.maxChars >= $(event.data.fake_input).val().length)) ){
+						var addValue = $(event.data.fake_input).val();
+						addValue = addValue.split(settings.delimiter);
+						for (i=0; i<addValue.length; i++) { 
+							$(event.data.real_input).addTag(addValue[i],{focus:true,unique:(settings.unique)});
+						}
+					}
+					$(event.data.fake_input).resetAutosize(settings);
+					return false;
+				} else if (event.data.autosize) {
+					$(event.data.fake_input).doAutosize(settings);
+		
+				}
+			});
+			//Delete last tag on backspace
+			data.removeWithBackspace && $(data.fake_input).bind('keydown', function(event)
+			{
+				if(event.keyCode == 8 && $(this).val() == '')
+				{
+					 event.preventDefault();
+					 var last_tag = $(this).closest('.tagsinput').find('.tag:last').text();
+					 var id = $(this).attr('id').replace(/_tag$/, '');
+					 last_tag = last_tag.replace(/[\s]+x$/, '');
+					 $('#' + id).removeTag(escape(last_tag));
+					 $(this).trigger('focus');
+				}
+			});
+			$(data.fake_input).blur();
+			
+			//Removes the not_valid class when user changes the value of the fake input
+			if(data.unique) {
+				$(data.fake_input).keydown(function(event){
+					if(event.keyCode == 8 || String.fromCharCode(event.which).match(/\w+|[áéíóúÁÉÍÓÚñÑ,/]+/)) {
+						$(this).removeClass('not_valid');
+					}
+				});
+			}
 		});
 			
 		return this;
@@ -322,7 +315,6 @@ $js(true,[
 
 	$('[is=tagsinput]').each(function(){
 		$(this).tagsInput({
-			interactive:true,
 			defaultText:'Ajouter',
 			defaultTextRemove:'Supprimer ce tag',
 			minChars:0,
@@ -332,7 +324,20 @@ $js(true,[
 				selectFirst:true,
 				width:'100px',
 				autoFill:true,
-				source:'service/autocomplete/taxonomy'
+				source:function(request,response){
+					var term = request.term;
+					$.ajax({
+						type:'GET',
+						dataType:'json',
+						url:'service/autocomplete/taxonomy',
+						data:{
+							'term':term
+						},
+						complete:function(r){
+							response(r);
+						}
+					});
+				}
 			},
 			'hide':true,
 			'delimiter':',',

@@ -20,7 +20,7 @@
 	}
 	li.active > a {
 		background: #333;
-		color: $brand-primary;
+		color: $color-main;
 	}
 	>li{
 		width: 100%;
@@ -72,7 +72,7 @@
 				left: 10px;
 			}
 			&.active > a {
-				color: $brand-primary;
+				color: $color-main;
 				background: transparent;
 			}
 			a{
@@ -100,7 +100,7 @@
 					&:focus {
 						text-decoration: none;
 						color: #FFF;
-						background-color: $brand-primary;
+						background-color: $color-main;
 						text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 					}
 				}
@@ -109,7 +109,7 @@
 						color: #fff;
 						text-decoration: none;
 						outline: 0;
-						background-color: $brand-primary;
+						background-color: $color-main;
 						text-shadow: none;
 					}
 				}
