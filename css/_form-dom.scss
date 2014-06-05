@@ -60,14 +60,13 @@ input[type=submit]{
 	font-size: 1.1em;
 	line-height: 1.1em;
 	border-radius: 4px;
-	color: $color-main;
-	border: solid 1px #414141;
-	background-color:#414141;
+	background-color: $color-light;
+	color: $color-dark;
+	border: 1px solid $color-dark;
 	text-align: center;
 	vertical-align: middle;
 	background-image: none; // Reset unusual Firefox-on-Android default style; see https://github.com/necolas/normalize.css/issues/214
 	white-space: nowrap;
-	@include gradient-vertical(#414141,#323232);
 	@include user-select(none);
 	&:hover,
 	&:focus,
@@ -75,7 +74,6 @@ input[type=submit]{
 	&.active{
 		color:#FFF;
 		border-color:#323232;
-		@include gradient-vertical(lighten(#414141,20%),lighten(#323232,20%));
 	}
 	&,
 	&:active,
@@ -140,7 +138,6 @@ input[type=submit]{
 	vertical-align: middle;
 	cursor: pointer;
 	background-image: none; // Reset unusual Firefox-on-Android default style; see https://github.com/necolas/normalize.css/issues/214
-	border: 1px solid transparent;
 	white-space: nowrap;
 	padding: 0.3em;
 	font-size: 1.2em;
@@ -156,7 +153,9 @@ input[type=submit]{
 	}
 	&:hover,
 	&:focus {
-		color: #333;
+		border-color: $color-main;
+		color: $color-main;
+		background-color: lighten($color-light,2%);
 		text-decoration: none;
 	}
 	&:active,
