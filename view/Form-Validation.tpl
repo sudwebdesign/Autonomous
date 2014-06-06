@@ -1,6 +1,8 @@
 <after selector="input[name][type!=checkbox], select[name], textarea[name]">
 	<?
-		if(isset($formErrors)&&isset($formErrors['{{this:name}}'])){
+		if(isset($formErrors)&&isset($formErrors["{{eval:
+			rtrim(str_replace(array('[',']'),array('.',''),'{{this:name}}'),'.')
+		}}"])){
 			?><small class="help-block"><?=$formErrors['{{this:name}}']?></small><?
 		}
 	?>
