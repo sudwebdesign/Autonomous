@@ -6,7 +6,7 @@ abstract class TableAbstraction_Main extends Table{
 	function onValidate(){
 		if(!ruler::minchar($this->titre,$this->minTitreLength))
 			$this->error('titre','Le titre doit comporter minimum '.$this->minTitreLength.' caractères');
-		elseif(!ruler::minchar($this->titre,$this->maxTitreLength))
+		elseif(!ruler::maxchar($this->titre,$this->maxTitreLength))
 			$this->error('titre','Le titre doit comporter maximum '.$this->maxTitreLength.' caractères');
 		if($this->tel&&!ruler::tel($this->tel))
 			$this->error('tel','Numéro de téléphone non valide');

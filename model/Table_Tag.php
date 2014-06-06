@@ -1,13 +1,13 @@
 <?php namespace model;
 use surikat\control\ruler;
 final class Table_Tag extends Table{
-	protected $minLabelLength = 8;
+	protected $minLabelLength = 4;
 	protected $maxLabelLength = 25;
 	function onValidate(){
 		parent::onValidate();
 		if(!ruler::minchar($this->label,$this->minLabelLength))
 			$this->error('label','Le label doit comporter minimum '.$this->minLabelLength.' caractères');
-		elseif(!ruler::minchar($this->label,$this->maxLabelLength))
+		elseif(!ruler::maxchar($this->label,$this->maxLabelLength))
 			$this->error('label','Le label doit comporter maximum '.$this->maxLabelLength.' caractères');
 	}
 	//function onNew(){}

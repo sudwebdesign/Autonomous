@@ -81,9 +81,9 @@ class ajouter extends \present{
 			
 		if(isset($_POST['presentation']))
 			$bean->presentation = filter::strip_tags_basic($_POST['presentation']);
-		if(isset($_POST['tags'])&&trim($_POST['tags'])){
+		if(isset($_POST['sharedTag'])&&trim($_POST['sharedTag'])){
 			$max = 5;
-			$tags = explode(',',strip_tags($_POST['tags']));
+			$tags = explode(',',strip_tags($_POST['sharedTag']));
 			$taxonomyO = model::load('taxonomy',self::variable('taxonomy'));			
 			foreach($tags as $i=>$tag){
 				if($i>=$max)

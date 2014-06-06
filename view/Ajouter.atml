@@ -1,3 +1,4 @@
+<?use control\str;?>
 <?use control\post;?>
 <?use control\session;?>
 <extend>	
@@ -6,15 +7,15 @@
 	<write main>
 		<?
 			$x = explode('-',view::param(0));
-			$Type = ucfirst(end($x));
-			$type = strtolower($Type);
+			$Type = str::ucfirst(end($x));
+			$type = str::tolower($Type);
 		?>
 		<form apply="Form-Validation.tpl" id="<?=$type?>" action="<?=$action?>" method="POST" enctype="multipart/form-data" role="form" <?=isset($formPosted)?'class="form-posted"':''?>>
-			<h1>Ajouter <?=$Type?></h1>
+			<h1>Ajouter un <?=$type?></h1>
 			<if e="isset($formPosted)">
 				<h4>
 					<if e="$formPosted">
-						Votre <?=strtolower($type)?> a bien été pris en compte
+						Votre <?=str::tolower($type)?> a bien été pris en compte
 					<else>
 						Données manquantes ou erronées pour valider l'<?=$type?>
 						<dev><pre><?=substr(print_r($formErrors,true),6,-1);?></pre></dev>
@@ -31,7 +32,7 @@
 			</fieldset>
 			<fieldset>
 				<legend>Thématiques <small>(séparées par des virgules)</small></legend>
-				<input name="tags" type="text" value="" is="tagsinput" data-url="service/autocomplete/taxonomy?label=<?=$taxonomy?>" data-minchar="4" data-maxchar="25" data-max="5" placeholder="Thématique Principale,Seconde Thématique,Groupe de Mots clefs..." />
+				<input name="sharedTag" type="text" value="" is="tagsinput" data-url="service/autocomplete/taxonomy?label=<?=$taxonomy?>" data-minchar="4" data-maxchar="25" data-max="5" placeholder="Thématique Principale,Seconde Thématique,Groupe de Mots clefs..." />
 				<?$dynVar='taxonomy'.ucfirst($taxonomy);?>
 				<if e="isset($$dynVar)">
 					<span class="tags-suggests">Suggestions:

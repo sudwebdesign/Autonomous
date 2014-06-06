@@ -13,22 +13,22 @@ final class evenement extends \present\ajouter{
 	protected static $datetimeCombine = true;
 	protected static function POST_Dates($bean){
 		static $vars = array('date_start','date_end','time_start','time_end');
-		if(!isset($_POST['dates']))
+		if(!isset($_POST['xownDate']))
 			return;
-		foreach($vars as $k) $$k = isset($_POST['dates'][$k])?$_POST['dates'][$k]:null;
+		foreach($vars as $k) $$k = isset($_POST['xownDate'][$k])?$_POST['xownDate'][$k]:null;
 		dates::dp_to_date_fr($date_start);
 		dates::dp_to_date_fr($date_end);
 		$multi = is_array($date_start);
 		$se = $multi?'[]':'';
 		if(!dates::validate_date($date_start,true))
-			$bean->error('dates[date_start]'.$se,'missing or invalid format');
+			$bean->error('xownDate[date_start]'.$se,'missing or invalid format');
 		if(!dates::validate_time($time_start))
-			$bean->error('dates[time_start]'.$se,'invalid format');
+			$bean->error('xownDate[time_start]'.$se,'invalid format');
 		if(isset($_POST['date_with_end'])){
 			if(!dates::validate_date($date_end))
-				$bean->error('dates[date_end]'.$se,'invalid format');
+				$bean->error('xownDate[date_end]'.$se,'invalid format');
 			if(!dates::validate_time($time_end))
-				$bean->error('dates[time_end]'.$se,'invalid format');
+				$bean->error('xownDate[time_end]'.$se,'invalid format');
 		}		
 		if($multi){
 			foreach(array_keys($date_start) as $i){
