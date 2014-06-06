@@ -81,15 +81,7 @@ class ajouter extends \present{
 			$bean->presentation = filter::strip_tags_basic($_POST['presentation']);
 		if(isset($_POST['tags'])&&trim($_POST['tags'])){
 			$tags = explode(',',$_POST['tags']);
-			$taxonomyO = model::load('taxonomy',self::variable('taxonomy'));
-
-			//$joinTag = array($type,'tag');
-			//$joinTaxonomy = array($type,'taxonomy');
-			//sort($joinTag);
-			//sort($joinTaxonomy);
-			//$joinTag = implode('_',$joinTag);
-			//$joinTaxonomy = implode('_',$joinTaxonomy);
-			
+			$taxonomyO = model::load('taxonomy',self::variable('taxonomy'));			
 			foreach($tags as $tag){
 				$tag = trim($tag);
 				if(empty($tag))
@@ -100,7 +92,6 @@ class ajouter extends \present{
 					$bean->sharedTaxonomy[] = $t;
 				}
 				elseif($t=model::load('tag',$tag)){
-					//R::getCell("SELECT id FROM $joinTag WHERE {$type}_id={} LIMIT 1",array());
 					$t->sharedTaxonomy[] = $taxonomyO;
 					if(isset($user))
 						$t->sharedUser[] = $user;

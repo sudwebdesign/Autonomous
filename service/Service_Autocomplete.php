@@ -1,5 +1,6 @@
 <?php namespace service;
 use model;
+use model\R;
 use control\JSON;
 class Service_Autocomplete {
 	const URL_ADRESS_OSM = 'http://nominatim.openstreetmap.org/search.php?q=%s+%s&format=json';
@@ -30,12 +31,14 @@ class Service_Autocomplete {
 		$results = array();
 		if(isset($_GET['term'])&&strlen($term=trim($_GET['term']))>=1){
 			if(isset($_GET['label'])&&($label=trim($_GET['label']))){
+				//R::debug();
 				$tags = model::col('tag',array(
-					'where'=>'label LIKE :like AND taxonomy_id=:taxonomy',
+					'where'=>'tag.label LIKE :like AND taxonomy.label=:taxonomy',
+					'joinOn'=>'taxonomy',
 					'limit'=>10,
 				),array(
 					':like'=>$term.'%',
-					':taxonomy'=>$label.'%',
+					':taxonomy'=>$label,
 				));
 				$tags = array_values($tags);
 				$results = array_merge($results,$tags);
@@ -48,9 +51,9 @@ class Service_Autocomplete {
 				$term.'%'
 			));
 			$taxonomy = array_values($taxonomy);
-			$results = array_merge($result,$taxonomy);
+			$results = array_merge($results,$taxonomy);
 			
-			//$results = array_merge($result,self::getKeywordSuggestionsFromGoogle($term));
+			//$results = array_merge($results,self::getKeywordSuggestionsFromGoogle($term));
 		}
 		header('Content-Type:application/json; charset=utf-8');
 		echo json_encode($results);
