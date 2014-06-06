@@ -17,8 +17,8 @@ class ajouter extends \present{
 	}
 	static function exec(){
 		session::start(); //session auto start when get a key, if output not bufferised but direct flushed, have to start first
-		self::POST();
 		self::variable('taxonomy',end(self::$options['namespaces']));
+		self::POST();
 	}
 	static function execVars(&$vars=array()){
 		
@@ -83,7 +83,11 @@ class ajouter extends \present{
 			$tags = explode(',',$_POST['tags']);
 			foreach($tags as $tag)
 				if(!empty($tag))
-					$bean->sharedTag[] = R::findOrNewOne(array('taxonomy','tag'),array('label'=>trim($tag)));
+					$bean->sharedTag[] = R::findOrNewOne(
+						array('taxonomy','tag'),
+							array('label'=>trim($tag)),
+								array('taxonomy_id'=>model::cell('taxonomy',array('select'=>'id','where'=>'label=?'),array(self::variable('taxonomy'))))
+					);
 		}
 		self::POST_Geo($bean);
 		return $bean;
