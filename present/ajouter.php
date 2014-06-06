@@ -1,7 +1,9 @@
 <?php namespace present;
 use view;
 use model;
-use model\R;
+use control;
+use surikat\model\R;
+use surikat\control\FS;
 use surikat\control\PHP;
 use surikat\control\session;
 use surikat\control\post;
@@ -48,9 +50,7 @@ class ajouter extends \present{
 		}
 	}
 	protected static function POST_Common($type){
-		$bean = R::newOne($type,array(
-			'created'=>date('Y-m-d H:i:s',time()),
-		));
+		$bean = R::dispense($type);
 		$bean->on('created',function($bean)use($type){
 			uploader::image(array(
 				'dir'=>'content/'.$type.'/'.$bean->id.'/',
@@ -79,15 +79,41 @@ class ajouter extends \present{
 			
 		if(isset($_POST['presentation']))
 			$bean->presentation = filter::strip_tags_basic($_POST['presentation']);
-		if(isset($_POST['tags'])){
+		if(isset($_POST['tags'])&&trim($_POST['tags'])){
 			$tags = explode(',',$_POST['tags']);
-			foreach($tags as $tag)
-				if(!empty($tag))
-					$bean->sharedTag[] = R::findOrNewOne(
-						array('taxonomy','tag'),
-							array('label'=>trim($tag)),
-								array('taxonomy_id'=>model::cell('taxonomy',array('select'=>'id','where'=>'label=?'),array(self::variable('taxonomy'))))
-					);
+			$taxonomyO = model::load('taxonomy',self::variable('taxonomy'));
+
+			//$joinTag = array($type,'tag');
+			//$joinTaxonomy = array($type,'taxonomy');
+			//sort($joinTag);
+			//sort($joinTaxonomy);
+			//$joinTag = implode('_',$joinTag);
+			//$joinTaxonomy = implode('_',$joinTaxonomy);
+			
+			foreach($tags as $tag){
+				$tag = trim($tag);
+				if(empty($tag))
+					continue;
+				if($t=model::load('taxonomy',$tag)){
+					if(isset($user))
+						$t->sharedUser[] = $user;
+					$bean->sharedTaxonomy[] = $t;
+				}
+				elseif($t=model::load('tag',$tag)){
+					//R::getCell("SELECT id FROM $joinTag WHERE {$type}_id={} LIMIT 1",array());
+					$t->sharedTaxonomy[] = $taxonomyO;
+					if(isset($user))
+						$t->sharedUser[] = $user;
+					$bean->sharedTag[] = $t;
+				}
+				else{
+					$t = R::newOne('tag',$tag);
+					$t->sharedTaxonomy[] = $taxonomyO;
+					if(isset($user))
+						$t->sharedUser[] = $user;
+					$bean->sharedTag[] = $t;
+				}
+			}
 		}
 		self::POST_Geo($bean);
 		return $bean;
@@ -100,7 +126,18 @@ class ajouter extends \present{
 		$label = null;
 		$locality = null;
 		if($valid){
-			if(($js=json_decode(file_get_contents(sprintf('https://maps.googleapis.com/maps/api/geocode/json?address=%s&region=%s&sensor=false',urlencode($geo),model::DEFAULT_COUNTRY_CODE))))&&$js->status==='OK'&&isset($js->results[0])&&($result=$js->results[0])){
+			$file = sprintf('https://maps.googleapis.com/maps/api/geocode/json?address=%s&region=%s&sensor=false',urlencode($geo),model::DEFAULT_COUNTRY_CODE);
+
+			$tmpDir = control::$TMP.'cache/.geocode-address/';
+			if(is_file($tmpFile=$tmpDir.sha1($file))){
+				$content = file_get_contents($tmpFile);
+			}
+			else{
+				$content = file_get_contents($file);
+				FS::mkdir($tmpFile,true);
+				file_put_contents($tmpFile,$content);
+			}
+			if(($js=json_decode($content))&&$js->status==='OK'&&isset($js->results[0])&&($result=$js->results[0])){
 				$political = array();
 				foreach($result->address_components as $compo){
 					if(in_array('political',$compo->types))

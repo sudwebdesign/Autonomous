@@ -29,9 +29,28 @@ class Service_Autocomplete {
 	static function taxonomy(){
 		$results = array();
 		if(isset($_GET['term'])&&strlen($term=trim($_GET['term']))>=1){
-			$results = array_values(model::col('tag',array('where'=>'label LIKE ?'),array($term.'%')));
-			$results = array_merge($results,array_values(model::col('taxonomy',array('where'=>'label LIKE ?'),array($term.'%'))));
-			//$results = array_merge($results,self::getKeywordSuggestionsFromGoogle($term));
+			if(isset($_GET['label'])&&($label=trim($_GET['label']))){
+				$tags = model::col('tag',array(
+					'where'=>'label LIKE :like AND taxonomy_id=:taxonomy',
+					'limit'=>10,
+				),array(
+					':like'=>$term.'%',
+					':taxonomy'=>$label.'%',
+				));
+				$tags = array_values($tags);
+				$results = array_merge($results,$tags);
+			};
+			
+			$taxonomy = model::col('taxonomy',array(
+				'where'=>'label LIKE ?',
+				'limit'=>10,
+			),array(
+				$term.'%'
+			));
+			$taxonomy = array_values($taxonomy);
+			$results = array_merge($result,$taxonomy);
+			
+			//$results = array_merge($result,self::getKeywordSuggestionsFromGoogle($term));
 		}
 		header('Content-Type:application/json; charset=utf-8');
 		echo json_encode($results);

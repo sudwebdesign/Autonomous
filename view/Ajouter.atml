@@ -31,7 +31,7 @@
 			</fieldset>
 			<fieldset>
 				<legend>Thématiques <small>(séparées par des virgules)</small></legend>
-				<input name="tags" type="text" value="" is="tagsinput" />
+				<input name="tags" type="text" value="" is="tagsinput" data-url="service/autocomplete/taxonomy?label=<?=$taxonomy?>" data-minchars="4" placeholder="Thématique Principale,Seconde Thématique,Groupe de Mots clefs..." />
 				<?$dynVar='taxonomy'.ucfirst($taxonomy);?>
 				<if e="isset($$dynVar)">
 					<span class="tags-suggests">Suggestions:
