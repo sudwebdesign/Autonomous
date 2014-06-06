@@ -46,13 +46,6 @@ class model extends surikat\model{
 	static function getNorthEastLongOfMainBound(){
 		return 3.177833;
 	}
-	static function getTaxonomy($params=null){
-		self::schemaAuto('taxonomy');
-		if($params)
-			return self::col('taxonomy',array('where'=>'taxonomy_id=(SELECT id FROM taxonomy WHERE label=?)'),array($params));
-		else
-			return self::col('taxonomy');
-	}
 	static function liste($tb,$rowByPage=20,$paginationOffset=0){
 		$themes =  W::col('themes');
 		$communes = W::col('communes',array('join'=>"JOIN departements ON departements.id=communes.departements_id AND departements.code=?"),array(self::DEFAULT_DEPARTEMENT_CODE));
