@@ -3,15 +3,15 @@ use surikat\control\ruler;
 abstract class TableAbstraction_Main extends Table{
 	protected $minTitreLength = 8;
 	protected $maxTitreLength = 250;
+	//var $breakValidationOnError = true;
 	function onValidate(){
-		$l = strlen($this->titre);
-		if($l<$this->minTitreLength)
-			$this->errors['titre'] = 'Le titre doit comporter minimum '.$this->minTitreLength.' caractères';
-		elseif($l>$this->maxTitreLength)
-			$this->errors['titre'] = 'Le titre doit comporter maximum '.$this->maxTitreLength.' caractères';
+		if(!ruler::minchar($this->titre,$this->minTitreLength))
+			$this->error('titre','Le titre doit comporter minimum '.$this->minTitreLength.' caractères');
+		elseif(!ruler::minchar($this->titre,$this->maxTitreLength))
+			$this->error('titre','Le titre doit comporter maximum '.$this->maxTitreLength.' caractères');
 		if($this->tel&&!ruler::tel($this->tel))
-			$this->errors['tel'] = 'Numéro de téléphone non valide';			
+			$this->error('tel','Numéro de téléphone non valide');
 		if($this->url&&!ruler::url($this->url))
-			$this->errors['url'] = 'Lien non valide';
+			$this->error('url','Lien non valide');
 	}
 }

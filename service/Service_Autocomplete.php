@@ -33,8 +33,8 @@ class Service_Autocomplete {
 			if(isset($_GET['label'])&&($label=trim($_GET['label']))){
 				//R::debug();
 				$tags = model::col('tag',array(
-					'where'=>'tag.label LIKE :like AND taxonomy.label=:taxonomy',
 					'joinOn'=>'taxonomy',
+					'where'=>'tag.label LIKE :like AND taxonomy.label=:taxonomy',
 					'limit'=>10,
 				),array(
 					':like'=>$term.'%',

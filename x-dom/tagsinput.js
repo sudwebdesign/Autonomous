@@ -23,15 +23,16 @@ $js(true,[
 			if (tagslist[0]=='')
 				tagslist = new Array();
 			value = $.trim(value);
-			if(options.unique){
-				var skipTag = $(this).tagExist(value);
-				if(skipTag == true)//Marks fake input as not_valid to let styling it
-					$('#'+id+'_tag').addClass('not_valid');
+			var skipTag = false; 
+			if(options.unique)
+				skipTag = $(this).tagExist(value);
+			if(!skipTag&&options.max&&options.max<=$(this).closest('.tagsinput-wrap').find('.tagsinput>span').length){
+				skipTag = true;
+				//$('#'+id+'_tag').hide();
 			}
-			else{
-				var skipTag = false; 
-			}
-			if (value !='' && skipTag != true) { 
+			if(skipTag)
+				$('#'+id+'_tag').addClass('not_valid');
+			if(value!=''&&!skipTag){
 				$('<span>').addClass('tag').append(
 					$('<span>').text(value).append('&nbsp;&nbsp;'),
 					$('<a>', {
@@ -96,11 +97,13 @@ $js(true,[
 		  defaultText:'add a tag',
 		  defaultTextRemove:'Removing tag',
 		  minChars:0,
+		  max:0,
 		  'unique':true,
 		  comfortZone: 20,
 		  after: false
 		},options);
 		$(this).data('removeText',settings.defaultTextRemove);
+		$(this).data('max',settings.max);
 		this.each(function(){ 
 			$(this).hide();
 			var id = $(this).attr('id');
@@ -122,7 +125,7 @@ $js(true,[
 				tags_callbacks[id]['onChange'] = settings.onChange;
 			}
 			var markup = '<div id="'+id+'_tagsinput" class="tagsinput"><div id="'+id+'_addTag">';
-			markup += '<input id="'+id+'_tag" value="" data-default="'+settings.defaultText+'" />';
+			markup += '<input id="'+id+'_tag" value="" placeholder="'+settings.defaultText+'" />';
 			markup += '</div><div class="tags_clear"></div></div>';
 			if(settings.after)
 				$(markup).insertAfter(this);
@@ -130,18 +133,13 @@ $js(true,[
 				$(markup).insertBefore(this);
 			if ($(data.real_input).val()!='') 
 				$.fn.tagsInput.importTags($(data.real_input),$(data.real_input).val());
-			$(data.fake_input).val($(data.fake_input).attr('data-default'));
+			$(data.fake_input).attr('placeholder',$(data.fake_input).attr('placeholder'));
 			$(data.holder).on('click',data,function(event) {
 				$(event.data.fake_input).focus();
 			});
-			$(data.fake_input).on('focus',data,function(event){
-				if ($(event.data.fake_input).val()==$(event.data.fake_input).attr('data-default'))
-					$(event.data.fake_input).val('');
-				$(event.data.fake_input).css('color','#000000');		
-			});
 			$(data.fake_input).autocomplete(settings.autocomplete);
 			$(data.fake_input).on('autocompleteselect',data,function(event,ui) {
-				$(event.data.real_input).addTag(ui.item.value,{focus:true,unique:(settings.unique)});
+				$(event.data.real_input).addTag(ui.item.value,{focus:true,unique:settings.unique,max:settings.max});
 				return false;
 			});
 			if(settings.autocomplete&&typeof(settings.autocomplete.source)=='function'){				
@@ -149,18 +147,24 @@ $js(true,[
 					$(this).autocomplete('search','');
 				});
 			}
+			var addingTag = function(event){
+				if((event.data.minChars <= $(event.data.fake_input).val().length) && (!event.data.maxChars || (event.data.maxChars >= $(event.data.fake_input).val().length)) ){
+					var addValue = $(event.data.fake_input).val();
+					addValue = addValue.split(settings.delimiter);
+					for (i=0; i<addValue.length; i++) { 
+						$(event.data.real_input).addTag(addValue[i],{focus:true,unique:settings.unique,max:settings.max});
+					}
+				}
+			};
 			$(data.fake_input).on('keypress',data,function(event) { // if user types a comma, create a new tag
 				if (event.which==event.data.delimiter.charCodeAt(0) || event.which==13 ) {
 					event.preventDefault();
-					if( (event.data.minChars <= $(event.data.fake_input).val().length) && (!event.data.maxChars || (event.data.maxChars >= $(event.data.fake_input).val().length)) ){
-						var addValue = $(event.data.fake_input).val();
-						addValue = addValue.split(settings.delimiter);
-						for (i=0; i<addValue.length; i++) { 
-							$(event.data.real_input).addTag(addValue[i],{focus:true,unique:(settings.unique)});
-						}
-					}
+					addingTag(event);
 					return false;
 				}
+			});
+			$(data.fake_input).on('blur',data,function(event){
+				addingTag(event);
 			});
 			$(data.fake_input).on('keydown', function(event){ //Delete last tag on backspace
 				if(event.keyCode == 8 && $(this).val() == ''){
@@ -187,12 +191,12 @@ $js(true,[
 		var id = $(obj).attr('id');
 		$(obj).val(tagslist.join(delimiter[id]));
 	};
-	$.fn.tagsInput.importTags = function(obj,val) {			
+	$.fn.tagsInput.importTags = function(obj,val) {
 		$(obj).val('');
 		var id = $(obj).attr('id');
 		var tags = val.split(delimiter[id]);
 		for (i=0; i<tags.length; i++) { 
-			$(obj).addTag(tags[i],{focus:false,callback:false});
+			$(obj).addTag(tags[i],{focus:false,callback:false,max:$(obj).data('max')});
 		}
 		if(tags_callbacks[id] && tags_callbacks[id]['onChange']){
 			var f = tags_callbacks[id]['onChange'];
@@ -216,12 +220,16 @@ $js(true,[
 		}
 		THIS.wrap('<div class="tagsinput-wrap" />');
 		var data_url = THIS.attr('data-url');
-		var data_minchars = THIS.attr('data-minchars');
-		data_minchars = parseInt(data_minchars);
+		var data_minchar = THIS.attr('data-minchar');
+		var data_maxchar = THIS.attr('data-maxchar');
+		var data_max = THIS.attr('data-max');
+		data_minchar = parseInt(data_minchar);
 		THIS.tagsInput({
 			defaultText:THIS.attr('placeholder')?THIS.attr('placeholder'):'',
 			defaultTextRemove:'Supprimer ce tag',
-			minChars:data_minchars,
+			minChars:data_minchar,
+			maxChars:data_maxchar,
+			max:data_max,
 			autocomplete:{
 				selectFirst:true,
 				autoFill:true,

@@ -33,11 +33,13 @@ class ajouter extends \present{
 		$type = self::variable('taxonomy');
 		R::begin();
 		try{
-			$bean = self::POST_Common($type);
-			if(method_exists(($final=self::$final),'POST_Specifications'))
+			$bean = ajouter::POST_Common($type);
+			if(method_exists(($final=ajouter::$final),'POST_Specifications'))
 				$final::POST_Specifications($bean);
 			//exit(print('<pre>'.print_r($bean->getArray(),true)));
 			R::store($bean);
+			if($e=$bean->getErrors())
+				throw new Exception_Validation('Données manquantes ou erronées',$e);
 			R::commit();
 			post::clearPersistance();
 		}
@@ -71,7 +73,7 @@ class ajouter extends \present{
 		}
 			
 		if(isset($_POST['titre']))
-			$bean->titre = $_POST['titre'];
+			$bean->titre = strip_tags($_POST['titre']);
 		if(isset($_POST['tel']))
 			$bean->tel = $_POST['tel'];
 		if(isset($_POST['url']))
@@ -80,9 +82,12 @@ class ajouter extends \present{
 		if(isset($_POST['presentation']))
 			$bean->presentation = filter::strip_tags_basic($_POST['presentation']);
 		if(isset($_POST['tags'])&&trim($_POST['tags'])){
-			$tags = explode(',',$_POST['tags']);
+			$max = 5;
+			$tags = explode(',',strip_tags($_POST['tags']));
 			$taxonomyO = model::load('taxonomy',self::variable('taxonomy'));			
-			foreach($tags as $tag){
+			foreach($tags as $i=>$tag){
+				if($i>=$max)
+					break;
 				$tag = trim($tag);
 				if(empty($tag))
 					continue;
