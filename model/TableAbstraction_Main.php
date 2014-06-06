@@ -3,7 +3,6 @@ use surikat\control\ruler;
 abstract class TableAbstraction_Main extends Table{
 	protected $minTitreLength = 8;
 	protected $maxTitreLength = 250;
-	//var $breakValidationOnError = true;
 	function onValidate(){
 		if(!ruler::minchar($this->titre,$this->minTitreLength))
 			$this->error('titre','Le titre doit comporter minimum '.$this->minTitreLength.' caractères');
