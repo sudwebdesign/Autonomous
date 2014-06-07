@@ -1,7 +1,7 @@
 <present:ajouter:evenement uri="static" />
 <extend file="Ajouter.atml">
 	<after selector="main form fieldset:has(geo-completer)">
-		<fieldset is="daterange" apply="Form-Validation.tpl">
+		<fieldset is="daterange" apply="forms.tpl">
 			<legend>Date</legend>
 			<div>
 				<fieldset>
