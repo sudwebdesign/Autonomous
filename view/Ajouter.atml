@@ -59,11 +59,11 @@
 					<fieldset>
 						<legend>Détails de localisation</legend>
 						<label for="geocompleter-lat">Latitude</label>
-						<input id="geocompleter-lat" name="xownGeopoint[lat]" type="number">
+						<input id="geocompleter-lat" name="xownGeopoint[lat]" type="number" step="any" min="-90" max="90">
 						<label for="geocompleter-lng">Longitude</label>
-						<input id="geocompleter-lng" name="xownGeopoint[lng]" type="number">
+						<input id="geocompleter-lng" name="xownGeopoint[lng]" type="number" step="any" min="-180" max="180">
 						<label for="geocompleter-rayon">Rayon en km</label>
-						<input id="geocompleter-rayon" name="xownGeopoint[rayon]" type="number">
+						<input id="geocompleter-rayon" name="xownGeopoint[rayon]" type="number" step="1" min="0" max="">
 						<input type="hidden" name="geo-valid">
 					</fieldset>					
 				</geo-completer>

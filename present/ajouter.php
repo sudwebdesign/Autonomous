@@ -170,13 +170,11 @@ class ajouter extends \present{
 		$lat = @$_POST['lat'];
 		$lng = @$_POST['lng'];
 		$rayon = @$_POST['rayon'];
-		if($lat||$lng||$label||$locality){
-			//R::debug();
+		if($lat!=''||$lng!=''||$label||$locality){
 			$geopoint = R::newOne('geopoint',array(
 				'label'=>$label,
 				'lat'=>$lat,
 				'lng'=>$lng,
-				'point'=>'POINT('.$lat.' '.$lng.')',
 				'rayon'=>$rayon,
 			));
 			if($locality)

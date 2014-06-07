@@ -15,12 +15,11 @@ $js([
 				new google.maps.LatLng(params.northEastLatMainBound,params.northEastLngMainBound)
 			);
 			var geocoder = new google.maps.Geocoder();
-			var input_lat = geocompleter.find("input[name=lat]");
-			var input_lng = geocompleter.find("input[name=lng]");
-			var input_rayon = geocompleter.find('input[name=rayon]');
-			var input_locality = geocompleter.find('input[name=locality]');
-			var input_validate = geocompleter.find("input[name=geo-valid]");
-			var input = geocompleter.find('input[name=geo]');
+			var input_lat = geocompleter.find('input[type=number][step=any]:eq(0)');
+			var input_lng = geocompleter.find('input[type=number][step=any]:eq(1)');
+			var input_rayon = geocompleter.find('input[type=number][step][step!=any]:eq(0)');
+			var input_validate = geocompleter.find('input[type=hidden]:eq(0)');
+			var input = geocompleter.find('input[type=text]:eq(0)');
 			var div_map = $('<div class="map-canvas"></div>');
 			div_map.insertAfter(input);
 			var distance = function(lat1, lon1, lat2, lon2){
