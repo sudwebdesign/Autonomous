@@ -60,7 +60,7 @@ class ajouter extends \present{
 				'width'=>'90',
 				'height'=>'90',
 				//'rename'=>true, //image by default
-				'rename'=>$bean->titre,
+				'rename'=>$bean->title,
 			));
 			uploader::files('content/'.$type.'/'.$bean->id.'/','files');
 		});
@@ -72,8 +72,8 @@ class ajouter extends \present{
 			$bean->user = $user;
 		}
 			
-		if(isset($_POST['titre']))
-			$bean->titre = strip_tags($_POST['titre']);
+		if(isset($_POST['title']))
+			$bean->title = strip_tags($_POST['title']);
 		if(isset($_POST['tel']))
 			$bean->tel = $_POST['tel'];
 		if(isset($_POST['url']))
@@ -81,7 +81,7 @@ class ajouter extends \present{
 			
 		if(isset($_POST['presentation']))
 			$bean->presentation = filter::strip_tags_basic($_POST['presentation']);
-		if(isset($_POST['sharedTag'])&&trim($_POST['sharedTag'])){
+		if(isset($_POST['sharedTag'])&&is_array($_POST['sharedTag'])&&isset($_POST['sharedTag']['label'])&&trim($_POST['sharedTag']['label'])){
 			$max = 5;
 			$tags = explode(',',strip_tags($_POST['sharedTag']));
 			$taxonomyO = model::load('taxonomy',self::variable('taxonomy'));			
@@ -162,24 +162,22 @@ class ajouter extends \present{
 					$label = rtrim($label);
 				}
 			}
-			else{
+			else
 				$bean->error('geo','not_found');
-			}
 		}
-		else{
+		else
 			$label = htmlentities($geo);
-		}
-		$lat = (float)$_POST['lat'];
-		$lng = (float)$_POST['lng'];
-		$latLngOk = $lat&&$lng&&$lat<=90.0&&$lat>=-90.0&&$lng<=180.0&&$lng>=-180.0;
-		if($latLngOk||$label||$locality){
+		$lat = @$_POST['lat'];
+		$lng = @$_POST['lng'];
+		$rayon = @$_POST['rayon'];
+		if($lat||$lng||$label||$locality){
 			//R::debug();
 			$geopoint = R::newOne('geopoint',array(
 				'label'=>$label,
-				'lat'=>$latLngOk?(float)$_POST['lat']:null,
-				'lng'=>$latLngOk?(float)$_POST['lng']:null,
-				'point'=>$latLngOk?'POINT('.$_POST['lat'].' '.$_POST['lng'].')':null,
-				'rayon'=>$latLngOk&&isset($_POST['rayon'])?(float)$_POST['rayon']:null,
+				'lat'=>$lat,
+				'lng'=>$lng,
+				'point'=>'POINT('.$lat.' '.$lng.')',
+				'rayon'=>$rayon,
 			));
 			if($locality)
 				$geopoint->locality = $locality;

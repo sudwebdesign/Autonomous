@@ -1,5 +1,5 @@
 <?php namespace model;
-final class Table_Association extends TableAbstraction_Main{
+final class Table_Association extends ATable_Main{
 	//function onValidate(){
 		//parent::onValidate();
 	//}

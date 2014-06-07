@@ -1,5 +1,5 @@
 <?php namespace model;
-final class Table_Annonce extends TableAbstraction_Main{
+final class Table_Annonce extends ATable_Main{
 	//function onValidate(){
 		//parent::onValidate();
 	//}
