@@ -83,7 +83,7 @@ class ajouter extends \present{
 			$bean->presentation = filter::strip_tags_basic($_POST['presentation']);
 		if(isset($_POST['sharedTag'])&&is_array($_POST['sharedTag'])&&isset($_POST['sharedTag']['label'])&&trim($_POST['sharedTag']['label'])){
 			$max = 5;
-			$tags = explode(',',strip_tags($_POST['sharedTag']));
+			$tags = explode(',',strip_tags($_POST['sharedTag']['label']));
 			$taxonomyO = model::load('taxonomy',self::variable('taxonomy'));			
 			foreach($tags as $i=>$tag){
 				if($i>=$max)
@@ -115,19 +115,19 @@ class ajouter extends \present{
 		return $bean;
 	}
 	static function POST_Geo($bean){
-		if(!isset($_POST['geo']))
+		if(!isset($_POST['xownGeopoint'])||!is_array($_POST['xownGeopoint']))
 			return;
-		$geo = $_POST['geo'];
-		$valid = @$_POST['geo-valid']==='true';
-		$label = null;
-		$locality = null;
-		if($valid){
-			$file = sprintf('https://maps.googleapis.com/maps/api/geocode/json?address=%s&region=%s&sensor=false',urlencode($geo),model::DEFAULT_COUNTRY_CODE);
-
+		$geop = $_POST['xownGeopoint'];
+		$geopoint = R::newOne('geopoint',array(
+			'lat'=>@$geop['lat'],
+			'lng'=>@$geop['lng'],
+			'rayon'=>@$geop['rayon'],
+		));
+		if(@$geop['valid']==='true'&&@$geop['label']){
+			$file = sprintf('https://maps.googleapis.com/maps/api/geocode/json?address=%s&region=%s&sensor=false',urlencode($geop['label']),model::DEFAULT_COUNTRY_CODE);
 			$tmpDir = control::$TMP.'cache/.geocode-address/';
-			if(is_file($tmpFile=$tmpDir.sha1($file))){
+			if(is_file($tmpFile=$tmpDir.sha1($file)))
 				$content = file_get_contents($tmpFile);
-			}
 			else{
 				$content = file_get_contents($file);
 				FS::mkdir($tmpFile,true);
@@ -140,46 +140,51 @@ class ajouter extends \present{
 						$political[] = $compo->long_name;
 					switch($compo->types[0]){
 						case 'locality':
-							$locality = R::findOrNewOne('locality',array('label'=>$compo->long_name));
+							$geopoint->locality = $bean->locality = R::findOrNewOne('locality',array('label'=>$compo->long_name));
 						break;
 						case 'administrative_area_level_2':
 							if((int)$compo->short_name!=model::DEFAULT_DEPARTEMENT_CODE)
 								$bean->error('geo','administrative_area_level_2');
+							$geoarealevel2 = R::findOrNewOne('geoarealevel2',
+								array('code'=>$compo->short_name),
+								array('label'=>$compo->long_name)
+							);
+							$geopoint->geoarealevel2 = $bean->geoarealevel2 = $geoarealevel2;
+							if($bean->locality)
+								$bean->locality->geoarealevel2 = $geoarealevel2;
 						break;
 						case 'country':
 							if($compo->short_name!=strtoupper(model::DEFAULT_COUNTRY_CODE))
-								$bean->error('geo','country');
+								$bean->error('geo','geocountry');
+							$country = R::findOrNewOne('geocountry',
+								array('code'=>$compo->short_name),
+								array('label'=>$compo->long_name)
+							);
+							$geopoint->country = $bean->country = $country;
+							if($bean->locality)
+								$bean->locality->country = $country;
+							if($bean->geoarealevel2)
+								$bean->geoarealevel2->country = $country;
 						break;
 					}
 				}
-				$x = explode(',',$geo);
+				$x = explode(',',$geop['label']);
 				if(count($x)>2){
 					array_pop($x);
 					array_pop($x);
+					$label = '';
 					foreach($x as $_x)
 						if(!in_array($_x=trim($_x),$political))
 							$label .= $_x.' ';
-					$label = rtrim($label);
+					$geopoint->label = rtrim($label);
 				}
 			}
 			else
 				$bean->error('geo','not_found');
 		}
 		else
-			$label = htmlentities($geo);
-		$lat = @$_POST['lat'];
-		$lng = @$_POST['lng'];
-		$rayon = @$_POST['rayon'];
-		if($lat!=''||$lng!=''||$label||$locality){
-			$geopoint = R::newOne('geopoint',array(
-				'label'=>$label,
-				'lat'=>$lat,
-				'lng'=>$lng,
-				'rayon'=>$rayon,
-			));
-			if($locality)
-				$geopoint->locality = $locality;
+			$geopoint->label = htmlentities((string)@$geop['label']);
+		if($geopoint->lat!=''||$geopoint->lng!=''||$geopoint->label||$geopoint->locality)
 			$bean->xownGeopoint[] = $geopoint;
-		}
 	}
 }

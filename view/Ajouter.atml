@@ -32,7 +32,7 @@
 			</fieldset>
 			<fieldset>
 				<legend>Thématiques <small>(séparées par des virgules)</small></legend>
-				<input name="sharedTag[label]" type="text" value="" is="tagsinput" data-url="service/autocomplete/taxonomy?label=<?=$taxonomy?>" data-minchar="4" data-maxchar="25" data-max="5" placeholder="Thématique Principale,Seconde Thématique,Groupe de Mots clefs..." />
+				<input name="sharedTag[label]" type="text" value="" is="tagsinput" data-url="service/autocomplete/taxonomy?label=<?=$taxonomy?>" data-minchar="4" data-maxchar="25" data-max="5" placeholder="Thématique,Mots clefs..." />
 				<?$dynVar='taxonomy'.ucfirst($taxonomy);?>
 				<if e="isset($$dynVar)">
 					<span class="tags-suggests">Suggestions:
@@ -64,7 +64,7 @@
 						<input id="geo-lng" name="xownGeopoint[lng]" type="number" step="any" min="-180" max="180">
 						<label for="geo-rayon">Rayon en km</label>
 						<input id="geo-rayon" name="xownGeopoint[rayon]" type="number" step="1" min="0" max="67">
-						<input type="hidden" name="geo-valid">
+						<input type="hidden" name="xownGeopoint[valid]">
 					</fieldset>					
 				</geo-completer>
 			</fieldset>
