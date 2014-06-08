@@ -160,11 +160,11 @@ class ajouter extends \present{
 								array('code'=>$compo->short_name),
 								array('label'=>$compo->long_name)
 							);
-							$geopoint->country = $bean->country = $country;
+							$geopoint->geocountry = $bean->geocountry = $country;
 							if($bean->locality)
-								$bean->locality->country = $country;
+								$bean->locality->geocountry = $country;
 							if($bean->geoarealevel2)
-								$bean->geoarealevel2->country = $country;
+								$bean->geoarealevel2->geocountry = $country;
 						break;
 					}
 				}

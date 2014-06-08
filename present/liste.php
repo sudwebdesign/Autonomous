@@ -2,6 +2,7 @@
 use view;
 use model;
 class liste extends \present{
+	static $taxonomy;
 	static function compileVars(&$vars=array()){
 		
 	}
@@ -9,12 +10,23 @@ class liste extends \present{
 		
 	}
 	static function exec(){
-			
+		static::$taxonomy = end(self::$options['namespaces']);
 	}	
 	static function execVars(&$vars=array()){
-		
+		$t = static::$taxonomy;
+		return array(
+			'liste'=>model::table4D($t,array(
+					'select'=>array(
+						"$t.title",
+						"$t.presentation",
+					),
+				),array(
+					
+				)
+			),
+			'taxonomy'=>static::$taxonomy,
+		);
 	}
-	
 	const pagePrefixer = 'page:';
 	static $pagePrefix = '';
 	static $pageCurrent = 1;
