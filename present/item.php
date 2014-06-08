@@ -17,6 +17,7 @@ class item extends \present{
 		$table = static::$taxonomy;
 		
 		return array(
+			'title'=>view::param(1),
 			'taxonomy'=>static::$taxonomy,
 		);
 	}
