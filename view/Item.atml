@@ -1,7 +1,9 @@
+<?use control\str;?>
 <extend>
 	<write main>
 		<article>
 			<h1><?=$title?></h1>
+			<h2><?=str::ucfirst($taxonomy)?></h2>
 			
 		</article>
 	</write>
