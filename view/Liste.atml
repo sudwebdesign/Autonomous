@@ -6,6 +6,7 @@
 		</aside>
 		<article>
 			<h1><?=$title?></h1>
+			<?=$count?> results
 			<foreach e="(array)@$liste as $id=>$item">
 				<h2><a href=""><?=$item->title?></a></h2>
 				<a href=""><?=$item->presentation?></a>
@@ -14,7 +15,7 @@
 				</ul>
 				<hr>
 			</foreach>
-			<if e="@$rowsTotal">
+			<if e="@$count">
 				<!--
 				<ul class="simple-pagination light-theme">
 					<if e="$pageCurrent==1">

@@ -1,10 +1,6 @@
 <?php
 control::dev(
 	control::dev_default //control+view+present+model
-	//|control::dev_control
-	//|control::dev_view
-	//|control::dev_present
-	//|control::dev_model
 	//|control::dev_model_compo
 	//|control::dev_model_redbean
 	//|control::dev_model_sql

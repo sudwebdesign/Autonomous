@@ -13,17 +13,18 @@ class liste extends \present{
 		static::$taxonomy = end(self::$options['namespaces']);
 	}	
 	static function execVars(&$vars=array()){
-		$t = static::$taxonomy;
-		return array(
-			'liste'=>model::table4D($t,array(
-					'select'=>array(
-						"$t.title",
-						"$t.presentation",
-					),
-				),array(
-					
-				)
+		$table = static::$taxonomy;
+		$query = array(
+			'where'=>array(
+				
 			),
+			'limit'=>20,
+			'offset'=>null,
+		);
+		$params = array();
+		return array(
+			'count'=>model::count4D($table,$query,$params),
+			'liste'=>model::table4D($table,$query,$params),
 			'taxonomy'=>static::$taxonomy,
 		);
 	}
