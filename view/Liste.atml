@@ -6,9 +6,10 @@
 		</aside>
 		<article>
 			<h1><?=$title?></h1>
-			<?=$count?> results
+			<?=$countListe?> / <?=$count?> results
 			<foreach e="(array)@$liste as $id=>$item">
-				<h2><a href=""><?=$item->title?></a></h2>
+				<?$href=substr(view::param(0),0,-1).'|'.$item->title.'|'.$id;?>
+				<h2><a href="<?=$href?>"><?=$item->title?></a></h2>
 				<a href=""><?=$item->presentation?></a>
 				<ul class="tags">
 					<li></li>

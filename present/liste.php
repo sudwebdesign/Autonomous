@@ -1,6 +1,7 @@
 <?php namespace present;
 use view;
 use model;
+use surikat\control\ArrayObject;
 class liste extends \present{
 	static $taxonomy;
 	static function compileVars(&$vars=array()){
@@ -18,14 +19,17 @@ class liste extends \present{
 			'where'=>array(
 				
 			),
-			'limit'=>20,
-			'offset'=>null,
 		);
+		$queryListe = array_merge($query,array(
+			'limit'=>$limit=20,
+			'offset'=>null,
+		));
 		$params = array();
 		return array(
 			'count'=>model::count4D($table,$query,$params),
-			'liste'=>model::table4D($table,$query,$params),
+			'liste'=>$list = new ArrayObject(model::table4D($table,$queryListe,$params)),
 			'taxonomy'=>static::$taxonomy,
+			'countListe'=>count($list),
 		);
 	}
 	const pagePrefixer = 'page:';
