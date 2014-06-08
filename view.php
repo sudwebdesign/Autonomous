@@ -4,15 +4,24 @@ control::dev(
 	|control::dev_js
 );
 class view extends surikat\view{
-	static $xDom = false;
-	#<workflow>
-	//static function compileDocument($TML){
-		//parent::compileDocument($TML); #register P & auto min when PROD
-	//}
-	//static function index(){
-		//self::hooks();
-		//self::exec(self::param(0).'.tml');
-	//}
+	static $xDom = 'x-dom/';
+	static function preHooks(){ #don't forget to call exit to avoid simple Template auto-Mapping when hook found
+		parent::preHooks(); #automatics hooks, just /service/
+		
+	}
+	static function postHooks(){ #don't forget to call exit to avoid 404 when hook found
+		control::dev(false);
+		if(strpos(static::$PATH,'/blog/')===0)
+			exit(include('plugin/wordpress/index.php'));
+		
+	}
+	static function compileDocument($TML){
+		parent::compileDocument($TML); #register "present:" in tml templates & auto min when PROD
+		
+
+		//add here your jquery-style manipulation on dom before compile
+		
+	}
 	//static function getUriParams($path){
 		//static $sepEq = ':';
 		//static $sepAnd = '|';

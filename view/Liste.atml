@@ -6,39 +6,16 @@
 		</aside>
 		<article>
 			<h1><?=$title?></h1>
-			<foreach e="(array)@$liste">
-				<h2><a href="<?=$subUri.$label.'|'.$id?>"><?=$label?></a></h2>
-				<p><?=$presentation?></p>
-				<loop var="themes" prefix="theme">
-					<?=$theme_id?>
-					<?=$theme_label?>
-				</loop>
-				<loop var="communes" prefix="commune">
-					<?=$commune_id?>
-					<?=$commune_label?>
-				</loop>
-				<p class="lead">
-					<a href="<?=$subUri.":$label|$id"?>" class="btn btn-default">Read More</a>
-				</p>
-				<p class="pull-right">
-					<span class="label label-default">keyword</span>
-					<span class="label label-default">tag</span>
-					<span class="label label-default">post</span>
-				</p>
-				<ul class="list-inline">
-					<li>
-						<a href="#"><?=$datestart?></a>
-					</li>
-					<li>
-						<a href="#"><i class="icon-comment"></i> 2 Comments</a>
-					</li>
-					<li>
-						<a href="#"><i class="icon-share"></i> 14 Shares</a>
-					</li>
+			<foreach e="(array)@$liste as $id=>$item">
+				<h2><a href=""><?=$item->title?></a></h2>
+				<a href=""><?=$item->presentation?></a>
+				<ul class="tags">
+					<li></li>
 				</ul>
 				<hr>
 			</foreach>
 			<if e="@$rowsTotal">
+				<!--
 				<ul class="simple-pagination light-theme">
 					<if e="$pageCurrent==1">
 						<li class="active"><span class="current prev">Début</span></li>
@@ -66,6 +43,7 @@
 						</li>
 					</if>
 				</ul>
+				-->
 			<else>
 				Aucune Entrée
 			</if>
