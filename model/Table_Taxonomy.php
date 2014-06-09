@@ -1,6 +1,6 @@
 <?php namespace model;
 use model;
-use model\Cache;
+use model\cache;
 final class Table_Taxonomy extends Table{
 	function onUpdate(){
 		
@@ -18,8 +18,8 @@ final class Table_Taxonomy extends Table{
 	static function getChildrenbyLabel($params=null){
 		model::schemaAuto('taxonomy');
 		if($params)
-			return Cache::syncCol('taxonomy',array('where'=>'taxonomy_id=(SELECT id FROM taxonomy WHERE label=?)'),array($params));
+			return cache::syncCol('taxonomy',array('where'=>'taxonomy_id=(SELECT id FROM taxonomy WHERE label=?)'),array($params));
 		else
-			return Cache::syncCol('taxonomy');
+			return cache::syncCol('taxonomy');
 	}
 }

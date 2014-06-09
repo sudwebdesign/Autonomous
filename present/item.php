@@ -18,6 +18,7 @@ class item extends \present{
 		
 		return array(
 			'title'=>view::param(1),
+			'row'=>model::row4D(static::$taxonomy,array('where'=>static::$taxonomy.'.id=?'),array(view::param(2))),
 			'taxonomy'=>static::$taxonomy,
 		);
 	}

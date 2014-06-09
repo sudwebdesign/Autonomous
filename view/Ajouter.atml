@@ -36,7 +36,7 @@
 				<?$dynVar='taxonomy'.ucfirst($taxonomy);?>
 				<if e="isset($$dynVar)">
 					<span class="tags-suggests">Suggestions:
-						<foreach e="$$dynVar as $key=>$val" cacheSync="taxonomy">
+						<foreach e="$$dynVar as $key=>$val" cacheSync="model.taxonomy">
 							<?=$val?>,
 						</foreach>
 					</span>
