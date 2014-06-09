@@ -14,12 +14,12 @@ class item extends \present{
 		static::$taxonomy = end(self::$options['namespaces']);
 	}	
 	static function execVars(&$vars=array()){
-		$table = static::$taxonomy;
+		$t = static::$taxonomy;
 		
 		return array(
 			'title'=>view::param(1),
-			'row'=>model::row4D(static::$taxonomy,array('where'=>static::$taxonomy.'.id=?'),array(view::param(2))),
-			'taxonomy'=>static::$taxonomy,
+			'row'=>model::row4D($t,array('where'=>$t.'.id=?'),array(view::param(2))),
+			'taxonomy'=>$t,
 		);
 	}
 }

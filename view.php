@@ -3,9 +3,9 @@ control::dev(
 	control::dev_default //control+view+present+model
 	//|control::dev_model_compo
 	//|control::dev_model_redbean
-	|control::dev_model_sql
+	//|control::dev_model_sql
 	//|control::dev_css
-	|control::dev_js
+	//|control::dev_js
 	//|control::dev_img
 	//|control::dev_all //very heavy
 );
