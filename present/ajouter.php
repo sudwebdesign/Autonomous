@@ -11,26 +11,22 @@ use surikat\control\filter;
 use surikat\control\uploader;
 use surikat\model\Exception_Validation;
 class ajouter extends \present{
-	static function compileVars(&$vars=array()){
-		$vars['action'] = view::param(0);
+	static $implementation = array(
+		'forms'=>array()
+	);
+	static function assign($o){
+		$o->action = view::param(0);
 	}
-	static function compileElement(){
-		
-	}
-	static function exec(){
+	static function dynamic($o){
 		session::start(); //session auto start when get a key, if output not bufferised but direct flushed, have to start first
-		self::variable('taxonomy',end(self::$options['namespaces']));
-		self::POST();
+		$o->taxonomy = end($o->options->namespaces);
+		self::POST($o);
 	}
-	static function execVars(&$vars=array()){
-		
-	}
-	
-	protected static function POST(){
-		if(!count(self::$options['namespaces'])>count(explode('\\',__CLASS__))||empty($_POST))
+	protected static function POST($o){
+		if(!count($o->options->namespaces)>count(explode('\\',__CLASS__))||empty($_POST))
 			return;
-		self::variable('formPosted',true);
-		$type = self::variable('taxonomy');
+		$o->formPosted = true;
+		$type = $o->taxonomy;
 		R::begin();
 		try{
 			$bean = ajouter::POST_Common($type);
@@ -45,10 +41,8 @@ class ajouter extends \present{
 		}
 		catch(Exception_Validation $e){
 			R::rollback();
-			self::variable(array(
-				'formErrors'=>$e->getData(),
-				'formPosted'=>false
-			));
+			$o->formErrors = $e->getData();
+			$o->formPosted = false;
 		}
 	}
 	protected static function POST_Common($type){
@@ -84,7 +78,7 @@ class ajouter extends \present{
 		if(isset($_POST['sharedTag'])&&is_array($_POST['sharedTag'])&&isset($_POST['sharedTag']['label'])&&trim($_POST['sharedTag']['label'])){
 			$max = 5;
 			$tags = explode(',',strip_tags($_POST['sharedTag']['label']));
-			$taxonomyO = model::load('taxonomy',self::variable('taxonomy'));			
+			$taxonomyO = model::load('taxonomy',$o->taxonomy);			
 			foreach($tags as $i=>$tag){
 				if($i>=$max)
 					break;

@@ -10,7 +10,7 @@
 			$Type = str::ucfirst(end($x));
 			$type = str::tolower($Type);
 		?>
-		<form apply="forms.tpl" id="<?=$type?>" action="<?=$action?>" method="POST" enctype="multipart/form-data" role="form" <?=isset($formPosted)?'class="form-posted"':''?>>
+		<form id="<?=$type?>" action="<?=$action?>" method="POST" enctype="multipart/form-data" role="form" <?=isset($formPosted)?'class="form-posted"':''?>>
 			<h1>Ajouter un <?=$type?></h1>
 			<if e="isset($formPosted)">
 				<h4>

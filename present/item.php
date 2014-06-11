@@ -4,22 +4,19 @@ use model;
 use surikat\control\ArrayObject;
 class item extends \present{
 	static $taxonomy;
-	static function compileVars(&$vars=array()){
+	static function assign($o){
 		
 	}
-	static function compileElement(){
-		
-	}
-	static function exec(){
-		static::$taxonomy = end(self::$options['namespaces']);
-	}	
-	static function execVars(&$vars=array()){
-		$t = static::$taxonomy;
-		
-		return array(
-			'title'=>view::param(1),
-			'row'=>model::row4D($t,array('where'=>$t.'.id=?'),array(view::param(2))),
-			'taxonomy'=>$t,
+	static function dynamic($o){
+		$o->taxonomy = end($o->options->namespaces);
+		$o->title = view::param(1);
+		$t = $o->taxonomy;
+		$query = array(
+			'where'=>$t.'.id=?'
 		);
+		$params = array(
+			view::param(2),
+		);
+		$o->row = model::row4D($t,$query,$params);
 	}
 }
