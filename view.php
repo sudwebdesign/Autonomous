@@ -1,5 +1,6 @@
 <?php
 control::dev(
+	//control::dev_control //just for chrono and output error
 	control::dev_default //control+view+present+model
 	//|control::dev_model_compo
 	//|control::dev_model_redbean
@@ -23,8 +24,8 @@ class view extends surikat\view{
 		}
 		
 	}
-	static function compileDocument($TML){
-		parent::compileDocument($TML); #register "present:" in tml templates & auto min when PROD
+	static function document($TML){
+		parent::document($TML); #register "present:" in tml templates & auto min when PROD
 		
 
 		//add here your jquery-style manipulation on dom before compile

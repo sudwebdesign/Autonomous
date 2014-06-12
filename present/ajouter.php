@@ -11,26 +11,25 @@ use surikat\control\filter;
 use surikat\control\uploader;
 use surikat\model\Exception_Validation;
 class ajouter extends \present{
-	static $implementation = array(
-		'forms'=>array()
-	);
-	static function assign($o){
-		$o->action = view::param(0);
+	function assign(){
+		parent::assign();
+		$this->action = view::param(0);
 	}
-	static function dynamic($o){
+	function dynamic(){
+		parent::dynamic();
 		session::start(); //session auto start when get a key, if output not bufferised but direct flushed, have to start first
-		$o->taxonomy = end($o->options->namespaces);
-		self::POST($o);
+		$this->taxonomy = end($this->presentNamespaces);
+		$this->POST();
 	}
-	protected static function POST($o){
-		if(!count($o->options->namespaces)>count(explode('\\',__CLASS__))||empty($_POST))
+	function POST(){
+		if(!count($this->presentNamespaces)>count(explode('\\',__CLASS__))||empty($_POST))
 			return;
-		$o->formPosted = true;
-		$type = $o->taxonomy;
+		$this->formPosted = true;
+		$type = $this->taxonomy;
 		R::begin();
 		try{
 			$bean = ajouter::POST_Common($type);
-			if(method_exists(($final=ajouter::$final),'POST_Specifications'))
+			if(method_exists($this,'POST_Specifications'))
 				$final::POST_Specifications($bean);
 			//exit(print('<pre>'.print_r($bean->getArray(),true)));
 			R::store($bean);
@@ -41,11 +40,11 @@ class ajouter extends \present{
 		}
 		catch(Exception_Validation $e){
 			R::rollback();
-			$o->formErrors = $e->getData();
-			$o->formPosted = false;
+			$this->formErrors = $e->getData();
+			$this->formPosted = false;
 		}
 	}
-	protected static function POST_Common($type){
+	function POST_Common($type){
 		$bean = R::dispense($type);
 		$bean->on('created',function($bean)use($type){
 			uploader::image(array(

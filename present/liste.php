@@ -4,11 +4,13 @@ use model;
 use surikat\control\ArrayObject;
 use surikat\view\Exception as View_Exception;
 class liste extends \present{
-	static function assign($o){
+	function assign(){
+		parent::assign();
+		$this->taxonomy = end($this->presentNamespaces);
 		
 	}
-	static function dynamic($o){
-		$o->taxonomy = end($o->options->namespaces);
+	function dynamic(){
+		parent::dynamic();
 		//$pagePrefixer = 'page:';
 		//$pagePrefix = '';
 		//$pageCurrent = 1;
@@ -32,8 +34,8 @@ class liste extends \present{
 		//$end = ($start+$max)>$pagesTotal?$pagesTotal:$start+$max;
 		//if($end-$start<$max)
 			//$start = $end-$max;
-		//$o->page = $page;
-		$table = $o->taxonomy;
+		//$this->page = $page;
+		$table = $this->taxonomy;
 		$query = array(
 			'where'=>array(
 				
@@ -44,10 +46,10 @@ class liste extends \present{
 			'offset'=>null,
 		));
 		$params = array();
-		$o->count = model::count4D($table,$query,$params);
-		$o->liste = new ArrayObject(model::table4D($table,$queryListe,$params));
-		$o->countListe = count($o->liste);
-		$o->uri = view::param(0);
-		$o->subUri = (strrpos($o->uri,'s')===strlen($o->uri)-1?substr($o->uri,0,-1):$o->uri);
+		$this->count = model::count4D($table,$query,$params);
+		$this->liste = new ArrayObject(model::table4D($table,$queryListe,$params));
+		$this->countListe = count($this->liste);
+		$this->uri = view::param(0);
+		$this->subUri = (strrpos($this->uri,'s')===strlen($this->uri)-1?substr($this->uri,0,-1):$this->uri);
 	}
 }
