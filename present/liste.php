@@ -33,10 +33,6 @@ class liste extends \present{
 				
 			),
 		);
-		$this->sqlQueryListe = array_merge($this->sqlQuery,array(
-			'limit'=>$this->limit,
-			'offset'=>$this->offset,
-		));
 		$this->sqlParams = array();
 	}
 	function count(){
@@ -77,6 +73,10 @@ class liste extends \present{
 			$this->pagination->start = $this->pagination->end-$this->pagination->max;
 	}
 	function liste(){
+		$this->sqlQueryListe = array_merge($this->sqlQuery,array(
+			'limit'=>$this->limit,
+			'offset'=>$this->offset,
+		));
 		$this->liste = new ArrayObject(model::table4D($this->taxonomy,$this->sqlQueryListe,$this->sqlParams));
 		$this->countListe = count($this->liste);
 	}

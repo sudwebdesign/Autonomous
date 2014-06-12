@@ -9,17 +9,15 @@
 			<h1><?=$title?></h1>
 			<?=$countListe?> / <?=$count?> results
 			<foreach e="(array)@$liste as $id=>$item">
-				<?$href=substr(view::param(0),0,-1).'|'.$item->title.'|'.$id;?>
+				<?$href=$subUri.'|'.$item->title.'|'.$id;?>
 				<h2><a href="<?=$href?>"><?=$item->title?></a></h2>
-				<a href=""><?=$item->presentation?></a>
+				<a href="<?=$href?>"><?=$item->presentation?></a>
 				<ul class="tags">
 					<li></li>
 				</ul>
 				<hr>
 			</foreach>
 			<if e="$count">
-				<!--
-				-->
 				<ul class="simple-pagination light-theme">
 					<if e="$page==1">
 						<li class="active"><span class="current prev">Début</span></li>
