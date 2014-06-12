@@ -9,47 +9,75 @@ class liste extends \present{
 		$this->taxonomy = end($this->presentNamespaces);
 		
 	}
+	protected $sqlQuery;
+	protected $sqlParams;
+	protected $sqlQueryListe;
 	function dynamic(){
 		parent::dynamic();
-		//$pagePrefixer = 'page:';
-		//$pagePrefix = '';
-		//$pageCurrent = 1;
-		//$paginationOffset = 0;
-		//$rowByPage = 5;
-		//$maxPaginationColumns = 3;
-		//$pageSeparator = '|';
-		//$page = view::param('page');
-		//if(($page&&!is_integer(filter_var($page,FILTER_VALIDATE_INT)))
-			//||($page=(int)$page)<2
-			//||$this->rowsTotal<=($offset=($page-1)*$this->rowByPage)
-		//)
-			//throw new View_Exception('404');
-		//$pageCurrent = $page;
-		//$paginationOffset = $offset;
-		//$pagePrefix = ($uri?$pageSeparator:'').$pagePrefixer;
-		//$end = ($paginationOffset+$rowByPage)>$rowsTotal?$rowsTotal:$paginationOffset+$rowByPage;
-		//$pagesTotal = (int)ceil($rowsTotal/$rowByPage);
-		//$max = ($maxPaginationColumns>$pagesTotal?$pagesTotal:$maxPaginationColumns)-1;
-		//$start = ($start=$pageCurrent-(int)floor($max/2))>1?$start:1;
-		//$end = ($start+$max)>$pagesTotal?$pagesTotal:$start+$max;
-		//if($end-$start<$max)
-			//$start = $end-$max;
-		//$this->page = $page;
-		$table = $this->taxonomy;
-		$query = array(
+		$this->getParamsFromUri();
+		$this->buildQuery();
+		$this->count();
+		$this->pagination();
+		$this->liste();
+	}
+	function getParamsFromUri(){
+		$this->uri = view::param(0);
+		$this->subUri = (strrpos($this->uri,'s')===strlen($this->uri)-1?substr($this->uri,0,-1):$this->uri);
+		$this->page = view::param('page');
+	}
+	function buildQuery(){
+		$this->limit = 5;
+		$this->offset = 0;
+		$this->sqlQuery = array(
 			'where'=>array(
 				
 			),
 		);
-		$queryListe = array_merge($query,array(
-			'limit'=>$limit=20,
-			'offset'=>null,
+		$this->sqlQueryListe = array_merge($this->sqlQuery,array(
+			'limit'=>$this->limit,
+			'offset'=>$this->offset,
 		));
-		$params = array();
-		$this->count = model::count4D($table,$query,$params);
-		$this->liste = new ArrayObject(model::table4D($table,$queryListe,$params));
+		$this->sqlParams = array();
+	}
+	function count(){
+		$this->count = model::count4D($this->taxonomy,$this->sqlQuery,$this->sqlParams);
+	}
+	function pagination(){
+		$this->pagination = array(
+			'prefix'			=>'|page:',
+			'maxCols'			=>3,
+		);
+		
+		if($this->page===null)
+			$this->page = 1;
+		elseif(
+			!is_integer(filter_var($this->page,FILTER_VALIDATE_INT))
+			||($this->page=(int)$this->page)<2
+			||$this->count<=($this->offset=($this->page-1)*$this->limit)
+		)
+			throw new View_Exception('404');
+		
+		if(($this->offset+$this->limit)>$this->count)
+			$this->pagination->end = $this->count;
+		else
+			$this->pagination->end = $this->offset+$this->limit;
+		
+		$this->pagination->pagesTotal = (int)ceil($this->count/$this->limit);
+		
+		if($this->pagination->maxCols>$this->pagination->pagesTotal)
+			$this->pagination->max = $this->pagination->pagesTotal-1;
+		else
+			$this->pagination->max = $this->pagination->maxCols-1;
+			
+		$this->pagination->start = $this->page-(int)floor($this->pagination->max/2);
+		if(!$this->pagination->start)
+			$this->pagination->start = 1;
+		$this->pagination->end = ($this->pagination->start+$this->pagination->max)>$this->pagination->pagesTotal?$this->pagination->pagesTotal:$this->pagination->start+$this->pagination->max;
+		if($this->pagination->end-$this->pagination->start<$this->pagination->max)
+			$this->pagination->start = $this->pagination->end-$this->pagination->max;
+	}
+	function liste(){
+		$this->liste = new ArrayObject(model::table4D($this->taxonomy,$this->sqlQueryListe,$this->sqlParams));
 		$this->countListe = count($this->liste);
-		$this->uri = view::param(0);
-		$this->subUri = (strrpos($this->uri,'s')===strlen($this->uri)-1?substr($this->uri,0,-1):$this->uri);
 	}
 }

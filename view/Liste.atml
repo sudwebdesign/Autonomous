@@ -18,30 +18,32 @@
 				<hr>
 			</foreach>
 			<if e="$count">
+				<!--
+				-->
 				<ul class="simple-pagination light-theme">
-					<if e="$pageCurrent==1">
+					<if e="$page==1">
 						<li class="active"><span class="current prev">Début</span></li>
 						<li class="active"><span class="current prev">Précédent</span></li>
 					<else>
-						<li><a class="prev page-link" href="<?=view::param(0)?>">Début</a></li>
-						<li><a class="prev page-link" href="<?=view::param(0).($pageCurrent==2?'':$pagePrefix.($pageCurrent-1))?>">Précédent</a></li>
+						<li><a class="prev page-link" href="<?=$uri?>">Début</a></li>
+						<li><a class="prev page-link" href="<?=$uri.($page==2?'':$pagination->prefix.($page-1))?>">Précédent</a></li>
 					</if>
-					<for e="$i=$start;$i<=$end;$i++">
-						<if e="$pageCurrent==$i">
+					<for from="$pagination->start" to="$pagination->end">
+						<if e="$page==$i">
 							<li class="active"><span class="current"><?=$i?></span></li>
 						<else>
 							<li>
-								<a class="page-link" href="<?=view::param(0).($i>1?$pagePrefix.$i:'')?>"><?=$i?></a>
+								<a class="page-link" href="<?=$uri.($i>1?$pagination->prefix.$i:'')?>"><?=$i?></a>
 							</li>
 						</if>
 					</for>
-					<if e="$pageCurrent==$pagesTotal">
+					<if e="$page==$pagination->pagesTotal">
 						<li class="active">
 							<span class="current next">Suivant</span>
 						</li>
 					<else>
 						<li>
-							<a class="next page-link" href="<?=view::param(0).$pagePrefix.($pageCurrent+1)?>">Suivant</a>
+							<a class="next page-link" href="<?=$uri.$pagination->prefix.($page+1)?>">Suivant</a>
 						</li>
 					</if>
 				</ul>
@@ -51,6 +53,7 @@
 		</article>
 		<aside>
 			Flux of others tables articles
+			<?/*$o->debug()*/?>
 		</aside>
 	</write>
 </extend>
