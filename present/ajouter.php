@@ -14,11 +14,11 @@ class ajouter extends \present{
 	function assign(){
 		parent::assign();
 		$this->action = view::param(0);
+		$this->taxonomy = end($this->presentNamespaces);
 	}
 	function dynamic(){
 		parent::dynamic();
 		session::start(); //session auto start when get a key, if output not bufferised but direct flushed, have to start first
-		$this->taxonomy = end($this->presentNamespaces);
 		$this->POST();
 	}
 	function POST(){
@@ -28,9 +28,9 @@ class ajouter extends \present{
 		$type = $this->taxonomy;
 		R::begin();
 		try{
-			$bean = ajouter::POST_Common($type);
+			$bean = $this->POST_Common($type);
 			if(method_exists($this,'POST_Specifications'))
-				$final::POST_Specifications($bean);
+				$this->POST_Specifications($bean);
 			//exit(print('<pre>'.print_r($bean->getArray(),true)));
 			R::store($bean);
 			if($e=$bean->getErrors())
@@ -77,7 +77,7 @@ class ajouter extends \present{
 		if(isset($_POST['sharedTag'])&&is_array($_POST['sharedTag'])&&isset($_POST['sharedTag']['label'])&&trim($_POST['sharedTag']['label'])){
 			$max = 5;
 			$tags = explode(',',strip_tags($_POST['sharedTag']['label']));
-			$taxonomyO = model::load('taxonomy',$o->taxonomy);			
+			$taxonomyO = model::load('taxonomy',$this->taxonomy);			
 			foreach($tags as $i=>$tag){
 				if($i>=$max)
 					break;
@@ -104,10 +104,10 @@ class ajouter extends \present{
 				}
 			}
 		}
-		self::POST_Geo($bean);
+		$this->POST_Geo($bean);
 		return $bean;
 	}
-	static function POST_Geo($bean){
+	function POST_Geo($bean){
 		if(!isset($_POST['xownGeopoint'])||!is_array($_POST['xownGeopoint']))
 			return;
 		$geop = $_POST['xownGeopoint'];

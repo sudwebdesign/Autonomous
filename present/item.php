@@ -5,10 +5,10 @@ use surikat\control\ArrayObject;
 class item extends \present{
 	function assign(){
 		parent::assign();
+		$this->taxonomy = end($this->presentNamespaces);
 	}
 	function dynamic(){
 		parent::dynamic();
-		$this->taxonomy = end($this->presentNamespaces);
 		$this->title = view::param(1);
 		$t = $this->taxonomy;
 		$query = array(
