@@ -82,6 +82,8 @@
 	<script type="text/javascript">
 		<?if(control::devHas(control::dev_css)):?>$css().dev=true;<?endif;?>
 		<?if(control::devHas(control::dev_js)):?>$js().dev=true;<?endif;?>
+		$js().min = false
+		$css().min = false;
 		$js('script');
 		<?if(control::devHas(control::dev_control)):?>if(console) console.log('Server <?=$timeCompiled===$time?'Compilation+':''?>Exec: <?=control\Chrono::get()?> -  Exec <?=date('jMY-H:m:s',$time)?> - Compiled <?=date('jMY-H:m:s',$timeCompiled)?>');<?endif;?>
 	</script>
