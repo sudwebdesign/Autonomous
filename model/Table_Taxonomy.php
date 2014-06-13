@@ -1,7 +1,7 @@
 <?php namespace model;
 use model;
 use model\cache;
-final class Table_Taxonomy extends Table{
+final class Table_Taxonomy extends ATable_Keyword{
 	function onUpdate(){
 		
 	}
@@ -15,6 +15,10 @@ final class Table_Taxonomy extends Table{
 	//function onUpdated(){}
 	//function onDelete(){}
 	//function onDeleted(){}
+	static function getLabels(){
+		model::schemaAuto('taxonomy');
+		return cache::syncCol('taxonomy');
+	}
 	static function getChildrenbyLabel($params=null){
 		model::schemaAuto('taxonomy');
 		if($params)

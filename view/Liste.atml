@@ -48,10 +48,12 @@
 			<else>
 				Aucune Entrée
 			</if>
+
+			<br>
+			<?$o->debug();?>
 		</article>
 		<aside>
 			Flux of others tables articles
-			<?/*$o->debug()*/?>
 		</aside>
 	</write>
 </extend>

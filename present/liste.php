@@ -1,39 +1,72 @@
 <?php namespace present;
 use view;
 use model;
+use model\Table_Taxonomy;
+use model\Table_Tag;
 use surikat\control\ArrayObject;
 use surikat\view\Exception as View_Exception;
 class liste extends \present{
+	protected $limit		= 5;
+	protected $offset	    = 0;
+	protected $sqlQuery		= array('where'=>array(),'having_sum'=>array());
+	protected $sqlParams	= array();
+	protected $sqlQueryListe;
 	function assign(){
 		parent::assign();
 		$this->taxonomy = end($this->presentNamespaces);
 		
 	}
-	protected $sqlQuery;
-	protected $sqlParams;
-	protected $sqlQueryListe;
 	function dynamic(){
 		parent::dynamic();
 		$this->getParamsFromUri();
-		$this->buildQuery();
+		$this->searchMotorParams();
+		$this->searchMotorCompo();
 		$this->count();
 		$this->pagination();
 		$this->liste();
 	}
+	
 	function getParamsFromUri(){
 		$this->uri = view::param(0);
 		$this->subUri = (strrpos($this->uri,'s')===strlen($this->uri)-1?substr($this->uri,0,-1):$this->uri);
 		$this->page = view::param('page');
+
+		$this->keywords = array();
+		$i = 0;
+		while(($param = view::param($i+=1))!==null)
+			$this->keywords[] = $param;
+		
+		//var_dump($this->keywords);exit;
 	}
-	function buildQuery(){
-		$this->limit = 5;
-		$this->offset = 0;
-		$this->sqlQuery = array(
-			'where'=>array(
-				
-			),
-		);
-		$this->sqlParams = array();
+	function searchMotorParams(){
+		$this->search = array();
+		$s =& $this->search;
+
+		$s->taxonomyId = array();
+		$s->tagId = array();
+		$s->localities = array();
+		$s->texts = array();
+
+		$taxonomies = Table_Taxonomy::getLabels();
+		
+		foreach($this->keywords as $k){
+			if(in_array($k,$taxonomies))
+				$s->taxonomyId[] = array_search($k,$taxonomies);
+			elseif($id=Table_Tag::find($k,1))
+				$this->tagId[] = $id;
+			else
+				$s->texts[] = $k;
+		}
+
+
+	}
+	function searchMotorCompo(){
+		$sum =& $this->sqlQuery['sum'];
+		$where =& $this->sqlQuery['where'];
+		$s =& $this->search;
+		//exit($s->debug());
+		if(count($s->taxonomyId))
+			$sum[] = 'taxonomy.id IN('.implode(',',(array)$s->taxonomyId).')';
 	}
 	function count(){
 		$this->count = model::count4D($this->taxonomy,$this->sqlQuery,$this->sqlParams);
