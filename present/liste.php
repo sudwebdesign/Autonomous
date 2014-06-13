@@ -8,7 +8,7 @@ use surikat\view\Exception as View_Exception;
 class liste extends \present{
 	protected $limit		= 5;
 	protected $offset	    = 0;
-	protected $sqlQuery		= array('where'=>array(),'having_sum'=>array());
+	protected $sqlQuery		= array('where'=>array(),'joinWhere'=>array());
 	protected $sqlParams	= array();
 	protected $sqlQueryListe;
 	function assign(){
@@ -61,12 +61,12 @@ class liste extends \present{
 
 	}
 	function searchMotorCompo(){
-		$sum =& $this->sqlQuery['sum'];
+		$joinWhere =& $this->sqlQuery['joinWhere'];
 		$where =& $this->sqlQuery['where'];
 		$s =& $this->search;
 		//exit($s->debug());
 		if(count($s->taxonomyId))
-			$sum[] = 'taxonomy.id IN('.implode(',',(array)$s->taxonomyId).')';
+			$joinWhere[] = 'taxonomy.id IN('.implode(',',(array)$s->taxonomyId).')';
 	}
 	function count(){
 		$this->count = model::count4D($this->taxonomy,$this->sqlQuery,$this->sqlParams);
