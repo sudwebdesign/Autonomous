@@ -13,6 +13,7 @@ body>footer{
 		margin-bottom:1%;
 		font-size: 1.2em;
 		color: #FFF;
+		&.active,
 		&:hover {
 		  color: $color-main;
 		  text-decoration:none;
