@@ -22,12 +22,12 @@ class liste extends \present{
 		$this->getParamsFromUri();
 		$this->searchMotorParams();
 		$this->searchMotorCompo();
-		$this->count();
+		$this->countAll();
 		$this->pagination();
 		$this->liste();
 	}
 	
-	function getParamsFromUri(){
+	protected function getParamsFromUri(){
 		$this->uri = view::param(0);
 		$this->subUri = (strrpos($this->uri,'s')===strlen($this->uri)-1?substr($this->uri,0,-1):$this->uri);
 		$this->page = view::param('page');
@@ -39,51 +39,8 @@ class liste extends \present{
 		
 		//var_dump($this->keywords);exit;
 	}
-	function searchMotorParams(){
-		$this->search = array();
-		$s =& $this->search;
 
-		$s->taxonomyId = array();
-		$s->tagId = array();
-		$s->localityId = array();
-		$s->texts = array();
-
-		$taxonomies = taxonomy::getLabels();
-		
-		foreach($this->keywords as $k){
-			if(in_array($k,$taxonomies))
-				$s->taxonomyId[] = array_search($k,$taxonomies);
-			elseif($id=locality::find($k,1))
-				$s->localityId[] = $id;
-			elseif($id=tag::find($k,1))
-				$s->tagId[] = $id;
-			else
-				$s->texts[] = $k;
-		}
-
-
-	}
-	
-	function pushJoinWhere($query,$params){ //helper method for searchMotorCompo and pushJoinWhereSearch
-		$this->sqlQuery['joinWhere'][] = model::multiSlots($query,(array)$params);
-		foreach($params as $k=>$v)
-			if(is_integer($k))
-				$this->sqlParams[] = $v;
-			else
-				$this->sqlParams[$k] = $v;
-	}
-	function pushJoinWhereSearch($table){ //helper method for searchMotorCompo
-		if(is_array($table)){
-			foreach($table as $t)
-				$this->pushJoinWhereSearch($t);
-			return;
-		}
-		$s =& $this->search;
-		$k = $table.'Id';
-		if(!empty($s->$k))
-			$this->pushJoinWhere($table.'.id IN(?)',$s->$k);
-	}
-	function searchMotorCompo(){
+	protected function searchMotorCompo(){
 		//exit($s->debug());
 		$this->pushJoinWhereSearch(array(
 			'taxonomy',
@@ -91,10 +48,77 @@ class liste extends \present{
 			'tag',
 		));
 	}
-	function count(){
+	protected function pushJoinWhereSearch($table){ //helper method for searchMotorCompo
+		if(is_array($table)){
+			foreach($table as $t)
+				$this->pushJoinWhereSearch($t);
+			return;
+		}
+		$k = $table.'Id';
+		if(!empty($this->search->$k))
+			$this->pushJoinWhere($table.'.id IN(?)',$this->search->$k);
+	}
+	protected function pushJoinWhere($query,$params){ //helper method for searchMotorCompo and pushJoinWhereSearch
+		$this->sqlQuery['joinWhere'][] = model::multiSlots($query,(array)$params);
+		foreach($params as $k=>$v)
+			if(is_integer($k))
+				$this->sqlParams[] = $v;
+			else
+				$this->sqlParams[$k] = $v;
+	}
+	protected $searchers = array(
+		'taxonomyId',
+		'localityId',
+		'tagId',
+		'texts',
+	);
+	protected function searchMotorParams(){
+		$this->search = array();
+		$search =& $this->search;
+		$order = array();
+		$founds = array();
+		foreach($this->keywords as $k){
+			foreach($this->searchers as $sr){
+				if(!isset($search->$sr))
+					$search->$sr = array();
+				$m = 'keyword'.ucfirst($sr);
+				if($found=$this->$m($k)){
+					$search->{$sr}[] = $found;
+					$founds[$sr][] = $k;
+					if(!in_array($sr,$order))
+						$order[] = $sr;
+					break;
+				}
+			}
+		}
+		$ordered = array_filter((array)$this->searchers,function($v)use($order){
+			return in_array($v,$order);
+		});
+		if($order!=$ordered){
+			$redirect = '';
+			foreach($ordered as $sr)
+				$redirect .= implode('|',(array)$founds[$sr]).'|';
+			$redirect = '|'.trim($redirect,'|');
+			header('Location: '.$this->HREF.$redirect,true,301);
+		}
+	}
+	protected function keywordTaxonomyId($k){
+		return array_search($k,taxonomy::getLabels());
+	}
+	protected function keywordLocalityId($k){
+		return locality::find($k,1);
+	}
+	protected function keywordTagId($k){
+		return tag::find($k,1);
+	}
+	protected function keywordTexts($k){
+		return $k;
+	}
+	
+	protected function countAll(){
 		$this->count = model::count4D($this->taxonomy,$this->sqlQuery,$this->sqlParams);
 	}
-	function pagination(){
+	protected function pagination(){
 		$this->pagination = array(
 			'prefix'			=>'|page:',
 			'maxCols'			=>3,
@@ -128,7 +152,7 @@ class liste extends \present{
 		if($this->pagination->end-$this->pagination->start<$this->pagination->max)
 			$this->pagination->start = $this->pagination->end-$this->pagination->max;
 	}
-	function liste(){
+	protected function liste(){
 		$this->sqlQueryListe = array_merge($this->sqlQuery,array(
 			'limit'=>$this->limit,
 			'offset'=>$this->offset,
