@@ -25,19 +25,22 @@ class liste extends \present{
 		$this->countAll();
 		$this->pagination();
 		$this->liste();
+
+		$this->h1 = view::param(0);
+		if(!empty($this->keywords))
+			$this->h1 .= ' - '.implode(' ',(array)$this->keywords);
+		if($this->page>1)
+			$this->h1 .= ' - page '.$this->page;
 	}
 	
 	protected function getParamsFromUri(){
 		$this->uri = view::param(0);
 		$this->subUri = (strrpos($this->uri,'s')===strlen($this->uri)-1?substr($this->uri,0,-1):$this->uri);
 		$this->page = view::param('page');
-
 		$this->keywords = array();
 		$i = 0;
 		while(($param = view::param($i+=1))!==null)
 			$this->keywords[] = $param;
-		
-		//var_dump($this->keywords);exit;
 	}
 
 	protected function searchMotorCompo(){
@@ -72,11 +75,11 @@ class liste extends \present{
 		'tagId',
 		'texts',
 	);
+	protected $orderedParams = array();
 	protected function searchMotorParams(){
 		$this->search = array();
 		$search =& $this->search;
 		$order = array();
-		$founds = array();
 		foreach($this->keywords as $k){
 			foreach($this->searchers as $sr){
 				if(!isset($search->$sr))
@@ -84,7 +87,7 @@ class liste extends \present{
 				$m = 'keyword'.ucfirst($sr);
 				if($found=$this->$m($k)){
 					$search->{$sr}[] = $found;
-					$founds[$sr][] = $k;
+					$this->orderedParams[$sr][] = $k;
 					if(!in_array($sr,$order))
 						$order[] = $sr;
 					break;
@@ -94,10 +97,11 @@ class liste extends \present{
 		$ordered = array_filter((array)$this->searchers,function($v)use($order){
 			return in_array($v,$order);
 		});
-		if($order!=$ordered){
+		if(count(array_diff($order,$ordered))){
+			//exit(var_dump($order,$ordered));
 			$redirect = '';
 			foreach($ordered as $sr)
-				$redirect .= implode('|',(array)$founds[$sr]).'|';
+				$redirect .= implode('|',(array)$this->orderedParams[$sr]).'|';
 			$redirect = '|'.trim($redirect,'|');
 			header('Location: '.$this->HREF.$redirect,true,301);
 		}

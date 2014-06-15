@@ -6,7 +6,7 @@
 			Search Options
 		</aside>
 		<article>
-			<h1><?=$title?></h1>
+			<h1><?=$h1?></h1>
 			<?=$countListe?> / <?=$count?> results
 			<foreach e="(array)@$liste as $id=>$item">
 				<?$href=$subUri.'|'.$item->title.'|'.$id;?>
