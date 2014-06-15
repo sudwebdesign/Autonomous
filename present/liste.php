@@ -34,7 +34,6 @@ class liste extends \present{
 	}
 	
 	protected function getParamsFromUri(){
-		$this->subUri = (strrpos($this->uri,'s')===strlen($this->uri)-1?substr($this->uri,0,-1):$this->uri);
 		$this->page = view::param('page');
 		$this->uri = $this->URI;
 		$this->keywords = array();
@@ -43,6 +42,7 @@ class liste extends \present{
 			$this->keywords[] = $param;
 			$this->uri .= '|'.$param;
 		}
+		$this->subUri = (strrpos($this->uri,'s')===strlen($this->uri)-1?substr($this->uri,0,-1):$this->uri);
 	}
 
 	protected function searchMotorCompo(){
