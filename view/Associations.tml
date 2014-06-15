@@ -1,2 +1,4 @@
 <present:liste:association />
-<extend file="Liste.atml"></extend>
+<extend file="Liste.atml">
+	<attr selector="main" addClass="associations">
+</extend>
