@@ -1,8 +1,9 @@
 <?php namespace present;
 use view;
 use model;
-use model\Table_Taxonomy;
-use model\Table_Tag;
+use model\Table_Taxonomy as taxonomy;
+use model\Table_Tag as tag;
+use model\Table_Locality as locality;
 use surikat\control\ArrayObject;
 use surikat\view\Exception as View_Exception;
 class liste extends \present{
@@ -44,29 +45,51 @@ class liste extends \present{
 
 		$s->taxonomyId = array();
 		$s->tagId = array();
-		$s->localities = array();
+		$s->localityId = array();
 		$s->texts = array();
 
-		$taxonomies = Table_Taxonomy::getLabels();
+		$taxonomies = taxonomy::getLabels();
 		
 		foreach($this->keywords as $k){
 			if(in_array($k,$taxonomies))
 				$s->taxonomyId[] = array_search($k,$taxonomies);
-			elseif($id=Table_Tag::find($k,1))
-				$this->tagId[] = $id;
+			elseif($id=locality::find($k,1))
+				$s->localityId[] = $id;
+			elseif($id=tag::find($k,1))
+				$s->tagId[] = $id;
 			else
 				$s->texts[] = $k;
 		}
 
 
 	}
-	function searchMotorCompo(){
-		$joinWhere =& $this->sqlQuery['joinWhere'];
-		$where =& $this->sqlQuery['where'];
+	
+	function pushJoinWhere($query,$params){ //helper method for searchMotorCompo and pushJoinWhereSearch
+		$this->sqlQuery['joinWhere'][] = model::multiSlots($query,(array)$params);
+		foreach($params as $k=>$v)
+			if(is_integer($k))
+				$this->sqlParams[] = $v;
+			else
+				$this->sqlParams[$k] = $v;
+	}
+	function pushJoinWhereSearch($table){ //helper method for searchMotorCompo
+		if(is_array($table)){
+			foreach($table as $t)
+				$this->pushJoinWhereSearch($t);
+			return;
+		}
 		$s =& $this->search;
+		$k = $table.'Id';
+		if(!empty($s->$k))
+			$this->pushJoinWhere($table.'.id IN(?)',$s->$k);
+	}
+	function searchMotorCompo(){
 		//exit($s->debug());
-		if(count($s->taxonomyId))
-			$joinWhere[] = 'taxonomy.id IN('.implode(',',(array)$s->taxonomyId).')';
+		$this->pushJoinWhereSearch(array(
+			'taxonomy',
+			'locality',
+			'tag',
+		));
 	}
 	function count(){
 		$this->count = model::count4D($this->taxonomy,$this->sqlQuery,$this->sqlParams);
