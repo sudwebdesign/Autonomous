@@ -7,7 +7,7 @@ use model\Table_Locality as locality;
 use surikat\control\ArrayObject;
 use surikat\view\Exception as View_Exception;
 class liste extends \present{
-	protected $limit		= 5;
+	protected $limit		= 2;
 	protected $offset	    = 0;
 	protected $sqlQuery		= array('where'=>array(),'joinWhere'=>array());
 	protected $sqlParams	= array();
@@ -34,13 +34,15 @@ class liste extends \present{
 	}
 	
 	protected function getParamsFromUri(){
-		$this->uri = view::param(0);
 		$this->subUri = (strrpos($this->uri,'s')===strlen($this->uri)-1?substr($this->uri,0,-1):$this->uri);
 		$this->page = view::param('page');
+		$this->uri = $this->URI;
 		$this->keywords = array();
 		$i = 0;
-		while(($param = view::param($i+=1))!==null)
+		while(($param = view::param($i+=1))!==null){
 			$this->keywords[] = $param;
+			$this->uri .= '|'.$param;
+		}
 	}
 
 	protected function searchMotorCompo(){
