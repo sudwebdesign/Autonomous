@@ -18,7 +18,7 @@
 				<hr>
 			</foreach>
 			<if e="$count">
-				<ul class="simple-pagination light-theme">
+				<ul class="simple-pagination dark-theme">
 					<if e="$page==1">
 						<li class="active"><span class="current prev">Début</span></li>
 						<li class="active"><span class="current prev">Précédent</span></li>

@@ -7,10 +7,14 @@ use model\Table_Locality as locality;
 use surikat\control\ArrayObject;
 use surikat\view\Exception as View_Exception;
 class liste extends \present{
-	protected $limit		= 2;
-	protected $offset	    = 0;
-	protected $sqlQuery		= array('where'=>array(),'joinWhere'=>array());
-	protected $sqlParams	= array();
+	protected $limit				= 5;
+	protected $offset	    		= 0;
+	protected $sqlQuery				= array(
+										'where'=>array(),
+										'joinWhere'=>array()
+									);
+	protected $sqlParamsWhere		= array();
+	protected $sqlParamsJoinWhere	= array();
 	protected $sqlQueryListe;
 	function assign(){
 		parent::assign();
@@ -52,6 +56,16 @@ class liste extends \present{
 			'locality',
 			'tag',
 		));
+		$q = model::getQuote();
+		foreach((array)$this->search->texts as $t){
+			$this->sqlQuery['where'][] = "{$q}{$this->taxonomy}{$q}.{$q}presentation{$q} @@ to_tsquery(?)";
+			$this->sqlParamsWhere[] = "'$t'";
+			//$this->sqlQuery['select'][] = "(to_tsvector()) as "search"";
+			//$this->sqlQuery['where'][] = "search @@ to_tsquery(?)";
+		}
+	}
+	protected function sqlParams(){
+		return array_merge($this->sqlParamsWhere,$this->sqlParamsJoinWhere);
 	}
 	protected function pushJoinWhereSearch($table){ //helper method for searchMotorCompo
 		if(is_array($table)){
@@ -67,9 +81,9 @@ class liste extends \present{
 		$this->sqlQuery['joinWhere'][] = model::multiSlots($query,(array)$params);
 		foreach($params as $k=>$v)
 			if(is_integer($k))
-				$this->sqlParams[] = $v;
+				$this->sqlParamsJoinWhere[] = $v;
 			else
-				$this->sqlParams[$k] = $v;
+				$this->sqlParamsJoinWhere[$k] = $v;
 	}
 	protected $searchers = array(
 		'taxonomyId',
@@ -122,7 +136,7 @@ class liste extends \present{
 	}
 	
 	protected function countAll(){
-		$this->count = model::count4D($this->taxonomy,$this->sqlQuery,$this->sqlParams);
+		$this->count = model::count4D($this->taxonomy,$this->sqlQuery,$this->sqlParams());
 	}
 	protected function pagination(){
 		$this->pagination = array(
@@ -163,7 +177,7 @@ class liste extends \present{
 			'limit'=>$this->limit,
 			'offset'=>$this->offset,
 		));
-		$this->liste = new ArrayObject(model::table4D($this->taxonomy,$this->sqlQueryListe,$this->sqlParams));
+		$this->liste = new ArrayObject(model::table4D($this->taxonomy,$this->sqlQueryListe,$this->sqlParams()));
 		$this->countListe = count($this->liste);
 	}
 }
