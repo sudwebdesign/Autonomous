@@ -95,8 +95,8 @@ class liste extends \present{
 		'tagId',
 		'texts',
 	);
-	protected $assocParams = array();
 	protected function searchMotorParams(){
+		$this->assocParams = array();
 		$this->search = array();
 		$search =& $this->search;
 		$order = array();
