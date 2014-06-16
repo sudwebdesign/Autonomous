@@ -2,7 +2,16 @@ main.present-liste{
 	@?include grid( 1-45-1, 1-51-1, 1-98-1,	768px);
 	@?include grid( 1-23-1, 1-48-1, 1-23-1,	1024px);
 	@?include grid( 1-23-1, 1-48-1, 1-23-1,	1260px);
-
+	>article>h1{
+		&::before{
+			font-size:0.9em;
+			position: relative;
+			top: -0.1em;
+		}
+		font-size: 1.5em;
+		position: relative;
+		top: 0.1em;
+	}
 	&.evenements>article>h1{
 		@?include icon(calendar);
 	}
