@@ -1,0 +1,15 @@
+<extend>
+	<main>
+		<nav>
+			<h1>Ajouter</h1>
+			<ul>
+				<li><a href="Ajouter-Évènement">Évènement</a></li>
+				<li><a href="Ajouter-Ressource">Ressource</a></li>
+				<li><a href="Ajouter-Projet">Projet</a></li>
+				<li><a href="Ajouter-Association">Association</a></li>
+				<li><a href="Ajouter-Annonce">Annonce</a></li>
+				<li><a href="Ajouter-Mediathèque">Médiathèque</a></li>
+			</ul>
+		</nav>
+	</main>
+</extend>

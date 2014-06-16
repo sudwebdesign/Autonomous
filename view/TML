@@ -59,7 +59,7 @@
 			<li><a href="Mediathèques">Mediathèque</a></li>
 			
 				<li>
-					<a href="javascript:;" class="ajouter">Ajouter</a>
+					<a href="Ajouter">Ajouter</a>
 					<ul>
 						<li><a href="Ajouter-Évènement">Évènement</a></li>
 						<li><a href="Ajouter-Ressource">Ressource</a></li>

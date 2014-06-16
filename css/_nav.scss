@@ -119,7 +119,7 @@ body>nav {
 		&::before{
 			clear:both;
 		}
-		&.ajouter{
+		&[href="Ajouter"]{
 			@?include icon(plus);
 		}
 		&[href^="Évènements"],&[href="Ajouter-Évènement"]{
