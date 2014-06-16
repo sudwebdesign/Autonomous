@@ -58,10 +58,14 @@ class liste extends \present{
 		));
 		$q = model::getQuote();
 		foreach((array)$this->search->texts as $t){
-			$this->sqlQuery['where'][] = "{$q}{$this->taxonomy}{$q}.{$q}presentation{$q} @@ to_tsquery(?)";
+			$cols = array(
+				'title',
+				'presentation',
+			);
+			foreach($cols as $k=>$col)
+				$cols[$k] = "to_tsvector({$q}{$this->taxonomy}{$q}.{$q}{$col}{$q})";
+			$this->sqlQuery['where'][] = implode(' || ',$cols)." @@ to_tsquery(?)";
 			$this->sqlParamsWhere[] = "'$t'";
-			//$this->sqlQuery['select'][] = "(to_tsvector()) as "search"";
-			//$this->sqlQuery['where'][] = "search @@ to_tsquery(?)";
 		}
 	}
 	protected function sqlParams(){
