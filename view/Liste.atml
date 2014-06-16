@@ -31,7 +31,9 @@
 				<h2><a href="<?=$href?>"><?=$item->title?></a></h2>
 				<a href="<?=$href?>"><?=$item->presentation?></a>
 				<ul class="tags">
-					<li></li>
+					<?foreach($item->groupKey(array('taxonomy','locality','tag'),'label',true) as $tag):?>
+						<li><?=$tag?></li>
+					<?endforeach;?>
 				</ul>
 				<hr>
 			</foreach>
