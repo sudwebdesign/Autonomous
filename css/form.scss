@@ -21,12 +21,25 @@ body>main>form{
 	label>*{
 		float:left;
 	}
-	&#evenement{
-		>h1{
-			@?include icon(calendar);
-		}
-	}
 }
 main.present-ajouter h1{
 	@?include icon(plus);
+}
+#evenement>h1>i{
+	@?include icon(calendar);
+}
+#ressource>h1>i{
+	@?include icon(cog);
+}
+#projet>h1>i{
+	@?include icon(star);
+}
+#association>h1>i{
+	@?include icon(group);
+}
+#annonce>h1>i{
+	@?include icon(exchange);
+}
+#mediatheque>h1>i{
+	@?include icon(book);
 }
