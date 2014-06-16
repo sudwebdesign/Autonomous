@@ -4,6 +4,24 @@
 	<write main>
 		<aside>
 			Search Options
+			<?
+				foreach($assocParams as $type=>$m){
+					switch($type){
+						case 'taxonomyId':
+							
+						break;
+						case 'localityId':
+							
+						break;
+						case 'tagId':
+							
+						break;
+						case 'texts':
+							
+						break;
+					}
+				}
+			?>
 		</aside>
 		<article>
 			<h1><?=$h1?></h1>
@@ -48,12 +66,10 @@
 			<else>
 				Aucune Entrée
 			</if>
-
-			<br>
-			<?/*$o->debug();*/?>
 		</article>
 		<aside>
 			Flux of others tables articles
+			<br>for DEV: Liste Actuelle Variables Dispos:<br><?$o->debug();?>
 		</aside>
 	</write>
 </extend>
