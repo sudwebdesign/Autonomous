@@ -1,15 +1,28 @@
 $js('jquery',function(){
-	var location = document.location.pathname;
-	location = decodeURIComponent(location.substr(1));	
-	$('body>nav>ul[is=dropdown] li>a[href="'+location+'"]').each(function(){
-		var li = $(this).parent('li');
-		if(!$(this).closest('ul').is('[is=dropdown]')){
-			li = $(this).closest('li');
+	var splitter = function(loc,splitters){
+		for(var i in splitters){
+			var idf = loc.indexOf(splitters[i]);
+			if(idf>-1){
+				loc = loc.substr(0,idf);
+			}
 		}
-		li.addClass('active');
-		li.parent('ul').parent('li').addClass('active');
-	});
-	$('body>footer>a[href="'+location+'"]').addClass('active');
+		return loc;
+	};
+	var location = document.location.pathname;
+	location = decodeURIComponent(location.substr(1));
+	var splitters = ['|','/',':'];
+	var loc = splitter(location,splitters);
+	var splitOnce = splitters.shift();
+	var loc2 = splitter(location,splitters);
+	var idf = loc2.indexOf(splitOnce);
+	if(idf>-1){
+		var x = loc2.split(splitOnce);
+		loc2 = x[0]+splitOnce+x[1];
+	}
+	console.log(loc2);
+	$('body>nav>ul[is=dropdown]>li:has(>a[href^="'+loc+'"])'
+		+',body>nav>ul[is=dropdown]>li>ul>li:has(>a[href^="'+loc2+'"])'
+		+',body>footer>a[href="'+location+'"]').addClass('active');
 	
 	$(window).on('unload',function(){
 		$('main').css('opacity',0.5);
