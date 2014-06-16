@@ -95,7 +95,7 @@ class liste extends \present{
 		'tagId',
 		'texts',
 	);
-	protected $orderedParams = array();
+	protected $assocParams = array();
 	protected function searchMotorParams(){
 		$this->search = array();
 		$search =& $this->search;
@@ -107,7 +107,9 @@ class liste extends \present{
 				$m = 'keyword'.ucfirst($sr);
 				if($found=$this->$m($k)){
 					$search->{$sr}[] = $found;
-					$this->orderedParams[$sr][] = $k;
+					if(!isset($this->assocParams[$sr]))
+						$this->assocParams[$sr] = array();
+					$this->assocParams[$sr][] = $k;
 					if(!in_array($sr,$order))
 						$order[] = $sr;
 					break;
@@ -117,11 +119,10 @@ class liste extends \present{
 		$ordered = array_filter((array)$this->searchers,function($v)use($order){
 			return in_array($v,$order);
 		});
-		if(count(array_diff($order,$ordered))){
-			//exit(var_dump($order,$ordered));
+		if(count(array_diff_assoc(array_values($order),array_values($ordered)))){
 			$redirect = '';
 			foreach($ordered as $sr)
-				$redirect .= implode('|',(array)$this->orderedParams[$sr]).'|';
+				$redirect .= implode('|',(array)$this->assocParams[$sr]).'|';
 			$redirect = '|'.trim($redirect,'|');
 			header('Location: '.$this->HREF.$redirect,true,301);
 		}
