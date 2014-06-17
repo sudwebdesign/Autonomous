@@ -32,7 +32,7 @@
 				<a href="<?=$href?>"><?=$item->presentation?></a>
 				<ul class="tags">
 					<?foreach($item->groupKey(array('taxonomy','locality','tag'),'label',true) as $tag):?>
-						<li><a href="<?=$uri.'|'.$tag?>"><?=$tag?></a></li>
+						<li><a href="<?=$URI.'|'.$tag?>"><?=$tag?></a></li>
 					<?endforeach;?>
 				</ul>
 				<hr>
