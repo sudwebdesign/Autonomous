@@ -1,0 +1,9 @@
+<present:ajouter:association uri="static" />
+<extend file="Ajouter.atml">
+	<after selector="main form fieldset:has(geo-completer)">
+		<fieldset>
+			<legend>Raison</legend>
+			<input type="text" name="raison" value="" placeholder="Raison sociale">
+		</fieldset>
+	</after>
+</extend>
