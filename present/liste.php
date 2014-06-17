@@ -7,7 +7,7 @@ use model\Table_Locality as locality;
 use surikat\control\ArrayObject;
 use surikat\view\Exception as View_Exception;
 class liste extends \present{
-	protected $limit				= 1;
+	protected $limit				= 5;
 	protected $offset	    		= 0;
 	protected $sqlQuery				= array(
 										'where'=>array(),
@@ -100,6 +100,7 @@ class liste extends \present{
 		$this->search = array();
 		$search =& $this->search;
 		$order = array();
+		$doublon = false;
 		foreach($this->keywords as $k){
 			foreach($this->searchers as $sr){
 				if(!isset($search->$sr))
@@ -109,7 +110,10 @@ class liste extends \present{
 					$search->{$sr}[] = $found;
 					if(!isset($this->assocParams[$sr]))
 						$this->assocParams[$sr] = array();
-					$this->assocParams[$sr][] = $k;
+					if($this->assocParams[$sr]->in($k))
+						$doublon = true;
+					else
+						$this->assocParams[$sr][] = $k;
 					if(!in_array($sr,$order))
 						$order[] = $sr;
 					break;
@@ -119,7 +123,7 @@ class liste extends \present{
 		$ordered = array_filter((array)$this->searchers,function($v)use($order){
 			return in_array($v,$order);
 		});
-		if(count(array_diff_assoc(array_values($order),array_values($ordered)))){
+		if($doublon||count(array_diff_assoc(array_values($order),array_values($ordered)))){
 			$redirect = '';
 			foreach($ordered as $sr)
 				$redirect .= implode('|',(array)$this->assocParams[$sr]).'|';
