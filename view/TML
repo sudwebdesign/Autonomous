@@ -12,7 +12,7 @@
 	<header>
 		<a href="" title="Accueil"><img src="img/udac.png" alt="L'UDAC 66" /></a>
 		<form role="search">
-			<input type="search" placeholder="Rechercher">
+			<input type="search" is="searchbox" name="search" data-url="service/autocomplete/searchbox" placeholder="Rechercher">
 		</form>
 		<ul is="dropdown">
 			<li>
