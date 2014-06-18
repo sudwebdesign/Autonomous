@@ -4,8 +4,8 @@ foreach(array(
 	'Évènement'=>array(
 		'Salon',
 		'Marché',
-		'Vente directe',
-		'Chantier collectif',
+		'Vente-directe',
+		'Chantier-collectif',
 		'Spectacle',
 		'Animation',
 		'Conférence',
@@ -34,8 +34,8 @@ foreach(array(
 		'Education',
 		'Energie',
 		'Transport',
-		'Vie Pratique',
-		'Art et culture',
+		'Vie-Pratique',
+		'Art-et-culture',
 	),
 ) as $label=>$v){
 	$a2 = array();

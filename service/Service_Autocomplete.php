@@ -27,6 +27,22 @@ class Service_Autocomplete {
 		header('Content-Type:application/json; charset=utf-8');
 		echo json_encode((array)$results);
 	}
+	static function searchbox(){
+		$results = array();
+		if(isset($_GET['term'])&&strlen($term=trim($_GET['term']))>=1){			
+			$taxonomy = model::col('taxonomy',array(
+				'where'=>'label LIKE ?',
+				'limit'=>10,
+			),array(
+				$term.'%'
+			));
+			$taxonomy = array_values($taxonomy);
+			$results = array_merge($results,$taxonomy);
+			$results = array_merge($results,self::getKeywordSuggestionsFromGoogle($term));
+		}
+		header('Content-Type:application/json; charset=utf-8');
+		echo json_encode($results);
+	}
 	static function taxonomy(){
 		$results = array();
 		if(isset($_GET['term'])&&strlen($term=trim($_GET['term']))>=1){
@@ -52,8 +68,6 @@ class Service_Autocomplete {
 			));
 			$taxonomy = array_values($taxonomy);
 			$results = array_merge($results,$taxonomy);
-			
-			//$results = array_merge($results,self::getKeywordSuggestionsFromGoogle($term));
 		}
 		header('Content-Type:application/json; charset=utf-8');
 		echo json_encode($results);

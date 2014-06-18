@@ -24,21 +24,19 @@
 			</if>
 			<fieldset>
 				<legend>Titre</legend>
-				<input type="text" name="title" value="Titre ..." placeholder="">
+				<input type="text" name="title" value="" placeholder="Mon titre simple et précis">
 			</fieldset>
 			<fieldset>
 				<legend>Présentation</legend>
 				<textarea name="presentation" placeholder="" is="ckeditor"></textarea>
 			</fieldset>
 			<fieldset>
-				<legend>Thématiques <small>(séparées par des virgules)</small></legend>
-				<input name="sharedTag[label]" type="text" value="" is="tagsinput" data-url="service/autocomplete/taxonomy?label=<?=$taxonomy?>" data-minchar="4" data-maxchar="25" data-max="5" placeholder="Thématique,Mots clefs..." />
+				<legend>Thématiques</legend>
+				<input name="sharedTag[label]" type="text" value="" placeholder="" is="tagsinput" data-url="service/autocomplete/taxonomy?label=<?=$taxonomy?>" data-minchar="4" data-maxchar="25" data-max="5" />
 				<?$dynVar='taxonomy'.ucfirst($taxonomy);?>
 				<if e="isset($$dynVar)">
 					<span class="tags-suggests">Suggestions:
-						<foreach e="$$dynVar as $key=>$val" cacheSync="model.taxonomy">
-							<?=$val?>,
-						</foreach>
+						<foreach e="$$dynVar as $key=>$val" cacheSync="model.taxonomy"><?=$val?> </foreach>
 					</span>
 				</if>
 			</fieldset>
@@ -54,7 +52,7 @@
 				<legend>Localité <small>(lieu,adresse ou commune)</small></legend>
 				<geo-completer>
 					<fieldset>
-						<input name="xownGeopoint[label]" type="text" placeholder="Rechercher un lieu, une adresse ou une commune" value="<?=model::getDepartementName().', '.model::DEFAULT_COUNTRY?>">
+						<input name="xownGeopoint[label]" type="text" placeholder="Rechercher un lieu, une adresse ou une commune" value="">
 					</fieldset>					
 					<fieldset>
 						<legend>Détails de localisation</legend>

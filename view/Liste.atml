@@ -27,7 +27,7 @@
 			<h1><?=$h1?></h1>
 			<?=$countListe?> / <?=$count?> results
 			<foreach e="(array)@$liste as $id=>$item">
-				<?$href=$subUri.'|'.$item->title.'|'.$id;?>
+				<?$href=$subUri.'|'.view::filterParam($item->title).'|'.$id;?>
 				<h2><a href="<?=$href?>"><?=$item->title?></a></h2>
 				<a href="<?=$href?>"><?=$item->presentation?></a>
 				<ul class="tags">
