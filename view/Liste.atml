@@ -38,7 +38,7 @@
 				<hr>
 			</foreach>
 			<if e="$count">
-				<ul class="simple-pagination dark-theme">
+				<ul class="simple-pagination light-theme">
 					<if e="$page==1">
 						<li class="active"><span class="current prev">Début</span></li>
 						<li class="active"><span class="current prev">Précédent</span></li>
@@ -68,10 +68,11 @@
 			<else>
 				Aucune Entrée
 			</if>
+			<br><?$o->debug();?>
 		</article>
 		<aside>
 			Flux of others tables articles
-			<br>for DEV: Liste Actuelle Variables Dispos:<br><?$o->debug();?>
+			<br>for DEV: Liste Actuelle Variables Dispos:
 		</aside>
 	</write>
 </extend>

@@ -28,8 +28,9 @@ class liste extends \present{
 		$this->searchMotorCompo();
 		$this->countAll();
 		$this->pagination();
+		
 		$this->liste();
-
+		
 		$this->h1 = view::param(0);
 		if(!empty($this->keywords))
 			$this->h1 .= ' - '.implode(' ',(array)$this->keywords);

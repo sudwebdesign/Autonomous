@@ -1,6 +1,7 @@
 <?php namespace model;
 use model;
 use model\cache;
+use control\str;
 final class Table_Taxonomy extends ATable_Keyword{
 	function onUpdate(){
 		

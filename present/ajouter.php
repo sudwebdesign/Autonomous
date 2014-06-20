@@ -3,6 +3,7 @@ use view;
 use model;
 use control;
 use surikat\model\R;
+use surikat\control\str;
 use surikat\control\FS;
 use surikat\control\PHP;
 use surikat\control\session;
@@ -77,7 +78,12 @@ class ajouter extends \present{
 		if(isset($_POST['sharedTag'])&&is_array($_POST['sharedTag'])&&isset($_POST['sharedTag']['label'])&&trim($_POST['sharedTag']['label'])){
 			$max = 5;
 			$tags = explode(' ',strip_tags($_POST['sharedTag']['label']));
-			$taxonomyO = model::load('taxonomy',$this->taxonomy,model::FLAG_CASE_INSENSITIVE);
+			//$taxonomyO = model::load('taxonomy',$this->taxonomy,model::FLAG_CASE_INSENSITIVE|model::FLAG_ACCENT_INSENSITIVE);
+			$x = explode('-',view::param(0));
+			$Type = str::ucfirst(end($x));
+			$taxonomyO = model::load('taxonomy',$Type,model::FLAG_CASE_INSENSITIVE|model::FLAG_ACCENT_INSENSITIVE);
+			if(!$taxonomyO)
+				throw new \Exception(sprintf("Error: Taxonomy %s not found",$this->taxonomy));
 			foreach($tags as $i=>$tag){
 				if($i>=$max)
 					break;
