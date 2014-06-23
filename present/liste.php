@@ -1,6 +1,7 @@
 <?php namespace present;
 use view;
 use model;
+use control\str;
 use model\Table_Taxonomy as taxonomy;
 use model\Table_Tag as tag;
 use model\Table_Locality as locality;
@@ -24,7 +25,7 @@ class liste extends \present{
 	function dynamic(){
 		parent::dynamic();
 		$this->getParamsFromUri();
-		$this->searchMotorParams();
+		$this->searchMotorParams(); //IA
 		$this->searchMotorCompo();
 		$this->countAll();
 		$this->pagination();
@@ -50,6 +51,12 @@ class liste extends \present{
 		$this->subUri = (strrpos($this->URI,'s')===strlen($this->URI)-1?substr($this->URI,0,-1):$this->URI);
 	}
 
+	protected $searchers = array(
+		'taxonomyId',
+		'localityId',
+		'tagId',
+		'texts',
+	);
 	protected function searchMotorCompo(){
 		//exit($s->debug());
 		$this->pushJoinWhereSearch(array(
@@ -90,56 +97,47 @@ class liste extends \present{
 			else
 				$this->sqlParamsJoinWhere[$k] = $v;
 	}
-	protected $searchers = array(
-		'taxonomyId',
-		'localityId',
-		'tagId',
-		'texts',
-	);
 	protected function searchMotorParams(){
 		$this->assocParams = array();
 		$this->search = array();
 		$search =& $this->search;
-		$order = array();
-		$doublon = false;
 		foreach($this->keywords as $k){
 			foreach($this->searchers as $sr){
-				if(!isset($search->$sr))
-					$search->$sr = array();
 				$m = 'keyword'.ucfirst($sr);
-				if($found=$this->$m($k)){
+				$rewrite = null;
+				if($found=$this->$m($k,$rewrite)){
+					if(!isset($search->$sr))
+						$search->$sr = array();
 					$search->{$sr}[] = $found;
 					if(!isset($this->assocParams[$sr]))
 						$this->assocParams[$sr] = array();
-					if($this->assocParams[$sr]->in($k))
-						$doublon = true;
-					else
+					if($rewrite!==null)
+						$k = (string)$rewrite;
+					if(!$this->assocParams[$sr]->in($k)) //doublon
 						$this->assocParams[$sr][] = $k;
-					if(!in_array($sr,$order))
-						$order[] = $sr;
 					break;
 				}
 			}
 		}
-		$ordered = array_filter((array)$this->searchers,function($v)use($order){
-			return in_array($v,$order);
-		});
-		if($doublon||count(array_diff_assoc(array_values($order),array_values($ordered)))){
-			$redirect = '';
-			foreach($ordered as $sr)
-				$redirect .= implode('|',(array)$this->assocParams[$sr]).'|';
-			$redirect = '|'.trim($redirect,'|');
-			header('Location: '.$this->HREF.$redirect,true,301);
+		$redirect = '';
+		foreach($this->searchers as $sr){
+			if(!isset($this->assocParams[$sr]))
+				continue;
+			$this->assocParams[$sr]->sort(SORT_NATURAL|SORT_FLAG_CASE);
+			$redirect .= implode('|',(array)$this->assocParams[$sr]).'|';
 		}
+		$redirect = trim($redirect,'|');
+		if(trim(implode('|',(array)$this->keywords),'|')!=$redirect)
+			header('Location: '.$this->HREF.'|'.$redirect,true,301);
 	}
-	protected function keywordTaxonomyId($k){
-		return array_search($k,taxonomy::getLabels());
+	protected function keywordTaxonomyId($k,&$rewrite){
+		return taxonomy::findRewrite($k,$rewrite);
 	}
-	protected function keywordLocalityId($k){
-		return locality::find($k,1);
+	protected function keywordLocalityId($k,&$rewrite){
+		return locality::findRewrite($k,$rewrite);
 	}
-	protected function keywordTagId($k){
-		return tag::find($k,1);
+	protected function keywordTagId($k,&$rewrite){
+		return tag::findRewrite($k,$rewrite);
 	}
 	protected function keywordTexts($k){
 		return $k;
