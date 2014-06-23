@@ -68,7 +68,7 @@
 			<else>
 				Aucune Entrée
 			</if>
-			<br><?$o->debug();?>
+			<br><?$THIS->debug();?>
 		</article>
 		<aside>
 			Flux of others tables articles

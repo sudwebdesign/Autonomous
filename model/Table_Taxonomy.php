@@ -20,6 +20,12 @@ final class Table_Taxonomy extends ATable_Keyword{
 		model::schemaAuto('taxonomy');
 		return cache::syncCol('taxonomy');
 	}
+	static function getLabelsI(){
+		$a = self::getLabels();
+		foreach($a as &$v)
+			$v = str::unaccent(str::tolower($v));
+		return $a;
+	}
 	static function getChildrenbyLabel($params=null){
 		model::schemaAuto('taxonomy');
 		if($params)
