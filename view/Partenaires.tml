@@ -1,8 +1,8 @@
 <extend>
 	<append main>
 		<?foreach(include('model/var.sponsors.php') as $sponsor): ?>
-		<div class="sponsor" title="Cliquer pour tourner">
-			<sponsor-flip style="background-image: url(img/Partenaires/<?=$sponsor[0]?>)">
+		<div class="sponsor" title="Cliquer pour en savoir plus au sujet de <?=$sponsor[1]?>">
+			<sponsor-flip>
 				<img src="img/Partenaires/<?=$sponsor[0]?>" alt="En savoir plus au sujet de <?=$sponsor[1]?>" />
 			</sponsor-flip>
 			<div class="sponsorData">
