@@ -1,4 +1,4 @@
-<?use control\str;$raw->getArray();?>
+<?use control\str;?>
 <extend>
 	<css item>
 	<attr selector="main" addClass="present-item">
@@ -27,10 +27,8 @@
 		</aside>
 		<article class="<?=$taxonomy?>s">
 			<h1><?=$title?></h1>
-<<<<<<< HEAD
 			<h2><?=str::ucfirst($taxonomy)?></h2>
-			<pre><?=htmlentities(print_r($row->getArray(),true))?></pre>
-=======
+			<pre><?=$raw/*simple debug with magical __toString method of class control/ArrayObject*/?></pre>
 			<h2>Présentation : </h2>
 			<?=$presentation?>
 			<img style="float:right;height:161px;" src="<?= $srcimg[0]?>" alt="<?=$title?>" title="<?=$title?>" />
@@ -42,7 +40,6 @@
 			<h3><b>Thème principal : </b><?=str::ucfirst($taxonomy)?></h3>
 			<pre style="display:none;"><?print_r($srcimg[0])?></pre>
 			<pre style="display:none;"><?print_r($raw)?></pre>
->>>>>>> 735e7d3eca9ffb425a85185811c07a2c033f7d4b
 		</article>
 		<aside>
 			Flux of others tables articles
@@ -50,4 +47,3 @@
 		</aside>
 	</write>
 </extend>
-
