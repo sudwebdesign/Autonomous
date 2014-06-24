@@ -136,31 +136,42 @@ class ajouter extends \present{
 						$political[] = $compo->long_name;
 					switch($compo->types[0]){
 						case 'locality':
-							$geopoint->locality = $bean->locality = R::findOrNewOne('locality',array('label'=>$compo->long_name));
+							$bean->sharedLocality[] = $geopoint->locality = R::findOrNewOne('locality',array('label'=>$compo->long_name));
+						break;
+						case 'administrative_area_level_1':
+							$geoarealevel1 = R::findOrNewOne('geoarealevel1',
+								array('code'=>$compo->short_name),
+								array('label'=>$compo->long_name)
+							);
+							$geopoint->geoarealevel1 = $geoarealevel1;
+							if($geopoint->locality)
+								$geopoint->locality->geoarealevel1 = $geoarealevel1;
 						break;
 						case 'administrative_area_level_2':
 							if((int)$compo->short_name!=model::DEFAULT_DEPARTEMENT_CODE)
-								$bean->error('geo','administrative_area_level_2');
+								$bean->error('xownGeopoint.label','administrative_area_level_2');
 							$geoarealevel2 = R::findOrNewOne('geoarealevel2',
 								array('code'=>$compo->short_name),
 								array('label'=>$compo->long_name)
 							);
-							$geopoint->geoarealevel2 = $bean->geoarealevel2 = $geoarealevel2;
-							if($bean->locality)
-								$bean->locality->geoarealevel2 = $geoarealevel2;
+							$geopoint->geoarealevel2 = $geoarealevel2;
+							if($geopoint->locality)
+								$geopoint->locality->geoarealevel2 = $geoarealevel2;
+							if($geopoint->geoarealevel1)
+								$geoarealevel2->geoarealevel1 = $geopoint->geoarealevel1;
 						break;
 						case 'country':
 							if($compo->short_name!=strtoupper(model::DEFAULT_COUNTRY_CODE))
-								$bean->error('geo','geocountry');
+								$bean->error('xownGeopoint.label','geocountry');
 							$country = R::findOrNewOne('geocountry',
 								array('code'=>$compo->short_name),
 								array('label'=>$compo->long_name)
 							);
-							$geopoint->geocountry = $bean->geocountry = $country;
-							if($bean->locality)
-								$bean->locality->geocountry = $country;
-							if($bean->geoarealevel2)
-								$bean->geoarealevel2->geocountry = $country;
+							$geopoint->geocountry = $country;
+							if($geopoint->locality)
+								$geopoint->locality->geocountry = $country;
+							if($geopoint->geoarealevel2)
+								$geopoint->geoarealevel2->geocountry = $country;
 						break;
 					}
 				}
@@ -176,7 +187,7 @@ class ajouter extends \present{
 				}
 			}
 			else
-				$bean->error('geo','not_found');
+				$bean->error('xownGeopoint.label','not_found');
 		}
 		else
 			$geopoint->label = htmlentities((string)@$geop['label']);
