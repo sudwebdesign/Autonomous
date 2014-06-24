@@ -4,7 +4,7 @@
 		<article>
 			<h1><?=$title?></h1>
 			<h2><?=str::ucfirst($taxonomy)?></h2>
-			<pre><?print_r($row->getArray())?></pre>
+			<pre><?=htmlentities(print_r($row->getArray(),true))?></pre>
 		</article>
 	</write>
 </extend>
