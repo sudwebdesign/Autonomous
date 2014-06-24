@@ -26,12 +26,11 @@
 			?>
 		</aside>
 		<article class="<?=$taxonomy?>s">
-			<h1><?=$title?></h1>
-			<h2><?=$URI?></h2>
+			<h1><?=$URI?> : <?=$title?></h1>
 			<pre><?/*=$raw simple debug with magical __toString method of class control/ArrayObject*/?></pre>
 			<h2>Présentation : </h2>
+			<img src="<?= $srcimg[0]?>" alt="<?=$title?>" title="<?=$title?>" />
 			<?=$presentation?>
-			<img style="float:right;height:161px;" src="<?= $srcimg[0]?>" alt="<?=$title?>" title="<?=$title?>" />
 			<hr />
 			<p><b>Lien : </b><a href="<?=$lien?>" title="<?=$title?>"><?=$title?></a></p>
 			<p><b>Télépnone : </b><?=$tel?></p>
@@ -39,12 +38,12 @@
 			<hr />
 			<h3><b>Thème principal : </b><a href="<?=$URI.'s'?>"><?=$URI?></a></h3>
 			<h4>Sous thème(s) : </h4>
-			<ul class="tags">		
+			<ul class="tags">
 			<foreach e="(array)@$raw[tag] as $tag">
-				<li><a href="<?=$URI.'s|'.$tag['label']?>"><?=$tag['label']?></a></li>
-			</foreach>			
+				<li><h5><a href="<?=$URI.'s|'.$tag['label']?>"><?=$tag['label']?></a></h5></li>
+			</foreach>
 			</ul>
-			<hr>
+			<hr />
 			<pre style="display:none;"><?print_r($srcimg[0])?></pre>
 			<pre style="display:none;"><?print_r($raw)?></pre>
 		</article>
