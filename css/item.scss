@@ -1,0 +1,33 @@
+main.present-item{
+	@?include grid( 1-45-1, 1-51-1, 1-98-1,	768px);
+	@?include grid( 1-23-1, 1-48-1, 1-23-1,	1024px);
+	@?include grid( 1-23-1, 1-48-1, 1-23-1,	1260px);
+	>h1{
+		&::before{
+			font-size:0.9em;
+			position: relative;
+			top: -0.1em;
+		}
+		font-size: 1.5em;
+		position: relative;
+		top: 0.1em;
+	}
+	&>article.evenements>h1{
+		@?include icon(calendar);
+	}
+	&>article.ressources>h1{
+		@?include icon(cog);
+	}
+	&>article.projets>h1{
+		@?include icon(star);
+	}
+	&>article.associations>h1{
+		@?include icon(group);
+	}
+	&>article.annonces>h1{
+		@?include icon(exchange);
+	}
+	&>article.mediatheques>h1{
+		@?include icon(book);
+	}
+}

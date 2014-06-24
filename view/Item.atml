@@ -1,10 +1,53 @@
-<?use control\str;?>
+<?use control\str;$raw->getArray();?>
 <extend>
+	<css item>
+	<attr selector="main" addClass="present-item">
+	<append title> dans <?=$taxonomy?></append>
 	<write main>
-		<article>
+		<aside>
+			Search Options
+			<?
+			/*	foreach($assocParams as $type=>$m){
+					switch($type){
+						case 'taxonomyId':
+							?><?=$m?><?
+						break;
+						case 'localityId':
+							
+						break;
+						case 'tagId':
+							
+						break;
+						case 'texts':
+							
+						break;
+					}
+				} */
+			?>
+		</aside>
+		<article class="<?=$taxonomy?>s">
 			<h1><?=$title?></h1>
+<<<<<<< HEAD
 			<h2><?=str::ucfirst($taxonomy)?></h2>
 			<pre><?=htmlentities(print_r($row->getArray(),true))?></pre>
+=======
+			<h2>Présentation : </h2>
+			<?=$presentation?>
+			<img style="float:right;height:161px;" src="<?= $srcimg[0]?>" alt="<?=$title?>" title="<?=$title?>" />
+			<hr />
+			<p><b>Lien : </b><a href="<?=$lien?>" title="<?=$title?>"><?=$title?></a></p>
+			<p><b>Télépnone : </b><?=$tel?></p>
+			<p><b>Créé le : </b><?=$création?></p>
+			<hr />
+			<h3><b>Thème principal : </b><?=str::ucfirst($taxonomy)?></h3>
+			<pre style="display:none;"><?print_r($srcimg[0])?></pre>
+			<pre style="display:none;"><?print_r($raw)?></pre>
+>>>>>>> 735e7d3eca9ffb425a85185811c07a2c033f7d4b
 		</article>
+		<aside>
+			Flux of others tables articles
+			<br />In && for DEV
+		</aside>
 	</write>
 </extend>
+
