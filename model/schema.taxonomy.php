@@ -37,6 +37,8 @@ foreach(array(
 		'Vie-Pratique',
 		'Art-et-culture',
 	),
+	'Association'=>array(),
+	'Médiathèque'=>array(),
 ) as $label=>$v){
 	$a2 = array();
 	foreach($v as $label2)
