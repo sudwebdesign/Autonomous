@@ -32,17 +32,19 @@
 			<if e="$srcimg[0]"><img src="<?= $srcimg[0]?>" alt="<?=$title?>" title="<?=$title?>" /></if>
 			<?=$presentation?>
 			<hr />
-			<p><b>Lien : </b><a href="<?=$lien?>" title="<?=$title?>"><?=$title?></a></p>
-			<p><b>Télépnone : </b><?=$tel?></p>
+			<if e="$lien"><p><b>Lien : </b><a href="<?=$lien?>" title="<?=$title?>"><?=$title?></a></p></if>
+			<if e="$tel"><p><b>Télépnone : </b><?=$tel?></p></if>
 			<p><b>Créé le : </b><?=$création?></p>
 			<hr />
 			<h3><b>Thème principal : </b><a href="<?=$URI.'s'?>"><?=$URI?></a></h3>
-			<h4>Sous thème(s) : </h4>
-			<ul class="tags">
-			<foreach e="(array)@$raw[tag] as $tag">
-				<li><h5><a href="<?=$URI.'s|'.$tag['label']?>"><?=$tag['label']?></a></h5></li>
-			</foreach>
-			</ul>
+			<if e="(array)@$raw[tag]">
+				<h4>Sous thème(s) : </h4>
+				<ul class="tags">
+				<foreach e="(array)@$raw[tag] as $tag">
+					<li><h5><a href="<?=$URI.'s|'.$tag['label']?>"><?=$tag['label']?></a></h5></li>
+				</foreach>
+				</ul>
+			</if>
 			<hr />
 			<pre style="display:none;"><?print_r($srcimg[0])?></pre>
 			<pre style="display:none;"><?print_r($raw)?></pre>
