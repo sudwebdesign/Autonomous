@@ -30,9 +30,12 @@ main.present-liste{
 	&.mediatheques>article>h1{
 		@?include icon(book);
 	}
-	
+	ul.tags>li{
+		float:left;margin:0 2px;
+	}	
 	ul.simple-pagination {
 		list-style: none;
+		clear: both;
 	}
 	.simple-pagination {
 		display: block;
