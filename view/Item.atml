@@ -1,13 +1,34 @@
-<?use control\str;
-$raw->getArray();
-?>
+<?use control\str;$raw->getArray();?>
 <extend>
+	<css item>
+	<attr selector="main" addClass="present-item">
 	<append title> dans <?=$taxonomy?></append>
 	<write main>
-		<article>
+		<aside>
+			Search Options
+			<?
+			/*	foreach($assocParams as $type=>$m){
+					switch($type){
+						case 'taxonomyId':
+							?><?=$m?><?
+						break;
+						case 'localityId':
+							
+						break;
+						case 'tagId':
+							
+						break;
+						case 'texts':
+							
+						break;
+					}
+				} */
+			?>
+		</aside>
+		<article class="<?=$taxonomy?>s">
 			<h1><?=$title?></h1>
 			<h2>Présentation : </h2>
-			<p><?=$presentation?></p>
+			<?=$presentation?>
 			<img style="float:right;height:161px;" src="<?= $srcimg[0]?>" alt="<?=$title?>" title="<?=$title?>" />
 			<hr />
 			<p><b>Lien : </b><a href="<?=$lien?>" title="<?=$title?>"><?=$title?></a></p>
@@ -18,6 +39,10 @@ $raw->getArray();
 			<pre style="display:none;"><?print_r($srcimg[0])?></pre>
 			<pre style="display:none;"><?print_r($raw)?></pre>
 		</article>
+		<aside>
+			Flux of others tables articles
+			<br />In && for DEV
+		</aside>
 	</write>
 </extend>
 
