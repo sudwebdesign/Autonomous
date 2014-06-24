@@ -29,7 +29,7 @@
 			<h1><?=$URI?> : <?=$title?></h1>
 			<pre><?/*=$raw simple debug with magical __toString method of class control/ArrayObject*/?></pre>
 			<h2>Présentation : </h2>
-			<img src="<?= $srcimg[0]?>" alt="<?=$title?>" title="<?=$title?>" />
+			<if e="$srcimg[0]"><img src="<?= $srcimg[0]?>" alt="<?=$title?>" title="<?=$title?>" /></if>
 			<?=$presentation?>
 			<hr />
 			<p><b>Lien : </b><a href="<?=$lien?>" title="<?=$title?>"><?=$title?></a></p>
