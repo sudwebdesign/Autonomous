@@ -18,7 +18,7 @@
 						Votre <?=str::tolower($type)?> a bien été pris en compte
 					<else>
 						Données manquantes ou erronées pour valider l'<?=$type?>
-						<dev><pre><?=substr(print_r($formErrors,true),6,-1);?></pre></dev>
+						<dev><pre><?=$formErrors?></pre></dev>
 					</if>
 				</h4>
 			</if>
