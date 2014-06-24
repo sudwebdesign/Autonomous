@@ -27,8 +27,8 @@
 		</aside>
 		<article class="<?=$taxonomy?>s">
 			<h1><?=$title?></h1>
-			<h2><?=str::ucfirst($taxonomy)?></h2>
-			<pre><?=$raw/*simple debug with magical __toString method of class control/ArrayObject*/?></pre>
+			<h2><?=$URI?></h2>
+			<pre><?/*=$raw simple debug with magical __toString method of class control/ArrayObject*/?></pre>
 			<h2>Présentation : </h2>
 			<?=$presentation?>
 			<img style="float:right;height:161px;" src="<?= $srcimg[0]?>" alt="<?=$title?>" title="<?=$title?>" />
@@ -37,7 +37,14 @@
 			<p><b>Télépnone : </b><?=$tel?></p>
 			<p><b>Créé le : </b><?=$création?></p>
 			<hr />
-			<h3><b>Thème principal : </b><?=str::ucfirst($taxonomy)?></h3>
+			<h3><b>Thème principal : </b><a href="<?=$URI.'s'?>"><?=$URI?></a></h3>
+			<h4>Sous thème(s) : </h4>
+			<ul class="tags">		
+			<foreach e="(array)@$raw[tag] as $tag">
+				<li><a href="<?=$URI.'s|'.$tag['label']?>"><?=$tag['label']?></a></li>
+			</foreach>			
+			</ul>
+			<hr>
 			<pre style="display:none;"><?print_r($srcimg[0])?></pre>
 			<pre style="display:none;"><?print_r($raw)?></pre>
 		</article>

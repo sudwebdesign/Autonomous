@@ -30,4 +30,7 @@ main.present-item{
 	&>article.mediatheques>h1{
 		@?include icon(book);
 	}
+	& ul.tags>li{
+		float:left;margin:0 2px;
+	}
 }
