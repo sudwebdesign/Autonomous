@@ -28,7 +28,7 @@ class item extends \present{
 	function findImageItem(){
 		$imgFolder = 'content/'.$this->taxonomy.'/'.view::param(2).'/';
 		$imgName = str_replace(' ','-',$this->title);
-		$imgsItem = glob($imgFolder."{".$imgName.".jpg,".$imgName.".gif,".$imgName.".png}", GLOB_BRACE);
+		$imgsItem = glob($imgFolder."{".$imgName.".*}", GLOB_BRACE);
 		$this->srcimg = $imgsItem;
 	}
 }
