@@ -31,7 +31,9 @@
 			<foreach e="(array)@$liste as $id=>$item">
 				<?$href=$subUri.'|'.view::filterParam($item->title).'|'.$id;?>
 				<h2><a href="<?=$href?>"><?=$item->title?></a></h2>
-				<a href="<?=$href?>"><?=$item->presentation?></a>
+				<a href="<?=$href?>"><?=$item->presentation?>
+
+	<if e="$imgsItems[$id]"><img src="<?= $imgsItems[$id][0]?>" alt="<?=$item->title?>" title="<?=$item->title?>" /></if></a>
 				<ul class="tags">
 					<?foreach($item->groupKey(array('taxonomy','locality','tag'),'label',true) as $tag):?>
 						<li><a href="<?=$URI.'|'.$tag?>"><?=$tag?></a></li>
@@ -70,7 +72,7 @@
 			<else>
 				Aucune Entrée
 			</if>
-			<br><?$THIS->debug();?>
+			<br><?//$THIS->debug();?>
 		</article>
 		<aside>
 			Flux of others tables articles
