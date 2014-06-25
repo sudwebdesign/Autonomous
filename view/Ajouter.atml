@@ -52,17 +52,57 @@
 				<legend>Localité <small>(lieu,adresse ou commune)</small></legend>
 				<geo-completer>
 					<fieldset>
-						<input name="xownGeopoint[label]" type="text" placeholder="Rechercher un lieu, une adresse ou une commune" value="">
+						<input	name="xownGeopoint[label]"
+								type="text"
+								placeholder="Rechercher un lieu, une adresse ou une commune" value="">
 					</fieldset>					
 					<fieldset>
-						<legend>Détails de localisation</legend>
+						<legend>Détails</legend>
+						<label for="geo-address">Adresse</label>
+						<input	name="xownGeopoint[address]"
+								type="text"
+								id="geo-address">
+						<label for="geo-city">Commune</label>
+						<input	name="xownGeopoint[city]"
+								type="text"
+								id="geo-city">
+						<label for="geo-country">Pays</label>
+						<input	name="xownGeopoint[country]"
+								type="text"
+								id="geo-country">
+						<label for="geo-arealevel1">Région</label>
+						<input	name="xownGeopoint[arealevel1]"
+								type="text"
+								id="geo-arealevel1">
+						<label for="geo-arealevel2">Département</label>
+						<input	name="xownGeopoint[arealevel2]"
+								type="text"
+								id="geo-arealevel2">
 						<label for="geo-lat">Latitude</label>
-						<input id="geo-lat" name="xownGeopoint[lat]" type="number" step="any" min="-90" max="90">
+						<input	name="xownGeopoint[lat]"
+								type="number"
+								step="any"
+								min="-90"
+								max="90"
+								id="geo-lat">
 						<label for="geo-lng">Longitude</label>
-						<input id="geo-lng" name="xownGeopoint[lng]" type="number" step="any" min="-180" max="180">
+						<input name="xownGeopoint[lng]"
+							type="number"
+							step="any"
+							min="-180"
+							max="180"
+							id="geo-lng">
 						<label for="geo-rayon">Rayon en km</label>
-						<input id="geo-rayon" name="xownGeopoint[rayon]" type="number" step="1" min="0" max="67">
-						<input type="hidden" name="xownGeopoint[valid]">
+						<input	name="xownGeopoint[rayon]"
+								type="number"
+								step="1"
+								min="0"
+								max="67"
+								id="geo-rayon">
+						<input name="xownGeopoint[geocountry_short]" type="hidden">
+						<input name="xownGeopoint[arealevel1_short]" type="hidden">
+						<input name="xownGeopoint[arealevel2_short]" type="hidden">
+						<input name="xownGeopoint[valid]" type="hidden">
 					</fieldset>					
 				</geo-completer>
 			</fieldset>
