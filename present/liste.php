@@ -20,6 +20,7 @@ class liste extends \present{
 	function assign(){
 		parent::assign();
 		$this->taxonomy = end($this->presentNamespaces);
+		
 	}
 	function dynamic(){
 		parent::dynamic();
@@ -28,9 +29,9 @@ class liste extends \present{
 		$this->findMotorCompo();
 		$this->countAll();
 		$this->pagination();
-
+		
 		$this->liste();
-
+		
 		$this->h1 = view::param(0);
 		if(!empty($this->keywords))
 			$this->h1 .= ' - '.implode(' ',(array)$this->keywords);
@@ -40,6 +41,7 @@ class liste extends \present{
 	
 	protected function getParamsFromUri(){
 		$this->page = view::param('page');
+		#var_dump(view::param(1));exit; //Médiathèque|Pré-écoute ::: param('page') 'Pré-écoute' == NULL ???
 		$this->uri = $this->URI;
 		$this->keywords = array();
 		$i = 0;
@@ -47,7 +49,7 @@ class liste extends \present{
 			$this->keywords[] = $param;
 			$this->uri .= '|'.$param;
 		}
-		$this->subUri = (strrpos($this->URI,'s')===strlen($this->URI)-1?substr($this->URI,0,-1):$this->URI);
+		$this->subUri = (strrpos($this->URI,'s')===strlen($this->URI)-1?substr($this->URI,0,-1):$this->URI);#var_dump($this);exit;
 	}
 
 	protected $finders = array(
@@ -99,7 +101,7 @@ class liste extends \present{
 	protected function findMotorParams(){
 		$this->assocParams = array();
 		$this->find = array();
-		$find =& $this->find;
+		$find =& $this->find;#var_dump($this->keywords,$this->find,$this->assocParams);exit;
 		foreach($this->keywords as $k){
 			foreach($this->finders as $fr){
 				$m = 'keyword'.ucfirst($fr);
@@ -114,16 +116,17 @@ class liste extends \present{
 						$k = (string)$rewrite;
 					if(!$this->assocParams[$fr]->in($k)) //doublon
 						$this->assocParams[$fr][] = $k;
+						
 					break;
 				}
 			}
 		}
-		$redirect = '';
+		$redirect = '';//var_dump($this->finders,$this->assocParams);exit;
 		foreach($this->finders as $fr){
 			if(!isset($this->assocParams[$fr]))
 				continue;
 			$this->assocParams[$fr]->sort(SORT_NATURAL|SORT_FLAG_CASE);
-			$redirect .= implode('|',(array)$this->assocParams[$frchange ]).'|';
+			$redirect .= implode('|',(array)$this->assocParams[$fr]).'|';
 		}
 		$redirect = trim($redirect,'|');
 		if(trim(implode('|',(array)$this->keywords),'|')!=$redirect)

@@ -22,6 +22,8 @@
 					}
 				}
 			?>
+			
+			<p>Trouvé : <?=$find?></p>
 		</aside>
 		<article>
 			<h1><?=$h1?></h1>
