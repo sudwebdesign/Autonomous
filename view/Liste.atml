@@ -3,21 +3,21 @@
 	<attr selector="main" addClass="present-liste">
 	<write main>
 		<aside>
-			Search Options
+			mode final du dégoteur :
 			<?
 				foreach($assocParams as $type=>$m){
 					switch($type){
 						case 'taxonomyId':
-							?><?=$m?><?
+							?>taxonomique<br />(<?=$m[0]?>)<?
 						break;
 						case 'localityId':
-							
+							?>localité<br />(<?=$m[0]?>)<?
 						break;
 						case 'tagId':
-							
+							?>tag<br />(<?=$m[0]?>)<?
 						break;
 						case 'texts':
-							
+							?>texte<br />(<?=$m[0]?>)<?
 						break;
 					}
 				}

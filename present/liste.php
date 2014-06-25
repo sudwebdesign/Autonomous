@@ -20,18 +20,17 @@ class liste extends \present{
 	function assign(){
 		parent::assign();
 		$this->taxonomy = end($this->presentNamespaces);
-		
 	}
 	function dynamic(){
 		parent::dynamic();
 		$this->getParamsFromUri();
-		$this->searchMotorParams(); //IA
-		$this->searchMotorCompo();
+		$this->findMotorParams(); //IA
+		$this->findMotorCompo();
 		$this->countAll();
 		$this->pagination();
-		
+
 		$this->liste();
-		
+
 		$this->h1 = view::param(0);
 		if(!empty($this->keywords))
 			$this->h1 .= ' - '.implode(' ',(array)$this->keywords);
@@ -51,21 +50,21 @@ class liste extends \present{
 		$this->subUri = (strrpos($this->URI,'s')===strlen($this->URI)-1?substr($this->URI,0,-1):$this->URI);
 	}
 
-	protected $searchers = array(
+	protected $finders = array(
 		'taxonomyId',
 		'localityId',
 		'tagId',
 		'texts',
 	);
-	protected function searchMotorCompo(){
+	protected function findMotorCompo(){
 		//exit($s->debug());
-		$this->pushJoinWhereSearch(array(
+		$this->pushJoinWhereFind(array(
 			'taxonomy',
 			'locality',
 			'tag',
 		));
 		$q = model::getQuote();
-		foreach((array)$this->search->texts as $t){
+		foreach((array)$this->find->texts as $t){
 			$cols = array(
 				'title',
 				'presentation',
@@ -79,17 +78,17 @@ class liste extends \present{
 	protected function sqlParams(){
 		return array_merge($this->sqlParamsWhere,$this->sqlParamsJoinWhere);
 	}
-	protected function pushJoinWhereSearch($table){ //helper method for searchMotorCompo
+	protected function pushJoinWhereFind($table){ //helper method for findMotorCompo
 		if(is_array($table)){
 			foreach($table as $t)
-				$this->pushJoinWhereSearch($t);
+				$this->pushJoinWhereFind($t);
 			return;
 		}
 		$k = $table.'Id';
-		if(!empty($this->search->$k))
-			$this->pushJoinWhere($table.'.id IN(?)',$this->search->$k);
+		if(!empty($this->find->$k))
+			$this->pushJoinWhere($table.'.id IN(?)',$this->find->$k);
 	}
-	protected function pushJoinWhere($query,$params){ //helper method for searchMotorCompo and pushJoinWhereSearch
+	protected function pushJoinWhere($query,$params){ //helper method for findMotorCompo and pushJoinWhereFind
 		$this->sqlQuery['joinWhere'][] = model::multiSlots($query,(array)$params);
 		foreach($params as $k=>$v)
 			if(is_integer($k))
@@ -97,34 +96,34 @@ class liste extends \present{
 			else
 				$this->sqlParamsJoinWhere[$k] = $v;
 	}
-	protected function searchMotorParams(){
+	protected function findMotorParams(){
 		$this->assocParams = array();
-		$this->search = array();
-		$search =& $this->search;
+		$this->find = array();
+		$find =& $this->find;
 		foreach($this->keywords as $k){
-			foreach($this->searchers as $sr){
-				$m = 'keyword'.ucfirst($sr);
+			foreach($this->finders as $fr){
+				$m = 'keyword'.ucfirst($fr);
 				$rewrite = null;
 				if($found=$this->$m($k,$rewrite)){
-					if(!isset($search->$sr))
-						$search->$sr = array();
-					$search->{$sr}[] = $found;
-					if(!isset($this->assocParams[$sr]))
-						$this->assocParams[$sr] = array();
+					if(!isset($find->$fr))
+						$find->$fr = array();
+					$find->{$fr}[] = $found;
+					if(!isset($this->assocParams[$fr]))
+						$this->assocParams[$fr] = array();
 					if($rewrite!==null)
 						$k = (string)$rewrite;
-					if(!$this->assocParams[$sr]->in($k)) //doublon
-						$this->assocParams[$sr][] = $k;
+					if(!$this->assocParams[$fr]->in($k)) //doublon
+						$this->assocParams[$fr][] = $k;
 					break;
 				}
 			}
 		}
 		$redirect = '';
-		foreach($this->searchers as $sr){
-			if(!isset($this->assocParams[$sr]))
+		foreach($this->finders as $fr){
+			if(!isset($this->assocParams[$fr]))
 				continue;
-			$this->assocParams[$sr]->sort(SORT_NATURAL|SORT_FLAG_CASE);
-			$redirect .= implode('|',(array)$this->assocParams[$sr]).'|';
+			$this->assocParams[$fr]->sort(SORT_NATURAL|SORT_FLAG_CASE);
+			$redirect .= implode('|',(array)$this->assocParams[$frchange ]).'|';
 		}
 		$redirect = trim($redirect,'|');
 		if(trim(implode('|',(array)$this->keywords),'|')!=$redirect)
