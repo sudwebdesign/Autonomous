@@ -9,7 +9,6 @@ class item extends \present{
 	}
 	function dynamic(){
 		parent::dynamic();
-		$this->title = view::param(1);
 		$t = $this->taxonomy;
 		$query = array(
 			'where'=>$t.'.id=?'
@@ -17,8 +16,8 @@ class item extends \present{
 		$params = array(
 			view::param(2),
 		);
-		//var_dump(parent::$this);
 		$this->raw = model::row4D($t,$query,$params);
+		$this->title = $this->raw['title'];//view::param(1);
 		$this->findImageItem();
 		$this->presentation = $this->raw['presentation'];
 		$this->tel = $this->raw['tel'];

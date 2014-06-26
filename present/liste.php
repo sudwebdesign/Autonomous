@@ -189,22 +189,14 @@ class liste extends \present{
 		));
 		$this->liste = new ArrayObject(model::table4D($this->taxonomy,$this->sqlQueryListe,$this->sqlParams()));
 		$this->countListe = count($this->liste);
-		//var_dump($this->liste);exit;
 	}
 	public function findSrcImageItems(){
 		$this->imgsItems=NULL;
-		//var_dump($this->liste);
 		foreach($this->liste as $item){
-			//var_dump(substr(str::tolower(view::param(0)),0,-1));exit;
-			$imgFolder = 'content/'.substr(str::tolower(view::param(0)),0,-1).'/'.$item->id.'/';
-			#var_dump($imgFolder);
+			$imgFolder = 'content/'.substr(str::unaccent(str::tolower(view::param(0))),0,-1).'/'.$item->id.'/';
 			$imgName = str_replace(' ','-',$item->title);
-			#var_dump($imgName);
-			//var_dump(glob($imgFolder."{".$imgName.".*}", GLOB_BRACE));
 			$imgsItem = glob($imgFolder."{".$imgName.".*}", GLOB_BRACE);
 			$this->imgsItems[$item->id] = $imgsItem;
-			
 		}
-	//var_dump($this->imgsItems);exit;
 	}
 }
