@@ -2,15 +2,16 @@
 use view;
 use model;
 use control;
-use surikat\model\R;
-use surikat\control\str;
-use surikat\control\FS;
-use surikat\control\PHP;
-use surikat\control\session;
-use surikat\control\post;
-use surikat\control\filter;
-use surikat\control\uploader;
-use surikat\model\Exception_Validation;
+use model\Control_Geocoding;
+use model\R;
+use control\str;
+use control\FS;
+use control\PHP;
+use control\session;
+use control\post;
+use control\filter;
+use control\uploader;
+use model\Exception_Validation;
 class ajouter extends \present{
 	function assign(){
 		parent::assign();
