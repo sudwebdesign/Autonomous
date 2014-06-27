@@ -9,8 +9,13 @@ geo-completer{
 		margin-bottom:0.3em;
 	}
 	>*{
-		height:17em;
-		min-height:17em;
+		//mobile & tablet
+		height:29em;
+		min-height:29em;
+		@media(min-width:1024px){
+			height:16em;
+			min-height:16em;
+		}
 		&:nth-child(2){
 			height:auto;
 		}
