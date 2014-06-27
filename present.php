@@ -1,6 +1,7 @@
 <?php
 use surikat\control\session;
 use model\Table_Taxonomy;
+use present\Truncating;
 class present extends surikat\present{
 	function assign(){
 		$this->timeCompiled			= time();
@@ -15,5 +16,8 @@ class present extends surikat\present{
 		$this->time		= time();
 		$this->title	= (($u=view::param(0))?$u.' - ':'').'Autonomie et Partage';
 		$this->h1		= $this->title;
+	}
+	static function truncatehtml($html,$lenght='20',$elipsis ='...'){
+		return Truncating::truncate($html, $lenght, array('length_in_chars' => true, 'ellipsis' => $elipsis, 'xml' => true));
 	}
 }

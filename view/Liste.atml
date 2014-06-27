@@ -31,7 +31,7 @@
 			<foreach e="(array)@$liste as $id=>$item">
 				<?$href=$subUri.'|'.view::filterParam($item->title).'|'.$id;?>
 				<h2><a href="<?=$href?>"><?=$item->title?></a></h2>
-				<a href="<?=$href?>"><?=$item->presentation?>
+				<a href="<?=$href?>"><?=present::truncatehtml($item->presentation, 63, '<i> (En savoir plus ...)</i>');?>
 
 	<if e="$imgsItems[$id]"><img src="<?= $imgsItems[$id][0]?>" alt="<?=$item->title?>" title="<?=$item->title?>" /></if></a>
 				<ul class="tags">
