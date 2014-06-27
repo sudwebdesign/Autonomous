@@ -1,4 +1,7 @@
 <?php namespace model;
+use control;
+use model;
+use control\FS;
 class Control_Geocoding{
 	static function POST_Geo($bean,$geop){
 		$geopoint = R::newOne('geopoint',array(
