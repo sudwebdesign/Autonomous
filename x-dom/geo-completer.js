@@ -157,12 +157,43 @@ $js([
 				//updateInfoWindow(place);
 				input_validate.val('true');
 
-				console.log(place);
-				input_address.val();
-				//input_city.val();
-				//input_country.val();
-				//input_region.val();
-				//input_departement.val();
+				var address_components = place.address_components;
+				var political = [];
+				for(var i in address_components){
+					var compo = address_components[i];
+					if(compo.types.indexOf('political')>-1)
+						political.push(compo.long_name);
+					switch(compo.types[0]){
+							//input_address.val();
+						case 'locality':
+							//input_city.val();
+						break;
+						case 'administrative_area_level_1':								
+							//input_region.val();
+						break;
+						case 'administrative_area_level_2':
+							//input_departement.val();
+						break;
+						case 'country':
+							//input_country.val();
+						
+						break;
+					}
+				}
+				var x = input.val().split(',');
+				if(x.length>2){
+					x.pop();
+					x.pop();
+					var label = '';
+					for(var i in x){
+						x[i] = x[i].trim();
+						if(political.indexOf(x[i].trim())===-1)
+							label += x[i]+' ';
+					}
+					label = label.trim();
+				}
+				//console.log(label);
+				//console.log(place);
 				
 				input.trigger('change');
 			};
