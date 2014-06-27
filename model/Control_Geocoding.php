@@ -7,7 +7,7 @@ class Control_Geocoding{
 			'rayon'=>@$geop['rayon'],
 		));
 		if(@$geop['valid']==='true'&&@$geop['label']){
-			$file = sprintf('https://maps.googleapis.com/maps/api/geocode/json?address=%s&region=%s&sensor=false',urlencode($geop['label']),model::DEFAULT_COUNTRY_CODE);
+			$file = sprintf('https://maps.googleapis.com/maps/api/geocode/json?address=%s&region=%s&sensor=false&language=%s',urlencode($geop['label']),model::DEFAULT_COUNTRY_CODE,model::DEFAULT_LG_CODE);
 			$tmpDir = control::$TMP.'geocode_cache/address/';
 			if(is_file($tmpFile=$tmpDir.sha1($file)))
 				$content = file_get_contents($tmpFile);

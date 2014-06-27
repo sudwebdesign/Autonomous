@@ -18,13 +18,14 @@ $js([
 			var input_lat = geocompleter.find('input[type=number][step=any]:eq(0)');
 			var input_lng = geocompleter.find('input[type=number][step=any]:eq(1)');
 			var input_rayon = geocompleter.find('input[type=number][step][step!=any]:eq(0)');
-			var input_address = geocompleter.find('input[type=text]:eq(0)');
-			var input_city = geocompleter.find('input[type=text]:eq(1)');
-			var input_country = geocompleter.find('input[type=text]:eq(2)');
-			var input_region = geocompleter.find('input[type=text]:eq(3)');
-			var input_departement = geocompleter.find('input[type=text]:eq(4)');
-			var input_validate = geocompleter.find('input[type=hidden]:eq(0)');
 			var input = geocompleter.find('input[type=text]:eq(0)');
+			var input_name = geocompleter.find('input[type=text]:eq(1)');
+			var input_address = geocompleter.find('input[type=text]:eq(2)');
+			var input_city = geocompleter.find('input[type=text]:eq(3)');
+			var input_country = geocompleter.find('input[type=text]:eq(4)');
+			var input_region = geocompleter.find('input[type=text]:eq(5)');
+			var input_departement = geocompleter.find('input[type=text]:eq(6)');
+			var input_validate = geocompleter.find('input[type=hidden]:eq(0)');
 			var div_map = $('<div class="map-canvas"></div>');
 			div_map.insertAfter(input);
 			var distance = function(lat1, lon1, lat2, lon2){
@@ -156,12 +157,13 @@ $js([
 				//updateInfoWindow(place);
 				input_validate.val('true');
 
+				console.log(place);
 				input_address.val();
 				//input_city.val();
 				//input_country.val();
 				//input_region.val();
 				//input_departement.val();
-				console.log(place);
+				
 				input.trigger('change');
 			};
 			//var autocompleteService = new google.maps.places.AutocompleteService();

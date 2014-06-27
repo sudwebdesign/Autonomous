@@ -58,6 +58,10 @@
 					</fieldset>					
 					<fieldset>
 						<legend>Détails</legend>
+						<label for="geo-name">Nom</label>
+						<input	name="xownGeopoint[name]"
+								type="text"
+								id="geo-name">
 						<label for="geo-address">Adresse</label>
 						<input	name="xownGeopoint[address]"
 								type="text"

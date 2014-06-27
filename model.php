@@ -3,6 +3,7 @@ use surikat\control;
 //use surikat\model\cache;
 use surikat\model as cache; //disable hard for dev
 class model extends surikat\model{	
+	const DEFAULT_LG_CODE = 'fr';
 	const DEFAULT_COUNTRY_CODE = 'fr';
 	const DEFAULT_COUNTRY = 'France';
 	const DEFAULT_DEPARTEMENT_CODE = 66;
