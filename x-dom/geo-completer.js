@@ -19,12 +19,11 @@ $js([
 			var input_lng = geocompleter.find('input[type=number][step=any]:eq(1)');
 			var input_rayon = geocompleter.find('input[type=number][step][step!=any]:eq(0)');
 			var input = geocompleter.find('input[type=text]:eq(0)');
-			var input_name = geocompleter.find('input[type=text]:eq(1)');
-			var input_address = geocompleter.find('input[type=text]:eq(2)');
-			var input_city = geocompleter.find('input[type=text]:eq(3)');
-			var input_country = geocompleter.find('input[type=text]:eq(4)');
-			var input_region = geocompleter.find('input[type=text]:eq(5)');
-			var input_departement = geocompleter.find('input[type=text]:eq(6)');
+			var input_address = geocompleter.find('input[type=text]:eq(1)');
+			var input_city = geocompleter.find('input[type=text]:eq(2)');
+			var input_country = geocompleter.find('input[type=text]:eq(3)');
+			var input_region = geocompleter.find('input[type=text]:eq(4)');
+			var input_departement = geocompleter.find('input[type=text]:eq(5)');
 			var input_validate = geocompleter.find('input[type=hidden]:eq(0)');
 			var div_map = $('<div class="map-canvas"></div>');
 			div_map.insertAfter(input);
@@ -158,42 +157,38 @@ $js([
 				input_validate.val('true');
 
 				var address_components = place.address_components;
-				var political = [];
+				var areas = [];
 				for(var i in address_components){
 					var compo = address_components[i];
-					if(compo.types.indexOf('political')>-1)
-						political.push(compo.long_name);
 					switch(compo.types[0]){
-							//input_address.val();
 						case 'locality':
-							//input_city.val();
+							input_city.val(compo.long_name);
+							areas.push(compo.long_name);
 						break;
 						case 'administrative_area_level_1':								
-							//input_region.val();
+							input_region.val(compo.long_name);
+							areas.push(compo.long_name);
 						break;
 						case 'administrative_area_level_2':
-							//input_departement.val();
+							input_departement.val(compo.long_name);
+							areas.push(compo.long_name);
 						break;
 						case 'country':
-							//input_country.val();
-						
+							input_country.val(compo.long_name);
+							areas.push(compo.long_name);
 						break;
 					}
 				}
 				var x = input.val().split(',');
-				if(x.length>2){
-					x.pop();
-					x.pop();
-					var label = '';
-					for(var i in x){
-						x[i] = x[i].trim();
-						if(political.indexOf(x[i].trim())===-1)
-							label += x[i]+' ';
-					}
-					label = label.trim();
+				var address = '';
+				for(var i in x){
+					x[i] = x[i].trim();
+					if(areas.indexOf(x[i].trim())===-1)
+						address += x[i]+' ';
 				}
-				//console.log(label);
-				//console.log(place);
+				address = address.trim();
+				input_address.val(address);
+				console.log(place);
 				
 				input.trigger('change');
 			};
