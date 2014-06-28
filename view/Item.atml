@@ -5,7 +5,7 @@
 	<append title> dans <?=$taxonomy?></append>
 	<write main>
 		<aside>
-			Search Options
+			<h3>Partie En déveleppement...</h3>
 			<?
 			/*	foreach($assocParams as $type=>$m){
 					switch($type){
@@ -32,17 +32,17 @@
 			<if e="$srcimg[0]"><img src="<?= $srcimg[0]?>" alt="<?=$title?>" title="<?=$title?>" /></if>
 			<?=$presentation?>
 			<hr />
-			<if e="$lien"><p><b>Lien : </b><a href="<?=$lien?>" title="<?=$title?>"><?=$title?></a></p></if>
-			<if e="$tel"><p><b>Télépnone : </b><?=$tel?></p></if>
-			<p><b>Créé le : </b><?=$création?></p>
+			<if e="$lien"><p><i>Lien : </i><a href="<?=$lien?>" title="<?=$title?>"><?=$title?></a></p></if>
+			<if e="$tel"><p><i>Télépnone : </i><?=$tel?></p></if>
+			<p><i>Créé le : </i><?=$création?></p>
 			<hr />
-			<h3><b>Thème principal : </b><a href="<?=$URI.'s'?>"><?=$URI?></a></h3>
-			<if e="(array)@$raw[tag]">
-				<h4>Sous thème(s) : </h4>
+<!--		<h4><i>Thème principal : </i><a href="<?=$URI.'s'?>"><?=$URI?></a></h4> -->
+			<if e="(array)@$raw->groupKey(array('taxonomy','locality','tag'),'label',true)">
 				<ul class="tags">
-				<foreach e="(array)@$raw[tag] as $tag">
-					<li><h5><a href="<?=$URI.'s|'.$tag['label']?>"><?=$tag['label']?></a></h5></li>
-				</foreach>
+<!--			<i>Sous thème(s) : </i> -->
+					<?foreach($raw->groupKey(array('taxonomy','locality','tag'),'label',true) as $tag):?>
+						<li><h5><a href="<?=$URI.'s|'.$tag?>"><?=$tag?></a></h5></li>
+					<?endforeach;?>
 				</ul>
 			</if>
 			<hr />
@@ -50,8 +50,7 @@
 			<pre style="display:none;"><?print_r($raw)?></pre>
 		</article>
 		<aside>
-			Flux of others tables articles
-			<br />In && for DEV
+			<h3>Partie En déveleppement...</h3>
 		</aside>
 	</write>
 </extend>

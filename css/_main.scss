@@ -37,6 +37,17 @@ body>main{
 			@?include icon(home);
 		}
 	}	
+	& ul.tags{
+		@?include icon(tags);
+		&>li{
+			display:inline-block;
+			margin:0 2px;
+			//float:left;
+			&>h5>a{
+				@?include icon(tag);
+			}
+		}
+	}
 	&.not-found{
 		a{
 			&[href=""]{
