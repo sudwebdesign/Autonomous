@@ -1,1 +1,0 @@
-<?php include('surikat/control.php');control::dev();view::index();

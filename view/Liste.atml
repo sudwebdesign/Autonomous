@@ -3,8 +3,10 @@
 	<attr selector="main" addClass="present-liste">
 	<write main>
 		<aside>
-			mode final du dégoteur :
-			<?
+			<h3>Partie En déveleppement...</h3>
+			
+			<? /*
+				echo "mode final du dégoteur :";
 				foreach($assocParams as $type=>$m){
 					switch($type){
 						case 'taxonomyId':
@@ -20,25 +22,30 @@
 							?>texte<br />(<?=$m[0]?>)<?
 						break;
 					}
-				}
+				} */
 			?>
 			
-			<p>Trouvé : <?=$find?></p>
+			<p><? /*= "Trouvé : ". $find */ ?></p>
+			
 		</aside>
 		<article>
-			<h1><?=$h1?></h1>
-			<?=$countListe?> / <?=$count?> results
+			<h1><?=$h1?> (<?=$countListe?> / <?=$count?> résultats)</h1>
+			<?$allLinks = array();?>
 			<foreach e="(array)@$liste as $id=>$item">
 				<?$href=$subUri.'|'.view::filterParam($item->title).'|'.$id;?>
 				<h2><a href="<?=$href?>"><?=$item->title?></a></h2>
-				<a href="<?=$href?>"><?=$item->presentation?>
-
-	<if e="$imgsItems[$id]"><img src="<?= $imgsItems[$id][0]?>" alt="<?=$item->title?>" title="<?=$item->title?>" /></if></a>
-				<ul class="tags">
-					<?foreach($item->groupKey(array('taxonomy','locality','tag'),'label',true) as $tag):?>
-						<li><a href="<?=$URI.'|'.$tag?>"><?=$tag?></a></li>
-					<?endforeach;?>
-				</ul>
+				<a href="<?=$href?>">
+					<if e="$imgsItems[$id]"><img src="<?= $imgsItems[$id][0]?>" alt="<?=$item->title?>" title="<?=$item->title?>" /></if>
+					<?=present::truncatehtml($item->presentation, 369, '<i> (En savoir plus ...)</i>');?>
+				</a>
+				<if e="(array)@$item->groupKey(array('taxonomy','locality','tag'),'label',true)">
+					<ul class="tags">
+						<?foreach($item->groupKey(array('taxonomy','locality','tag'),'label',true) as $tag):?>
+							<li><h5><a href="<?=$URI.'|'.$tag?>"><?=$tag?></a></h5></li>
+							<?$allLinks[] = '<a href="'.$URI.'|'.$tag.'"> '.$tag.' </a>';?>
+						<?endforeach;?>
+					</ul>
+				</if>
 				<hr>
 			</foreach>
 			<if e="$count">
@@ -75,8 +82,12 @@
 			<br><?//$THIS->debug();?>
 		</article>
 		<aside>
-			Flux of others tables articles
-			<br>for DEV: Liste Actuelle Variables Dispos:
+			<h3></h3>
+			<h4>Sémantiques en développement :</h4>
+			<?shuffle($allLinks);?>
+				<foreach e="(array)@$allLinks as $taggy">
+					<i><?=$taggy?></i>
+				</foreach>			
 		</aside>
 	</write>
 </extend>

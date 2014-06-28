@@ -30,12 +30,13 @@ main.present-liste{
 	&.mediatheques>article>h1{
 		@?include icon(book);
 	}
+	>article>h2{
+		margin-top: 1em;
+		border-top: solid #000 1px;
+	}
 	>article>a>img{
 		float:right;
 		height:161px;
-	}
-	article>ul.tags>li{
-		float:left;margin:0 2px;
 	}
 	article>hr{
 		clear: both;
@@ -44,10 +45,11 @@ main.present-liste{
 		list-style: none;
 	}
 	.simple-pagination {
+		border-top: solid #000 1px;
 		display: block;
 		overflow: hidden;
-		padding: 0 5px 5px 0;
-		margin: 0;
+		padding: 1em 5px 5px 0;
+		margin: 1em 0 0 0;
 		ul {
 			list-style: none;
 			padding: 0;
