@@ -43,9 +43,9 @@ class Truncating {
 		$root_node = null;
 
 		// Parse using HTML5Lib if it's available.
-		if (class_exists('HTML5Lib\\Parser')) {
+		if (class_exists('\present\HTML5Lib\\Parser')) {
 			try {
-				$doc = \HTML5Lib\Parser::parse($html);
+				$doc = \present\HTML5Lib\Parser::parse($html);
 				$root_node = $doc->documentElement->lastChild->lastChild;
 			}
 			catch (\Exception $e) {
