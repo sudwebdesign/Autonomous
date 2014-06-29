@@ -19,7 +19,10 @@ class view extends surikat\view{
 	static function postHooks(){ #don't forget to call exit to avoid 404 when hook found
 		if(strpos(static::$PATH,'/blog/')===0){
 			control::dev(false);
-			include 'plugin/wordpress/index.php';
+			//if(strpos(static::$PATH,'/blog/wp-admin/')===0)
+				//include('plugin/wordpress/wp-admin/index.php');
+			//else
+				include('plugin/wordpress/index.php');
 			exit;
 		}
 		
