@@ -12,5 +12,8 @@ abstract class ATable_Main extends Table{
 			$this->error('tel','Numéro de téléphone non valide');
 		if($this->url&&!ruler::url($this->url))
 			$this->error('url','Lien non valide');
+
+		$this->presentationHtml = $this->presentation;
+		$this->presentation = strip_tags($this->presentationHtml);
 	}
 }
