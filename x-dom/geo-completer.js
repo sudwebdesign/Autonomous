@@ -177,6 +177,15 @@ $js([
 							input_country.val(compo.long_name);
 							areas.push(compo.long_name);
 						break;
+						//case 'postal_code':
+						//break;
+						//case 'route':
+						//break;
+						//case 'sublocality':
+						//break;
+						//case 'street_number':
+						//break;
+
 					}
 				}
 				var x = input.val().split(',');
@@ -188,7 +197,7 @@ $js([
 				}
 				address = address.trim();
 				input_address.val(address);
-				console.log(place);
+				//console.log(place);
 				
 				input.trigger('change');
 			};

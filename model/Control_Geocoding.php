@@ -65,6 +65,14 @@ class Control_Geocoding{
 							if($geopoint->geoarealevel2)
 								$geopoint->geoarealevel2->geocountry = $country;
 						break;
+						//case 'postal_code':
+						//break;
+						//case 'route':
+						//break;
+						//case 'sublocality':
+						//break;
+						//case 'street_number':
+						//break;
 					}
 				}
 				$x = explode(',',$geop['label']);
