@@ -1,3 +1,4 @@
+<?use control\Truncating;?>
 <extend>
 	<css liste>
 	<attr selector="main" addClass="present-liste">
@@ -36,7 +37,7 @@
 				<h2><a href="<?=$href?>"><?=$item->title?></a></h2>
 				<a href="<?=$href?>">
 					<if e="$imgsItems[$id]"><img src="<?= $imgsItems[$id][0]?>" alt="<?=$item->title?>" title="<?=$item->title?>" /></if>
-					<?=\control\Truncating::truncatehtml($item->presentation, 369, '<i> (En savoir plus ...)</i>');?>
+					<?=Truncating::truncatehtml($item->presentation, 369, '<i> (En savoir plus ...)</i>');?>
 				</a>
 				<if e="(array)@$item->groupKey(array('taxonomy','locality','tag'),'label',true)">
 					<ul class="tags">
