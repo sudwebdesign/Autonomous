@@ -36,7 +36,7 @@
 				<h2><a href="<?=$href?>"><?=$item->title?></a></h2>
 				<a href="<?=$href?>">
 					<if e="$imgsItems[$id]"><img src="<?= $imgsItems[$id][0]?>" alt="<?=$item->title?>" title="<?=$item->title?>" /></if>
-					<?=present::truncatehtml($item->presentation, 369, '<i> (En savoir plus ...)</i>');?>
+					<?=\present\Truncating::truncatehtml($item->presentation, 369, '<i> (En savoir plus ...)</i>');?>
 				</a>
 				<if e="(array)@$item->groupKey(array('taxonomy','locality','tag'),'label',true)">
 					<ul class="tags">

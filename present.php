@@ -17,7 +17,4 @@ class present extends surikat\present{
 		$this->title	= (($u=view::param(0))?$u.' - ':'').'Autonomie et Partage';
 		$this->h1		= $this->title;
 	}
-	static function truncatehtml($html,$lenght='20',$elipsis ='...'){
-		return Truncating::truncate($html, $lenght, array('length_in_chars' => true, 'ellipsis' => $elipsis, 'xml' => true));
-	}
 }

@@ -6,7 +6,10 @@ class Exception extends \surikat\control\Exception{}
 
 
 class Truncating {
-
+	static function truncatehtml($html,$lenght='20',$elipsis ='...'){
+		return self::truncate($html, $lenght, array('length_in_chars' => true, 'ellipsis' => $elipsis, 'xml' => true));
+	}
+	
 	public static $default_options = array(
 		'ellipsis' => '…',
 		'length_in_chars' => false,
@@ -158,4 +161,3 @@ class Truncating {
 	}
 
 }
-
