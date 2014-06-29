@@ -41,7 +41,6 @@ class liste extends \present{
 	
 	protected function getParamsFromUri(){
 		$this->page = view::param('page');
-		#var_dump(view::param(1));exit; //Médiathèque|Pré-écoute ::: param('page') 'Pré-écoute' == NULL ???
 		$this->uri = $this->URI;
 		$this->keywords = array();
 		$i = 0;
@@ -49,7 +48,7 @@ class liste extends \present{
 			$this->keywords[] = $param;
 			$this->uri .= '|'.$param;
 		}
-		$this->subUri = (strrpos($this->URI,'s')===strlen($this->URI)-1?substr($this->URI,0,-1):$this->URI);#var_dump($this);exit;
+		$this->subUri = (strrpos($this->URI,'s')===strlen($this->URI)-1?substr($this->URI,0,-1):$this->URI);
 	}
 
 	protected $finders = array(
@@ -190,7 +189,7 @@ class liste extends \present{
 		$this->liste = new ArrayObject(model::table4D($this->taxonomy,$this->sqlQueryListe,$this->sqlParams()));
 		$this->countListe = count($this->liste);
 	}
-	public function findSrcImageItems(){
+	protected function findSrcImageItems(){
 		$this->imgsItems=NULL;
 		foreach($this->liste as $item){
 			$imgFolder = 'content/'.substr(str::unaccent(str::tolower(view::param(0))),0,-1).'/'.$item->id.'/';
