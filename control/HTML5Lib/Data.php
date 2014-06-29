@@ -1,4 +1,4 @@
-<?php namespace present\HTML5Lib;
+<?php namespace control\HTML5Lib;
 
 // warning: this file is encoded in UTF-8!
 
