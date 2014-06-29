@@ -49,7 +49,7 @@ class liste extends \present{
 			$this->keywords[] = $param;
 			$this->uri .= '|'.$param;
 		}
-		$this->subUri = (strrpos($this->URI,'s')===strlen($this->URI)-1?substr($this->URI,0,-1):$this->URI);#var_dump($this);exit;
+		$this->subUri = (strrpos($this->URI,'s')===strlen($this->URI)-1?substr($this->URI,0,-1):$this->URI);
 	}
 
 	protected $finders = array(
@@ -201,7 +201,7 @@ class liste extends \present{
 		$this->liste = model::table4D($this->taxonomy,$this->sqlQueryListe,$this->sqlParams());
 		$this->countListe = count($this->liste);
 	}
-	public function findSrcImageItems(){
+	protected function findSrcImageItems(){
 		$this->imgsItems=NULL;
 		foreach($this->liste as $item){
 			$imgFolder = 'content/'.substr(str::unaccent(str::tolower(view::param(0))),0,-1).'/'.$item->id.'/';
