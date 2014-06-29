@@ -1,12 +1,11 @@
-<?php namespace present;
-
+<?php namespace control;
 use DOMDocument;
-
-class Exception extends \surikat\control\Exception{}
-
-
+use control\HTML5Lib\Parser;
 class Truncating {
-
+	static function truncatehtml($html,$lenght='20',$elipsis ='...'){
+		return self::truncate($html, $lenght, array('length_in_chars' => true, 'ellipsis' => $elipsis, 'xml' => true));
+	}
+	
 	public static $default_options = array(
 		'ellipsis' => '…',
 		'length_in_chars' => false,
@@ -42,17 +41,9 @@ class Truncating {
 
 		$root_node = null;
 
-		// Parse using HTML5Lib if it's available.
-		if (class_exists('\present\HTML5Lib\\Parser')) {
-			try {
-				$doc = \present\HTML5Lib\Parser::parse($html);
-				$root_node = $doc->documentElement->lastChild->lastChild;
-			}
-			catch (\Exception $e) {
-				;
-			}
-		}
-
+		$doc = Parser::parse($html);
+		$root_node = $doc->documentElement->lastChild->lastChild;
+		
 		if ($root_node === null) {
 			// HTML5Lib not available so we'll have to use DOMDocument
 			// We'll only be able to parse HTML5 if it's valid XML
@@ -158,4 +149,3 @@ class Truncating {
 	}
 
 }
-
