@@ -19,7 +19,7 @@ class item extends \present{
 		$this->raw = model::row4D($t,$query,$params);
 		$this->title = $this->raw['title'];//view::param(1);
 		$this->findImageItem();
-		$this->presentation = $this->raw['presentation'];
+		$this->presentation = $this->raw['presentation_html'];
 		$this->tel = $this->raw['tel'];
 		$this->lien = $this->raw['url'];
 		$this->création = $this->raw['created'];

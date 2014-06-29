@@ -1,12 +1,13 @@
 <?php namespace present;
 use view;
 use model;
+use model\R;
 use control\str;
 use model\Table_Taxonomy as taxonomy;
 use model\Table_Tag as tag;
 use model\Table_Locality as locality;
-use surikat\control\ArrayObject;
-use surikat\view\Exception as View_Exception;
+use control\ArrayObject;
+use view\Exception as View_Exception;
 class liste extends \present{
 	protected $limit				= 5;
 	protected $offset	    		= 0;
@@ -41,7 +42,6 @@ class liste extends \present{
 	
 	protected function getParamsFromUri(){
 		$this->page = view::param('page');
-		#var_dump(view::param(1));exit; //Médiathèque|Pré-écoute ::: param('page') 'Pré-écoute' == NULL ???
 		$this->uri = $this->URI;
 		$this->keywords = array();
 		$i = 0;
@@ -76,6 +76,17 @@ class liste extends \present{
 			$this->sqlQuery['where'][] = implode(' || ',$cols)." @@ to_tsquery(?)";
 			$this->sqlParamsWhere[] = "'$t'";
 		}
+		$this->sqlQuery['select'][] = 'title';
+		$this->sqlQuery['select'][] = 'tel';
+		$this->sqlQuery['select'][] = 'url';
+		$this->selectTruncation('presentation',369);
+	}
+	protected function selectTruncation($col,$truncation=369){
+		$q = model::getQuote();
+		$c = $q.$this->taxonomy.$q.'.'.$q.$col.$q;
+		$this->sqlQuery['select'][] = "SUBSTRING($c,1,$truncation) as $col";
+		$this->sqlQuery['select'][] = "LENGTH($c) as {$col}_length";
+		$this->sqlQuery['select'][] = 'created';
 	}
 	protected function sqlParams(){
 		return array_merge($this->sqlParamsWhere,$this->sqlParamsJoinWhere);
@@ -187,7 +198,7 @@ class liste extends \present{
 			'limit'=>$this->limit,
 			'offset'=>$this->offset,
 		));
-		$this->liste = new ArrayObject(model::table4D($this->taxonomy,$this->sqlQueryListe,$this->sqlParams()));
+		$this->liste = model::table4D($this->taxonomy,$this->sqlQueryListe,$this->sqlParams());
 		$this->countListe = count($this->liste);
 	}
 	public function findSrcImageItems(){

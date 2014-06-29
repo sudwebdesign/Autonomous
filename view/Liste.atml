@@ -36,12 +36,16 @@
 				<?$href=$subUri.'|'.view::filterParam($item->title).'|'.$id;?>
 				<h2><a href="<?=$href?>"><?=$item->title?></a></h2>
 				<a href="<?=$href?>">
-					<if e="$imgsItems[$id]"><img src="<?= $imgsItems[$id][0]?>" alt="<?=$item->title?>" title="<?=$item->title?>" /></if>
-					<?=Truncating::truncatehtml($item->presentation, 369, '<i> (En savoir plus ...)</i>');?>
+					<if e="$imgsItems[$id]"><img src="<?=$imgsItems[$id][0]?>" alt="<?=$item->title?>" title="<?=$item->title?>" /></if>
+					<?=$item->presentation?>
+					<if e="$item->presentation_length>strlen($item->presentation)">
+						<i>(En savoir plus ...)</i>
+					</if>
 				</a>
-				<if e="(array)@$item->groupKey(array('taxonomy','locality','tag'),'label',true)">
+				<?$tags=$item->groupKey(array('taxonomy','locality','tag'),'label',true);?>
+				<if e="$tags->count()">
 					<ul class="tags">
-						<?foreach($item->groupKey(array('taxonomy','locality','tag'),'label',true) as $tag):?>
+						<?foreach($tags as $tag):?>
 							<li><h5><a href="<?=$URI.'|'.$tag?>"><?=$tag?></a></h5></li>
 							<?$allLinks[] = '<a href="'.$URI.'|'.$tag.'"> '.$tag.' </a>';?>
 						<?endforeach;?>
