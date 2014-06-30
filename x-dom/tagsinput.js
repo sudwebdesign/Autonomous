@@ -1,3 +1,6 @@
+$css('jquery-ui/core');
+$css('jquery-ui/menu');
+$css('jquery-ui/autocomplete');
 $css('tags');
 $css('/x-dom/tagsinput');
 $js(true,[

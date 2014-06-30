@@ -2,6 +2,28 @@ main.present-liste{
 	@?include grid( 1-45-1, 1-51-1, 1-98-1,	768px);
 	@?include grid( 1-23-1, 1-48-1, 1-23-1,	1024px);
 	@?include grid( 1-23-1, 1-48-1, 1-23-1,	1260px);
+	>aside:nth-child(1){
+		height:100%;
+		input {
+			width:100%;
+			background-image: none;
+			border: 1px solid #CCCCCC;
+			border-radius: 4px;
+			font-size: 1.2em;
+			font-weight: normal;
+			line-height: 0.8em;
+			padding: 1px 3px;
+			vertical-align: middle;
+			white-space: nowrap;
+		}
+		a.ui-state-focus{
+			font-weight:normal;
+			border:0;
+			color:$color-dark;
+			background: darken($color-light,15%);
+			margin:0;
+		}
+	}
 	>article>h1{
 		&::before{
 			font-size:0.9em;

@@ -1,7 +1,6 @@
 geo-completer{
-	@?include grid(*,100);
-	@?include grid(0-55-0,2-43-0,960px);
-	//@?include grid(0-65-0,2-33-0,1024px);
+	//@?include grid(*,100);
+	//@?include grid(0-55-0,2-43-0,960px);
 	input{
 		width:100%;
 		line-height: 1.2em;
@@ -24,6 +23,7 @@ geo-completer{
 					width:100%;
 				}
 			}
+			/*
 			@?include grid(*,100);
 			@?include grid(100,
 				50,50,
@@ -35,6 +35,7 @@ geo-completer{
 				50,50,
 				50,50,
 			480px);
+			*/
 			padding:0.5em;
 			label,
 			input{
