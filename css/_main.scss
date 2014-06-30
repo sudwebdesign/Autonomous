@@ -1,6 +1,7 @@
 body>main{
     @include clearfix();
-    min-height:74%;
+    height:100%;
+    //min-height:74%;
 	padding-bottom: 4em;
 	>*{
 		margin-bottom:1em;
