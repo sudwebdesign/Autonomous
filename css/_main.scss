@@ -18,7 +18,7 @@ body>main{
 	h1{
 		margin:-0.3em;
 		margin-bottom:0.5em;
-		border-bottom:solid 1px #000;
+		border-bottom:solid 1px #ccc;
 		font-size:1.4em;
 		font-weight:bold;
 		padding-left: 1.5em;
@@ -41,10 +41,27 @@ body>main{
 		@?include icon(tags);
 		&>li{
 			display:inline-block;
-			margin:0 2px;
+			margin:5px 0;
 			//float:left;
-			&>h5>a{
+			&>h5>a{//frontenda.com/snipped/viewSnip.php?snip=simple-ecommerce-template
 				@?include icon(tag);
+				@include transition(all 0.3s);
+				padding: 2px;//2px 12px;
+				border: 1px solid #d6d6d6;
+				border-radius: 4px;
+				background: #f0f0f0;
+				//float: left;
+				color: #666666;
+				font-size: 13px;
+				text-decoration: none;
+				&:hover{
+					color: #1c7ecd;
+					border: 1px solid #444444;
+					background: #666666;
+					color: #ffffff;
+					z-index: 2;
+					position: relative;
+				}
 			}
 		}
 	}
