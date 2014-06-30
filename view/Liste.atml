@@ -7,28 +7,10 @@
 			<h3>Options de Recherche</h3>
 			<form method="GET" action="<?=view::param(0)?>">
 				<fieldset>
-			<?
-			/*
-				foreach($assocParams as $type=>$m){
-					switch($type){
-						case 'taxonomyId':
-							?>taxonomique<br />(<?=$m[0]?>)<?
-						break;
-						case 'localityId':
-							?>localité<br />(<?=$m[0]?>)<?
-						break;
-						case 'tagId':
-							?>tag<br />(<?=$m[0]?>)<?
-						break;
-						case 'texts':
-							?>texte<br />(<?=$m[0]?>)<?
-						break;
-					}
-				}
-				*/
-			?>
 					<legend>Thématiques</legend>
-					<input name="sharedTag[label]" type="text" value="" placeholder="" is="tagsinput" data-url="service/autocomplete/taxonomy?label=<?=$taxonomy?>" data-minchar="4" data-maxchar="25" data-max="5" />
+					<input type="text" is="tagsinput" name="search" placeholder="" data-minchar="4" data-maxchar="25" data-max="5" data-url="service/autocomplete/taxonomy?label=<?=$taxonomy?>"
+						value="<?=implode(' ',$assocParams->submerge('taxonomyId','tagId','text')->getArray())?>"
+					/>
 					<?$dynVar='taxonomy'.ucfirst($taxonomy);?>
 					<if e="isset($$dynVar)">
 						<span class="tags-suggests">Suggestions:
@@ -40,53 +22,27 @@
 					<legend>Localité <small>(lieu,adresse ou commune)</small></legend>
 					<geo-completer>
 						<fieldset>
-							<input	name="xownGeopoint[label]"
-									type="text"
-									placeholder="Rechercher un lieu, une adresse ou une commune" value="">
+							<input name="geo" type="text" placeholder="Rechercher un lieu, une adresse ou une commune"
+								value="<?=@$assocParams->localityId[0]?>">
 						</fieldset>					
 						<fieldset>
 							<legend>Détails</legend>
 							<label for="geo-address">Adresse</label>
-							<input	name="xownGeopoint[address]"
-									type="text"
-									id="geo-address" readonly>
+							<input name="xownGeopoint[address]" type="text" id="geo-address" readonly>
 							<label for="geo-city">Commune</label>
-							<input	name="xownGeopoint[city]"
-									type="text"
-									id="geo-city" readonly>
+							<input name="xownGeopoint[city]" type="text" id="geo-city" readonly>
 							<label for="geo-country">Pays</label>
-							<input	name="xownGeopoint[country]"
-									type="text"
-									id="geo-country" readonly>
+							<input name="xownGeopoint[country]" type="text" id="geo-country" readonly>
 							<label for="geo-arealevel1">Région</label>
-							<input	name="xownGeopoint[arealevel1]"
-									type="text"
-									id="geo-arealevel1" readonly>
+							<input name="xownGeopoint[arealevel1]" type="text" id="geo-arealevel1" readonly>
 							<label for="geo-arealevel2">Département</label>
-							<input	name="xownGeopoint[arealevel2]"
-									type="text"
-									id="geo-arealevel2" readonly>
+							<input name="xownGeopoint[arealevel2]" type="text" id="geo-arealevel2" readonly>
 							<label for="geo-lat">Latitude</label>
-							<input	name="xownGeopoint[lat]"
-									type="number"
-									step="any"
-									min="-90"
-									max="90"
-									id="geo-lat">
+							<input name="xownGeopoint[lat]" type="number" step="any" min="-90" max="90" id="geo-lat">
 							<label for="geo-lng">Longitude</label>
-							<input name="xownGeopoint[lng]"
-								type="number"
-								step="any"
-								min="-180"
-								max="180"
-								id="geo-lng">
+							<input name="xownGeopoint[lng]" type="number" step="any" min="-180" max="180" id="geo-lng">
 							<label for="geo-rayon">Rayon en km</label>
-							<input	name="xownGeopoint[rayon]"
-									type="number"
-									step="1"
-									min="0"
-									max="67"
-									id="geo-rayon">
+							<input name="xownGeopoint[rayon]" type="number" step="1" min="0" max="67" id="geo-rayon">
 							<input name="xownGeopoint[geocountry_short]" type="hidden">
 							<input name="xownGeopoint[arealevel1_short]" type="hidden">
 							<input name="xownGeopoint[arealevel2_short]" type="hidden">

@@ -71,6 +71,8 @@ class liste extends \present{
 				'title',
 				'presentation',
 			);
+
+			//pgsql full text search
 			foreach($cols as $k=>$col)
 				$cols[$k] = "to_tsvector({$q}{$this->taxonomy}{$q}.{$q}{$col}{$q})";
 			$this->sqlQuery['where'][] = implode(' || ',$cols)." @@ to_tsquery(?)";
@@ -79,6 +81,12 @@ class liste extends \present{
 		$this->sqlQuery['select'][] = 'title';
 		$this->sqlQuery['select'][] = 'tel';
 		$this->sqlQuery['select'][] = 'url';
+
+		$this->sqlQuery['select'][] = $q.'locality'.$q.'.'.$q.'id'.$q.' as '.$q.'locality<>id'.$q;
+		$this->sqlQuery['select'][] = $q.'locality'.$q.'.'.$q.'label'.$q.' as '.$q.'locality<>label'.$q;
+		$this->sqlQuery['join'][] = 'LEFT OUTER JOIN locality on geopoint.locality_id=locality.id';
+		$this->sqlQuery['group_by'][] = $q.'locality'.$q.'.'.$q.'id'.$q;
+		
 		$this->selectTruncation('presentation',369);
 	}
 	protected function selectTruncation($col,$truncation=369){
