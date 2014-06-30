@@ -129,6 +129,7 @@ $.fn.tagsInput = function(options) {
 		});
 		if(settings.autocomplete&&typeof(settings.autocomplete.source)=='function'){				
 			$(data.fake_input).on('focus',function(){
+				$(this).removeClass('not_valid');
 				$(this).autocomplete('search','');
 			});
 		}
@@ -145,13 +146,13 @@ $.fn.tagsInput = function(options) {
 		$(data.fake_input).on('keypress',data,function(event) { // if user types a comma, create a new tag
 			if (event.which==event.data.delimiter.charCodeAt(0) || event.which==13 ) {
 				event.preventDefault();
-				console.log(event);
 				addingTag(event);
 				return false;
 			}
 		});
 		$(data.fake_input).on('blur',data,function(event){
 			addingTag(event);
+			$(this).removeClass('not_valid');
 		});
 		$(data.fake_input).on('keydown', function(event){ //Delete last tag on backspace
 			if(event.keyCode == 8 && $(this).val() == ''){
