@@ -153,7 +153,14 @@ $js([
 				}
 				if(updateMark)
 					updateMarker(place);
-				//updateInfoWindow(place);
+
+				console.log(place);
+				
+				if(input_lat.val()!=place.geometry.location.lat())
+					input_lat.val(place.geometry.location.lat());
+				if(input_lng.val()!=place.geometry.location.lng())
+					input_lng.val(place.geometry.location.lng());
+					
 				input_validate.val('true');
 
 				var address_components = place.address_components;

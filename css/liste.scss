@@ -3,7 +3,8 @@ main.present-liste{
 	@?include grid( 1-23-1, 1-48-1, 1-23-1,	1024px);
 	@?include grid( 1-23-1, 1-48-1, 1-23-1,	1260px);
 	>aside:nth-child(1){
-		height:100%;
+		min-height:100%;
+		height:auto;
 		input {
 			width:100%;
 			background-image: none;
