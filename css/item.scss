@@ -1,7 +1,9 @@
 main.present-item{
-	@?include grid( 1-45-1, 1-51-1, 1-98-1,	768px);
-	@?include grid( 1-23-1, 1-48-1, 1-23-1,	1024px);
-	@?include grid( 1-23-1, 1-48-1, 1-23-1,	1260px);
+	//@?include grid( 1-45-1, 1-51-1, 1-98-1,	768px);
+	//@?include grid( 1-23-1, 1-48-1, 1-23-1,	1024px);
+	//@?include grid( 1-23-1, 1-48-1, 1-23-1,	1260px);
+	@?include grid( *, 1-98-1);
+	@?include grid( 1-73-1, 1-23-1,	1024px);
 	>h1{
 		&::before{
 			font-size:0.9em;

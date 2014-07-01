@@ -10,11 +10,13 @@ control::dev(
 	//|control::dev_img
 	//|control::dev_all //very heavy
 );
+use control\i18n\i18n;
 class view extends surikat\view{
 	static $xDom = 'x-dom/';
 	static function preHooks(){ #don't forget to call exit to avoid simple Template auto-Mapping when hook found
 		parent::preHooks(); #automatics hooks, just /service/
-		
+		i18n::set(model::DEFAULT_LG_CODE);
+		i18n::handle();
 	}
 	static function postHooks(){ #don't forget to call exit to avoid 404 when hook found
 		if(strpos(static::$PATH,'/blog/')===0){
