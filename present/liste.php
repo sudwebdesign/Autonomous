@@ -82,10 +82,10 @@ class liste extends \present{
 		$this->sqlQuery['select'][] = 'tel';
 		$this->sqlQuery['select'][] = 'url';
 
-		$this->sqlQuery['select'][] = $q.'locality'.$q.'.'.$q.'id'.$q.' as '.$q.'locality<>id'.$q;
-		$this->sqlQuery['select'][] = $q.'locality'.$q.'.'.$q.'label'.$q.' as '.$q.'locality<>label'.$q;
-		$this->sqlQuery['join'][] = 'LEFT OUTER JOIN locality on geopoint.locality_id=locality.id';
-		$this->sqlQuery['group_by'][] = $q.'locality'.$q.'.'.$q.'id'.$q;
+		//$this->sqlQuery['select'][] = $q.'locality'.$q.'.'.$q.'id'.$q.' as '.$q.'locality<>id'.$q;
+		//$this->sqlQuery['select'][] = $q.'locality'.$q.'.'.$q.'label'.$q.' as '.$q.'locality<>label'.$q;
+		//$this->sqlQuery['join'][] = 'LEFT OUTER JOIN locality on geopoint.locality_id=locality.id';
+		//$this->sqlQuery['group_by'][] = $q.'locality'.$q.'.'.$q.'id'.$q;
 		
 		$this->selectTruncation('presentation',369);
 	}

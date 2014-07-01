@@ -50,7 +50,7 @@
 			<pre style="display:none;"><?print_r($raw)?></pre>
 		</article>
 		<aside>
-			<h3>Partie En déveleppement...</h3>
+			<h3>Partie En développement...</h3>
 		</aside>
 	</write>
 </extend>

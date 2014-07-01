@@ -9,11 +9,15 @@
 
 geo-completer{
 	@?include grid(*,100);
-	@?include grid(0-55-0,2-43-0,960px);
+	//@?include grid(0-55-0,2-43-0,960px);
+	
 	>*{
+		&:nth-child(1){
+			display:none;
+		}
 		&:nth-child(2){
 			@?include grid(*,100);
-			@?include grid(100,
+			@?include grid(
 				50,50,
 				50,50,
 				50,50,
