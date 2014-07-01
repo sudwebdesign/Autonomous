@@ -8,7 +8,7 @@ class find extends \present\liste{
 		parent::assign();
 		//$this->taxonomy = end($this->presentNamespaces);#'find';
 		//$this->tables = array('annonce','association','evenement','mediatheque','projet','ressource');
-		$this->tables = array('Annonce','Association','Évènement','Mediathèque','Projet','Ressource');
+		$this->tables = array('Annonce','Association','Événement','Médiathèque','Projet','Ressource');
 		$this->foo = 'bar2rire';
 	}
 	function dynamic(){

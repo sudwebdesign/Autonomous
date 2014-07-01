@@ -1,7 +1,7 @@
 <?php
 $a = array();
 foreach(array(
-	'Évènement'=>array(
+	'Événement'=>array(
 		'Salon',
 		'Marché',
 		'Vente-directe',

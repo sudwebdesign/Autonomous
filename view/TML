@@ -32,10 +32,10 @@
 		<a href="#" onclick="return false;" is="collapser">Menu Principal</a>
 		<ul is="dropdown">
 			<li>
-				<a href="Évènements">Évènements</a>
+				<a href="Événements">Événements</a>
 				<ul>
 					<foreach e="$taxonomyEvenement as $key=>$val" cacheSync="model.taxonomy">
-						<li><a href="Évènements|<?=$val?>"><?=$val?></a></li>
+						<li><a href="Événements|<?=$val?>"><?=$val?></a></li>
 					</foreach>
 				</ul> 	
 			</li>
@@ -56,17 +56,17 @@
 					<li><a href="Annonces|Demandes">Demandes</a></li>
 				</ul> 	
 			</li>
-			<li><a href="Mediathèques">Mediathèque</a></li>
+			<li><a href="Médiathèques">Médiathèque</a></li>
 			
 				<li>
 					<a href="Ajouter">Ajouter</a>
 					<ul>
-						<li><a href="Ajouter-Évènement">Évènement</a></li>
+						<li><a href="Ajouter-Événement">Événement</a></li>
 						<li><a href="Ajouter-Ressource">Ressource</a></li>
 						<li><a href="Ajouter-Projet">Projet</a></li>
 						<li><a href="Ajouter-Association">Association</a></li>
 						<li><a href="Ajouter-Annonce">Annonce</a></li>
-						<li><a href="Ajouter-Mediathèque">Médiathèque</a></li>
+						<li><a href="Ajouter-Médiathèque">Médiathèque</a></li>
 					</ul> 				
 				</li>
 		</ul>
