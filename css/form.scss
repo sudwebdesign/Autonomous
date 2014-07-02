@@ -44,6 +44,9 @@ main.present-ajouter h1{
 #médiathèque>h1>i{
 	@?include icon(book);
 }
+#mon_compte>h1{
+	@?include icon(th);
+}
 
 fieldset.geo-details{
 	>geo-completer{
