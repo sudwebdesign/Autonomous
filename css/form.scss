@@ -7,29 +7,6 @@
 @import 'jquery-ui/theme';
 @import 'form-dom';
 
-geo-completer{
-	@?include grid(*,100);
-	//@?include grid(0-55-0,2-43-0,960px);
-	
-	>*{
-		&:nth-child(1){
-			display:none;
-		}
-		&:nth-child(2){
-			@?include grid(*,100);
-			@?include grid(
-				50,50,
-				50,50,
-				50,50,
-				50,50,
-				50,50,
-				50,50,
-				50,50,
-				50,50,
-			480px);
-		}
-	}
-}
 
 body>main>form{
 	>fieldset{
@@ -66,4 +43,35 @@ main.present-ajouter h1{
 }
 #médiathèque>h1>i{
 	@?include icon(book);
+}
+
+fieldset.geo-details{
+	>geo-completer{
+		@?include grid(0-55-0,2-43-0,960px);
+		>*:nth-child(2){
+			display:block !important;
+		}
+	}
+}
+geo-completer{
+	@?include grid(*,100);
+	
+	>*{
+		&:nth-child(1){
+		}
+		&:nth-child(2){
+			display:none;
+			@?include grid(*,100);
+			@?include grid(
+				50,50,
+				50,50,
+				50,50,
+				50,50,
+				50,50,
+				50,50,
+				50,50,
+				50,50,
+			480px);
+		}
+	}
 }

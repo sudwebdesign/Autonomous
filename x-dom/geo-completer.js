@@ -19,7 +19,7 @@ $js([
 			var input_lng = geocompleter.find('input[type=number][step=any]:eq(1)');
 			var input_rayon = geocompleter.find('input[type=number][step][step!=any]:eq(0)');
 			var input = geocompleter.find('input[type=text][name*=label]');
-			var input_address = geocompleter.find('input[type=text]:[name*=address]');
+			var input_address = geocompleter.find('input[type=text][name*=address]');
 			var input_city = geocompleter.find('input[type=text][name*=city]');
 			var input_country = geocompleter.find('input[type=text][name*=country]');
 			var input_region = geocompleter.find('input[type=text][name*=arealevel1]');
