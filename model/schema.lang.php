@@ -16,8 +16,14 @@ CsvImporter::importation('lang',
 		'utf8_encode'=>true,
 		//'debug'=>1,
 		'callback'=>function(&$data,&$continue){
-			if(!$data['label'])
+			static $labels = array();
+			if(!$data['label']||in_array($data['label'],$labels)){
 				$continue = true;
+				return;
+			}
+			$labels[] = $data['label'];
+			$data['nameEn'] = ucfirst(@$data['nameEn']);
+			$data['nameFr'] = ucfirst(@$data['nameFr']);
 		}
 	)
 );
