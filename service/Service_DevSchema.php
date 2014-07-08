@@ -33,4 +33,9 @@ class Service_DevSchema{
 		fclose($fh);
 		print "$y/$i entry";
 	}
+	static function geoname(){
+		//\model\R::wipe('geoname');
+		set_time_limit(0);
+		include control::$CWD.'/model/schema.geoname.php';
+	}
 }
