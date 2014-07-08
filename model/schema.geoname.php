@@ -7,7 +7,7 @@ CsvImporter::importation('geoname',
 		'geonameid', //         : integer id of record in geonames database
 		'name', //              : name of geographical point (utf8) varchar(200)
 		'nameFind', //          : name of geographical point in plain ascii characters, varchar(200)
-		'namesAlt', //          : alternatenames, comma separated, ascii names automatically transliterated, convenience attribute from alternatename table, varchar(8000)
+		'xownGeoalt', //          : alternatenames, comma separated, ascii names automatically transliterated, convenience attribute from alternatename table, varchar(8000)
 		'lat', //               : latitude in decimal degrees (wgs84)
 		'lng', //               : longitude in decimal degrees (wgs84)
 		'featureClass', //      : see http://www.geonames.org/export/codes.html, char(1)
@@ -36,8 +36,12 @@ CsvImporter::importation('geoname',
 			$uns[] = $data['name'];
 			$data['name'] = (string)$data['name'];
 			$data['nameFind'] = strtolower($data['nameFind']);
-			$data['xownGeoalt'] = explode(',',$data['namesAlt']);
-			unset($data['namesAlt']);
+
+			$x = explode(',',$data['xownGeoalt']);
+			$data['xownGeoalt'] = array();
+			foreach($x as $v)
+				$data['xownGeoalt'][] = R::newOne('geoalt',array('name'=>$v));
+			
 			$data['lat'] = (float)$data['lat'];
 			$data['lng'] = (float)$data['lng'];
 			$data['population'] = $data['population']?(int)$data['population']:null;
