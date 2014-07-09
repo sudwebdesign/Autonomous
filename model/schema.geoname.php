@@ -40,7 +40,8 @@ CsvImporter::importation('geoname',
 			$x = explode(',',$data['xownGeoalt']);
 			$data['xownGeoalt'] = array();
 			foreach($x as $v)
-				$data['xownGeoalt'][] = R::newOne('geoalt',array('name'=>$v));
+				if(trim($v))
+					$data['xownGeoalt'][] = R::newOne('geoalt',array('name'=>$v));
 			
 			$data['lat'] = (float)$data['lat'];
 			$data['lng'] = (float)$data['lng'];

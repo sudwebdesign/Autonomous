@@ -75,7 +75,7 @@ $js([
 				input_rayon.val('');
 				input_validate.val('false');
 			});
-			input_lat.on('input',updatePosition);
+			//input_lat.on('input',updatePosition);
 			input_lng.on('input',updatePosition);
 			input_rayon.on('input',function(){
 				var val = $(this).val();

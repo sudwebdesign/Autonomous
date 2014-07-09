@@ -1,6 +1,7 @@
 <?php namespace present;
 use view;
 use model;
+use model\Query;
 use model\R;
 use control\str;
 use model\Table_Taxonomy as taxonomy;
@@ -65,7 +66,7 @@ class liste extends \present{
 			'locality',
 			'tag',
 		));
-		$q = model::getQuote();
+		$q = '"';
 		foreach((array)$this->find->texts as $t){
 			$cols = array(
 				'title',
@@ -90,7 +91,7 @@ class liste extends \present{
 		$this->selectTruncation('presentation',369);
 	}
 	protected function selectTruncation($col,$truncation=369){
-		$q = model::getQuote();
+		$q = '"';
 		$c = $q.$this->taxonomy.$q.'.'.$q.$col.$q;
 		$this->sqlQuery['select'][] = "SUBSTRING($c,1,$truncation) as $col";
 		$this->sqlQuery['select'][] = "LENGTH($c) as {$col}_length";
@@ -110,7 +111,7 @@ class liste extends \present{
 			$this->pushJoinWhere($table.'.id IN(?)',$this->find->$k);
 	}
 	protected function pushJoinWhere($query,$params){ //helper method for findMotorCompo and pushJoinWhereFind
-		$this->sqlQuery['joinWhere'][] = model::multiSlots($query,(array)$params);
+		$this->sqlQuery['joinWhere'][] = Query::multiSlots($query,(array)$params);
 		foreach($params as $k=>$v)
 			if(is_integer($k))
 				$this->sqlParamsJoinWhere[] = $v;

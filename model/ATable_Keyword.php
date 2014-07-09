@@ -19,12 +19,12 @@ abstract class ATable_Keyword extends Table{
 		$ci = '';
 		$cie = '';
 		if($flag){
-			if($flag&model::FLAG_ACCENT_INSENSITIVE){
+			if($flag&Query::FLAG_ACCENT_INSENSITIVE){
 				$ci .= 'uaccent(';
 				$cie .= ')';
 				$find = str::unaccent($find);
 			}
-			if($flag&model::FLAG_CASE_INSENSITIVE){
+			if($flag&Query::FLAG_CASE_INSENSITIVE){
 				$ci .= 'LOWER(';
 				$cie .= ')';
 				$find = str::tolower($find);

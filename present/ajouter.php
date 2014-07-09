@@ -1,6 +1,7 @@
 <?php namespace present;
 use view;
 use model;
+use model\Query;
 use model\Control_Geocoding;
 use model\R;
 use control;
@@ -79,7 +80,7 @@ class ajouter extends \present{
 		if(isset($_POST['sharedTag'])&&is_array($_POST['sharedTag'])&&isset($_POST['sharedTag']['label'])&&trim($_POST['sharedTag']['label'])){
 			$max = 5;
 			$tags = explode(' ',strip_tags($_POST['sharedTag']['label']));
-			$taxonomyO = model::load('taxonomy',$this->taxonomy,model::FLAG_CASE_INSENSITIVE|model::FLAG_ACCENT_INSENSITIVE);
+			$taxonomyO = model::load('taxonomy',$this->taxonomy,Query::FLAG_CASE_INSENSITIVE|Query::FLAG_ACCENT_INSENSITIVE);
 			if(!$taxonomyO)
 				throw new \Exception(sprintf("Error: Taxonomy %s not found",$this->taxonomy));
 			foreach($tags as $i=>$tag){
