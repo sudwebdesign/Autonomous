@@ -29,10 +29,80 @@ class liste extends \present{
 	}
 	function dynamic(){
 		parent::dynamic();
-		$this->getParamsFromUri();
+		
+		$this->page = view::param('page');
+		$this->uri = $this->URI;
+		$this->subUri = (strrpos($this->URI,'s')===strlen($this->URI)-1?substr($this->URI,0,-1):$this->URI);
 
 		$this->query = new Query4D($this->taxonomy);
-		
+
+		$uriA = view::param();
+		$orderParams = array(
+			'(int)',
+			'geo',
+			'search',
+		);
+		$this->taxonomies = array();
+		foreach($orderParams as $logic){
+			switch($logic){
+				case '(int)':
+					foreach($uriA as $k=>$a)
+						if(is_integer($k)){
+							$this->taxonomies[] = $uriA[$k];
+							unset($uriA[$k]);
+						}
+						else
+							break;
+					
+				break;
+				case 'search':
+					
+				break;
+			}
+		}
+		foreach($uriA as $k=>$a){
+			if(is_integer($k)){
+				//if(!in_array()
+				//$orderParamsFact[] = $k;
+			}
+			else{
+				switch($k){
+					case '':
+					break;
+					case '':
+					break;
+					case '':
+					break;
+					case '':
+					break;
+					case '':
+					break;
+					default:
+					break;
+				}
+			}
+		}
+		$redirect = '';//var_dump($this->finders,$this->assocParams);exit;
+		foreach($this->finders as $fr){
+			if(!isset($this->assocParams[$fr]))
+				continue;
+			$this->assocParams[$fr]->sort(SORT_NATURAL|SORT_FLAG_CASE);
+			$redirect .= implode('|',(array)$this->assocParams[$fr]).'|';
+		}
+		$redirect = trim($redirect,'|');
+		if(trim(implode('|',(array)$this->keywords),'|')!=$redirect)
+			header('Location: '.$this->HREF.'|'.$redirect,true,301);
+			
+		//var_dump();exit;
+		$this->keywords = array();
+		$i = 0;
+		while(($param = view::param($i+=1))!==null){
+			$this->keywords[] = $param;
+			$this->uri .= '|'.$param;
+		}
+
+
+
 		$this->findMotorParams(); //IA
 		$this->findMotorCompo();
 		$this->countAll();
@@ -45,18 +115,6 @@ class liste extends \present{
 			$this->h1 .= ' - '.implode(' ',(array)$this->keywords);
 		if($this->page>1)
 			$this->h1 .= ' - page '.$this->page;
-	}
-	
-	protected function getParamsFromUri(){
-		$this->page = view::param('page');
-		$this->uri = $this->URI;
-		$this->keywords = array();
-		$i = 0;
-		while(($param = view::param($i+=1))!==null){
-			$this->keywords[] = $param;
-			$this->uri .= '|'.$param;
-		}
-		$this->subUri = (strrpos($this->URI,'s')===strlen($this->URI)-1?substr($this->URI,0,-1):$this->URI);
 	}
 
 	protected $finders = array(
@@ -172,7 +230,7 @@ class liste extends \present{
 	}
 	
 	protected function countAll(){
-		$this->count = model::count4D($this->taxonomy,$this->sqlQuery,$this->sqlParams());
+		$this->count = $this->query->count($this->taxonomy,$this->sqlQuery,$this->sqlParams());
 	}
 	
 	protected function liste(){
@@ -180,7 +238,7 @@ class liste extends \present{
 			'limit'=>$this->limit,
 			'offset'=>$this->offset,
 		));
-		$this->liste = model::table4D($this->taxonomy,$this->sqlQueryListe,$this->sqlParams());
+		$this->liste = $this->query->table($this->taxonomy,$this->sqlQueryListe,$this->sqlParams());
 		$this->countListe = count($this->liste);
 	}
 	protected function findSrcImageItems(){

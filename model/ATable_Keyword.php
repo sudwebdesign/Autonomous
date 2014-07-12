@@ -3,7 +3,7 @@ use model;
 use control\str;
 abstract class ATable_Keyword extends Table{
 	static function findRewrite($find,&$rewrite){
-		$table = model::getClassModel(get_called_class());
+		$table = R::getClassModel(get_called_class());
 		$row = model::row($table,array(
 			'select'	=>array('id','label'),
 			'where'		=>'LOWER(uaccent(label)) = ?',
@@ -30,7 +30,7 @@ abstract class ATable_Keyword extends Table{
 				$find = str::tolower($find);
 			}
 		}
-		$table = model::getClassModel(get_called_class());
+		$table = R::getClassModel(get_called_class());
 		$method = $limit>1?'col':'cell';
 		return model::$method($table,array(
 			'select'	=>'id',

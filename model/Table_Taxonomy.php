@@ -1,6 +1,5 @@
 <?php namespace model;
 use model;
-use model\cache;
 use control\str;
 final class Table_Taxonomy extends ATable_Keyword{
 	function onUpdate(){
@@ -16,21 +15,11 @@ final class Table_Taxonomy extends ATable_Keyword{
 	//function onUpdated(){}
 	//function onDelete(){}
 	//function onDeleted(){}
-	static function getLabels(){
-		model::schemaAuto('taxonomy');
-		return cache::syncCol('taxonomy');
-	}
-	static function getLabelsI(){
-		$a = self::getLabels();
-		foreach($a as &$v)
-			$v = str::unaccent(str::tolower($v));
-		return $a;
-	}
 	static function getChildrenbyLabel($params=null){
-		model::schemaAuto('taxonomy');
+		R::schemaAuto('taxonomy');
 		if($params)
-			return cache::syncCol('taxonomy',array('where'=>'taxonomy_id=(SELECT id FROM taxonomy WHERE label=?)'),array($params));
+			return model::getAssoc('taxonomy',array('where'=>array('taxonomy_id=(SELECT id FROM taxonomy WHERE label=?)',array($params))));
 		else
-			return cache::syncCol('taxonomy');
+			return model::getAssoc('taxonomy',array('where'=>'taxonomy_id IS NULL'));
 	}
 }
