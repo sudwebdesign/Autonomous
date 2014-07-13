@@ -32,7 +32,8 @@ class liste extends \present{
 		$this->page = view::param('page');
 		$this->uri = $this->URI;
 		$this->subUri = (strrpos($this->URI,'s')===strlen($this->URI)-1?substr($this->URI,0,-1):$this->URI);
-
+		$this->imgDir = 'content/'.$this->taxonomy.'/';
+		
 		$this->Query = model::newFrom4D($this->taxonomy);
 
 		//findMotorParams
@@ -135,22 +136,13 @@ class liste extends \present{
 		$this->liste = $this->Query->fork()->limit($this->limit)->offset($this->offset)->getAll();
 		$this->countListe = count($this->liste);
 		
-		$this->findSrcImageItems();
 		$this->h1 = view::param(0);
 		if(!empty($this->keywords))
 			$this->h1 .= ' - '.implode(' ',(array)$this->keywords);
 		if($this->page>1)
 			$this->h1 .= ' - page '.$this->page;
 	}
-
-	
-	protected function findSrcImageItems(){
-		$this->imgsItems=array();
-		foreach($this->liste as $id=>$item){
-			$imgFolder = 'content/'.substr(str::unaccent(str::tolower(view::param(0))),0,-1).'/'.$item->id.'/';
-			$imgName = str_replace(' ','-',$item->title);
-			$imgsItem = glob($imgFolder."{".$imgName.".*}", GLOB_BRACE);
-			$this->imgsItems[$item->id] = $imgsItem;
-		}
+	function imageByItem($item){
+		return $this->imgDir.$item->id.'/'.view::filterParam($item->title).'.png';
 	}
 }

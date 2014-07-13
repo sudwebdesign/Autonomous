@@ -1,4 +1,3 @@
-<?use control\Truncating;?>
 <extend>
 	<css liste>
 	<attr selector="main" addClass="present-liste">
@@ -60,7 +59,9 @@
 				<?$href=$subUri.'|'.view::filterParam($item->title).'|'.$id;?>
 				<h2><a href="<?=$href?>"><?=$item->title?></a></h2>
 				<a href="<?=$href?>">
-					<if e="$imgsItems[$id]"><img src="<?=$imgsItems[$id][0]?>" alt="<?=$item->title?>" title="<?=$item->title?>" /></if>
+					<if e="$img=$THIS->imageByItem($item)">
+						<img src="<?=$img?>" alt="<?=$item->title?>" title="<?=$item->title?>" />
+					</if>
 					<?=$item->presentation?>
 					<if e="$item->presentation_length>strlen($item->presentation)">
 						<i>(En savoir plus ...)</i>

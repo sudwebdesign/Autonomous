@@ -56,7 +56,9 @@ class ajouter extends \present{
 				'width'=>'90',
 				'height'=>'90',
 				//'rename'=>true, //image by default
-				'rename'=>$bean->title,
+				'rename'=>view::filterParam($bean->title),
+				'extensions'=>array('png','jpg'),
+				'conversion'=>'png'
 			));
 			uploader::files('content/'.$type.'/'.$bean->id.'/','files');
 		});
