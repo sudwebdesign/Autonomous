@@ -133,7 +133,7 @@ class liste extends \present{
 		
 		$this->pagination();
 		
-		$this->liste = $this->Query->fork()->limit($this->limit)->offset($this->offset)->getAll();
+		$this->liste = $this->Query->fork()->limit($this->limit)->offset($this->offset)->table();
 		$this->countListe = count($this->liste);
 		
 		$this->h1 = view::param(0);

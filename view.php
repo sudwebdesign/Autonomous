@@ -2,7 +2,7 @@
 control::dev(
 	//control::dev_control //just for chrono and output error
 	control::dev_default //control+view+present+model
-	|control::dev_model_data
+	//|control::dev_model_data
 	//|control::dev_model_redbean
 	//|control::dev_model_sql
 	|control::dev_css
