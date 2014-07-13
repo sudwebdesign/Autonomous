@@ -6,7 +6,6 @@
 	<write main>
 		<article class="<?=$taxonomy?>s">
 			<h1><?=$URI?> : <?=$title?></h1>
-			<pre><?/*=$raw simple debug with magical __toString method of class control/ArrayObject*/?></pre>
 			<h2>Présentation : </h2>
 			<if e="$srcimg[0]"><img src="<?= $srcimg[0]?>" alt="<?=$title?>" title="<?=$title?>" /></if>
 			<?=$presentation?>

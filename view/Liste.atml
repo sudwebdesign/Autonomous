@@ -9,7 +9,7 @@
 				<fieldset>
 					<legend>Thématiques</legend>
 					<input type="text" is="tagsinput" name="search" placeholder="" data-minchar="4" data-maxchar="25" data-max="5" data-url="service/autocomplete/taxonomy?label=<?=$taxonomy?>"
-						value="<?=implode(' ',$assocParams->submerge('taxonomyId','tagId','text')->getArray())?>"
+						value="<?=implode(' ',$find->submerge('taxonomyId','tagId','text')->getArray())?>"
 					/>
 					<?$dynVar='taxonomy'.ucfirst($taxonomy);?>
 					<if e="isset($$dynVar)">
