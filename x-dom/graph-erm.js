@@ -1,6 +1,7 @@
 $css('joint');
 $js(true,['joint','joint.shapes.erd'],function(){
 	$('graph-erm').each(function(){
+		var paperDom = $('#paper');
 		// create the model for the E-R diagram
 		var nodeDataArray = [];
 		var linkDataArray = [];
@@ -41,11 +42,12 @@ $js(true,['joint','joint.shapes.erd'],function(){
 		var graph = new joint.dia.Graph;
 
 		var paper = new joint.dia.Paper({
-			el: $('#paper'),
+			el: paperDom,
 			width: 800,
 			height: 600,
 			gridSize: 1,
-			model: graph
+			model: graph,
+			interactive: false
 		});
 
 		var erd = joint.shapes.erd;
@@ -89,6 +91,6 @@ $js(true,['joint','joint.shapes.erd'],function(){
 		link(wage, amount);
 		link(wage, date);
 
-		
+		paper.$el.css('pointer-events', 'none'); //freeze
 	});
 });
