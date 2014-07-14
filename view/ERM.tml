@@ -1,0 +1,21 @@
+<graph-erm>
+	<eval>
+	<?='<table date>
+		<col start />
+		<col end />
+	</table>
+	<table evenement>
+	</table>
+	<table taxonomy>
+	</table>
+	<table user>
+		<col email />
+	</table>
+	<link date evenement text="" toText="">
+	<link evenement user text="" toText="">
+	<link evenement taxonomy" text="" toText="">'?>
+	</eval>
+</graph-erm>
+<div id="sample">
+	<div id="myDiagram" style="background-color: white; border: solid 1px black; width: 100%; height: 700px"></div>
+</div>
