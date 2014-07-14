@@ -48,7 +48,14 @@ main.present-ajouter h1{
 #mon_compte>h1{
 	@?include icon(th);
 }
+.geo-details > legend:nth-child(1) > small:nth-child(1) > a:nth-child(1){
+	@?include icon(minus,after);
+}
+small.geo-toggle > a:nth-child(1){
+	float:right;
+	@?include icon(plus,after);
 
+}
 fieldset.geo-details{
 	>geo-completer{
 		@?include grid(0-55-0,2-43-0,960px);
