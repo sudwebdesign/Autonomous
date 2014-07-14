@@ -1,5 +1,5 @@
-$js('go');
-$js('jquery',function(){
+$css('joint');
+$js(true,['joint','joint.shapes.erd'],function(){
 	$('graph-erm').each(function(){
 		// create the model for the E-R diagram
 		var nodeDataArray = [];
@@ -37,102 +37,58 @@ $js('jquery',function(){
 		});
 		//console.log(nodeDataArray);
 		//console.log(linkDataArray);
-		$js('go',function(){
-			var $ = go.GraphObject.make;  // for conciseness in defining templates
-			myDiagram = $(go.Diagram, "myDiagram", {  // must name or refer to the DIV HTML element
-				initialContentAlignment: go.Spot.Center,
-				allowDelete: false,
-				allowCopy: false,
-				layout: $(go.ForceDirectedLayout),
-				"undoManager.isEnabled": true
-			});
 
-			// define several shared Brushes
-			var bluegrad = $(go.Brush, go.Brush.Linear, { 0: "rgb(150, 150, 250)", 0.5: "rgb(86, 86, 186)", 1: "rgb(86, 86, 186)" });
-			var greengrad = $(go.Brush, go.Brush.Linear, { 0: "rgb(158, 209, 159)", 1: "rgb(67, 101, 56)" });
-			var redgrad = $(go.Brush, go.Brush.Linear, { 0: "rgb(206, 106, 100)", 1: "rgb(180, 56, 50)" });
-			var yellowgrad = $(go.Brush, go.Brush.Linear, { 0: "rgb(254, 221, 50)", 1: "rgb(254, 182, 50)" });
-			var lightgrad = $(go.Brush, go.Brush.Linear, { 1: "#E6E6FA", 0: "#FFFAF0" });
+		var graph = new joint.dia.Graph;
 
-			// the template for each attribute in a node's array of item data
-			var itemTempl = $(go.Panel, "Horizontal",
-				$(go.Shape,{
-					desiredSize: new go.Size(10, 10)
-				},
-				new go.Binding("figure", "figure"),
-				new go.Binding("fill", "color")),
-				$(go.TextBlock,{
-					stroke: "#333333",
-					font: "bold 14px sans-serif"
-				},
-				new go.Binding("text", "", go.Binding.toString))
-			);
-
-			// define the Node template, representing an entity
-			myDiagram.nodeTemplate = $(go.Node, "Auto",{  // the whole node panel
-				selectionAdorned: true,
-				resizable: true,
-				layoutConditions: go.Part.LayoutStandard & ~go.Part.LayoutNodeSized,
-				fromSpot: go.Spot.AllSides,
-				toSpot: go.Spot.AllSides,
-				isShadowed: true,
-				shadowColor: "#C5C1AA" },
-				new go.Binding("location", "location").makeTwoWay(),
-				// define the node's outer shape, which will surround the Table
-				$(go.Shape, "Rectangle",{ fill: lightgrad, stroke: "#756875", strokeWidth: 3 }),
-				$(go.Panel, "Table",{ margin: 8, stretch: go.GraphObject.Fill },
-					$(go.RowColumnDefinition, { row: 0, sizing: go.RowColumnDefinition.None }),
-					// the table header
-					$(go.TextBlock,{ row: 0, alignment: go.Spot.Center,font: "bold 16px sans-serif" }, new go.Binding("text", "key")),
-					// the list of Panels, each showing an attribute
-					$(go.Panel, "Vertical",{
-							row: 1,
-							padding: 3,
-							alignment: go.Spot.TopLeft,
-							defaultAlignment: go.Spot.Left,
-							stretch: go.GraphObject.Horizontal,
-							itemTemplate: itemTempl
-						},
-						new go.Binding("itemArray", "items")
-					)
-				)// end Table Panel
-			);  // end Node
-
-			// define the Link template, representing a relationship
-			myDiagram.linkTemplate = $(go.Link,  // the whole link panel
-				{
-					selectionAdorned: true,
-					layerName: "Foreground",
-					reshapable: true,
-					routing: go.Link.AvoidsNodes,
-					corner: 5,
-					curve: go.Link.JumpOver
-				},
-				$(go.Shape,{  // the link shape
-					isPanelMain: true,
-					stroke: "#303B45",
-					strokeWidth: 2.5
-				}),
-				$(go.TextBlock, { // the "from" label
-					textAlign: "center",
-					font: "bold 14px sans-serif",
-					stroke: "#1967B3",
-					segmentIndex: 0,
-					segmentOffset: new go.Point(NaN, NaN),
-					segmentOrientation: go.Link.OrientUpright
-				},
-				new go.Binding("text", "text")),
-				$(go.TextBlock,{  // the "to" label
-					textAlign: "center",
-					font: "bold 14px sans-serif",
-					stroke: "#1967B3",
-					segmentIndex: -1,
-					segmentOffset: new go.Point(NaN, NaN),
-					segmentOrientation: go.Link.OrientUpright
-				},
-				new go.Binding("text", "toText"))
-			);
-			myDiagram.model = new go.GraphLinksModel(nodeDataArray, linkDataArray);
+		var paper = new joint.dia.Paper({
+			el: $('#paper'),
+			width: 800,
+			height: 600,
+			gridSize: 1,
+			model: graph
 		});
+
+		var erd = joint.shapes.erd;
+
+		var element = function(elm, x, y, label) {
+			var cell = new elm({ position: { x: x, y: y }, attrs: { text: { text: label }}});
+			graph.addCell(cell);
+			return cell;
+		};
+
+		var link = function(elm1, elm2) {
+			var myLink = new erd.Line({ source: { id: elm1.id }, target: { id: elm2.id }});
+			graph.addCell(myLink);
+			return myLink;
+		};
+
+		var employee = element(erd.Entity, 100, 200, "Employee");
+		var salesman = element(erd.Entity, 100, 400, "Salesman");
+		var wage = element(erd.WeakEntity, 530, 200, "Wage");
+		var paid = element(erd.IdentifyingRelationship, 350, 190, "gets paid");
+		var isa = element(erd.ISA, 125, 300, "ISA");
+		var number = element(erd.Key, 0, 90, "number");
+		var nameEl = element(erd.Normal, 75, 30, "name");
+		var skills = element(erd.Multivalued, 150, 90, "skills");
+		var amount = element(erd.Derived, 440, 80, "amount");
+		var date = element(erd.Normal, 590, 80, "date");
+		var plate = element(erd.Key, 405, 500, "plate");
+		var car = element(erd.Entity, 430, 400, "Company car");
+		var uses = element(erd.Relationship, 300, 390, "uses");
+
+		link(employee, paid).cardinality('1');
+		link(employee, number);
+		link(employee, nameEl);
+		link(employee, skills);
+		link(employee, isa);
+		link(isa, salesman);
+		link(salesman, uses).cardinality('0..1');;
+		link(car, uses).cardinality('1..1');
+		link(car, plate);
+		link(wage, paid).cardinality('N');
+		link(wage, amount);
+		link(wage, date);
+
+		
 	});
 });

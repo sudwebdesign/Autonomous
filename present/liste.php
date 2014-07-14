@@ -12,28 +12,17 @@ use control\ArrayObject;
 use view\Exception as View_Exception;
 class liste extends \present{
 	use Mixin_Pagination;
-	
 	protected $limitation				= 5;
-	protected $finders = array(
-		'taxonomyId',
-		'localityId',
-		'tagId',
-		'texts',
-	);
-	
 	function assign(){
 		parent::assign();
 		$this->taxonomy = end($this->presentNamespaces);
-		
 	}
 	function dynamic(){
 		parent::dynamic();
-		
 		$this->page = view::param('page');
 		$this->uri = $this->URI;
 		$this->subUri = (strrpos($this->URI,'s')===strlen($this->URI)-1?substr($this->URI,0,-1):$this->URI);
 		$this->imgDir = 'content/'.$this->taxonomy.'/';
-		
 		$this->Query = model::newFrom4D($this->taxonomy);
 
 		//findMotorParams
@@ -83,18 +72,18 @@ class liste extends \present{
 				}
 			}
 		}
-		$redirect = '';
-		foreach($this->finders as $fr){
-			if(!isset($this->assocParams[$fr]))
-				continue;
-			$this->assocParams[$fr]->sort(SORT_NATURAL|SORT_FLAG_CASE);
-			$redirect .= implode('|',(array)$this->assocParams[$fr]).'|';
-		}
-		$redirect = trim($redirect,'|');
-		if(trim(implode('|',(array)$this->keywords),'|')!=$redirect){
-			header('Location: '.$this->HREF.'|'.$redirect,true,301);
-			exit;
-		}
+		//$redirect = '';
+		//foreach($this->finders as $fr){
+			//if(!isset($this->assocParams[$fr]))
+				//continue;
+			//$this->assocParams[$fr]->sort(SORT_NATURAL|SORT_FLAG_CASE);
+			//$redirect .= implode('|',(array)$this->assocParams[$fr]).'|';
+		//}
+		//$redirect = trim($redirect,'|');
+		//if(trim(implode('|',(array)$this->keywords),'|')!=$redirect){
+			//header('Location: '.$this->HREF.'|'.$redirect,true,301);
+			//exit;
+		//}
 		$this->keywords = array();
 		$i = 0;
 		while(($param = view::param($i+=1))!==null){
@@ -133,7 +122,7 @@ class liste extends \present{
 		
 		$this->pagination();
 		
-		$this->liste = $this->Query->fork()->limit($this->limit)->offset($this->offset)->table();
+		$this->liste = $this->Query->limit($this->limit,$this->offset)->table();
 		$this->countListe = count($this->liste);
 		
 		$this->h1 = view::param(0);
