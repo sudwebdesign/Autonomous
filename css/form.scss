@@ -54,7 +54,14 @@ main.present-ajouter h1{
 small.geo-toggle > a:nth-child(1){
 	float:right;
 	@?include icon(plus,after);
-
+	text-decoration: none;
+	padding: 0.2618em;//6px 12px;
+	color: #555;
+	background-color: #FFF;
+	background-image: none; // Reset unusual Firefox-on-Android default style; see https://github.com/necolas/normalize.css/issues/214
+	border: 1px solid #555;
+	border-radius: 4px;
+	@include box-shadow(inset 0 1px 1px rgba(0,0,0,.075));
 }
 fieldset.geo-details{
 	>geo-completer{
