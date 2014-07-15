@@ -16,4 +16,13 @@
 	<link evenement taxonomy" text="" toText="">'?>
 	</eval>
 </graph-erm>
-<div id="paper" class="paper"></div>
+<style>
+	#myDiagram {
+		font-family: helvetica;
+		font-size: 14px;
+		width: 600px;
+		height: 600px;
+		border: 1px solid #888;
+	}
+</style>
+<div id="myDiagram"></div>
