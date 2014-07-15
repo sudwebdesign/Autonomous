@@ -16,51 +16,39 @@ $js(true,[
 			$(this).find('col').each(function(){
 				cols.push($(this).attr('name'));
 			});
-			
 			var name = $(this).attr('name');
-			var figure = $(this).attr('figure');
-			var color = $(this).attr('color');
-			if(!figure)
-				figure = 'ellipse'; //ellipse,rectangle,octagon,triangle
-			if(!color)
-				color = '#86B342';
 			nodeDataArray.push({
 				'data':{
 					'id':name,
 					'name':name,
-					//'weight':$(this).attr('weight'),
-					//'faveColor':color,
-					//'faveShape':figure
 					'theCols':cols
 				},
 			});
-		}).remove();
+		});
 		THIS.find('link').each(function(){
-			var strength = $(this).attr('strength');
-			//if(!strength)
-				//strength = 40;
 			linkDataArray.push({
 				'data':{
 					'source':$(this).attr('from'),
-					'target':$(this).attr('to'),
-					//'strength':strength,
+					'target':$(this).attr('to')
 				}
 			});
-		}).remove();
+		});
 		//console.log(nodeDataArray);
 		//console.log(linkDataArray);
 		
-		$('#myDiagram').cytoscape({
+		$(this).empty().cytoscape({
 			style: cytoscape.stylesheet()
 				.selector('node')
 					.css({
 						'content': 'data(name)',
+						'font-size': '0.8em',
 						'text-valign': 'center',
-						'color': 'white',
-						'text-outline-width': 1,
+						'color': '#FFF',
+						'text-outline-width': 0.2,
 						'text-outline-color': '#888',
-						'height': '20px',
-						'width': '20px',
+						'height': '5em',
+						'width': '5em',
+						'background-color': '#86B342',
 					})
 				.selector('edge')
 					.css({
@@ -94,7 +82,7 @@ $js(true,[
 				nodeRepulsion       : 10000, // Node repulsion (non overlapping) multiplier
 				nodeOverlap         : 100, // Node repulsion (overlapping) multiplier
 				idealEdgeLength     : 10, // Ideal edge (non nested) length
-				edgeElasticity      : 100, // Divisor to compute edge forces
+				edgeElasticity      : 10, // Divisor to compute edge forces
 				nestingFactor       : 5,  // Nesting factor (multiplier) to compute ideal edge length for nested edges
 				gravity             : 250,  // Gravity force (constant)
 				numIter             : 100, // Maximum number of iterations to perform

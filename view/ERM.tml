@@ -1,28 +1,20 @@
-<graph-erm>
-	<eval>
-	<?='<table date>
-		<col start />
-		<col end />
-	</table>
-	<table evenement>
-	</table>
-	<table taxonomy>
-	</table>
-	<table user>
-		<col email />
-	</table>
-	<link date evenement text="" toText="">
-	<link evenement user text="" toText="">
-	<link evenement taxonomy" text="" toText="">'?>
-	</eval>
-</graph-erm>
-<style>
-	#myDiagram {
-		font-family: helvetica;
-		font-size: 14px;
-		width: 600px;
-		height: 600px;
-		border: 1px solid #888;
-	}
-</style>
-<div id="myDiagram"></div>
+<extend>
+	<main>
+		<graph-erm>
+			<table date>
+				<col start />
+				<col end />
+			</table>
+			<table evenement>
+			</table>
+			<table taxonomy>
+			</table>
+			<table user>
+				<col email />
+			</table>
+			<link date evenement>
+			<link evenement user>
+			<link evenement taxonomy>		
+		</graph-erm>
+	</main>
+</extend>
