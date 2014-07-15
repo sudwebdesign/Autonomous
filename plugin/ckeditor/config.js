@@ -25,11 +25,13 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'colors' },
 		{ name: 'about' }
 	];
+	
+	config.toolbarCanCollapse = true;
+	config.toolbarStartupExpanded = false;
 
 	// Remove some buttons provided by the standard plugins, which are
 	// not needed in the Standard(s) toolbar.
 	config.removeButtons = 'Underline,Subscript,Superscript';
-
 	// Set the most common block elements.
 	config.format_tags = 'p;h3;h4;h5;pre';
 
@@ -38,5 +40,5 @@ CKEDITOR.editorConfig = function( config ) {
 	
 	config.language_list = ['fr:French'];
 	
-	config.removeFormatTags = 'h1,h2,h3,b,big,code,del,dfn,em,font,i,ins,kbd,q,s,samp,small,span,strike,strong,sub,sup,tt,u,var';
+	config.removeFormatTags = 'h1,h2,b,big,code,del,dfn,em,font,i,ins,kbd,q,s,samp,small,span,strike,strong,sub,sup,tt,u,var';
 };

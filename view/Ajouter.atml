@@ -49,7 +49,7 @@
 				<input type="file" name="files[]" accept="application/*,text/*,image/*" title="Sélectionner des Fichiers" multiple />
 			</fieldset>
 			<fieldset>
-				<legend>Localité <small><a href="javascript:;" onclick="$(this).closest('fieldset').toggleClass('geo-details');">détails</a></small></legend>
+				<legend>Localité <small class="geo-toggle"><a href="javascript:;" onclick="$(this).closest('fieldset').toggleClass('geo-details');">détails</a></small></legend>
 				<geo-completer>
 					<fieldset>
 						<input name="xownGeopoint[label]" type="text" placeholder="Rechercher un lieu, une adresse ou une commune" value="">
