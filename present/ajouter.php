@@ -82,7 +82,7 @@ class ajouter extends \present{
 		if(isset($_POST['sharedTag'])&&is_array($_POST['sharedTag'])&&isset($_POST['sharedTag']['label'])&&trim($_POST['sharedTag']['label'])){
 			$max = 5;
 			$tags = explode(' ',strip_tags($_POST['sharedTag']['label']));
-			$taxonomyO = model::load('taxonomy',$this->taxonomy,Query::FLAG_CASE_INSENSITIVE|Query::FLAG_ACCENT_INSENSITIVE);
+			$taxonomyO = R::load('taxonomy',$this->taxonomy,Query::FLAG_CASE_INSENSITIVE|Query::FLAG_ACCENT_INSENSITIVE);
 			if(!$taxonomyO)
 				throw new \Exception(sprintf("Error: Taxonomy %s not found",$this->taxonomy));
 			foreach($tags as $i=>$tag){
@@ -91,12 +91,12 @@ class ajouter extends \present{
 				$tag = view::filterParam($tag);
 				if(empty($tag))
 					continue;
-				if($t=model::load('taxonomy',$tag)){
+				if($t=R::load('taxonomy',$tag)){
 					if(isset($user))
 						$t->sharedUser[] = $user;
 					$bean->sharedTaxonomy[] = $t;
 				}
-				elseif($t=model::load('tag',$tag)){
+				elseif($t=R::load('tag',$tag)){
 					$t->sharedTaxonomy[] = $taxonomyO;
 					if(isset($user))
 						$t->sharedUser[] = $user;
