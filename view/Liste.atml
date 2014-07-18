@@ -7,7 +7,7 @@
 			<form method="GET" action="<?=view::param(0)?>">
 				<fieldset>
 					<legend>Thématiques</legend>
-					<input type="text" is="tagsinput" name="search" placeholder="" data-minchar="4" data-maxchar="25" data-max="5" data-url="service/autocomplete/taxonomy?label=<?=$taxonomy?>"
+					<input type="text" is="tagsinput" name="search" placeholder="" data-minchar="4" data-maxchar="25" data-max="5" data-url="service/autocomplete/taxonomy?name=<?=$taxonomy?>"
 						value="<?=implode(' ',$find->submerge('taxonomyId','tagId','text')->getArray())?>"
 					/>
 					<?$dynVar='taxonomy'.ucfirst($taxonomy);?>
@@ -67,7 +67,7 @@
 						<i>(En savoir plus ...)</i>
 					</if>
 				</a>
-				<?$tags=$item->groupKey(array('taxonomy','locality','tag'),'label',true);?>
+				<?$tags=$item->groupKey(array('taxonomy','locality','tag'),'name',true);?>
 				<if e="$tags->count()">
 					<ul class="tags">
 						<?foreach($tags as $tag):?>

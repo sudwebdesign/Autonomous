@@ -39,10 +39,10 @@ foreach(array(
 	),
 	'Association'=>array(),
 	'Médiathèque'=>array(),
-) as $label=>$v){
+) as $name=>$v){
 	$a2 = array();
-	foreach($v as $label2)
-		$a2[] = array('type'=>'taxonomy','label'=>$label2);
-	$a[] = array('type'=>'taxonomy','label'=>$label,'ownTaxonomy'=>$a2);
+	foreach($v as $name2)
+		$a2[] = array('type'=>'taxonomy','name'=>$name2);
+	$a[] = array('type'=>'taxonomy','name'=>$name,'ownTaxonomy'=>$a2);
 }
 return $a;

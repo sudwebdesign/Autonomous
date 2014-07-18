@@ -27,9 +27,9 @@
 						<if e="$imgsItems[$taxonomy][$id]"><img src="<?= $imgsItems[$taxonomy][$id][0]?>" alt="<?=$item->title?>" title="<?=$item->title?>" /></if>
 						<?=Truncating::truncatehtml($item->presentation);?>
 					</a>
-					<if e="(array)@$item->groupKey(array('taxonomy','locality','tag'),'label',true)">
+					<if e="(array)@$item->groupKey(array('taxonomy','locality','tag'),'name',true)">
 						<ul class="tags">
-							<?foreach($item->groupKey(array('taxonomy','locality','tag'),'label',true) as $tag):?>
+							<?foreach($item->groupKey(array('taxonomy','locality','tag'),'name',true) as $tag):?>
 								<li><h5><a href="<?=$taxonomy.'|'.$tag?>"><?=$tag?></a></h5></li>
 								<?$allLinks[] = '<a href="'.$URI.'|'.$tag.'"> '.$tag.' </a>';?>
 							<?endforeach;?>

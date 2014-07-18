@@ -3,7 +3,7 @@ use control;
 use control\CsvImporter;
 CsvImporter::importation('country',
 	array(
-		'label',
+		'name',
 		'nameEn',
 		'nameFr',
 		'nameEs',

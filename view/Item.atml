@@ -15,7 +15,7 @@
 			<!-- <p><i>Créé le : </i><?=date('l jS F Y \à H:i:s',strtotime($création))?></p> -->
 			<p><i>Créé le : </i><?=strftime('%A %e %B %G à %k:%M:%S',strtotime($création))?></p>
 			<hr />
-			<?$tags=$raw->groupKey(array('taxonomy','locality','tag'),'label',true);?>
+			<?$tags=$raw->groupKey(array('taxonomy','locality','tag'),'name',true);?>
 			<if e="$tags->count()">
 				<ul class="tags">
 					<?foreach($tags as $tag):?>

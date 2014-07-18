@@ -5,14 +5,14 @@ abstract class ATable_Keyword extends Table{
 	static function findRewrite($find,&$rewrite){
 		$table = R::getClassModel(get_called_class());
 		$row = model::row($table,array(
-			'select'	=>array('id','label'),
-			'where'		=>'LOWER(uaccent(label)) = ?',
+			'select'	=>array('id','name'),
+			'where'		=>'LOWER(uaccent(name)) = ?',
 			'limit'		=>1,
 		),array(strtolower(str::unaccent($find))));
 		if(!$row)
 			return;
-		if($row['label']!=$find)
-			$rewrite = $row['label'];
+		if($row['name']!=$find)
+			$rewrite = $row['name'];
 		return $row['id'];
 	}
 	static function find($find,$limit=1,$flag=0){
@@ -34,7 +34,7 @@ abstract class ATable_Keyword extends Table{
 		$method = $limit>1?'col':'cell';
 		return model::$method($table,array(
 			'select'	=>'id',
-			'where'		=>$ci.'label'.$cie.' = :equal OR '.$ci.'label'.$cie.' LIKE :like',
+			'where'		=>$ci.'name'.$cie.' = :equal OR '.$ci.'name'.$cie.' LIKE :like',
 			'limit'		=>$limit,
 			'order_by'	=>'created DESC',
 		),array(

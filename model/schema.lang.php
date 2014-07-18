@@ -3,7 +3,7 @@ use control;
 use control\CsvImporter;
 CsvImporter::importation('lang',
 	array(
-		'label',
+		'name',
 		'nameEn',
 		'nameFr',
 	),
@@ -16,12 +16,12 @@ CsvImporter::importation('lang',
 		'utf8_encode'=>true,
 		//'debug'=>1,
 		'callback'=>function(&$data,&$continue){
-			static $labels = array();
-			if(!$data['label']||in_array($data['label'],$labels)){
+			static $names = array();
+			if(!$data['name']||in_array($data['name'],$names)){
 				$continue = true;
 				return;
 			}
-			$labels[] = $data['label'];
+			$names[] = $data['name'];
 			$data['nameEn'] = ucfirst(@$data['nameEn']);
 			$data['nameFr'] = ucfirst(@$data['nameFr']);
 		}

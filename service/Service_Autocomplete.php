@@ -31,7 +31,7 @@ class Service_Autocomplete {
 		$results = array();
 		if(isset($_GET['term'])&&strlen($term=trim($_GET['term']))>=1){			
 			$taxonomy = model::col('taxonomy',array(
-				'where'=>'label LIKE ?',
+				'where'=>'name LIKE ?',
 				'limit'=>10,
 			),array(
 				$term.'%'
@@ -46,22 +46,22 @@ class Service_Autocomplete {
 	static function taxonomy(){
 		$results = array();
 		if(isset($_GET['term'])&&strlen($term=trim($_GET['term']))>=1){
-			if(isset($_GET['label'])&&($label=trim($_GET['label']))){
+			if(isset($_GET['name'])&&($name=trim($_GET['name']))){
 				//R::debug();
 				$tags = model::col('tag',array(
 					'joinOn'=>'taxonomy',
-					'where'=>'tag.label LIKE :like AND taxonomy.label=:taxonomy',
+					'where'=>'tag.name LIKE :like AND taxonomy.name=:taxonomy',
 					'limit'=>10,
 				),array(
 					':like'=>$term.'%',
-					':taxonomy'=>$label,
+					':taxonomy'=>$name,
 				));
 				$tags = array_values($tags);
 				$results = array_merge($results,$tags);
 			};
 			
 			$taxonomy = model::col('taxonomy',array(
-				'where'=>'label LIKE ?',
+				'where'=>'name LIKE ?',
 				'limit'=>10,
 			),array(
 				$term.'%'
