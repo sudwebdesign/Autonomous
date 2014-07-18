@@ -2,6 +2,7 @@
 use ReflectionClass;
 use ReflectionMethod;
 use control;
+use model\R;
 use control\CsvIterator;
 class Service_DevSchema{
 	static function method(){
@@ -10,6 +11,9 @@ class Service_DevSchema{
 		foreach($methods as $method)
 			if($method->name!=__FUNCTION__)
 				echo '<button onclick="document.location=\''.@$_SERVER['PATH_INFO'].'/'.$method->name.'\';">'.str_replace('_',' ',$method->name).'</button><br>';
+	}
+	static function countGeoname(){
+		echo R::getCell('SELECT COUNT(*) FROM geoname');
 	}
 	static function country(){
 		include control::$CWD.'/model/schema.country.php';
@@ -37,5 +41,10 @@ class Service_DevSchema{
 		//\model\R::wipe('geoname');
 		set_time_limit(0);
 		include control::$CWD.'/model/schema.geoname.php';
+	}
+	static function geonameHierarchy(){
+		set_time_limit(0);
+		include control::$CWD.'/model/schema.geonameHierarchy.php';
+		
 	}
 }

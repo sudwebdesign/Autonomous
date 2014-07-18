@@ -30,5 +30,6 @@ CsvImporter::importation('country',
 	array(
 		//'utf8_encode'=>false,
 		//'debug'=>1,
+		'freeze'=>true,
 	)
 );

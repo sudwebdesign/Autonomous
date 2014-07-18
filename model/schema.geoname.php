@@ -1,13 +1,12 @@
 <?php namespace model;
 use control;
 use control\CsvImporter;
-//https://github.com/petewarden/dstkdata/blob/master/worldcitiespop.csv and rename it in .data/city.csv without comments and cols first line, just data
 CsvImporter::importation('geoname',
 	array(
 		'geonameid', //         : integer id of record in geonames database
-		'name', //              : name of geographical point (utf8) varchar(200)
+		'label', //             : name of geographical point (utf8) varchar(200)
 		'nameFind', //          : name of geographical point in plain ascii characters, varchar(200)
-		'xownGeoalt', //          : alternatenames, comma separated, ascii names automatically transliterated, convenience attribute from alternatename table, varchar(8000)
+		'geoalt', //          : alternatenames, comma separated, ascii names automatically transliterated, convenience attribute from alternatename table, varchar(8000)
 		'lat', //               : latitude in decimal degrees (wgs84)
 		'lng', //               : longitude in decimal degrees (wgs84)
 		'featureClass', //      : see http://www.geonames.org/export/codes.html, char(1)
@@ -26,22 +25,25 @@ CsvImporter::importation('geoname',
 	),
 	null,
 	array(
-		'debug'=>3,
+		'freeze'=>true,
+		'checkUniq'=>false,
+		//'debug'=>2,
 		'separator'=>"\t",
 		'callback'=>function(&$data,&$continue){
-			static $uns = array();
-			$data['un'] = (string)$data['name'];
-			if(in_array($data['un'],$uns))
-				$data['un'] .= '-'.$data['geonameid'];
-			$uns[] = $data['name'];
-			$data['name'] = (string)$data['name'];
+			static $names = array();
+			$data['label'] = (string)$data['label'];
+			$data = array_merge(array('name'=>$data['label']),$data);
+			if(in_array($data['name'],$names))
+				$data['name'] .= '-'.$data['geonameid'];
+			$names[] = $data['name'];
 			$data['nameFind'] = strtolower($data['nameFind']);
-
-			$x = explode(',',$data['xownGeoalt']);
-			$data['xownGeoalt'] = array();
-			foreach($x as $v)
-				if(trim($v))
-					$data['xownGeoalt'][] = R::newOne('geoalt',array('name'=>$v));
+			
+			//$x = explode(',',$data['geoalt']);
+			unset($data['geoalt']);
+			//$data['xownGeoalt'] = array();
+			//foreach($x as $v)
+				//if(trim($v))
+					//$data['xownGeoalt'][] = R::newOne('geoalt',array('label'=>$v));
 			
 			$data['lat'] = (float)$data['lat'];
 			$data['lng'] = (float)$data['lng'];

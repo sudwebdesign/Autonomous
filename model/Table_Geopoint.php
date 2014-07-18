@@ -1,8 +1,8 @@
 <?php namespace model;
 final class Table_Geopoint extends Table{
 	var $columnPointCast	= 'point';
-	//var $columnPointWrite	= 'GeomFromText'; //MySql
-	//var $columnPointRead	= 'asText'; //MySql
+	//var $columnPointReadParam	= 'GeomFromText'; //MySql
+	//var $columnPointReadCol	= 'asText'; //MySql
 	//function onNew(){}
 	//function onCreate(){}
 	//function onDelete(){}
