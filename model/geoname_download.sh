@@ -1,5 +1,6 @@
 #!/bin/bash
 WORKPATH="${HOME}/tmp/GIS/gisnames/geodata"
+WORKPATH_DB="/var/www/geoname-data"
 TMPPATH="tmp"
 PCPATH="pc"
 PREFIX="_"
@@ -55,3 +56,14 @@ if [ $WORKPATH/$PCPATH/allCountries.zip -nt $WORKPATH/$PCPATH/allCountries$PREFI
 else
 	echo "| ....zip is already the latest version"
 fi
+
+cp "${WORKPATH}/${TMPPATH}/allCountries.txt" "${WORKPATH_DB}/geoname.csv"
+cp "${WORKPATH}/${PCPATH}/allCountries.txt" "${WORKPATH_DB}/geopostal.csv"
+cp "${WORKPATH}/${TMPPATH}/timeZones.txt.tmp" "${WORKPATH_DB}/geotimezone.csv"
+cp "${WORKPATH}/${TMPPATH}/featureCodes_en.txt" "${WORKPATH_DB}/geotype.csv"
+cp "${WORKPATH}/${TMPPATH}/admin1CodesASCII.txt" "${WORKPATH_DB}/geoarea1admin.csv"
+cp "${WORKPATH}/${TMPPATH}/admin2Codes.txt" "${WORKPATH_DB}/geoarea2admin.csv"
+cp "${WORKPATH}/${TMPPATH}/iso-languagecodes.txt.tmp" "${WORKPATH_DB}/geolang.csv"
+cp "${WORKPATH}/${TMPPATH}/countryInfo.txt.tmp" "${WORKPATH_DB}/geocountry.csv"
+cp "${WORKPATH}/${TMPPATH}/alternateNames.txt" "${WORKPATH_DB}/geoaltname.csv"
+#sed -i -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' "${WORKPATH_DB}/geoaltname.csv"
