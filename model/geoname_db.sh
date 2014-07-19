@@ -118,8 +118,8 @@ CREATE TABLE geotimezone (
 	raw_offset NUMERIC(3,1)
 );
 
-DROP TABLE continent;
-CREATE TABLE continent (
+DROP TABLE geocontinent;
+CREATE TABLE geocontinent (
 	id		 SERIAL PRIMARY KEY,
 	code		CHAR(2),
 	name		VARCHAR(20),
@@ -142,13 +142,13 @@ CREATE TABLE geopostal (
 	longitude	 FLOAT,
 	accuracy	SMALLINT
 );
-INSERT INTO continent (code,name,geoname_id) VALUES ('AF', 'Africa', 6255146);
-INSERT INTO continent (code,name,geoname_id) VALUES ('AS', 'Asia', 6255147);
-INSERT INTO continent (code,name,geoname_id) VALUES ('EU', 'Europe', 6255148);
-INSERT INTO continent (code,name,geoname_id) VALUES ('NA', 'North America', 6255149);
-INSERT INTO continent (code,name,geoname_id) VALUES ('OC', 'Oceania', 6255150);
-INSERT INTO continent (code,name,geoname_id) VALUES ('SA', 'South America', 6255151);
-INSERT INTO continent (code,name,geoname_id) VALUES ('AN', 'Antarctica', 6255152);
+INSERT INTO geocontinent (code,name,geoname_id) VALUES ('AF', 'Africa', 6255146);
+INSERT INTO geocontinent (code,name,geoname_id) VALUES ('AS', 'Asia', 6255147);
+INSERT INTO geocontinent (code,name,geoname_id) VALUES ('EU', 'Europe', 6255148);
+INSERT INTO geocontinent (code,name,geoname_id) VALUES ('NA', 'North America', 6255149);
+INSERT INTO geocontinent (code,name,geoname_id) VALUES ('OC', 'Oceania', 6255150);
+INSERT INTO geocontinent (code,name,geoname_id) VALUES ('SA', 'South America', 6255151);
+INSERT INTO geocontinent (code,name,geoname_id) VALUES ('AN', 'Antarctica', 6255152);
 
 
 ALTER TABLE ONLY geocountry
