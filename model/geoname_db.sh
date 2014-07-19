@@ -108,8 +108,8 @@ CREATE TABLE geotype (
 	description TEXT
 );
 
-DROP TABLE timezone;
-CREATE TABLE timezone (
+DROP TABLE geotimezone;
+CREATE TABLE geotimezone (
 	id		 SERIAL PRIMARY KEY,
 	countrycode CHAR(2),
 	time_zone VARCHAR(200),
@@ -156,7 +156,7 @@ ALTER TABLE ONLY geocountry
 
 copy geoname (id,name,asciiname,geoaltnames,latitude,longitude,fclass,fcode,country,cc2,admin1,admin2,admin3,admin4,population,elevation,gtopo30,timezone,moddate) from '${WORKPATH_DB}/geoname.csv' null as '';
 copy geopostal (countrycode,geopostal,placename,admin1name,admin1code,admin2name,admin2code,admin3name,admin3code,latitude,longitude,accuracy) from '${WORKPATH_DB}/geopostal.csv' null as '';
-copy timezone (countrycode,time_zone,gmt_offset,dst_offset,raw_offset) from '${WORKPATH_DB}/geotimezone.csv' null as '';
+copy geotimezone (countrycode,time_zone,gmt_offset,dst_offset,raw_offset) from '${WORKPATH_DB}/geotimezone.csv' null as '';
 copy geotype (code,name,description) from '${WORKPATH_DB}/geotype.csv' null as '';
 copy geoarea1admin (code,name,name_ascii,geoname_id) from '${WORKPATH_DB}/geoarea1admin.csv' null as '';
 copy geoarea2admin (code,name,name_ascii,geoname_id) from '${WORKPATH_DB}/geoarea2admin.csv' null as '';
