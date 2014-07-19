@@ -63,7 +63,7 @@ CREATE TABLE "geocountry" (
 	currency_name			CHAR(15),
 	phone					CHARACTER VARYING(20),
 	postal					CHARACTER VARYING(60),
-	postalRegex				CHARACTER VARYING(200),
+	postal_regex				CHARACTER VARYING(200),
 	languages				CHARACTER VARYING(200),
 	geoname_id				INT,
 	neighbours				CHARACTER VARYING(50),
@@ -161,10 +161,10 @@ copy geotype (code,name,description) from '${WORKPATH_DB}/geotype.csv' null as '
 copy geoarea1admin (code,name,name_ascii,geoname_id) from '${WORKPATH_DB}/geoarea1admin.csv' null as '';
 copy geoarea2admin (code,name,name_ascii,geoname_id) from '${WORKPATH_DB}/geoarea2admin.csv' null as '';
 copy geolang (iso_639_3,iso_639_2,iso_639_1,name) from '${WORKPATH_DB}/geolang.csv' null as '';
-copy geocountry (iso_alpha2,iso_alpha3,iso_numeric,fips_code,country,capital,areainsqkm,population,continent,tld,currency_code,currency_name,phone,postal,postalRegex,languages,geoname_id,neighbours,equivalent_fips_code) from '${WORKPATH_DB}/geocountry.csv' null as '';
+copy geocountry (iso_alpha2,iso_alpha3,iso_numeric,fips_code,country,capital,areainsqkm,population,continent,tld,currency_code,currency_name,phone,postal,postal_regex,languages,geoname_id,neighbours,equivalent_fips_code) from '${WORKPATH_DB}/geocountry.csv' null as '';
 copy geoaltname (geoname_id,geoaltnameid,iso_language,name,is_preferred_name,is_short_name,unknow1,unknow2) from '${WORKPATH_DB}/geoaltname.csv' null as '';
 
-DELETE FROM geoaltname WHERE geoaltname.geoname_id NOT IN (SELECT id from geoname);
+DELETE FROM geoaltname WHERE geoname_id NOT IN (SELECT id from geoname);
 
 ALTER TABLE ONLY geoaltname
 	ADD CONSTRAINT fk_geoname_id FOREIGN KEY (geoname_id) REFERENCES geoname(id);
