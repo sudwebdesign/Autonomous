@@ -33,6 +33,19 @@ CREATE TABLE geoname (
 	moddate			DATE
 );
 	
+DROP TABLE geoaltname_tmp;
+CREATE TABLE geoaltname_tmp (
+	id				SERIAL PRIMARY KEY,
+	geoname_id		INT,
+	geoaltnameid	INT,
+	iso_language	VARCHAR(7),
+	name 			TEXT,
+	is_preferred_name BOOLEAN,
+	is_short_name	BOOLEAN,
+	unknow1	TEXT,
+	unknow2	TEXT
+);
+
 DROP TABLE geoaltname;
 CREATE TABLE geoaltname (
 	id				SERIAL PRIMARY KEY,
@@ -45,6 +58,8 @@ CREATE TABLE geoaltname (
 	unknow1	TEXT,
 	unknow2	TEXT
 );
+
+
 
 DROP TABLE geocountry;
 CREATE TABLE "geocountry" (
@@ -142,6 +157,11 @@ CREATE TABLE geopostal (
 	longitude	 FLOAT,
 	accuracy	SMALLINT
 );
+ALTER TABLE ONLY geocountry
+	ADD CONSTRAINT fk_geoname_id FOREIGN KEY (geoname_id) REFERENCES geoname(id);
+ALTER TABLE ONLY geoaltname
+	ADD CONSTRAINT fk_geoname_id FOREIGN KEY (geoname_id) REFERENCES geoname(id);
+
 INSERT INTO geocontinent (code,name,geoname_id) VALUES ('AF', 'Africa', 6255146);
 INSERT INTO geocontinent (code,name,geoname_id) VALUES ('AS', 'Asia', 6255147);
 INSERT INTO geocontinent (code,name,geoname_id) VALUES ('EU', 'Europe', 6255148);
@@ -150,27 +170,27 @@ INSERT INTO geocontinent (code,name,geoname_id) VALUES ('OC', 'Oceania', 6255150
 INSERT INTO geocontinent (code,name,geoname_id) VALUES ('SA', 'South America', 6255151);
 INSERT INTO geocontinent (code,name,geoname_id) VALUES ('AN', 'Antarctica', 6255152);
 
+COPY geoname (id,name,asciiname,geoaltnames,latitude,longitude,fclass,fcode,country,cc2,admin1,admin2,admin3,admin4,population,elevation,gtopo30,timezone,moddate) from '${WORKPATH_DB}/geoname.csv' null as '';
+COPY geopostal (countrycode,geopostal,placename,admin1name,admin1code,admin2name,admin2code,admin3name,admin3code,latitude,longitude,accuracy) from '${WORKPATH_DB}/geopostal.csv' null as '';
+COPY geotimezone (countrycode,time_zone,gmt_offset,dst_offset,raw_offset) from '${WORKPATH_DB}/geotimezone.csv' null as '';
+COPY geotype (code,name,description) from '${WORKPATH_DB}/geotype.csv' null as '';
+COPY geoarea1admin (code,name,name_ascii,geoname_id) from '${WORKPATH_DB}/geoarea1admin.csv' null as '';
+COPY geoarea2admin (code,name,name_ascii,geoname_id) from '${WORKPATH_DB}/geoarea2admin.csv' null as '';
+COPY geolang (iso_639_3,iso_639_2,iso_639_1,name) from '${WORKPATH_DB}/geolang.csv' null as '';
+COPY geocountry (iso_alpha2,iso_alpha3,iso_numeric,fips_code,country,capital,areainsqkm,population,continent,tld,currency_code,currency_name,phone,postal,postal_regex,languages,geoname_id,neighbours,equivalent_fips_code) from '${WORKPATH_DB}/geocountry.csv' null as '';
+COPY geoaltname_tmp (geoname_id,geoaltnameid,iso_language,name,is_preferred_name,is_short_name,unknow1,unknow2) from '${WORKPATH_DB}/geoaltname.csv' null as '';
+COPY geoaltname (id,geoname_id,geoaltnameid,iso_language,name,is_preferred_name,is_short_name,unknow1,unknow2) from (SELECT geoaltname_tmp.* FROM geoaltname_tmp LEFT OUTER JOIN geoname ON geoaltname_tmp.geoname_id=geoname.id);
+DROP TABLE geoaltname_tmp;
 
-ALTER TABLE ONLY geocountry
-	ADD CONSTRAINT fk_geoname_id FOREIGN KEY (geoname_id) REFERENCES geoname(id);
-
-copy geoname (id,name,asciiname,geoaltnames,latitude,longitude,fclass,fcode,country,cc2,admin1,admin2,admin3,admin4,population,elevation,gtopo30,timezone,moddate) from '${WORKPATH_DB}/geoname.csv' null as '';
-copy geopostal (countrycode,geopostal,placename,admin1name,admin1code,admin2name,admin2code,admin3name,admin3code,latitude,longitude,accuracy) from '${WORKPATH_DB}/geopostal.csv' null as '';
-copy geotimezone (countrycode,time_zone,gmt_offset,dst_offset,raw_offset) from '${WORKPATH_DB}/geotimezone.csv' null as '';
-copy geotype (code,name,description) from '${WORKPATH_DB}/geotype.csv' null as '';
-copy geoarea1admin (code,name,name_ascii,geoname_id) from '${WORKPATH_DB}/geoarea1admin.csv' null as '';
-copy geoarea2admin (code,name,name_ascii,geoname_id) from '${WORKPATH_DB}/geoarea2admin.csv' null as '';
-copy geolang (iso_639_3,iso_639_2,iso_639_1,name) from '${WORKPATH_DB}/geolang.csv' null as '';
-copy geocountry (iso_alpha2,iso_alpha3,iso_numeric,fips_code,country,capital,areainsqkm,population,continent,tld,currency_code,currency_name,phone,postal,postal_regex,languages,geoname_id,neighbours,equivalent_fips_code) from '${WORKPATH_DB}/geocountry.csv' null as '';
-copy geoaltname (geoname_id,geoaltnameid,iso_language,name,is_preferred_name,is_short_name,unknow1,unknow2) from '${WORKPATH_DB}/geoaltname.csv' null as '';
-
-DELETE FROM geoaltname WHERE geoname_id NOT IN (SELECT id from geoname);
-
-ALTER TABLE ONLY geoaltname
-	ADD CONSTRAINT fk_geoname_id FOREIGN KEY (geoname_id) REFERENCES geoname(id);
 	
+
 CREATE INDEX index_geocountry_geoname_id ON geocountry USING hash (geoname_id);
 CREATE INDEX index_geoaltname_geoname_id ON geoaltname USING hash (geoname_id);
+
+#Create PostGIS geometry column, insert geometry, and create indexes
+SELECT AddGeometryColumn ('public','geoname','the_geom',4326,'POINT',2);
+UPDATE geoname SET the_geom = ST_PointFromText('POINT(' || longitude || ' ' || latitude || ')', 4326);
+CREATE INDEX idx_geoname_the_geom ON public.geoname USING gist(the_geom);
 
 EOT
 
