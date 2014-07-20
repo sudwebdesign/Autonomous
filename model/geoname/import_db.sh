@@ -171,19 +171,18 @@ INSERT INTO geocontinent (code,name,geoname_id) VALUES ('OC', 'Oceania', 6255150
 INSERT INTO geocontinent (code,name,geoname_id) VALUES ('SA', 'South America', 6255151);
 INSERT INTO geocontinent (code,name,geoname_id) VALUES ('AN', 'Antarctica', 6255152);
 
-COPY geoname (id,name,asciiname,geoaltnames,latitude,longitude,fclass,fcode,country,cc2,admin1,admin2,admin3,admin4,population,elevation,gtopo30,timezone,moddate) from '${WORKPATH_DB}/geoname.csv' null as '';
-COPY geopostal (countrycode,geopostal,placename,admin1name,admin1code,admin2name,admin2code,admin3name,admin3code,latitude,longitude,accuracy) from '${WORKPATH_DB}/geopostal.csv' null as '';
-COPY geotimezone (countrycode,time_zone,gmt_offset,dst_offset,raw_offset) from '${WORKPATH_DB}/geotimezone.csv' null as '';
-COPY geotype (code,name,description) from '${WORKPATH_DB}/geotype.csv' null as '';
-COPY geoarea1admin (code,name,name_ascii,geoname_id) from '${WORKPATH_DB}/geoarea1admin.csv' null as '';
-COPY geoarea2admin (code,name,name_ascii,geoname_id) from '${WORKPATH_DB}/geoarea2admin.csv' null as '';
-COPY geolang (iso_639_3,iso_639_2,iso_639_1,name) from '${WORKPATH_DB}/geolang.csv' null as '';
-COPY geocountry (iso_alpha2,iso_alpha3,iso_numeric,fips_code,country,capital,areainsqkm,population,continent,tld,currency_code,currency_name,phone,postal,postal_regex,languages,geoname_id,neighbours,equivalent_fips_code) from '${WORKPATH_DB}/geocountry.csv' null as '';
+COPY geoname (id,name,asciiname,geoaltnames,latitude,longitude,fclass,fcode,country,cc2,admin1,admin2,admin3,admin4,population,elevation,gtopo30,timezone,moddate) FROM '${WORKPATH_DB}/geoname.csv' null as '';
+COPY geopostal (countrycode,geopostal,placename,admin1name,admin1code,admin2name,admin2code,admin3name,admin3code,latitude,longitude,accuracy) FROM '${WORKPATH_DB}/geopostal.csv' null as '';
+COPY geotimezone (countrycode,time_zone,gmt_offset,dst_offset,raw_offset) FROM '${WORKPATH_DB}/geotimezone.csv' null as '';
+COPY geotype (code,name,description) FROM '${WORKPATH_DB}/geotype.csv' null as '';
+COPY geoarea1admin (code,name,name_ascii,geoname_id) FROM '${WORKPATH_DB}/geoarea1admin.csv' null as '';
+COPY geoarea2admin (code,name,name_ascii,geoname_id) FROM '${WORKPATH_DB}/geoarea2admin.csv' null as '';
+COPY geolang (iso_639_3,iso_639_2,iso_639_1,name) FROM '${WORKPATH_DB}/geolang.csv' null as '';
+COPY geocountry (iso_alpha2,iso_alpha3,iso_numeric,fips_code,country,capital,areainsqkm,population,continent,tld,currency_code,currency_name,phone,postal,postal_regex,languages,geoname_id,neighbours,equivalent_fips_code) FROM '${WORKPATH_DB}/geocountry.csv' null as '';
 
-COPY geoaltname_tmp (geoname_id,geoaltnameid,iso_language,name,is_preferred_name,is_short_name,unknow1,unknow2) from '${WORKPATH_DB}/geoaltname.csv' null as '';
-INSERT INTO geoaltname (SELECT geoaltname_tmp.* FROM geoaltname_tmp LEFT OUTER JOIN geoname ON geoaltname_tmp.geoname_id=geoname.id);
+COPY geoaltname_tmp (geoname_id,geoaltnameid,iso_language,name,is_preferred_name,is_short_name,unknow1,unknow2) FROM '${WORKPATH_DB}/geoaltname.csv' null as '';
+INSERT INTO geoaltname (SELECT geoaltname_tmp.* FROM geoaltname_tmp LEFT JOIN geoname ON geoaltname_tmp.geoname_id=geoname.id WHERE geoname.id IS NOT NULL);
 DROP TABLE geoaltname_tmp;
-	
 
 CREATE INDEX index_geocountry_geoname_id ON geocountry USING hash (geoname_id);
 CREATE INDEX index_geoaltname_geoname_id ON geoaltname USING hash (geoname_id);
