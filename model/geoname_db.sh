@@ -10,6 +10,7 @@ DBNAME='geonames'
 echo "FILL DATABASE ( can be very long ) ..."
 
 psql -e -U $DBUSER -h $DBHOST -p $DBPORT $DBNAME <<EOT
+
 DROP TABLE geoname CASCADE;
 CREATE TABLE geoname (
 	id				SERIAL PRIMARY KEY,
@@ -178,16 +179,18 @@ COPY geoarea1admin (code,name,name_ascii,geoname_id) from '${WORKPATH_DB}/geoare
 COPY geoarea2admin (code,name,name_ascii,geoname_id) from '${WORKPATH_DB}/geoarea2admin.csv' null as '';
 COPY geolang (iso_639_3,iso_639_2,iso_639_1,name) from '${WORKPATH_DB}/geolang.csv' null as '';
 COPY geocountry (iso_alpha2,iso_alpha3,iso_numeric,fips_code,country,capital,areainsqkm,population,continent,tld,currency_code,currency_name,phone,postal,postal_regex,languages,geoname_id,neighbours,equivalent_fips_code) from '${WORKPATH_DB}/geocountry.csv' null as '';
-COPY geoaltname_tmp (geoname_id,geoaltnameid,iso_language,name,is_preferred_name,is_short_name,unknow1,unknow2) from '${WORKPATH_DB}/geoaltname.csv' null as '';
-COPY geoaltname (id,geoname_id,geoaltnameid,iso_language,name,is_preferred_name,is_short_name,unknow1,unknow2) from (SELECT geoaltname_tmp.* FROM geoaltname_tmp LEFT OUTER JOIN geoname ON geoaltname_tmp.geoname_id=geoname.id);
-DROP TABLE geoaltname_tmp;
 
+COPY geoaltname_tmp (geoname_id,geoaltnameid,iso_language,name,is_preferred_name,is_short_name,unknow1,unknow2) from '${WORKPATH_DB}/geoaltname.csv' null as '';
+INSERT INTO geoaltname (SELECT geoaltname_tmp.* FROM geoaltname_tmp LEFT OUTER JOIN geoname ON geoaltname_tmp.geoname_id=geoname.id);
+DROP TABLE geoaltname_tmp;
 	
 
 CREATE INDEX index_geocountry_geoname_id ON geocountry USING hash (geoname_id);
 CREATE INDEX index_geoaltname_geoname_id ON geoaltname USING hash (geoname_id);
 
-#Create PostGIS geometry column, insert geometry, and create indexes
+CREATE EXTENSION postgis;
+CREATE EXTENSION postgis_topology;
+CREATE EXTENSION postgis_tiger_geocoder;
 SELECT AddGeometryColumn ('public','geoname','the_geom',4326,'POINT',2);
 UPDATE geoname SET the_geom = ST_PointFromText('POINT(' || longitude || ' ' || latitude || ')', 4326);
 CREATE INDEX idx_geoname_the_geom ON public.geoname USING gist(the_geom);
