@@ -85,7 +85,7 @@
 		$js().min = false
 		$css().min = false;
 		$js('script');
-		<?if(control::devHas(control::dev_control)):?>if(console) console.info('Server <?=$timeCompiled===$time?'Compilation+':''?>Exec: <?=control\Chrono::get()?> -  Exec <?=date('jMY-H:m:s',$time)?> - Compiled <?=date('jMY-H:m:s',$timeCompiled)?>');<?endif;?>
+		<?if(control::devHas(control::dev_control)):?>if(console) console.info('Server <?=$timeCompiled===$time?'Compilation+':''?>Exec: <?=control\chrono::get()?> -  Exec <?=date('jMY-H:m:s',$time)?> - Compiled <?=date('jMY-H:m:s',$timeCompiled)?>');<?endif;?>
 	</script>
 </body>
 </html>

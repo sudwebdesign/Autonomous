@@ -43,8 +43,8 @@ CREATE TABLE geoaltname_tmp (
 	name 			TEXT,
 	is_preferred_name BOOLEAN,
 	is_short_name	BOOLEAN,
-	unknow1	TEXT,
-	unknow2	TEXT
+	isColloquial	BOOLEAN,
+	isHistoric		BOOLEAN
 );
 
 DROP TABLE geoaltname;
@@ -56,8 +56,8 @@ CREATE TABLE geoaltname (
 	name 			TEXT,
 	is_preferred_name BOOLEAN,
 	is_short_name	BOOLEAN,
-	unknow1	TEXT,
-	unknow2	TEXT
+	isColloquial	BOOLEAN,
+	isHistoric		BOOLEAN
 );
 
 
@@ -180,7 +180,7 @@ COPY geoarea2admin (code,name,name_ascii,geoname_id) FROM '${WORKPATH_DB}/geoare
 COPY geolang (iso_639_3,iso_639_2,iso_639_1,name) FROM '${WORKPATH_DB}/geolang.csv' null as '';
 COPY geocountry (iso_alpha2,iso_alpha3,iso_numeric,fips_code,country,capital,areainsqkm,population,continent,tld,currency_code,currency_name,phone,postal,postal_regex,languages,geoname_id,neighbours,equivalent_fips_code) FROM '${WORKPATH_DB}/geocountry.csv' null as '';
 
-COPY geoaltname_tmp (geoname_id,geoaltnameid,iso_language,name,is_preferred_name,is_short_name,unknow1,unknow2) FROM '${WORKPATH_DB}/geoaltname.csv' null as '';
+COPY geoaltname_tmp (geoname_id,geoaltnameid,iso_language,name,is_preferred_name,is_short_name,isColloquial,isHistoric) FROM '${WORKPATH_DB}/geoaltname.csv' null as '';
 INSERT INTO geoaltname (SELECT geoaltname_tmp.* FROM geoaltname_tmp LEFT JOIN geoname ON geoaltname_tmp.geoname_id=geoname.id WHERE geoname.id IS NOT NULL);
 DROP TABLE geoaltname_tmp;
 

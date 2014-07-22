@@ -25,15 +25,15 @@ class liste extends \present{
 		$this->subUri = (strrpos($this->URI,'s')===strlen($this->URI)-1?substr($this->URI,0,-1):$this->URI);
 		$this->imgDir = 'content/'.$this->taxonomy.'/';
 		$this->Query = model::newFrom4D($this->taxonomy);
+		
 		$uri = view::getUri();
 		$uri->resolveMap(array(
 			':int'=>function($param){
-				return R::loadUniq('taxonomy',$param);
+				return R::load('taxonomy',$param);
 			},
 			'geo',
 			'search'=>true,
 		));
-		
 		//$this->taxonomies = array();
 		//$redirect = '';
 		//foreach($this->finders as $fr){
@@ -55,12 +55,11 @@ class liste extends \present{
 				//$this->Query->joinWhere($t.'.id IN ?',array((array)$this->find->$k));
 		//}
 		//
-		//foreach((array)$this->find->texts as $t){
-			//$this->fullText(array(
-				//'title',
-				//'presentation',
-			//),$t);
-		//}
+		if($uri->search)
+			$this->Query->fullText(array(
+				'title',
+				'presentation',
+			),$uri->search);
 		
 		$this->Query
 			->select(array('title','tel','url'))

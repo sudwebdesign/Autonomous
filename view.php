@@ -8,7 +8,7 @@ control::dev(
 	|control::dev_css
 	|control::dev_js
 	//|control::dev_img
-	|control::dev_uri
+	//|control::dev_uri
 	//|control::dev_all //very heavy
 );
 use control\i18n\i18n;
