@@ -7,6 +7,9 @@ body>nav {
 	@include clearfix();
 	@include gradient-vertical(#414141,#323232);
 	border-bottom: 1px solid #000;
+	a[is=persona]{
+		display:none;
+	}
 	[is=dropdown]{
 		>li{
 			position: relative;
