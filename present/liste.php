@@ -25,14 +25,13 @@ class liste extends \present{
 		$this->subUri = (strrpos($this->URI,'s')===strlen($this->URI)-1?substr($this->URI,0,-1):$this->URI);
 		$this->imgDir = 'content/'.$this->taxonomy.'/';
 		$this->Query = model::newFrom4D($this->taxonomy);
-
-		//findMotorParams
-		$uri = new URI(); //uri::param()
-		$uri->orderParams(array(
+		$uri = view::getUri();
+		$uri->resolveMap(array(
 			':int',
 			'geo',
 			'search',
 		));
+		
 		//$this->taxonomies = array();
 		//$redirect = '';
 		//foreach($this->finders as $fr){
@@ -40,11 +39,6 @@ class liste extends \present{
 				//continue;
 			//$this->assocParams[$fr]->sort(SORT_NATURAL|SORT_FLAG_CASE);
 			//$redirect .= implode('|',(array)$this->assocParams[$fr]).'|';
-		//}
-		//$redirect = trim($redirect,'|');
-		//if(trim(implode('|',(array)$this->keywords),'|')!=$redirect){
-			//header('Location: '.$this->HREF.'|'.$redirect,true,301);
-			//exit;
 		//}
 		$this->keywords = array();
 		//$i = 0;
