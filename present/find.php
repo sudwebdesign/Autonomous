@@ -32,7 +32,7 @@ class find extends \present\liste{
 		//$type = $this->taxonomy;
 		if ($this->search === NULL){#||empty($_POST)
 			$terms ='';
-			foreach(view::param() as $p){
+			foreach(uri::param() as $p){
 				if ($p!="search"){
 					$terms .= $p.' ';
 				}
@@ -41,7 +41,7 @@ class find extends \present\liste{
 		}
 	}
 	protected function getParamsFromUri(){
-		$this->page = view::param('page');
+		$this->page = uri::param('page');
 		$this->uri = $this->URI;
 		$this->keywords = array();
 		$i = 0;

@@ -3,6 +3,10 @@ use surikat\control\ruler;
 abstract class ATable_Main extends Table{
 	protected $minTitreLength = 8;
 	protected $maxTitreLength = 250;
+
+	//static $columnTitleFullTextAgg = 'fulltext';
+	//static $columnPresentationFullTextAgg = 'fulltext';
+	
 	function onValidate(){
 		if(!ruler::minchar($this->title,$this->minTitreLength))
 			$this->error('title','Le titre doit comporter minimum '.$this->minTitreLength.' caractères');

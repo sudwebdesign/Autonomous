@@ -14,10 +14,10 @@ class item extends \present{
 			'where'=>$t.'.id=?'
 		);
 		$params = array(
-			view::param(2),
+			uri::param(2),
 		);
 		$this->raw = model::row4D($t,$query,$params);
-		$this->title = $this->raw['title'];//view::param(1);
+		$this->title = $this->raw['title'];//uri::param(1);
 		$this->findImageItem();
 		$this->presentation = $this->raw['presentation_html'];
 		$this->tel = $this->raw['tel'];
@@ -25,7 +25,7 @@ class item extends \present{
 		$this->création = $this->raw['created'];
 	}
 	function findImageItem(){
-		$imgFolder = 'content/'.$this->taxonomy.'/'.view::param(2).'/';
+		$imgFolder = 'content/'.$this->taxonomy.'/'.uri::param(2).'/';
 		$imgName = str_replace(' ','-',$this->title);
 		$imgsItem = glob($imgFolder."{".$imgName.".*}", GLOB_BRACE);
 		$this->srcimg = $imgsItem;

@@ -16,7 +16,7 @@ use model\Exception_Validation;
 class ajouter extends \present{
 	function assign(){
 		parent::assign();
-		$this->action = view::param(0);
+		$this->action = uri::param(0);
 		$this->taxonomy = end($this->presentNamespaces);
 	}
 	function dynamic(){
@@ -56,7 +56,7 @@ class ajouter extends \present{
 				'width'=>'90',
 				'height'=>'90',
 				//'rename'=>true, //image by default
-				'rename'=>view::filterParam($bean->title),
+				'rename'=>uri::filterParam($bean->title),
 				'extensions'=>array('png','jpg'),
 				'conversion'=>'png'
 			));
@@ -88,7 +88,7 @@ class ajouter extends \present{
 			foreach($tags as $i=>$tag){
 				if($i>=$max)
 					break;
-				$tag = view::filterParam($tag);
+				$tag = uri::filterParam($tag);
 				if(empty($tag))
 					continue;
 				if($t=R::load('taxonomy',$tag)){

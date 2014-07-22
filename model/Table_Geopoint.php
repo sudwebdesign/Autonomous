@@ -1,7 +1,7 @@
 <?php namespace model;
-final class Table_Geopoint extends Table{
+final class Table_Geopoint extends Table{	
 	static $columnPointCast	= 'point';
-	//var $columnPointReadParam	= 'GeomFromText'; //MySql
+	//var $columnPointWriteCol	= 'GeomFromText'; //MySql
 	//var $columnPointReadCol	= 'asText'; //MySql
 	//function onNew(){}
 	//function onCreate(){}

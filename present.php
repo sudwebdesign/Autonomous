@@ -9,12 +9,12 @@ class present extends surikat\present{
 		$this->taxonomyEvenement	= Table_Taxonomy::getChildrenbyLabel('Événement');
 		$port = ($_SERVER['SERVER_PORT']&&(int)$_SERVER['SERVER_PORT']!=80?':'.$_SERVER['SERVER_PORT']:'');
 		$this->BASE_HREF = 'http://'.$_SERVER['SERVER_NAME'].$port.'/';
-		$this->URI		= view::param(0);
+		$this->URI		= uri::param(0);
 		$this->HREF		= $this->BASE_HREF.$this->URI;
 	}
 	function dynamic(){
 		$this->time		= time();
-		$this->title	= (($u=view::param(0))?$u.' - ':'').'Autonomie et Partage';
+		$this->title	= (($u=uri::param(0))?$u.' - ':'').'Autonomie et Partage';
 		$this->h1		= $this->title;
 	}
 }

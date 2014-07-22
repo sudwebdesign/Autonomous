@@ -1,7 +1,5 @@
 <?php namespace model;
 class Table_User extends Table{
-	static $columnEmailReadCol = 'uaccent';
-	static $columnEmailTestReadCol = 'uaccent';
 	//function onNew(){
 	//}
 	//function onUpdate(){}

@@ -1,4 +1,5 @@
 <?php namespace present;
+use URI;
 use view;
 use model;
 use model\Query;
@@ -19,59 +20,20 @@ class liste extends \present{
 	}
 	function dynamic(){
 		parent::dynamic();
-		$this->page = view::param('page');
+		$this->page = uri::param('page');
 		$this->uri = $this->URI;
 		$this->subUri = (strrpos($this->URI,'s')===strlen($this->URI)-1?substr($this->URI,0,-1):$this->URI);
 		$this->imgDir = 'content/'.$this->taxonomy.'/';
 		$this->Query = model::newFrom4D($this->taxonomy);
 
 		//findMotorParams
-		$uriA = view::param();
-		$orderParams = array(
-			'(int)',
+		$uri = new URI(); //uri::param()
+		$uri->orderParams(array(
+			':int',
 			'geo',
 			'search',
-		);
-		$this->taxonomies = array();
-		foreach($orderParams as $logic){
-			switch($logic){
-				case '(int)':
-					foreach($uriA as $k=>$a)
-						if(is_integer($k)){
-							$this->taxonomies[] = $uriA[$k];
-							unset($uriA[$k]);
-						}
-						else
-							break;
-					
-				break;
-				case 'search':
-					
-				break;
-			}
-		}
-		foreach($uriA as $k=>$a){
-			if(is_integer($k)){
-				//if(!in_array()
-				//$orderParamsFact[] = $k;
-			}
-			else{
-				switch($k){
-					case '':
-					break;
-					case '':
-					break;
-					case '':
-					break;
-					case '':
-					break;
-					case '':
-					break;
-					default:
-					break;
-				}
-			}
-		}
+		));
+		//$this->taxonomies = array();
 		//$redirect = '';
 		//foreach($this->finders as $fr){
 			//if(!isset($this->assocParams[$fr]))
@@ -85,38 +47,30 @@ class liste extends \present{
 			//exit;
 		//}
 		$this->keywords = array();
-		$i = 0;
-		while(($param = view::param($i+=1))!==null){
-			$this->keywords[] = $param;
-			$this->uri .= '|'.$param;
-		}
-		
+		//$i = 0;
+		//while(($param = uri::param($i+=1))!==null){
+			//$this->keywords[] = $param;
+			//$this->uri .= '|'.$param;
+		//}
 		$this->find = array();
-		//findMotorCompo
-		foreach(array('taxonomy','locality','tag') as $t){
-			$k = $t.'Id';
-			if(!empty($this->find->$k))
-				$this->Query->joinWhere($t.'.id IN ?',array((array)$this->find->$k));
-		}
+		//foreach(array('taxonomy','locality','tag') as $t){
+			//$k = $t.'Id';
+			//if(!empty($this->find->$k))
+				//$this->Query->joinWhere($t.'.id IN ?',array((array)$this->find->$k));
+		//}
+		//
+		//foreach((array)$this->find->texts as $t){
+			//$this->fullText(array(
+				//'title',
+				//'presentation',
+			//),$t);
+		//}
 		
-		foreach((array)$this->find->texts as $t){
-			$this->fullText(array(
-				'title',
-				'presentation',
-			),$t);
-		}
-		$this->Query->select(array('title','tel','url'));
-
-		//$q = '"';
-		//$this->Query->select($q.'locality'.$q.'.'.$q.'id'.$q.' as '.$q.'locality<>id'.$q);
-		//$this->Query->select($q.'locality'.$q.'.'.$q.'label'.$q.' as '.$q.'locality<>label'.$q);
-		//$this->Query->join('LEFT OUTER JOIN locality on geopoint.locality_id=locality.id');
-		//$this->Query->group_by($q.'locality'.$q.'.'.$q.'id'.$q);
-		
-		$this->Query->selectTruncation('presentation',369);
-		$this->Query->select('created');
-
-		
+		$this->Query
+			->select(array('title','tel','url'))
+			->selectTruncation('presentation',369)
+			->select('created')
+		;
 
 		$this->count = $this->Query->count();
 		
@@ -125,13 +79,13 @@ class liste extends \present{
 		$this->liste = $this->Query->limit($this->limit,$this->offset)->table();
 		$this->countListe = count($this->liste);
 		
-		$this->h1 = view::param(0);
+		$this->h1 = uri::param(0);
 		if(!empty($this->keywords))
 			$this->h1 .= ' - '.implode(' ',(array)$this->keywords);
 		if($this->page>1)
 			$this->h1 .= ' - page '.$this->page;
 	}
 	function imageByItem($item){
-		return $this->imgDir.$item->id.'/'.view::filterParam($item->title).'.png';
+		return $this->imgDir.$item->id.'/'.uri::filterParam($item->title).'.png';
 	}
 }

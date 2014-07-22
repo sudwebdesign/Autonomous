@@ -21,7 +21,7 @@
 				<h2><?=$h1?> dans <?=$taxonomy?> (<?=$count[$taxonomy]?> / <?=$countListe?> résultats)</h2>
 				<?$allLinks = array();?>
 				<foreach e="(array)@$founds as $id=>$item">
-					<?$href=$taxonomy.'|'.view::filterParam($item->title).'|'.$id;?>
+					<?$href=$taxonomy.'|'.uri::filterParam($item->title).'|'.$id;?>
 					<h3><a href="<?=$href?>"><?=$item->title?></a></h3>
 					<a href="<?=$href?>">
 						<if e="$imgsItems[$taxonomy][$id]"><img src="<?= $imgsItems[$taxonomy][$id][0]?>" alt="<?=$item->title?>" title="<?=$item->title?>" /></if>

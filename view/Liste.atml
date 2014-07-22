@@ -4,7 +4,7 @@
 	<write main>
 		<aside>
 			<h3>Options de Recherche</h3>
-			<form method="GET" action="<?=view::param(0)?>">
+			<form method="GET" action="<?=uri::param(0)?>">
 				<fieldset>
 					<legend>Thématiques</legend>
 					<input type="text" is="tagsinput" name="search" placeholder="" data-minchar="4" data-maxchar="25" data-max="5" data-url="service/autocomplete/taxonomy?name=<?=$taxonomy?>"
@@ -56,7 +56,7 @@
 			<h1><?=$h1?> (<?=$countListe?> / <?=$count?> résultats)</h1>
 			<?$allLinks = array();?>
 			<foreach e="(array)@$liste as $id=>$item">
-				<?$href=$subUri.'|'.view::filterParam($item->title).'|'.$id;?>
+				<?$href=$subUri.'|'.uri::filterParam($item->title).'|'.$id;?>
 				<h2><a href="<?=$href?>"><?=$item->title?></a></h2>
 				<a href="<?=$href?>">
 					<if e="$img=$THIS->imageByItem($item)">
