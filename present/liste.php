@@ -27,9 +27,11 @@ class liste extends \present{
 		$this->Query = model::newFrom4D($this->taxonomy);
 		$uri = view::getUri();
 		$uri->resolveMap(array(
-			':int',
+			':int'=>function($param){
+				return R::loadUniq('taxonomy',$param);
+			},
 			'geo',
-			'search',
+			'search'=>true,
 		));
 		
 		//$this->taxonomies = array();
