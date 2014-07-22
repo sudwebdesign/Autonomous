@@ -76,6 +76,8 @@ $js([
 			logonCALL(currentUser);
 		else if(!localStorage.getItem('personaInitilized'))
 			initCALL();
+		else
+			loginBTN.show();		
 	});
 	$js(['jquery-ui/core','jquery-ui/effect','jquery-ui/effect-shake'],true);
 });
