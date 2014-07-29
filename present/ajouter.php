@@ -1,4 +1,5 @@
 <?php namespace present;
+use uri;
 use view;
 use model;
 use model\Query;

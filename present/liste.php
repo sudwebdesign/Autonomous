@@ -25,7 +25,6 @@ class liste extends \present{
 		$this->subUri = (strrpos($this->URI,'s')===strlen($this->URI)-1?substr($this->URI,0,-1):$this->URI);
 		$this->imgDir = 'content/'.$this->taxonomy.'/';
 		$this->Query = model::newFrom4D($this->taxonomy);
-		
 		$uri = view::getUri();
 		$uri->resolveMap(array(
 			':int'=>function($param){

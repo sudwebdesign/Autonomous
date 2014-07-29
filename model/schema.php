@@ -1,6 +1,61 @@
 <?php namespace model;
-use control\CsvImporter;
-CsvImporter::importation('geoname',
+
+set_time_limit(0);
+
+R::nuke();
+
+R::setUniqCheck(false);
+
+R::drop('taxonomy');
+$taxonomyTree = array(
+	'Événement'=>array(
+		'Salon',
+		'Marché',
+		'Vente-directe',
+		'Chantier-collectif',
+		'Spectacle',
+		'Animation',
+		'Conférence',
+		'Projection',
+		'Débat',
+		'Fête',
+		'Actu',
+	),
+	'Ressource'=>array(
+		'Compétence',
+		'Bénévolat',
+		'Lieu',
+		'Terrain',
+		'Salle',
+		'Outillage',
+		'Véhicule',
+	),
+	'Projet'=>array(
+		
+	),
+	'Annonce'=>array(
+		'Loisirs',
+		'Alimentation',
+		'Santé',
+		'Logement',
+		'Education',
+		'Energie',
+		'Transport',
+		'Vie-Pratique',
+		'Art-et-culture',
+	),
+	'Association'=>array(),
+	'Médiathèque'=>array(),
+);
+foreach($taxonomyTree as $name=>$v){
+	$b = R::create('taxonomy',$name);
+	foreach($v as $name2)
+		$b->sharedTaxonomy[] = R::create('taxonomy',$name2);
+	R::store($b);
+}
+
+R::drop('geoname');
+\control\CsvImporter::importation('geoname',
 	array(
 		'geonameid', //         : integer id of record in geonames database
 		'name', //              : name of geographical point (utf8) varchar(200)

@@ -16,7 +16,6 @@ final class Table_Taxonomy extends ATable_Keyword{
 	//function onDelete(){}
 	//function onDeleted(){}
 	static function getChildrenbyLabel($params=null){
-		R::schemaAuto('taxonomy');
 		if($params)
 			return model::getAssoc('taxonomy',array('where'=>array('taxonomy_id=(SELECT id FROM taxonomy WHERE name=?)',array($params))));
 		else
