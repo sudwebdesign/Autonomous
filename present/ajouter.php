@@ -49,7 +49,7 @@ class ajouter extends \present{
 		}
 	}
 	function POST_Common($type){
-		$bean = R::dispense($type);
+		$bean = R::create($type);
 		$bean->on('created',function($bean)use($type){
 			uploader::image(array(
 				'dir'=>'content/'.$type.'/'.$bean->id.'/',

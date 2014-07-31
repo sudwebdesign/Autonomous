@@ -24,7 +24,26 @@ class liste extends \present{
 		$this->uri = $this->URI;
 		$this->subUri = (strrpos($this->URI,'s')===strlen($this->URI)-1?substr($this->URI,0,-1):$this->URI);
 		$this->imgDir = 'content/'.$this->taxonomy.'/';
-		$this->Query = model::newFrom4D($this->taxonomy);
+		//$this->Query = model::newFrom4D($this->taxonomy);
+		$this->Query = model::newFrom($this->taxonomy);
+		$this->Query->selectRelationnal(array(
+			'user<email',
+			//'user>$ email',
+			
+			'date>start',
+			//'$>date start',
+			'date>end',
+			//'$>date end',
+			
+			//'tag::thematics <>name',
+			'tag:thematics	<>		name',
+			//'$>evenement_tag>tag name',
+			
+			'taxonomy:thematics <>taxonomy<>name',
+			//'taxonomy:thematics <>taxonomy<>name',
+			//'$>evenement_taxonomy>taxonomy_taxonomy>taxonomy name',
+		));
+		
 		$uri = view::getUri();
 		$uri->resolveMap(array(
 			':int'=>function($param){
