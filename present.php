@@ -5,8 +5,10 @@ use present\Truncating;
 class present extends surikat\present{
 	function assign(){
 		$this->timeCompiled			= time();
-		$this->taxonomyRessource	= Table_Taxonomy::getChildrenbyLabel('Ressource');
-		$this->taxonomyEvenement	= Table_Taxonomy::getChildrenbyLabel('Événement');
+		//$this->taxonomyRessource	= Table_Taxonomy::getChildrenbyLabel('Ressource');
+		//$this->taxonomyEvenement	= Table_Taxonomy::getChildrenbyLabel('Événement');
+		$this->taxonomyRessource	= array();
+		$this->taxonomyEvenement	= array();
 		$port = ($_SERVER['SERVER_PORT']&&(int)$_SERVER['SERVER_PORT']!=80?':'.$_SERVER['SERVER_PORT']:'');
 		$this->BASE_HREF = 'http://'.$_SERVER['SERVER_NAME'].$port.'/';
 		$this->URI		= uri::param(0);

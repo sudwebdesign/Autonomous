@@ -24,25 +24,23 @@ class liste extends \present{
 		$this->uri = $this->URI;
 		$this->subUri = (strrpos($this->URI,'s')===strlen($this->URI)-1?substr($this->URI,0,-1):$this->URI);
 		$this->imgDir = 'content/'.$this->taxonomy.'/';
-		//$this->Query = model::newFrom4D($this->taxonomy);
 		$this->Query = model::newFrom($this->taxonomy);
 		$this->Query->selectRelationnal(array(
-			'user<email',
-			//'user>$ email',
+			'user			<		email',
 			
-			'date>start',
-			//'$>date start',
-			'date>end',
-			//'$>date end',
+			'date			>		start',
+			'date			>		end',
+
+			//'tag			<>		id',
+			'tag			<>		name',
 			
-			//'tag::thematics <>name',
-			'tag:thematics	<>		name',
-			//'$>evenement_tag>tag name',
+			//'taxonomy			<>		id',
+			'taxonomy		<>		name',
 			
-			'taxonomy:thematics <>taxonomy<>name',
-			//'taxonomy:thematics <>taxonomy<>name',
-			//'$>evenement_taxonomy>taxonomy_taxonomy>taxonomy name',
+			//'tag::thematics	<>		name',
+			//'taxonomy		<> 		taxonomy::thematics <>	name',
 		));
+		//$this->Query = model::newFrom4D($this->taxonomy);
 		
 		$uri = view::getUri();
 		$uri->resolveMap(array(
@@ -89,7 +87,8 @@ class liste extends \present{
 		
 		$this->pagination();
 		
-		$this->liste = $this->Query->limit($this->limit,$this->offset)->table();
+		$this->liste = $this->Query->limit($this->limit,$this->offset)->tableMD();
+		//exit(print($this->liste));
 		$this->countListe = count($this->liste);
 		
 		$this->h1 = uri::param(0);
