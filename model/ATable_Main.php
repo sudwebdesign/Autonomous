@@ -3,19 +3,14 @@ use surikat\control\ruler;
 abstract class ATable_Main extends Table{
 	protected $minTitreLength = 8;
 	protected $maxTitreLength = 250;
-	//protected static $columnDocumentFulltext = array( //uppercase letter is for semantic weight of query, postgres convention: just A,B,C,D, no others letters
-		//'sharedTaxonomy'=>'name/B',
-		//'sharedTag'=>'name/A',
-		//'xownGeopoint'=>'name/B',
-		//'title/B',
-		//'presentation/C',
-	//);
+	protected static $columnDocumentFulltextLanguage = 'french';
 	protected static $columnDocumentFulltext = array(
-		'taxonomy'=>'name/B',
-		'tag'=>'name/A',
-		'geopoint'=>'name/B',
-		'title/B',
-		'presentation/C',
+		'taxonomy		<>	name		/A',
+		'tag			<>	name		/A',
+		'geopoint		>	name		/A',
+		'title							/B',
+		'presentation					/B',
+		'user			<	email		/C',
 	);
 	function onValidate(){
 		if(!ruler::minchar($this->title,$this->minTitreLength))

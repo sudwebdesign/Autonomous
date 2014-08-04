@@ -13,7 +13,7 @@ use control\ArrayObject;
 use view\Exception as View_Exception;
 class liste extends \present{
 	use Mixin_Pagination;
-	protected $limitation				= 5;
+	protected $limitation				= 10;
 	function assign(){
 		parent::assign();
 		$this->taxonomy = end($this->presentNamespaces);
@@ -24,19 +24,15 @@ class liste extends \present{
 		$this->uri = $this->URI;
 		$this->subUri = (strrpos($this->URI,'s')===strlen($this->URI)-1?substr($this->URI,0,-1):$this->URI);
 		$this->imgDir = 'content/'.$this->taxonomy.'/';
+
 		$this->Query = model::newFrom($this->taxonomy);
 		$this->Query->selectRelationnal(array(
 			'user			<		email',
-			
 			'date			>		start',
 			'date			>		end',
-
-			//'tag			<>		id',
 			'tag			<>		name',
-			
-			//'taxonomy			<>		id',
 			'taxonomy		<>		name',
-			
+			//'taxonomy		<> 		taxonomy <>	name',
 			//'tag::thematics	<>		name',
 			//'taxonomy		<> 		taxonomy::thematics <>	name',
 		));
@@ -72,14 +68,14 @@ class liste extends \present{
 		//}
 		//
 		if($uri->search)
-			$this->Query->fullText(array(
+			$this->Query->whereFullText(array(
 				'title',
 				'presentation',
 			),$uri->search);
-		
 		$this->Query
 			->select(array('title','tel','url'))
-			->selectTruncation('presentation',369)
+			//->selectTruncation('presentation',369)
+			->selectFullTextHighlite('presentation',$uri->search,369)
 			->select('created')
 		;
 
