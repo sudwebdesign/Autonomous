@@ -68,14 +68,12 @@ class liste extends \present{
 		//}
 		//
 		if($uri->search)
-			$this->Query->whereFullText(array(
-				'title',
-				'presentation',
-			),$uri->search);
+			$this->Query->whereFullText('document',$uri->search);
 		$this->Query
 			->select(array('title','tel','url'))
 			//->selectTruncation('presentation',369)
 			->selectFullTextHighlite('presentation',$uri->search,369)
+			->orderByFullTextRank('document',$uri->search)
 			->select('created')
 		;
 
