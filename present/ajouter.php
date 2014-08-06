@@ -64,12 +64,13 @@ class ajouter extends \present{
 			uploader::files('content/'.$type.'/'.$entry->id.'/','files');
 		});
 
-		$email = session::get('email');
-		if(!$email)
-			return $entry->error('user','required');
-
-		$user = R::findOrNewOne('user',array('email'=>$email));
-		$entry->user = $user;
+		$user = session::get('email');
+		if($user){
+			$user = R::findOrNewOne('user',array('email'=>$user));
+			$entry->user = $user;
+		}
+		else
+			$entry->error('user','required');
 			
 		if(isset($_POST['title']))
 			$entry->title = strip_tags($_POST['title']);
@@ -81,22 +82,18 @@ class ajouter extends \present{
 		if(isset($_POST['presentation']))
 			$entry->presentation = filter::strip_tags_basic($_POST['presentation']);
 
-		if(isset($_POST['sharedTag'])&&is_array($_POST['sharedTag'])&&isset($_POST['sharedTag']['label'])&&trim($_POST['sharedTag']['label'])){
+		if(isset($_POST['sharedTag'])&&is_array($_POST['sharedTag'])&&isset($_POST['sharedTag']['name'])&&trim($_POST['sharedTag']['name'])){
 			$max = 5;
-			$tags = explode(' ',strip_tags($_POST['sharedTag']['label']));
-			$taxonomy = R::load('taxonomy',$this->taxonomy);
-			if(!$taxonomy)
-				throw new \Exception(sprintf("Error: Taxonomy %s not found",$this->taxonomy));
+			$tags = explode(' ',strip_tags($_POST['sharedTag']['name']));
 			foreach($tags as $i=>$t){
 				if($i>=$max)
 					break;
-				$tag = uri::filterParam($tag);
-				if(empty($tag))
+				$t = uri::filterParam($t);
+				if(empty($t))
 					continue;
-				$tag = R::findOrNewOne('tag',$tag);
-				$tag->sharedTaxonomy[] = $taxonomy;
-				$tag->sharedUser[] = $user;
-				$entry->sharedTag[] = $t;
+				$tag = R::findOrNewOne('tag',$t);
+				$tag->sharedUser[] = $entry->user;
+				$entry->sharedTag[] = $tag;
 			}
 		}
 

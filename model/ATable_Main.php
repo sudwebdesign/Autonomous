@@ -6,9 +6,9 @@ abstract class ATable_Main extends Table{
 	protected static $columnDocumentFulltextLanguage = 'french';
 	protected static $columnDocumentFulltext = array(
 		'title							/A',
-		'presentation					/A',
+		'tag			<>	name		/A',
+		'presentation					/B',
 		'geopoint		>	name		/B',
-		'tag			<>	name		/B',
 		'user			<	email		/C',
 	);
 	function onValidate(){
