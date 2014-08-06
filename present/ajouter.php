@@ -32,12 +32,12 @@ class ajouter extends \present{
 		$type = $this->taxonomy;
 		R::begin();
 		try{
-			$bean = $this->POST_Common($type);
+			$entry = $this->POST_Common($type);
 			if(method_exists($this,'POST_Specifications'))
-				$this->POST_Specifications($bean);
-			//exit(print('<pre>'.print_r($bean->getArray(),true)));
-			R::store($bean);
-			if($e=$bean->getErrors())
+				$this->POST_Specifications($entry);
+			//exit(print('<pre>'.print_r($entry->getArray(),true)));
+			R::store($entry);
+			if($e=$entry->getErrors())
 				throw new Exception_Validation('Données manquantes ou erronées',$e);
 			R::commit();
 			post::clearPersistance();
@@ -49,71 +49,59 @@ class ajouter extends \present{
 		}
 	}
 	function POST_Common($type){
-		$bean = R::create($type);
-		$bean->on('created',function($bean)use($type){
+		$entry = R::create($type);
+		$entry->on('created',function($entry)use($type){
 			uploader::image(array(
-				'dir'=>'content/'.$type.'/'.$bean->id.'/',
+				'dir'=>'content/'.$type.'/'.$entry->id.'/',
 				'key'=>'image',
 				'width'=>'90',
 				'height'=>'90',
 				//'rename'=>true, //image by default
-				'rename'=>uri::filterParam($bean->title),
+				'rename'=>uri::filterParam($entry->title),
 				'extensions'=>array('png','jpg'),
 				'conversion'=>'png'
 			));
-			uploader::files('content/'.$type.'/'.$bean->id.'/','files');
+			uploader::files('content/'.$type.'/'.$entry->id.'/','files');
 		});
+
 		$email = session::get('email');
 		if(!$email)
-			$bean->error('user','required');
-		else{
-			$user = R::findOrNewOne('user',array('email'=>$email));
-			$bean->user = $user;
-		}
+			return $entry->error('user','required');
+
+		$user = R::findOrNewOne('user',array('email'=>$email));
+		$entry->user = $user;
 			
 		if(isset($_POST['title']))
-			$bean->title = strip_tags($_POST['title']);
+			$entry->title = strip_tags($_POST['title']);
 		if(isset($_POST['tel']))
-			$bean->tel = $_POST['tel'];
+			$entry->tel = $_POST['tel'];
 		if(isset($_POST['url']))
-			$bean->url = filter::url($_POST['url']);
+			$entry->url = filter::url($_POST['url']);
 			
 		if(isset($_POST['presentation']))
-			$bean->presentation = filter::strip_tags_basic($_POST['presentation']);
+			$entry->presentation = filter::strip_tags_basic($_POST['presentation']);
+
 		if(isset($_POST['sharedTag'])&&is_array($_POST['sharedTag'])&&isset($_POST['sharedTag']['label'])&&trim($_POST['sharedTag']['label'])){
 			$max = 5;
 			$tags = explode(' ',strip_tags($_POST['sharedTag']['label']));
-			$taxonomyO = R::load('taxonomy',$this->taxonomy);
-			if(!$taxonomyO)
+			$taxonomy = R::load('taxonomy',$this->taxonomy);
+			if(!$taxonomy)
 				throw new \Exception(sprintf("Error: Taxonomy %s not found",$this->taxonomy));
-			foreach($tags as $i=>$tag){
+			foreach($tags as $i=>$t){
 				if($i>=$max)
 					break;
 				$tag = uri::filterParam($tag);
 				if(empty($tag))
 					continue;
-				if($t=R::load('taxonomy',$tag)){
-					if(isset($user))
-						$t->sharedUser[] = $user;
-					$bean->sharedTaxonomy[] = $t;
-				}
-				elseif($t=R::load('tag',$tag)){
-					$t->sharedTaxonomy[] = $taxonomyO;
-					if(isset($user))
-						$t->sharedUser[] = $user;
-					$bean->sharedTag[] = $t;
-				}
-				else{
-					$t = R::newOne('tag',$tag);
-					$t->sharedTaxonomy[] = $taxonomyO;
-					if(isset($user))
-						$t->sharedUser[] = $user;
-					$bean->sharedTag[] = $t;
-				}
+				$tag = R::findOrNewOne('tag',$tag);
+				$tag->sharedTaxonomy[] = $taxonomy;
+				$tag->sharedUser[] = $user;
+				$entry->sharedTag[] = $t;
 			}
 		}
-		if(isset($_POST['xownGeopoint'])&&is_array($_POST['xownGeopoint']))
-			Control_Geocoding::POST_Geo($bean,$_POST['xownGeopoint']);
-		return $bean;
+
+		
+			
+		return $entry;
 	}
 }

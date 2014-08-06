@@ -55,12 +55,6 @@
 						<input name="xownGeopoint[label]" type="text" placeholder="Rechercher un lieu, une adresse ou une commune" value="">
 					</fieldset>
 					<fieldset>
-						<label for="geo-country">Pays</label>
-						<input name="xownGeopoint[country]" type="text" id="geo-country">
-						<label for="geo-arealevel1">Région</label>
-						<input name="xownGeopoint[arealevel1]" type="text" id="geo-arealevel1">
-						<label for="geo-arealevel2">Département</label>
-						<input name="xownGeopoint[arealevel2]" type="text" id="geo-arealevel2">
 						<label for="geo-city">Commune</label>
 						<input name="xownGeopoint[city]" type="text" id="geo-city">
 						<label for="geo-address">Adresse</label>
