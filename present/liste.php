@@ -71,7 +71,7 @@ class liste extends \present{
 		$this->Query
 			->select(array('title','tel','url'))
 			//->selectTruncation('presentation',369)
-			->selectFullTextHighlite('presentation_html',$uri->search,369)
+			->selectFullTextHighlite('presentationHtml',$uri->search,369)
 			->orderByFullTextRank('document',$uri->search)
 			->select('created')
 		;

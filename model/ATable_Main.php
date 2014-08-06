@@ -5,11 +5,10 @@ abstract class ATable_Main extends Table{
 	protected $maxTitreLength = 250;
 	protected static $columnDocumentFulltextLanguage = 'french';
 	protected static $columnDocumentFulltext = array(
-		'taxonomy		<>	name		/A',
-		'tag			<>	name		/A',
-		'geopoint		>	name		/A',
-		'title							/B',
-		'presentation					/B',
+		'title							/A',
+		'presentation					/A',
+		'geopoint		>	name		/B',
+		'tag			<>	name		/B',
 		'user			<	email		/C',
 	);
 	function onValidate(){

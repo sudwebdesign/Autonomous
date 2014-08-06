@@ -83,8 +83,6 @@ R::drop('geoname');
 		'callback'=>function(&$data,&$continue){
 			$data['name'] = (string)$data['name'];
 			$data['asciiname'] = strtolower($data['asciiname']);
-			$data['latitude'] = (float)$data['latitude'];
-			$data['longitude'] = (float)$data['longitude'];
 			$data['population'] = $data['population']?(int)$data['population']:null;
 		}
 	)
