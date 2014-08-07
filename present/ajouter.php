@@ -85,6 +85,7 @@ class ajouter extends \present{
 		if(isset($_POST['sharedTag'])&&is_array($_POST['sharedTag'])&&isset($_POST['sharedTag']['name'])&&trim($_POST['sharedTag']['name'])){
 			$max = 5;
 			$tags = explode(' ',strip_tags($_POST['sharedTag']['name']));
+			$taxonomy = R::findOne('taxonomy',$this->presentAttributes->TAXONOMY);
 			foreach($tags as $i=>$t){
 				if($i>=$max)
 					break;
@@ -93,6 +94,7 @@ class ajouter extends \present{
 					continue;
 				$tag = R::findOrNewOne('tag',$t);
 				$tag->sharedUser[] = $entry->user;
+				$tag->sharedTaxonomy[] = $taxonomy;
 				$entry->sharedTag[] = $tag;
 			}
 		}

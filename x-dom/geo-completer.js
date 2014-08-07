@@ -1,7 +1,20 @@
-//https://developers.google.com/maps/documentation/javascript/reference
 $css('/x-dom/geo-completer');
+
+$css('jquery-ui/core');
+$css('jquery-ui/menu');
+$css('jquery-ui/autocomplete');
+
 $js([
 	'jquery',
+
+	'jquery-ui/core',
+	'jquery-ui/widget',
+	'jquery-ui/menu',
+	'jquery-ui/position',
+	'jquery-ui/autocomplete',
+	
+	'string',
+	
 	'simulate'
 ],function(){
 	geocallback = function(){
@@ -20,9 +33,43 @@ $js([
 			var input_rayon = geolocal.find('input[type=number][step][step!=any]:eq(0)');
 			var input = geolocal.find('input[type=text][name*=label]');
 			var div_map = $('<div class="map-canvas"></div>');
+
+			var input_geoname = $(this).find('input[type=text][name*=geoname]');
+			input_geoname.autocomplete({
+				selectFirst:true,
+				autoFill:true,
+				minLength: 0,
+				source:function(request,response){
+					if(request.term.length>=1){
+						$.ajax({
+							type:'GET',
+							dataType:'json',
+							url:input_geoname.attr('data-url'),
+							data:{'term':request.term},
+							success:function(j){
+								var suggesting = [];
+								for(var k in j)
+									suggesting.push(j[k].name);
+								response(suggesting);
+							},
+							error:function(){
+								response([]);
+							}
+						});
+					}
+				},
+				appendTo: input_geoname.parent(),
+				position: {
+					my: 'left top-3',
+					at: 'left bottom',
+					collision: 'none'
+				}
+			});
 			
 			var launch = function(){
+				//https://developers.google.com/maps/documentation/javascript/reference
 				div_map.insertAfter(input);
+				geolocal.show();
 				var distance = function(lat1, lon1, lat2, lon2){
 					var R = 6371; // Radius of the earth in km
 					var dLat = (lat2 - lat1) * Math.PI / 180;  // deg2rad below
@@ -212,8 +259,8 @@ $js([
 				}
 				
 			};
-
-			launch();
+			
+			//launch();
 			
 			
 		});

@@ -1,10 +1,26 @@
 geo-completer{
-
+	>fieldset{
+		@?include grid(*,100);
+		@?include grid(0-55-0,2-43-0,960px);
+		label{
+			cursor: pointer;
+			color: $color-main;
+		}
+		a{
+			vertical-align: top;
+		}
+		input[type=checkbox]{
+			margin-left: 0.5em;
+			margin-right: 0.2em;
+			margin-top: 0.25em;
+		}
+	}
 }
 
 geo-local{
 	//@?include grid(*,100);
 	//@?include grid(0-55-0,2-43-0,960px);
+	display:none;
 	input{
 		width:100%;
 		line-height: 1.2em;

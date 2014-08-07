@@ -51,7 +51,12 @@
 			<fieldset>
 				<legend>Commune</legend>
 				<geo-completer>
-					<input name="geoname" type="text" value="">
+					<fieldset>
+						<input name="geoname" type="text" value="" data-url="service/autocomplete/geoname">
+						<label>Préciser l'adresse
+							<input name="date_with_end" type="checkbox">
+						</label>
+					</fieldset>
 					<geo-local>
 						<fieldset>
 							<input name="xownGeopoint[label]" type="text" placeholder="Rechercher un lieu, une adresse ou une commune" value="">
