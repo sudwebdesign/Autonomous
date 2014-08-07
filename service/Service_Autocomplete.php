@@ -8,14 +8,13 @@ class Service_Autocomplete {
 	static function geoname(){
 		$results = array();
 		if(isset($_GET['term'])&&strlen($term=trim($_GET['term']))>=1){
-			$term = );
 			$results = model::newFrom('geoname')
 				->select('id')
 				->select('name')
 				->select('latitude')
 				->select('longitude')
 				//->select('radius')
-				->where('asciiname LIKE ?',array(strtolower(str::unaccent($term).'%'))
+				->where('asciiname LIKE ?',array(strtolower(str::unaccent($term).'%')))
 				->where('fcode = ?',array('ADM4'))
 				->getAll()
 			;
