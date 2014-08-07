@@ -49,24 +49,22 @@
 				<input type="file" name="files[]" accept="application/*,text/*,image/*" title="Sélectionner des Fichiers" multiple />
 			</fieldset>
 			<fieldset>
-				<legend>Localité <small class="geo-toggle"><a href="javascript:;" onclick="$(this).closest('fieldset').toggleClass('geo-details');">détails</a></small></legend>
+				<legend>Commune</legend>
 				<geo-completer>
-					<fieldset>
-						<input name="xownGeopoint[label]" type="text" placeholder="Rechercher un lieu, une adresse ou une commune" value="">
-					</fieldset>
-					<fieldset>
-						<label for="geo-city">Commune</label>
-						<input name="xownGeopoint[city]" type="text" id="geo-city">
-						<label for="geo-address">Adresse</label>
-						<input name="xownGeopoint[address]" type="text" id="geo-address">
-						<label for="geo-lat">Latitude</label>
-						<input name="xownGeopoint[lat]" type="number" step="any" min="-90" max="90" id="geo-lat">
-						<label for="geo-lng">Longitude</label>
-						<input name="xownGeopoint[lng]" type="number" step="any" min="-180" max="180" id="geo-lng">
-						<label for="geo-rayon">Rayon en km</label>
-						<input name="xownGeopoint[rayon]" type="number" step="1" min="0" max="67" id="geo-rayon">
-						<input name="xownGeopoint[valid]" type="hidden">
-					</fieldset>					
+					<input name="geoname" type="text" value="">
+					<geo-local>
+						<fieldset>
+							<input name="xownGeopoint[label]" type="text" placeholder="Rechercher un lieu, une adresse ou une commune" value="">
+						</fieldset>
+						<fieldset>
+							<label for="geo-lat">Latitude</label>
+							<input name="xownGeopoint[lat]" type="number" step="any" min="-90" max="90" id="geo-lat">
+							<label for="geo-lng">Longitude</label>
+							<input name="xownGeopoint[lng]" type="number" step="any" min="-180" max="180" id="geo-lng">
+							<label for="geo-rayon">Rayon en km</label>
+							<input name="xownGeopoint[rayon]" type="number" step="1" min="0" max="67" id="geo-rayon">
+						</fieldset>
+					</geo-local>
 				</geo-completer>
 			</fieldset>
 			<fieldset>

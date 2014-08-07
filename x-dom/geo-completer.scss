@@ -1,4 +1,8 @@
 geo-completer{
+
+}
+
+geo-local{
 	//@?include grid(*,100);
 	//@?include grid(0-55-0,2-43-0,960px);
 	input{
@@ -47,32 +51,32 @@ geo-completer{
 			
 		}
 	}
-	.map-canvas{
-		height:100%;
-		width:100%;
-		margin: 0;
-		padding: 0;
-		input[type="text"] {
-			margin-top: 16px;
-			border: 1px solid transparent;
-			border-radius: 2px 0 0 2px;
-			box-sizing: border-box;
-			-moz-box-sizing: border-box;
-			height: 32px;
-			outline: none;
-			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-			background-color: #fff;
-			padding: 0 11px 0 13px;
-			width: 400px;
-			font-size: 15px;
-			font-weight: 300;
-			text-overflow: ellipsis;
-			&:focus {
-				border-color: #4d90fe;
-				margin-left: -1px;
-				padding-left: 14px;  // Regular padding-left + 1.
-				width: 401px;
-			}
+}
+.map-canvas{
+	height:100%;
+	width:100%;
+	margin: 0;
+	padding: 0;
+	input[type="text"] {
+		margin-top: 16px;
+		border: 1px solid transparent;
+		border-radius: 2px 0 0 2px;
+		box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		height: 32px;
+		outline: none;
+		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+		background-color: #fff;
+		padding: 0 11px 0 13px;
+		width: 400px;
+		font-size: 15px;
+		font-weight: 300;
+		text-overflow: ellipsis;
+		&:focus {
+			border-color: #4d90fe;
+			margin-left: -1px;
+			padding-left: 14px;  // Regular padding-left + 1.
+			width: 401px;
 		}
 	}
 }

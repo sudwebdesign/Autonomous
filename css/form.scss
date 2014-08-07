@@ -72,6 +72,9 @@ fieldset.geo-details{
 	}
 }
 geo-completer{
+
+}
+geo-local{
 	@?include grid(*,100);
 	
 	>*{
