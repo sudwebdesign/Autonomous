@@ -3,15 +3,17 @@ use model;
 use model\R;
 use model\Query;
 use control\JSON;
+use control\str;
 class Service_Autocomplete {
 	static function geoname(){
 		$results = array();
 		if(isset($_GET['term'])&&strlen($term=trim($_GET['term']))>=1){
+			$term = strtolower(str::unaccent($term));
 			$q = new Query('geoname');
 			$results = $q
 				->select('id')
 				->select('name')
-				->where('name LIKE ?',array("$term%"))
+				->where('asciiname LIKE ?',array("$term%"))
 				->where('fcode = ?',array('ADM4'))
 				->getAll()
 			;

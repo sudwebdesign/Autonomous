@@ -6,6 +6,9 @@ geo-completer{
 			cursor: pointer;
 			color: $color-main;
 		}
+		input[type=text]{
+			width:100%;
+		}
 		a{
 			vertical-align: top;
 		}

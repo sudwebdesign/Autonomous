@@ -35,6 +35,7 @@ $js([
 			var div_map = $('<div class="map-canvas"></div>');
 
 			var input_geoname = $(this).find('input[type=text][name*=geoname]');
+			input_geoname.wrap('<div>');
 			input_geoname.autocomplete({
 				selectFirst:true,
 				autoFill:true,
