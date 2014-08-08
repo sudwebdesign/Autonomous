@@ -18,25 +18,39 @@ $js([
 	'simulate'
 ],function(){
 	geocallback = function(){
+		var geocoder = new google.maps.Geocoder();
+		var autocompleteService = new google.maps.places.AutocompleteService();
+		var floatFromStr = function(v){
+			if(typeof(v)!='undefined')
+				return parseFloat(v.replace(',','.'));
+		};
+		var distance = function(lat1, lon1, lat2, lon2){
+			var R = 6371; // Radius of the earth in km
+			var dLat = (lat2 - lat1) * Math.PI / 180;  // deg2rad below
+			var dLon = (lon2 - lon1) * Math.PI / 180;
+			var a = 0.5 - Math.cos(dLat)/2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * (1 - Math.cos(dLon))/2;
+			return R * 2 * Math.asin(Math.sqrt(a));
+		};
+		
+		var params = <!--#include virtual="/service/autocomplete/geoinit" -->; //Pyrénées-Orientales Square
+		//$.getJSON('service/autocomplete/geoinit',function(params){
+		
 		$('geo-completer').each(function(){
 			var geolocal = $(this).find('geo-local');
-			//$.getJSON('service/autocomplete/geoinit',function(params){
-			var params = <!--#include virtual="/service/autocomplete/geoinit" -->;
 			var defaultMapZoom = 17;
-			var bounds = new google.maps.LatLngBounds( //Pyrénées-Orientales Square
+			var bounds = new google.maps.LatLngBounds(
 				new google.maps.LatLng(params.southWestLatMainBound,params.southWestLngMainBound),
 				new google.maps.LatLng(params.northEastLatMainBound,params.northEastLngMainBound)
 			);
-			var geocoder = new google.maps.Geocoder();
 			var input_lat = geolocal.find('input[type=number][step=any]:eq(0)');
 			var input_lng = geolocal.find('input[type=number][step=any]:eq(1)');
 			var input_rayon = geolocal.find('input[type=number][step][step!=any]:eq(0)');
 			var input = geolocal.find('input[type=text][name*=label]');
-			var div_map = $('<div class="map-canvas"></div>');
-
-			var input_geoname = $(this).find('input[type=text][name*=geoname]');
-			input_geoname.wrap('<div>');
-			input_geoname.autocomplete({
+			var theMAP = $('<div class="map-canvas"></div>');
+			var inputUseAddress = $(this).find('input[type=checkbox][name*=use_address]');
+			var inputGeoname = $(this).find('input[type=text][name*=geoname]');
+			inputGeoname.wrap('<div>');
+			inputGeoname.autocomplete({
 				selectFirst:true,
 				autoFill:true,
 				minLength: 0,
@@ -45,7 +59,7 @@ $js([
 						$.ajax({
 							type:'GET',
 							dataType:'json',
-							url:input_geoname.attr('data-url'),
+							url:inputGeoname.attr('data-url'),
 							data:{'term':request.term},
 							success:function(j){
 								var suggesting = [];
@@ -58,8 +72,11 @@ $js([
 							}
 						});
 					}
+					else{
+						response([]);
+					}
 				},
-				appendTo: input_geoname.parent(),
+				appendTo: inputGeoname.parent(),
 				position: {
 					my: 'left top-3',
 					at: 'left bottom',
@@ -69,27 +86,17 @@ $js([
 			
 			var launch = function(){
 				//https://developers.google.com/maps/documentation/javascript/reference
-				div_map.insertAfter(input);
-				geolocal.show();
-				var distance = function(lat1, lon1, lat2, lon2){
-					var R = 6371; // Radius of the earth in km
-					var dLat = (lat2 - lat1) * Math.PI / 180;  // deg2rad below
-					var dLon = (lon2 - lon1) * Math.PI / 180;
-					var a = 0.5 - Math.cos(dLat)/2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * (1 - Math.cos(dLon))/2;
-					return R * 2 * Math.asin(Math.sqrt(a));
-				};
+				theMAP.insertAfter(input);
+				
 				var updateAdresse = function(latLng,updateMark){
 					geocoder.geocode({'latLng':latLng},function(results,status){
-						if(status=='OK'){
+						if(status==google.maps.places.PlacesServiceStatus.OK){
 							input.val(results[0].formatted_address);
-							updatePlace(results[0],updateMark);
+							theMAP.updatePlace(results[0],updateMark);
 						}				
 					});
 				};
-				var floatFromStr = function(v){
-					if(typeof(v)!='undefined')
-						return parseFloat(v.replace(',','.'));
-				};
+				
 				var updatePosition = function(){
 					updateAdresse(new google.maps.LatLng(floatFromStr(input_lat.val()), floatFromStr(input_lng.val())),true);
 				};
@@ -131,7 +138,7 @@ $js([
 						circle.setVisible(false);
 					}
 				});
-				var map = new google.maps.Map(div_map.get(0),{ //https://developers.google.com/maps/documentation/javascript/reference?csw=1#MapOptions
+				var map = new google.maps.Map(theMAP.get(0),{ //https://developers.google.com/maps/documentation/javascript/reference?csw=1#MapOptions
 					zoom: 8,
 					mapTypeId: google.maps.MapTypeId.HYBRID
 					/*			
@@ -149,8 +156,8 @@ $js([
 					region:params.region,
 					componentRestrictions:{
 						country:params.country
-					}
-					/* type: //https://developers.google.com/places/documentation/supported_types */
+					},
+					types: ['geocode'] //see https://developers.google.com/places/documentation/supported_types
 				});
 				//autocomplete.bindTo('bounds', map);
 				var infowindow = new google.maps.InfoWindow();
@@ -183,7 +190,7 @@ $js([
 						input_rayon.val('');
 					}
 				};
-				var updatePlace = function(place,updateMark){
+				theMAP.updatePlace = function(place,updateMark){
 					setRayon(place);
 					if(typeof(place)!='object'||!place.geometry)
 						return;
@@ -203,7 +210,7 @@ $js([
 						input_lng.val(place.geometry.location.lng());
 					input.trigger('change');
 				};
-				//var autocompleteService = new google.maps.places.AutocompleteService();
+				
 				google.maps.event.addListener(circle, 'radius_changed', function(){
 					var val = circle.getRadius()/1000.0;
 					if(val!=floatFromStr(input_rayon.val()))
@@ -228,7 +235,7 @@ $js([
 					input_lng.val(center.lng());
 					map.setZoom(defaultMapZoom);
 					geocoder.geocode({'latLng':center},function(results,status){
-						if(status=='OK'){
+						if(status==google.maps.places.PlacesServiceStatus.OK){
 							input.val(results[0].formatted_address);
 						}
 					});
@@ -246,23 +253,74 @@ $js([
 							input_lng.val(place.geometry.location.lng());
 						}
 					}
-					updatePlace(place,true);
+					theMAP.updatePlace(place,true);
 					
 				});
 				var val = input.val();
 				if(val){
-					geocoder.geocode({'address':val},function(results,status){
-						if(status==='OK'){
-							input.val(results[0].formatted_address);
-							updatePlace(results[0],true);
+					//geocoder.geocode({'address':val},function(results,status){
+						//if(status===google.maps.places.PlacesServiceStatus.OK){
+							//input.val(results[0].formatted_address);
+							//theMAP.updatePlace(results[0],true);
+						//}
+					//});
+					autocompleteService.getQueryPredictions({input:val},function(predictions, status){
+						//console.log(val);
+						//console.log(predictions);
+						if(status==google.maps.places.PlacesServiceStatus.OK&&predictions.length){
+							theMAP.updatePlace(predictions[0],true);
 						}
 					});
 				}
 				
 			};
+
+			var showGeolocal = function(){
+				inputGeoname.hide();
+				geolocal.show();
+				if(!launched){
+					input.val(inputGeoname.val());
+					launched = true;
+					launch();
+				}
+				else{
+					var val = inputGeoname.val();
+					input.val(val);
+					if(val){
+						autocompleteService.getQueryPredictions({input:val},function(predictions, status){
+							console.log(val);
+							console.log(predictions);
+							console.log(status==google.maps.places.PlacesServiceStatus.OK);
+							console.log(google.maps.places.PlacesServiceStatus.OK);
+							if(status==google.maps.places.PlacesServiceStatus.OK&&predictions.length){
+								theMAP.updatePlace(predictions[0],true);
+							}
+						});
+					}
+				}
+			};
+			var hideGeolocal = function(){
+				geolocal.hide();
+				inputGeoname.val(input.val());
+				inputGeoname.show();
+			};
 			
-			//launch();
-			
+			var launched = false;
+			if(inputUseAddress.is(':checked')){
+				showGeolocal();
+			}
+			inputUseAddress.change(function(e){
+				e.preventDefault();
+				if($(this).attr('checked')){
+					$(this).removeAttr('checked');
+					hideGeolocal();
+				}
+				else{
+					$(this).attr('checked','checked');
+					showGeolocal();
+				}
+				return false;
+			});
 			
 		});
 	};

@@ -24,7 +24,7 @@
 			</if>
 			<fieldset>
 				<legend>Titre</legend>
-				<input type="text" name="title" value="" placeholder="Mon titre simple et précis">
+				<input type="text" name="title" value="">
 			</fieldset>
 			<fieldset>
 				<legend>Présentation</legend>
@@ -54,7 +54,7 @@
 					<fieldset>
 						<input name="geoname" type="text" value="" data-url="service/autocomplete/geoname">
 						<label>Préciser l'adresse
-							<input name="date_with_end" type="checkbox">
+							<input name="use_address" type="checkbox">
 						</label>
 					</fieldset>
 					<geo-local>
