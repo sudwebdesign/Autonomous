@@ -18,30 +18,42 @@ $js([
 	'simulate'
 ],function(){
 	geocallback = function(){
-		var geocoder = new google.maps.Geocoder();
-		var autocompleteService = new google.maps.places.AutocompleteService();
-		var floatFromStr = function(v){
-			if(typeof(v)!='undefined')
-				return parseFloat(v.replace(',','.'));
-		};
-		var distance = function(lat1, lon1, lat2, lon2){
-			var R = 6371; // Radius of the earth in km
-			var dLat = (lat2 - lat1) * Math.PI / 180;  // deg2rad below
-			var dLon = (lon2 - lon1) * Math.PI / 180;
-			var a = 0.5 - Math.cos(dLat)/2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * (1 - Math.cos(dLon))/2;
-			return R * 2 * Math.asin(Math.sqrt(a));
-		};
-		
-		var params = <!--#include virtual="/service/autocomplete/geoinit" -->; //Pyrénées-Orientales Square
-		//$.getJSON('service/autocomplete/geoinit',function(params){
-		
 		$('geo-completer').each(function(){
-			var geolocal = $(this).find('geo-local');
-			var defaultMapZoom = 17;
+			var geocoder = new google.maps.Geocoder();
+			var autocompleteService = new google.maps.places.AutocompleteService();
+			var floatFromStr = function(v){
+				if(typeof(v)!='undefined')
+					return parseFloat(v.replace(',','.'));
+			};
+			var distance = function(lat1, lon1, lat2, lon2){
+				var R = 6371; // Radius of the earth in km
+				var dLat = (lat2 - lat1) * Math.PI / 180;  // deg2rad below
+				var dLon = (lon2 - lon1) * Math.PI / 180;
+				var a = 0.5 - Math.cos(dLat)/2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * (1 - Math.cos(dLon))/2;
+				return R * 2 * Math.asin(Math.sqrt(a));
+			};
+			
+			var params = <!--#include virtual="/service/autocomplete/geoinit" -->; //Pyrénées-Orientales Square
+			//$.getJSON('service/autocomplete/geoinit',function(params){
 			var bounds = new google.maps.LatLngBounds(
 				new google.maps.LatLng(params.southWestLatMainBound,params.southWestLngMainBound),
 				new google.maps.LatLng(params.northEastLatMainBound,params.northEastLngMainBound)
 			);
+
+			var updatingGeocode = function(val){
+				autocompleteService.getQueryPredictions({input:val,types:['geocode']},function(predictions, status){
+					if(status==google.maps.places.PlacesServiceStatus.OK&&predictions.length){
+						geocoder.geocode({'address':predictions[0].description,bounds:bounds},function(results,status){
+							if(status===google.maps.places.PlacesServiceStatus.OK){
+								input.val(results[0].formatted_address);
+								theMAP.updatePlace(results[0],true);
+							}
+						});
+					}
+				});
+			};
+			var geolocal = $(this).find('geo-local');
+			var defaultMapZoom = 17;
 			var input_lat = geolocal.find('input[type=number][step=any]:eq(0)');
 			var input_lng = geolocal.find('input[type=number][step=any]:eq(1)');
 			var input_rayon = geolocal.find('input[type=number][step][step!=any]:eq(0)');
@@ -65,6 +77,12 @@ $js([
 								var suggesting = [];
 								for(var k in j)
 									suggesting.push(j[k].name);
+								//var suggesting = [];
+								//for(var k in j)
+									//suggesting.push({
+										//label:j[k].name,
+										//value:j[k].id
+									//});
 								response(suggesting);
 							},
 							error:function(){
@@ -89,7 +107,7 @@ $js([
 				theMAP.insertAfter(input);
 				
 				var updateAdresse = function(latLng,updateMark){
-					geocoder.geocode({'latLng':latLng,bounds:bounds},function(results,status){
+					geocoder.geocode({'latLng':latLng},function(results,status){
 						if(status==google.maps.places.PlacesServiceStatus.OK){
 							input.val(results[0].formatted_address);
 							theMAP.updatePlace(results[0],updateMark);
@@ -215,16 +233,9 @@ $js([
 						var compo = address_components[i];
 						switch(compo.types[0]){
 							case 'locality':
-								//inputGeoname.val(compo.long_name);
-								inputGeoname.val(compo.long_name+' '+compo.short_name);
-							break;
-							case 'postal_code':
-								inputGeoname.val(compo.long_name+' '+compo.short_name);
+								inputGeoname.val(compo.long_name);
 							break;
 							//case 'country':
-							//case 'route':
-							//case 'sublocality':
-							//case 'street_number':
 							//case 'administrative_area_level_1':
 							//case 'administrative_area_level_2':
 						}
@@ -257,7 +268,7 @@ $js([
 					input_lat.val(center.lat());
 					input_lng.val(center.lng());
 					map.setZoom(defaultMapZoom);
-					geocoder.geocode({'latLng':center,bounds:bounds},function(results,status){
+					geocoder.geocode({'latLng':center},function(results,status){
 						if(status==google.maps.places.PlacesServiceStatus.OK){
 							input.val(results[0].formatted_address);
 						}
@@ -281,23 +292,13 @@ $js([
 				});
 				var val = input.val();
 				if(val){
-					geocoder.geocode({'address':val,bounds:bounds},function(results,status){
-						if(status===google.maps.places.PlacesServiceStatus.OK){
-							input.val(results[0].formatted_address);
-							theMAP.updatePlace(results[0],true);
-						}
-					});
+					updatingGeocode(val);
 				}
 
 				var updateByGeoname = function(event,ui){
 					var val = ui&&ui.item?ui.item.value:inputGeoname.val();
 					if(val){
-						geocoder.geocode({'address':val,bounds:bounds},function(results,status){
-							if(status===google.maps.places.PlacesServiceStatus.OK){
-								input.val(results[0].formatted_address);
-								theMAP.updatePlace(results[0],true);
-							}
-						});
+						updatingGeocode(val);
 					}
 				};
 				
@@ -316,12 +317,7 @@ $js([
 				}
 				else{
 					if(val){
-						geocoder.geocode({'address':val,bounds:bounds},function(results,status){
-							if(status===google.maps.places.PlacesServiceStatus.OK){
-								input.val(results[0].formatted_address);
-								theMAP.updatePlace(results[0],true);
-							}
-						});
+						updatingGeocode(val);
 					}
 				}
 			};
@@ -350,6 +346,9 @@ $js([
 		});
 	};
 	$js('http://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places&callback=geocallback');
+
+	
+	
 	/*
 	$(window).on('unload',function(){
 		//trying to resolve google map bug on unloading page that slow hard navigation
