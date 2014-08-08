@@ -89,7 +89,7 @@ $js([
 				theMAP.insertAfter(input);
 				
 				var updateAdresse = function(latLng,updateMark){
-					geocoder.geocode({'latLng':latLng},function(results,status){
+					geocoder.geocode({'latLng':latLng,bounds:bounds},function(results,status){
 						if(status==google.maps.places.PlacesServiceStatus.OK){
 							input.val(results[0].formatted_address);
 							theMAP.updatePlace(results[0],updateMark);
@@ -156,8 +156,8 @@ $js([
 					region:params.region,
 					componentRestrictions:{
 						country:params.country
-					},
-					types: ['geocode'] //see https://developers.google.com/places/documentation/supported_types
+					}
+					//,types: ['geocode'] //see https://developers.google.com/places/documentation/supported_types
 				});
 				//autocomplete.bindTo('bounds', map);
 				var infowindow = new google.maps.InfoWindow();
@@ -208,6 +208,29 @@ $js([
 						input_lat.val(place.geometry.location.lat());
 					if(input_lng.val()!=place.geometry.location.lng())
 						input_lng.val(place.geometry.location.lng());
+
+
+					var address_components = place.address_components;
+					for(var i in address_components){
+						var compo = address_components[i];
+						switch(compo.types[0]){
+							case 'locality':
+								//inputGeoname.val(compo.long_name);
+								inputGeoname.val(compo.long_name+' '+compo.short_name);
+							break;
+							case 'postal_code':
+								inputGeoname.val(compo.long_name+' '+compo.short_name);
+							break;
+							//case 'country':
+							//case 'route':
+							//case 'sublocality':
+							//case 'street_number':
+							//case 'administrative_area_level_1':
+							//case 'administrative_area_level_2':
+						}
+					}
+					
+					
 					input.trigger('change');
 				};
 				
@@ -234,7 +257,7 @@ $js([
 					input_lat.val(center.lat());
 					input_lng.val(center.lng());
 					map.setZoom(defaultMapZoom);
-					geocoder.geocode({'latLng':center},function(results,status){
+					geocoder.geocode({'latLng':center,bounds:bounds},function(results,status){
 						if(status==google.maps.places.PlacesServiceStatus.OK){
 							input.val(results[0].formatted_address);
 						}
@@ -258,42 +281,45 @@ $js([
 				});
 				var val = input.val();
 				if(val){
-					//geocoder.geocode({'address':val},function(results,status){
-						//if(status===google.maps.places.PlacesServiceStatus.OK){
-							//input.val(results[0].formatted_address);
-							//theMAP.updatePlace(results[0],true);
-						//}
-					//});
-					autocompleteService.getQueryPredictions({input:val},function(predictions, status){
-						//console.log(val);
-						//console.log(predictions);
-						if(status==google.maps.places.PlacesServiceStatus.OK&&predictions.length){
-							theMAP.updatePlace(predictions[0],true);
+					geocoder.geocode({'address':val,bounds:bounds},function(results,status){
+						if(status===google.maps.places.PlacesServiceStatus.OK){
+							input.val(results[0].formatted_address);
+							theMAP.updatePlace(results[0],true);
 						}
 					});
 				}
+
+				var updateByGeoname = function(event,ui){
+					var val = ui&&ui.item?ui.item.value:inputGeoname.val();
+					if(val){
+						geocoder.geocode({'address':val,bounds:bounds},function(results,status){
+							if(status===google.maps.places.PlacesServiceStatus.OK){
+								input.val(results[0].formatted_address);
+								theMAP.updatePlace(results[0],true);
+							}
+						});
+					}
+				};
+				
+				inputGeoname.on('autocompleteselect',updateByGeoname);
+				inputGeoname.on('autocompletechange',updateByGeoname);
 				
 			};
 
 			var showGeolocal = function(){
-				inputGeoname.hide();
 				geolocal.show();
+				var val = inputGeoname.val();
+				input.val(val);
 				if(!launched){
-					input.val(inputGeoname.val());
 					launched = true;
 					launch();
 				}
 				else{
-					var val = inputGeoname.val();
-					input.val(val);
 					if(val){
-						autocompleteService.getQueryPredictions({input:val},function(predictions, status){
-							console.log(val);
-							console.log(predictions);
-							console.log(status==google.maps.places.PlacesServiceStatus.OK);
-							console.log(google.maps.places.PlacesServiceStatus.OK);
-							if(status==google.maps.places.PlacesServiceStatus.OK&&predictions.length){
-								theMAP.updatePlace(predictions[0],true);
+						geocoder.geocode({'address':val,bounds:bounds},function(results,status){
+							if(status===google.maps.places.PlacesServiceStatus.OK){
+								input.val(results[0].formatted_address);
+								theMAP.updatePlace(results[0],true);
 							}
 						});
 					}
@@ -301,7 +327,6 @@ $js([
 			};
 			var hideGeolocal = function(){
 				geolocal.hide();
-				inputGeoname.val(input.val());
 				inputGeoname.show();
 			};
 			

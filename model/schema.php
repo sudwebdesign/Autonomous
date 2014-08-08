@@ -70,7 +70,7 @@ R::drop('geoname');
 		'admin1', //            : fipscode (subject to change to iso code), see exceptions below, see file admin1Codes.txt for display names of this code; varchar(20)
 		'admin2', //            : code for the second administrative division, a county in the US, see file admin2Codes.txt; varchar(80)
 		'admin3', //            : code for third level administrative division, varchar(20)
-		'admin44', //           : code for fourth level administrative division, varchar(20)
+		'admin4', //            : code for fourth level administrative division, varchar(20)
 		'population', //        : bigint (8 byte int)
 		'elevation', //         : in meters, integer
 		'gtopo30', //           : digital elevation model, srtm3 or gtopo30, average elevation of 3''x3'' (ca 90mx90m) or 30''x30'' (ca 900mx900m) area in meters, integer. srtm processed by cgiar/ciat.
