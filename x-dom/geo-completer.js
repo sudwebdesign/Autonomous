@@ -19,6 +19,7 @@ $js([
 ],function(){
 	geocallback = function(){
 		$('geo-completer').each(function(){
+			var autocomplete;
 			var geocoder = new google.maps.Geocoder();
 			var autocompleteService = new google.maps.places.AutocompleteService();
 			var floatFromStr = function(v){
@@ -40,13 +41,13 @@ $js([
 				new google.maps.LatLng(params.northEastLatMainBound,params.northEastLngMainBound)
 			);
 
-			var updatingGeocode = function(val){
+			var updatingGeocode = function(val,callback){
 				autocompleteService.getQueryPredictions({input:val,types:['geocode']},function(predictions, status){
 					if(status==google.maps.places.PlacesServiceStatus.OK&&predictions.length){
-						geocoder.geocode({'address':predictions[0].description,bounds:bounds},function(results,status){
+						geocoder.geocode({address:predictions[0].description,bounds:bounds},function(results,status){
 							if(status===google.maps.places.PlacesServiceStatus.OK){
 								input.val(results[0].formatted_address);
-								theMAP.updatePlace(results[0],true);
+								theMAP.updatePlace(results[0],true,callback);
 							}
 						});
 					}
@@ -169,15 +170,15 @@ $js([
 				});
 				//map.fitBounds(bounds);
 				map.controls[google.maps.ControlPosition.TOP_LEFT].push(input.get(0));
-				var autocomplete = new google.maps.places.Autocomplete(input.get(0),{
+				autocomplete = new google.maps.places.Autocomplete(input.get(0),{
 					bounds:bounds,
 					region:params.region,
 					componentRestrictions:{
 						country:params.country
 					}
-					//,types: ['geocode'] //see https://developers.google.com/places/documentation/supported_types
+					,types: ['geocode'] //see https://developers.google.com/places/documentation/supported_types
 				});
-				//autocomplete.bindTo('bounds', map);
+				autocomplete.bindTo('bounds', map);
 				var infowindow = new google.maps.InfoWindow();
 				var marker = new google.maps.Marker({map: map,draggable:true});
 				var circle = new google.maps.Circle({ //https://developers.google.com/maps/documentation/javascript/reference?csw=1#CircleOptions
@@ -208,12 +209,14 @@ $js([
 						input_rayon.val('');
 					}
 				};
-				theMAP.updatePlace = function(place,updateMark){
+				theMAP.updatePlace = function(place,updateMark,callback){
 					setRayon(place);
 					if(typeof(place)!='object'||!place.geometry)
 						return;
 					if(place.geometry.viewport){
+						console.log(place.geometry);
 						map.fitBounds(place.geometry.viewport);
+						//map.fitBounds(place.geometry.bounds);
 					}
 					else{
 						map.setCenter(place.geometry.location);
@@ -229,6 +232,7 @@ $js([
 
 
 					var address_components = place.address_components;
+					inputGeoname.val('');
 					for(var i in address_components){
 						var compo = address_components[i];
 						switch(compo.types[0]){
@@ -241,7 +245,8 @@ $js([
 						}
 					}
 					
-					
+					if(callback)
+						callback();
 					input.trigger('change');
 				};
 				
@@ -267,7 +272,7 @@ $js([
 					circle.setVisible(false);
 					input_lat.val(center.lat());
 					input_lng.val(center.lng());
-					map.setZoom(defaultMapZoom);
+					//map.setZoom(defaultMapZoom);
 					geocoder.geocode({'latLng':center},function(results,status){
 						if(status==google.maps.places.PlacesServiceStatus.OK){
 							input.val(results[0].formatted_address);
@@ -290,11 +295,7 @@ $js([
 					theMAP.updatePlace(place,true);
 					
 				});
-				var val = input.val();
-				if(val){
-					updatingGeocode(val);
-				}
-
+				
 				var updateByGeoname = function(event,ui){
 					var val = ui&&ui.item?ui.item.value:inputGeoname.val();
 					if(val){
@@ -304,29 +305,27 @@ $js([
 				
 				inputGeoname.on('autocompleteselect',updateByGeoname);
 				inputGeoname.on('autocompletechange',updateByGeoname);
-				
 			};
 
+			var launched = false;
 			var showGeolocal = function(){
 				geolocal.show();
-				var val = inputGeoname.val();
-				input.val(val);
 				if(!launched){
 					launched = true;
 					launch();
+
 				}
-				else{
-					if(val){
-						updatingGeocode(val);
-					}
+				var val = inputGeoname.val();
+				if(val){
+					updatingGeocode(val);
 				}
+				
 			};
 			var hideGeolocal = function(){
 				geolocal.hide();
 				inputGeoname.show();
 			};
 			
-			var launched = false;
 			if(inputUseAddress.is(':checked')){
 				showGeolocal();
 			}

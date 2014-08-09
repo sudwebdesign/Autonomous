@@ -81,7 +81,7 @@ geo-local{
 		&:nth-child(1){
 		}
 		&:nth-child(2){
-			display:none;
+			//display:none;
 			@?include grid(*,100);
 			@?include grid(
 				50,50,

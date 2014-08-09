@@ -59,7 +59,7 @@
 					</fieldset>
 					<geo-local>
 						<fieldset>
-							<input name="xownGeopoint[label]" type="text" placeholder="Rechercher un lieu, une adresse ou une commune" value="">
+							<input name="xownGeopoint[label]" type="text" placeholder="Rechercher une adresse" value="">
 						</fieldset>
 						<fieldset>
 							<label for="geo-lat">Latitude</label>
