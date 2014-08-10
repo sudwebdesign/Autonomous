@@ -3,6 +3,10 @@
 <?use control\session;?>
 <extend>	
 	<js+css form>
+
+	<js jquery sync="true">
+	<js+css remodal sync="true">
+	
 	<attr selector="main" addClass="present-ajouter">
 	<write main>
 		<?
@@ -49,27 +53,28 @@
 				<input type="file" name="files[]" accept="application/*,text/*,image/*" title="Sélectionner des Fichiers" multiple />
 			</fieldset>
 			<fieldset>
-				<legend>Commune</legend>
+				<legend>Emplacement (lieu,adresse ou commune)</legend>
 				<geo-completer>
 					<fieldset>
-						<input name="geoname" type="text" value="" data-url="service/autocomplete/geoname">
-						<label>Préciser l'adresse
-							<input name="use_address" type="checkbox">
-						</label>
+						<input name="xownGeopoint[label]" type="text" value="">
+						<a class="show_button" href="<?=$URI?>#map">Rechercher sur la carte</a>						
+						<div class="remodal" data-remodal-id="map">
+							<h1>Remodal</h1>
+							<p>
+								Flat, responsive, lightweight, fast, easy customizable modal window jquery plugin
+								with declarative state notation and hash tracking.
+							</p>
+							<a class="remodal-confirm" href="#">OK</a>
+						</div>
 					</fieldset>
-					<geo-local>
-						<fieldset>
-							<input name="xownGeopoint[label]" type="text" placeholder="Rechercher une adresse" value="">
-						</fieldset>
-						<fieldset>
-							<label for="geo-lat">Latitude</label>
-							<input name="xownGeopoint[lat]" type="number" step="any" min="-90" max="90" id="geo-lat">
-							<label for="geo-lng">Longitude</label>
-							<input name="xownGeopoint[lng]" type="number" step="any" min="-180" max="180" id="geo-lng">
-							<label for="geo-rayon">Rayon en km</label>
-							<input name="xownGeopoint[rayon]" type="number" step="1" min="0" max="67" id="geo-rayon">
-						</fieldset>
-					</geo-local>
+					<fieldset>
+						<label for="geo-lat">Latitude</label>
+						<input name="xownGeopoint[lat]" type="number" step="any" min="-90" max="90" id="geo-lat">
+						<label for="geo-lng">Longitude</label>
+						<input name="xownGeopoint[lng]" type="number" step="any" min="-180" max="180" id="geo-lng">
+						<label for="geo-rayon">Rayon en km</label>
+						<input name="xownGeopoint[rayon]" type="number" step="1" min="0" max="67" id="geo-rayon">
+					</fieldset>
 				</geo-completer>
 			</fieldset>
 			<fieldset>
