@@ -52,7 +52,7 @@
 				<legend>Emplacement (lieu,adresse ou commune)</legend>
 				<geo-completer>
 					<fieldset>
-						<input name="xownGeopoint[label]" type="text" value="">
+						<input class="geoname" name="xownGeopoint[label]" data-url="service/autocomplete/geoname" type="text" value="">
 						<a class="show_button" href="<?=$URI?>#map">Rechercher sur la carte</a>						
 						<div class="remodal" data-remodal-id="map">
 							<input class="gg-maps" type="text" value="">
