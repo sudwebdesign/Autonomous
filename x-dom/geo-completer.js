@@ -4,7 +4,7 @@ $css('jquery-ui/core');
 $css('jquery-ui/menu');
 $css('jquery-ui/autocomplete');
 
-$js([
+$js(true,[
 	'jquery',
 
 	'jquery-ui/core',
@@ -13,19 +13,72 @@ $js([
 	'jquery-ui/position',
 	'jquery-ui/autocomplete',
 	
+	'remodal',
+	
 	'string',
 	
 	'simulate'
 ],function(){
-	geocallback = function(){
-		$('geo-completer').each(function(){
+	var geocallbacks = [];
+	var geocallback = function(){
+		for(var i in geocallbacks)
+			geocallbacks[i]();
+	};
+	$('geo-completer').each(function(){
+		var THIS = $(this);
+		var geolocal = $('.remodal',THIS);
+		var input_lat = $('input[type=number][step=any]:eq(0)',THIS);
+		var input_lng = $('input[type=number][step=any]:eq(1)',THIS);
+		var input_rayon = $('input[type=number][step][step!=any]:eq(0)',THIS);
+		var input = $('input.gg-maps',THIS);
+		var inputGeoname = $('input[type=text][name*=geoname]',THIS);
+
+
+		inputGeoname.wrap('<div>')
+		inputGeoname.autocomplete({
+			selectFirst:true,
+			autoFill:true,
+			minLength: 0,
+			source:function(request,response){
+				if(request.term.length>=1){
+					$.ajax({
+						type:'GET',
+						dataType:'json',
+						url:inputGeoname.attr('data-url'),
+						data:{'term':request.term},
+						success:function(j){
+							var suggesting = [];
+							for(var k in j)
+								suggesting.push(j[k].name);
+							//var suggesting = [];
+							//for(var k in j)
+								//suggesting.push({
+									//label:j[k].name,
+									//value:j[k].id
+								//});
+							response(suggesting);
+						},
+						error:function(){
+							response([]);
+						}
+					});
+				}
+				else{
+					response([]);
+				}
+			},
+			appendTo: inputGeoname.parent(),
+			position: {
+				my: 'left top-3',
+				at: 'left bottom',
+				collision: 'none'
+			}
+		});
+		
+		geocallbacks.push(function(){
 			var autocomplete;
 			var geocoder = new google.maps.Geocoder();
 			var autocompleteService = new google.maps.places.AutocompleteService();
-			var floatFromStr = function(v){
-				if(typeof(v)!='undefined')
-					return parseFloat(v.replace(',','.'));
-			};
 			var distance = function(lat1, lon1, lat2, lon2){
 				var R = 6371; // Radius of the earth in km
 				var dLat = (lat2 - lat1) * Math.PI / 180;  // deg2rad below
@@ -53,55 +106,10 @@ $js([
 					}
 				});
 			};
-			var geolocal = $(this).find('geo-local');
 			var defaultMapZoom = 17;
-			var input_lat = geolocal.find('input[type=number][step=any]:eq(0)');
-			var input_lng = geolocal.find('input[type=number][step=any]:eq(1)');
-			var input_rayon = geolocal.find('input[type=number][step][step!=any]:eq(0)');
-			var input = geolocal.find('input[type=text][name*=label]');
+			
+			
 			var theMAP = $('<div class="map-canvas"></div>');
-			var inputUseAddress = $(this).find('input[type=checkbox][name*=use_address]');
-			var inputGeoname = $(this).find('input[type=text][name*=geoname]');
-			inputGeoname.wrap('<div>');
-			inputGeoname.autocomplete({
-				selectFirst:true,
-				autoFill:true,
-				minLength: 0,
-				source:function(request,response){
-					if(request.term.length>=1){
-						$.ajax({
-							type:'GET',
-							dataType:'json',
-							url:inputGeoname.attr('data-url'),
-							data:{'term':request.term},
-							success:function(j){
-								var suggesting = [];
-								for(var k in j)
-									suggesting.push(j[k].name);
-								//var suggesting = [];
-								//for(var k in j)
-									//suggesting.push({
-										//label:j[k].name,
-										//value:j[k].id
-									//});
-								response(suggesting);
-							},
-							error:function(){
-								response([]);
-							}
-						});
-					}
-					else{
-						response([]);
-					}
-				},
-				appendTo: inputGeoname.parent(),
-				position: {
-					my: 'left top-3',
-					at: 'left bottom',
-					collision: 'none'
-				}
-			});
 			
 			var launch = function(){
 				//https://developers.google.com/maps/documentation/javascript/reference
@@ -114,8 +122,7 @@ $js([
 							theMAP.updatePlace(results[0],updateMark);
 						}				
 					});
-				};
-				
+				};				
 				var updatePosition = function(){
 					updateAdresse(new google.maps.LatLng(floatFromStr(input_lat.val()), floatFromStr(input_lng.val())),true);
 				};
@@ -137,24 +144,6 @@ $js([
 						input.trigger('focus');
 						input.simulate('keydown',{keyCode:$.ui.keyCode.DOWN}).simulate('keydown',{keyCode:$.ui.keyCode.ENTER});
 						return false;
-					}
-				});
-				input.on('input',function(){
-					input_lat.val('');
-					input_lng.val('');
-					input_rayon.val('');
-				});
-				//input_lat.on('input',updatePosition);
-				input_lng.on('input',updatePosition);
-				input_rayon.on('input',function(){
-					var val = $(this).val();
-					if(val){
-						circle.setRadius(floatFromStr(val)*1000.0);
-						circle.bindTo('center', marker, 'position');
-						circle.setVisible(true);
-					}
-					else{
-						circle.setVisible(false);
 					}
 				});
 				var map = new google.maps.Map(theMAP.get(0),{ //https://developers.google.com/maps/documentation/javascript/reference?csw=1#MapOptions
@@ -179,7 +168,7 @@ $js([
 					,types: ['geocode'] //see https://developers.google.com/places/documentation/supported_types
 				});
 				autocomplete.bindTo('bounds', map);
-				var infowindow = new google.maps.InfoWindow();
+				//var infowindow = new google.maps.InfoWindow();
 				var marker = new google.maps.Marker({map: map,draggable:true});
 				var circle = new google.maps.Circle({ //https://developers.google.com/maps/documentation/javascript/reference?csw=1#CircleOptions
 				  //visible: false,
@@ -257,7 +246,6 @@ $js([
 				});
 				google.maps.event.addListener(marker, 'dragstart', function(e){
 					circle.setVisible(false);
-					infowindow.close();
 				});
 				google.maps.event.addListener(marker, 'dragend', function(e){
 					var latLng = e.latLng;
@@ -324,45 +312,10 @@ $js([
 			var hideGeolocal = function(){
 				geolocal.hide();
 				inputGeoname.show();
-			};
-			
-			if(inputUseAddress.is(':checked')){
-				showGeolocal();
-			}
-			inputUseAddress.change(function(e){
-				e.preventDefault();
-				if($(this).attr('checked')){
-					$(this).removeAttr('checked');
-					hideGeolocal();
-				}
-				else{
-					$(this).attr('checked','checked');
-					showGeolocal();
-				}
-				return false;
-			});
-			
+			};			
 		});
-	};
-	$js('http://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places&callback=geocallback');
-
-	
-	
-	/*
-	$(window).on('unload',function(){
-		//trying to resolve google map bug on unloading page that slow hard navigation
-		//$(this).off('unload');
-		if (window.google !== undefined && google.maps !== undefined){
-			delete google.maps;
-			$('script').each(function () {
-				if (this.src.indexOf('googleapis.com/maps') >= 0
-						|| this.src.indexOf('maps.gstatic.com') >= 0
-						|| this.src.indexOf('earthbuilder.googleapis.com') >= 0) {
-					// console.log('removed', this.src);
-					$(this).remove();
-				}
-			});
-		}
 	});
-	*/
+	$(document).one("open","[data-remodal-id=map]",function(){
+		$js('http://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places&callback=geocallback');
+	});
 });

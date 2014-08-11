@@ -3,10 +3,6 @@
 <?use control\session;?>
 <extend>	
 	<js+css form>
-
-	<js jquery sync="true">
-	<js+css remodal sync="true">
-	
 	<attr selector="main" addClass="present-ajouter">
 	<write main>
 		<?
@@ -59,11 +55,7 @@
 						<input name="xownGeopoint[label]" type="text" value="">
 						<a class="show_button" href="<?=$URI?>#map">Rechercher sur la carte</a>						
 						<div class="remodal" data-remodal-id="map">
-							<h1>Remodal</h1>
-							<p>
-								Flat, responsive, lightweight, fast, easy customizable modal window jquery plugin
-								with declarative state notation and hash tracking.
-							</p>
+							<input class="gg-maps" type="text" value="">
 							<a class="remodal-confirm" href="#">OK</a>
 						</div>
 					</fieldset>
