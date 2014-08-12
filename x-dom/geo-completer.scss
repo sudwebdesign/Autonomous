@@ -38,7 +38,15 @@ geo-completer{
 		line-height: 0.9em;
 		margin-bottom:0.05em;
 	}
+	.ui-autocomplete {
+		max-height: 160px;
+		overflow: auto;
+		overflow-x: hidden;
+		overflow-y: auto;
+		padding-right: 20px;
+	}
 }
+
 .map-wrapper{
 	height:20em;
 }

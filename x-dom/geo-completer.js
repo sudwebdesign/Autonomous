@@ -80,6 +80,7 @@ $js(true,[
 			}
 		});
 		inputGeoname.on('focus',function(){
+			window.pageIndex = 0;
 			inputGeoname.autocomplete('search',inputGeoname.val());
 		});
 
