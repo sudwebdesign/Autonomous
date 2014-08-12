@@ -25,6 +25,8 @@ $js(true,[
 		var inputLng = $('input[type=number][step=any]:eq(1)',THIS);
 		var inputRadius = $('input[type=number][step][step!=any]:eq(0)',THIS);
 		var inputGG = $('input.gg-maps',THIS);
+			inputGG.after('<div class="map-wrapper"><div class="map-canvas"></div></div>');
+		var theMAP = $('.map-canvas',THIS);
 		var inputGeoname = $('input.geoname',THIS);
 		
 		inputGeoname.wrap('<div>');
@@ -78,7 +80,6 @@ $js(true,[
 		//inputGeoname.on('autocompletechange',updateByGeoname);
 		
 		geocallbacks.push(function(){
-			console.log('hello');
 			var autocomplete;
 			var geocoder = new google.maps.Geocoder();
 			var autocompleteService = new google.maps.places.AutocompleteService();
@@ -97,23 +98,19 @@ $js(true,[
 				new google.maps.LatLng(params.northEastLatMainBound,params.northEastLngMainBound)
 			);
 
-			var updatingGeocode = function(val,callback){
+			var updatingGeocode = function(val){
 				autocompleteService.getQueryPredictions({input:val,types:['geocode']},function(predictions, status){
 					if(status==google.maps.places.PlacesServiceStatus.OK&&predictions.length){
 						geocoder.geocode({address:predictions[0].description,bounds:bounds},function(results,status){
 							if(status===google.maps.places.PlacesServiceStatus.OK){
 								inputGG.val(results[0].formatted_address);
-								theMAP.updatePlace(results[0],true,callback);
+								theMAP.updatePlace(results[0],true);
 							}
 						});
 					}
 				});
 			};
 			var defaultMapZoom = 17;
-			
-			var theMAP = $('<div class="map-canvas"></div>');
-			theMAP.insertAfter(inputGG);
-			
 			var updateAdresse = function(latLng,updateMark){
 				geocoder.geocode({'latLng':latLng},function(results,status){
 					if(status==google.maps.places.PlacesServiceStatus.OK){
@@ -191,12 +188,11 @@ $js(true,[
 					inputRadius.val('');
 				}
 			};
-			theMAP.updatePlace = function(place,updateMark,callback){
+			theMAP.updatePlace = function(place,updateMark){
 				setRadius(place);
 				if(typeof(place)!='object'||!place.geometry)
 					return;
 				if(place.geometry.viewport){
-					console.log(place.geometry);
 					map.fitBounds(place.geometry.viewport);
 					//map.fitBounds(place.geometry.bounds);
 				}
@@ -211,24 +207,6 @@ $js(true,[
 					inputLat.val(place.geometry.location.lat());
 				if(inputLng.val()!=place.geometry.location.lng())
 					inputLng.val(place.geometry.location.lng());
-
-
-				var address_components = place.address_components;
-				inputGeoname.val('');
-				for(var i in address_components){
-					var compo = address_components[i];
-					switch(compo.types[0]){
-						case 'locality':
-							inputGeoname.val(compo.long_name);
-						break;
-						//case 'country':
-						//case 'administrative_area_level_1':
-						//case 'administrative_area_level_2':
-					}
-				}
-				
-				if(callback)
-					callback();
 				inputGG.trigger('change');
 			};
 			
@@ -253,7 +231,6 @@ $js(true,[
 				circle.setVisible(false);
 				inputLat.val(center.lat());
 				inputLng.val(center.lng());
-				//map.setZoom(defaultMapZoom);
 				geocoder.geocode({'latLng':center},function(results,status){
 					if(status==google.maps.places.PlacesServiceStatus.OK){
 						inputGG.val(results[0].formatted_address);

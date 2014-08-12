@@ -2,13 +2,17 @@
 geo-completer{
 	>fieldset{
 		@?include grid(*,100);
-		@?include grid(0-55-0,2-43-0,960px);
+		@?include grid(0-58-0,2-40-0,2-98-2,960px);
+		@?include grid(0-40-0,2-26-0,2-28-2,1024px);
 		label{
 			cursor: pointer;
 			color: $color-main;
 		}
-		input[type=text]{
+		input{
 			width:100%;
+			line-height: 1.2em;
+			font-size: 0.9em;
+			margin-bottom:0.3em;
 		}
 		a{
 			vertical-align: top;
@@ -19,58 +23,24 @@ geo-completer{
 			margin-top: 0.25em;
 		}
 	}
-}
-
-geo-local{
-	//@?include grid(*,100);
-	//@?include grid(0-55-0,2-43-0,960px);
-	display:none;
-	input{
-		width:100%;
-		line-height: 1.2em;
-		font-size: 0.9em;
-		margin-bottom:0.3em;
-	}
-	>*{
-		border-radius:4px;
-		border:1px solid #555;
+	legend{
+		font-size: 1em;
+		line-height: 1em;
+		margin-bottom:0.1em;
 		&:nth-child(1){
-			height:20em;
-		}
-		&:nth-child(2){
-			height:auto;
-			legend{
-				font-size: 1em;
-				line-height: 1em;
-				margin-bottom:0.1em;
-				&:nth-child(1){
-					width:100%;
-				}
-			}
-			/*
-			@?include grid(*,100);
-			@?include grid(100,
-				50,50,
-				50,50,
-				50,50,
-				50,50,
-				50,50,
-				50,50,
-				50,50,
-				50,50,
-			480px);
-			*/
-			padding:0.5em;
-			label,
-			input{
-				padding-top:0.5em;
-				font-size: 0.7em;
-				line-height: 0.9em;
-				margin-bottom:0.05em;
-			}
-			
+			width:100%;
 		}
 	}
+	label,
+	input{
+		padding-top:0.5em;
+		font-size: 0.7em;
+		line-height: 0.9em;
+		margin-bottom:0.05em;
+	}
+}
+.map-wrapper{
+	height:20em;
 }
 .map-canvas{
 	height:100%;
