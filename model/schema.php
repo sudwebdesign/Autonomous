@@ -1,4 +1,5 @@
 <?php namespace model;
+use surikat\control\Geocoder\RadiusFinder;
 
 set_time_limit(0);
 
@@ -81,9 +82,13 @@ R::drop('geoname');
 	array(
 		'debug'=>3,
 		'callback'=>function(&$data,&$continue){
-			$data['name'] = (string)$data['name'];
-			$data['asciiname'] = strtolower($data['asciiname']);
-			$data['population'] = $data['population']?(int)$data['population']:null;
+			if($data['fcode']=='ADM4'){
+				$data['asciiname'] = strtolower($data['asciiname']);
+				$data['population'] = $data['population']?(int)$data['population']:null;
+				$data['radius'] = RadiusFinder::byAddress($data['name'],$data['latitude'],$data['longitude']);
+			}
+			else
+				$continue = true;
 		}
 	)
 );

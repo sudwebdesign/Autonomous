@@ -26,8 +26,17 @@ $js(true,[
 		var inputRadius = $('input[type=number][step][step!=any]:eq(0)',THIS);
 		var inputGG = $('input.gg-maps',THIS);
 			inputGG.after('<div class="map-wrapper"><div class="map-canvas"></div></div>');
+		var confirmGG = $('.remodal-confirm',THIS);
 		var theMAP = $('.map-canvas',THIS);
 		var inputGeoname = $('input.geoname',THIS);
+
+		var modal = $('[data-remodal-id=map]',THIS);
+		var inputRadiusH = $('<input type="hidden">');
+		var inputLatH = $('<input type="hidden">');
+		var inputLngH = $('<input type="hidden">');
+		inputLatH.appendTo(modal);
+		inputLngH.appendTo(modal);
+		inputRadiusH.appendTo(modal);
 		
 		inputGeoname.wrap('<div>');
 		inputGeoname.autocomplete({
@@ -70,17 +79,15 @@ $js(true,[
 			}
 		});
 
-		//var updateByGeoname = function(event,ui){
-			//var val = ui&&ui.item?ui.item.value:inputGeoname.val();
-			//if(val){
-				//updatingGeocode(val);
-			//}
-		//};
-		//inputGeoname.on('autocompleteselect',updateByGeoname);
-		//inputGeoname.on('autocompletechange',updateByGeoname);
-		
 		geocallbacks.push(function(){
-			var autocomplete;
+
+			$(document).on("confirm","[data-remodal-id=map]",function(){
+				inputGeoname.val(inputGG.val());
+				inputLat.val(inputLatH.val());
+				inputLng.val(inputLngH.val());
+				inputRadius.val(inputRadiusH.val());
+			});
+			
 			var geocoder = new google.maps.Geocoder();
 			var autocompleteService = new google.maps.places.AutocompleteService();
 			var distance = function(lat1, lon1, lat2, lon2){
@@ -149,7 +156,7 @@ $js(true,[
 			});
 			//map.fitBounds(bounds);
 			map.controls[google.maps.ControlPosition.TOP_LEFT].push(inputGG.get(0));
-			autocomplete = new google.maps.places.Autocomplete(inputGG.get(0),{
+			var autocomplete = new google.maps.places.Autocomplete(inputGG.get(0),{
 				bounds:bounds,
 				region:params.region,
 				componentRestrictions:{
@@ -175,17 +182,18 @@ $js(true,[
 					var center = place.geometry.viewport.getCenter();
 					var northEast = place.geometry.viewport.getNorthEast();
 					var southWest = place.geometry.viewport.getSouthWest();
-					var lat = center.lat();
-					var lng = center.lng();
-					var r = (distance(lat,lng,northEast.lat(),northEast.lng())+distance(lat,lng,southWest.lat(),southWest.lng()))/2.0;
-					inputRadius.val(r);
+					//var lat = center.lat();
+					//var lng = center.lng();
+					//var r = (distance(lat,lng,northEast.lat(),northEast.lng())+distance(lat,lng,southWest.lat(),southWest.lng()))/2.0;
+					var r = (distance(northEast.lat(),northEast.lng(),southWest.lat(),southWest.lng()))/2.0;
+					inputRadiusH.val(r);
 					circle.setRadius(r*1000.0);
 					circle.bindTo('center', marker, 'position');
 					circle.setVisible(true);
 				}
 				else{
 					circle.setVisible(false);
-					inputRadius.val('');
+					inputRadiusH.val('');
 				}
 			};
 			theMAP.updatePlace = function(place,updateMark){
@@ -203,34 +211,34 @@ $js(true,[
 				if(updateMark)
 					updateMarker(place);
 				
-				if(inputLat.val()!=place.geometry.location.lat())
-					inputLat.val(place.geometry.location.lat());
-				if(inputLng.val()!=place.geometry.location.lng())
-					inputLng.val(place.geometry.location.lng());
-				inputGG.trigger('change');
+				if(inputLatH.val()!=place.geometry.location.lat())
+					inputLatH.val(place.geometry.location.lat());
+				if(inputLngH.val()!=place.geometry.location.lng())
+					inputLngH.val(place.geometry.location.lng());
+				//inputGG.trigger('change');
 			};
 			
 			google.maps.event.addListener(circle, 'radius_changed', function(){
 				var val = circle.getRadius()/1000.0;
-				if(val!=floatFromStr(inputRadius.val()))
-					inputRadius.val(val);
+				if(val!=floatFromStr(inputRadiusH.val()))
+					inputRadiusH.val(val);
 			});
 			google.maps.event.addListener(marker, 'dragstart', function(e){
 				circle.setVisible(false);
 			});
 			google.maps.event.addListener(marker, 'dragend', function(e){
 				var latLng = e.latLng;
-				inputLat.val(latLng.lat());
-				inputLng.val(latLng.lng());
+				inputLatH.val(latLng.lat());
+				inputLngH.val(latLng.lng());
 				updateAdresse(latLng);
 			});
 			google.maps.event.addListener(map, 'dragend', function(){
 				var center = map.getCenter();
 				marker.setPosition(center);
-				inputRadius.val('');
+				inputRadiusH.val('');
 				circle.setVisible(false);
-				inputLat.val(center.lat());
-				inputLng.val(center.lng());
+				inputLatH.val(center.lat());
+				inputLngH.val(center.lng());
 				geocoder.geocode({'latLng':center},function(results,status){
 					if(status==google.maps.places.PlacesServiceStatus.OK){
 						inputGG.val(results[0].formatted_address);
@@ -242,16 +250,20 @@ $js(true,[
 				if(typeof(place)=='object'&&place.geometry){
 					if(place.geometry.viewport){
 						var center = place.geometry.viewport.getCenter();
-						inputLat.val(center.lat());
-						inputLng.val(center.lng());
+						inputLatH.val(center.lat());
+						inputLngH.val(center.lng());
 					}
 					else{
-						inputLat.val(place.geometry.location.lat());
-						inputLng.val(place.geometry.location.lng());
+						inputLatH.val(place.geometry.location.lat());
+						inputLngH.val(place.geometry.location.lng());
 					}
 				}
 				theMAP.updatePlace(place,true);
 				
+			});
+			updatingGeocode(inputGeoname.val());
+			$(document).on("open","[data-remodal-id=map]",function(){
+				updatingGeocode(inputGeoname.val());
 			});
 			
 		});
