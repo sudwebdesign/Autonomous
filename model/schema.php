@@ -85,7 +85,7 @@ R::drop('geoname');
 			if($data['fcode']=='ADM4'){
 				$data['asciiname'] = strtolower($data['asciiname']);
 				$data['population'] = $data['population']?(int)$data['population']:null;
-				$data['radius'] = RadiusFinder::byAddress($data['name'],$data['latitude'],$data['longitude']);
+				$data['radius'] = RadiusFinder::byAddress($data['name'].', '.$data['country'],$data['latitude'],$data['longitude'],true);
 			}
 			else
 				$continue = true;
