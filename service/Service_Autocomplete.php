@@ -7,17 +7,21 @@ use control\str;
 class Service_Autocomplete {
 	static function geoname(){
 		$results = array();
-		if(isset($_GET['term'])&&strlen($term=trim($_GET['term']))>=1){
-			$results = model::newFrom('geoname')
-				->select('id')
+		if(isset($_GET['term'])){
+			$term = trim($_GET['term']);
+			$q = model::newFrom('geoname')
 				->select('name')
 				->select('latitude')
 				->select('longitude')
-				//->select('radius')
-				->where('asciiname LIKE ?',array(strtolower(str::unaccent($term).'%')))
+				->select('radius')
 				->where('fcode = ?',array('ADM4'))
-				->getAll()
+				->order_by('name ASC')
 			;
+			if(strlen($term)>=1)
+				$q->where('asciiname LIKE ?',array(strtolower(str_replace('%','',str::unaccent($term)).'%')));
+			else
+				$q->where('population >= ?',array(6000));
+			$results = $q->getAll();
 			
 		}
 		header('Content-Type:application/json; charset=utf-8');

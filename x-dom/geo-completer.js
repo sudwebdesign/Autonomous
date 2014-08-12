@@ -44,32 +44,33 @@ $js(true,[
 			autoFill:true,
 			minLength: 0,
 			source:function(request,response){
-				if(request.term.length>=1){
-					$.ajax({
-						type:'GET',
-						dataType:'json',
-						url:inputGeoname.attr('data-url'),
-						data:{'term':request.term},
-						success:function(j){
-							var suggesting = [];
-							for(var k in j)
-								suggesting.push(j[k].name);
-							//var suggesting = [];
-							//for(var k in j)
-								//suggesting.push({
-									//label:j[k].name,
-									//value:j[k].id
-								//});
-							response(suggesting);
-						},
-						error:function(){
-							response([]);
+				$.ajax({
+					type:'GET',
+					dataType:'json',
+					url:inputGeoname.attr('data-url'),
+					data:{'term':request.term},
+					success:function(j){
+						var suggesting = [];
+						for(var k in j){
+							suggesting.push({
+								label:j[k].name,
+								value:j[k].name,
+								lat:j[k].latitude,
+								lon:j[k].longitude,
+								radius:j[k].radius
+							});
 						}
-					});
-				}
-				else{
-					response([]);
-				}
+						response(suggesting);
+					},
+					error:function(){
+						response([]);
+					}
+				});
+			},
+			select:function(e,ui){
+				inputLat.val(ui.item.lat);
+				inputLng.val(ui.item.lon);
+				inputRadius.val(ui.item.radius);
 			},
 			appendTo: inputGeoname.parent(),
 			position: {
@@ -77,6 +78,9 @@ $js(true,[
 				at: 'left bottom',
 				collision: 'none'
 			}
+		});
+		inputGeoname.on('focus',function(){
+			inputGeoname.autocomplete('search',inputGeoname.val());
 		});
 
 		geocallbacks.push(function(){
@@ -202,7 +206,6 @@ $js(true,[
 					return;
 				if(place.geometry.viewport){
 					map.fitBounds(place.geometry.viewport);
-					//map.fitBounds(place.geometry.bounds);
 				}
 				else{
 					map.setCenter(place.geometry.location);
@@ -215,7 +218,6 @@ $js(true,[
 					inputLatH.val(place.geometry.location.lat());
 				if(inputLngH.val()!=place.geometry.location.lng())
 					inputLngH.val(place.geometry.location.lng());
-				//inputGG.trigger('change');
 			};
 			
 			google.maps.event.addListener(circle, 'radius_changed', function(){
