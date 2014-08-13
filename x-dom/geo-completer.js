@@ -107,7 +107,21 @@ $js(true,[
 				new google.maps.LatLng(params.southWestLatMainBound,params.southWestLngMainBound),
 				new google.maps.LatLng(params.northEastLatMainBound,params.northEastLngMainBound)
 			);
-
+			var map = new google.maps.Map(theMAP.get(0),{
+				zoom: 8,
+				mapTypeId: google.maps.MapTypeId.HYBRID,
+				center:new google.maps.LatLng(params.centerLatMainBound,params.centerLngMainBound)
+			});
+			//map.fitBounds(bounds);
+			map.controls[google.maps.ControlPosition.TOP_LEFT].push(inputGG.get(0));
+			var autocomplete = new google.maps.places.Autocomplete(inputGG.get(0),{
+				bounds:bounds,
+				region:params.region,
+				componentRestrictions:{
+					country:params.country
+				},
+				types: ['geocode']
+			});
 			var updatingGeocode = function(val){
 				if(val){
 					autocompleteService.getQueryPredictions({input:val,types:['geocode']},function(predictions, status){
@@ -159,21 +173,7 @@ $js(true,[
 					return false;
 				}
 			});
-			var map = new google.maps.Map(theMAP.get(0),{
-				zoom: 8,
-				mapTypeId: google.maps.MapTypeId.HYBRID,
-				center:new google.maps.LatLng(params.centerLatMainBound,params.centerLngMainBound)
-			});
-			//map.fitBounds(bounds);
-			map.controls[google.maps.ControlPosition.TOP_LEFT].push(inputGG.get(0));
-			var autocomplete = new google.maps.places.Autocomplete(inputGG.get(0),{
-				bounds:bounds,
-				region:params.region,
-				componentRestrictions:{
-					country:params.country
-				},
-				types: ['geocode']
-			});
+			
 			//autocomplete.bindTo('bounds', map);
 			//var infowindow = new google.maps.InfoWindow();
 			var marker = new google.maps.Marker({map: map,draggable:true});
