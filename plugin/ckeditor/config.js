@@ -34,11 +34,12 @@ CKEDITOR.editorConfig = function( config ) {
 	config.removeButtons = 'Underline,Subscript,Superscript';
 	// Set the most common block elements.
 	config.format_tags = 'p;h3;h4;h5;pre';
-
 	// Simplify the dialog windows.
 	config.removeDialogTabs = 'image:advanced;link:advanced';
 	
 	config.language_list = ['fr:French'];
 	
 	config.removeFormatTags = 'h1,h2,b,big,code,del,dfn,em,font,i,ins,kbd,q,s,samp,small,span,strike,strong,sub,sup,tt,u,var';
+
+	config.contentsCss = CKEDITOR.basePath+'contents.css';
 };
