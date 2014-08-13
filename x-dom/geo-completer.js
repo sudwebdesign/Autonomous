@@ -39,7 +39,7 @@ $js(true,[
 		inputRadiusH.appendTo(modal);
 		
 		inputGeoname.wrap('<div>');
-		inputGeoname.autocomplete({
+		var autocompleteUI = inputGeoname.autocomplete({
 			selectFirst:true,
 			autoFill:true,
 			minLength: 0,
@@ -79,11 +79,11 @@ $js(true,[
 				collision: 'none'
 			}
 		});
+		console.log(autocompleteUI);
 		inputGeoname.on('focus',function(){
-			window.pageIndex = 0;
+			$('ul.ui-autocomplete',THIS).scrollTop(0);
 			inputGeoname.autocomplete('search',inputGeoname.val());
 		});
-
 		geocallbacks.push(function(){
 
 			$(document).on("confirm","[data-remodal-id=map]",function(){

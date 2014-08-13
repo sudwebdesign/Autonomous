@@ -15,12 +15,19 @@ geo-completer{
 			margin-bottom:0.3em;
 		}
 		a{
+			margin-top: 0.25em;
 			vertical-align: top;
 		}
-		input[type=checkbox]{
-			margin-left: 0.5em;
-			margin-right: 0.2em;
-			margin-top: 0.25em;
+		>fieldset{
+			@?include grid(*,100);
+			@?include grid(50,50,50,50,50,50,960px);
+			label,
+			input{
+				padding-top:0.5em;
+				font-size: 0.7em;
+				line-height: 0.9em;
+				margin-bottom:0.05em;
+			}
 		}
 	}
 	legend{
@@ -30,13 +37,6 @@ geo-completer{
 		&:nth-child(1){
 			width:100%;
 		}
-	}
-	label,
-	input{
-		padding-top:0.5em;
-		font-size: 0.7em;
-		line-height: 0.9em;
-		margin-bottom:0.05em;
 	}
 	.ui-autocomplete {
 		max-height: 160px;
