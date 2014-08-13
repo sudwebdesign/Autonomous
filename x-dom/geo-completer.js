@@ -39,7 +39,7 @@ $js(true,[
 		inputRadiusH.appendTo(modal);
 		
 		inputGeoname.wrap('<div>');
-		var autocompleteUI = inputGeoname.autocomplete({
+		inputGeoname.autocomplete({
 			selectFirst:true,
 			autoFill:true,
 			minLength: 0,
@@ -79,9 +79,7 @@ $js(true,[
 				collision: 'none'
 			}
 		});
-		console.log(autocompleteUI);
 		inputGeoname.on('focus',function(){
-			$('ul.ui-autocomplete',THIS).scrollTop(0);
 			inputGeoname.autocomplete('search',inputGeoname.val());
 		});
 		geocallbacks.push(function(){
@@ -111,16 +109,23 @@ $js(true,[
 			);
 
 			var updatingGeocode = function(val){
-				autocompleteService.getQueryPredictions({input:val,types:['geocode']},function(predictions, status){
-					if(status==google.maps.places.PlacesServiceStatus.OK&&predictions.length){
-						geocoder.geocode({address:predictions[0].description,bounds:bounds},function(results,status){
-							if(status===google.maps.places.PlacesServiceStatus.OK){
-								inputGG.val(results[0].formatted_address);
-								theMAP.updatePlace(results[0],true);
-							}
-						});
-					}
-				});
+				if(val){
+					autocompleteService.getQueryPredictions({input:val,types:['geocode']},function(predictions, status){
+						if(status==google.maps.places.PlacesServiceStatus.OK&&predictions.length){
+							geocoder.geocode({address:predictions[0].description,bounds:bounds},function(results,status){
+								if(status===google.maps.places.PlacesServiceStatus.OK){
+									inputGG.val(results[0].formatted_address);
+									theMAP.updatePlace(results[0],true);
+								}
+							});
+						}
+					});
+				}
+				else{
+					map.fitBounds(bounds);
+					inputLatH.val('');
+					inputLngH.val('');
+				}
 			};
 			var defaultMapZoom = 17;
 			var updateAdresse = function(latLng,updateMark){

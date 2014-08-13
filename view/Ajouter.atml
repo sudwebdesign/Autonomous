@@ -49,7 +49,7 @@
 				<input type="file" name="files[]" accept="application/*,text/*,image/*" title="Sélectionner des Fichiers" multiple />
 			</fieldset>
 			<fieldset>
-				<legend>Emplacement (lieu,adresse ou commune)</legend>
+				<legend>Emplacement <small>(commune,lieu ou adresse)</small></legend>
 				<geo-completer>
 					<fieldset>
 						<input id="geoname" class="geoname" name="xownGeopoint[label]" data-url="service/autocomplete/geoname" type="text" value="">
@@ -63,7 +63,7 @@
 							<input name="xownGeopoint[rayon]" type="number" step="1" min="0" max="67" id="geo-rayon">
 						</fieldset>
 						<div class="remodal" data-remodal-id="map">
-							<input class="gg-maps" type="text" value="">
+							<input class="gg-maps" type="text" value="" placeholder="Rechercher un adresse, un lieu ou une commune">
 							<a class="remodal-confirm" href="#">OK</a>
 						</div>
 					</fieldset>
