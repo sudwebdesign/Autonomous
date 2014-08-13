@@ -9,16 +9,16 @@ final class Table_Geopoint extends Table{
 	function onUpdate(){
 		parent::onUpdate();
 		$this->lat = $this->lat!=''?(float)$this->lat:false;
-		$this->lng = $this->lng!=''?(float)$this->lng:false;
+		$this->lon = $this->lon!=''?(float)$this->lon:false;
 	}
 	function onValidate(){
 		parent::onValidate();
 		if($this->lat!==false&&!($this->lat<=90.0&&$this->lat>=-90.0))
 			$this->error('xownGeopoint.lat','La latitude doit être comprise entre 90 et -90');
-		if($this->lng!==false&&!($this->lng<=180.0&&$this->lng>=-180.0))
-			$this->error('xownGeopoint.lng','La logintude doit être comprise entre 180 et -180');
-		//$this->point = 'POINT('.$this->lat.' '.$this->lng.')'; //MySql
-		$this->point = '('.$this->lat.','.$this->lng.')'; //PgSql
+		if($this->lon!==false&&!($this->lon<=180.0&&$this->lon>=-180.0))
+			$this->error('xownGeopoint.lon','La logintude doit être comprise entre 180 et -180');
+		//$this->point = 'POINT('.$this->lat.' '.$this->lon.')'; //MySql
+		$this->point = '('.$this->lat.','.$this->lon.')'; //PgSql
 	}
 	//function onCreated(){}
 	//function onUpdated(){}

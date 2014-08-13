@@ -35,7 +35,6 @@ class ajouter extends \present{
 			$entry = $this->POST_Common($type);
 			if(method_exists($this,'POST_Specifications'))
 				$this->POST_Specifications($entry);
-			//exit(print('<pre>'.print_r($entry->getArray(),true)));
 			R::store($entry);
 			if($e=$entry->getErrors())
 				throw new Exception_Validation('Données manquantes ou erronées',$e);
@@ -71,20 +70,14 @@ class ajouter extends \present{
 		}
 		else
 			$entry->error('user','required');
-			
-		if(isset($_POST['title']))
-			$entry->title = strip_tags($_POST['title']);
-		if(isset($_POST['tel']))
-			$entry->tel = $_POST['tel'];
-		if(isset($_POST['url']))
-			$entry->url = filter::url($_POST['url']);
-			
-		if(isset($_POST['presentation']))
-			$entry->presentation = filter::strip_tags_basic($_POST['presentation']);
-
-		if(isset($_POST['sharedTag'])&&is_array($_POST['sharedTag'])&&isset($_POST['sharedTag']['name'])&&trim($_POST['sharedTag']['name'])){
+		$P = post::getObject();
+		$entry->title = strip_tags($P->title);
+		$entry->tel = $P->tel;
+		$entry->url = filter::url($P->url);
+		$entry->presentation = filter::strip_tags_basic($P->presentation);
+		if(is_object($P->sharedTag)&&trim($P->sharedTag->name)){
 			$max = 5;
-			$tags = explode(' ',strip_tags($_POST['sharedTag']['name']));
+			$tags = explode(' ',strip_tags($P->sharedTag->name));
 			$taxonomy = R::load('taxonomy',$this->presentAttributes->TAXONOMY);
 			foreach($tags as $i=>$t){
 				if($i>=$max)
@@ -98,9 +91,14 @@ class ajouter extends \present{
 				$entry->sharedTag[] = $tag;
 			}
 		}
-
-		
-			
+		if(is_object($G=$P->xownGeopoint)){
+			$entry->xownGeopoint[] = R::create('geopoint',[
+				'label' => $G->label,
+				'lat' => $G->lat,
+				'lon' => $G->lon,
+				'radius' => $G->radius,
+			]);
+		}
 		return $entry;
 	}
 }

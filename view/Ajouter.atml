@@ -58,9 +58,9 @@
 							<label for="geo-lat">Latitude</label>
 							<input name="xownGeopoint[lat]" type="number" step="any" min="-90" max="90" id="geo-lat">
 							<label for="geo-lng">Longitude</label>
-							<input name="xownGeopoint[lng]" type="number" step="any" min="-180" max="180" id="geo-lng">
+							<input name="xownGeopoint[lon]" type="number" step="any" min="-180" max="180" id="geo-lng">
 							<label for="geo-rayon">Rayon en km</label>
-							<input name="xownGeopoint[rayon]" type="number" step="1" min="0" max="67" id="geo-rayon">
+							<input name="xownGeopoint[radius]" type="number" step="1" min="0" max="67" id="geo-rayon">
 						</fieldset>
 						<div class="remodal" data-remodal-id="map">
 							<input class="gg-maps" type="text" value="" placeholder="Rechercher un adresse, un lieu ou une commune">

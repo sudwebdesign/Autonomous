@@ -8,7 +8,7 @@ abstract class ATable_Main extends Table{
 		'title							/A',
 		'tag			<>	name		/A',
 		'presentation					/B',
-		'geopoint		>	name		/B',
+		'geopoint		>	label		/B',
 		'user			<	email		/C',
 	);
 	function onValidate(){
