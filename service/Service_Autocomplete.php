@@ -6,7 +6,7 @@ use control\JSON;
 use control\str;
 class Service_Autocomplete {
 	static function geoname(){
-		$results = array();
+		$results = [];
 		if(isset($_GET['term'])){
 			$term = trim($_GET['term']);
 			$q = model::newFrom('geoname')
@@ -14,13 +14,13 @@ class Service_Autocomplete {
 				->select('latitude')
 				->select('longitude')
 				->select('radius')
-				->where('fcode = ?',array('ADM4'))
+				->where('fcode = ?',['ADM4'])
 				->order_by('name ASC')
 			;
 			if(strlen($term)>=1)
-				$q->where('asciiname LIKE ?',array(strtolower(str_replace('%','',str::unaccent($term)).'%')));
+				$q->where('asciiname LIKE ?',[strtolower(str_replace('%','',str::unaccent($term)).'%')]);
 			else
-				$q->where('population >= ?',array(6000));
+				$q->where('population >= ?',[6000]);
 			$results = $q->getAll();
 			
 		}
@@ -28,37 +28,35 @@ class Service_Autocomplete {
 		echo json_encode($results,JSON_UNESCAPED_UNICODE);
 	}
 	static function taxonomy(){
-		$results = array();
+		R::debug(2);
+		$results = [];
 		if(isset($_GET['term'])&&strlen($term=trim($_GET['term']))>=1){
 			if(isset($_GET['name'])&&($name=trim($_GET['name']))){
-				//R::debug();
-				$tags = model::getCol('tag',array(
+				$tags = model::getAssoc('tag',[
 					'joinOn'=>'taxonomy',
-					'where'=>'tag.name LIKE :like AND taxonomy.name=:taxonomy',
+					'where'=>['tag.name LIKE :like AND taxonomy.name=:taxonomy',[
+						':like'=>str_replace('%','',$term).'%',
+						':taxonomy'=>$name,
+					]],
 					'limit'=>10,
-				),array(
-					':like'=>$term.'%',
-					':taxonomy'=>$name,
-				));
+				]);
 				$tags = array_values($tags);
 				$results = array_merge($results,$tags);
 			};
 			
-			$taxonomy = model::getCol('taxonomy',array(
-				'where'=>'name LIKE ?',
+			$taxonomy = model::getAssoc('taxonomy',[
+				'where'=>['name LIKE ?',[str_replace('%','',$term).'%']],
 				'limit'=>10,
-			),array(
-				$term.'%'
-			));
+			]);
 			$taxonomy = array_values($taxonomy);
 			$results = array_merge($results,$taxonomy);
 		}
 		header('Content-Type:application/json; charset=utf-8');
-		echo json_encode($results);
+		echo json_encode($results,JSON_UNESCAPED_UNICODE);
 	}
 	static function geoinit(){
 		header('Content-Type:application/json; charset=utf-8');
-		echo json_encode(array(
+		echo json_encode([
 			'centerLatMainBound'=>model::getCenterLatOfMainBound(),
 			'centerLngMainBound'=>model::getCenterLongOfMainBound(),
 			'southWestLatMainBound'=>model::getSouthWestLatOfMainBound(),
@@ -67,7 +65,6 @@ class Service_Autocomplete {
 			'northEastLngMainBound'=>model::getNorthEastLongOfMainBound(),
 			'country'=>model::DEFAULT_COUNTRY_CODE,
 			'region'=>model::DEFAULT_COUNTRY_CODE
-
-		));
+		],JSON_UNESCAPED_UNICODE);
 	}
 }

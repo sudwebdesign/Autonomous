@@ -14,6 +14,7 @@ $js(true,[
 	'jquery-ui/autocomplete',
 	
 	'string',
+	'geocoding',
 	
 	'simulate'
 ],function(){
