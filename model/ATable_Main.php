@@ -31,7 +31,6 @@ abstract class ATable_Main extends Table{
 		$this->created = date('Y-m-d H:i:s');
 	}
 	function onChanged(){
-		//var_dump(__FUNCTION__);exit;
-		//$this->full
+		
 	}
 }
