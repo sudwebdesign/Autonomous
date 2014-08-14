@@ -32,7 +32,7 @@
 			</fieldset>
 			<fieldset>
 				<legend>Thématiques</legend>
-				<input name="sharedTag[name]" type="text" value="" placeholder="" is="tagsinput" data-url="service/autocomplete/taxonomy?name=<?=$taxonomy?>" data-minchar="4" data-maxchar="25" data-max="5" />
+				<input name="sharedTag[name]" type="text" value="" placeholder="" is="tagsinput" data-url="service/autocomplete/taxonomy?name=<?=$presentAttributes->TAXONOMY?>" data-minchar="4" data-maxchar="25" data-max="5" />
 				<?$dynVar='taxonomy'.ucfirst($taxonomy);?>
 				<if e="isset($$dynVar)">
 					<span class="tags-suggests">Suggestions:
