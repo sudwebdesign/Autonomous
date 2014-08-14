@@ -7,7 +7,7 @@
 			<form method="GET" action="<?=uri::param(0)?>">
 				<fieldset>
 					<legend>Phonémique</legend>
-					<input type="text" name="search" />
+					<input type="text" name="phonemic" />
 				</fieldset>
 				<fieldset>
 					<legend>Thématiques</legend>
