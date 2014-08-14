@@ -7,7 +7,7 @@
 			<form method="GET" action="<?=uri::param(0)?>">
 				<fieldset>
 					<legend>Thématiques</legend>
-					<input type="text" is="tagsinput" name="search" placeholder="" data-minchar="4" data-maxchar="25" data-max="5" data-url="service/autocomplete/taxonomy?name=<?=$taxonomy?>"
+					<input type="text" is="select2" name="search" placeholder="" data-minchar="4" data-maxchar="25" data-max="5" data-url="service/autocomplete/taxonomy?name=<?=$taxonomy?>"
 						value="<?=implode(' ',$find->submerge('taxonomyId','tagId','text')->getArray())?>"
 					/>
 					<?$dynVar='taxonomy'.ucfirst($taxonomy);?>
