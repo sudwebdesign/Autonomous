@@ -1,0 +1,40 @@
+(($name(byGeoname)=)$point,(if($name)geoname.radius+=)$dist)
+
+[
+	'center'=>"($lat,$lon)",
+	'dist'=>$rad,
+	'minLat'=>$minLat,
+	'maxLat'=>$maxLat,
+	'minLon'=>$minLon,
+	'maxLon'=>$maxLon,
+]
+
+SELECT
+	geodistance(:center::point,geopoint.point)+geopoint.radius as distance,
+	geodistance(:center::point,geopoint.point)-geopoint.radius as distance_proxima
+FROM
+	evenement
+LEFT OUTER JOIN
+	geopoint ON geopoint.evenement_id=evenement.id
+WHERE
+	[...]
+	distance<:dist OR distance_proxima<:dist
+ORDER BY
+	distance,distance_proxima
+
+[...]
+
+	included point
+	lat BETWEEN :minLat-geopoint.latVector AND :maxLat+geopoint.latVector AND
+	lon BETWEEN :minLon-geopoint.lonVector AND :maxLon+geopoint.lonVector AND
+	
+	included square
+	geopoint.south>:minLat AND geopoint.north<:maxLat AND
+	geopoint.west>:minLon AND geopoint.east<:maxLon AND
+
+	touched square
+	((geopoint.south>:minLat AND geopoint.east<:maxLon) OR
+	(geopoint.north<:maxLat AND geopoint.west>:minLon)) AND
+
+	((geopoint.south>:minLat OR geopoint.north<:maxLat) AND
+	(geopoint.east<:maxLon OR geopoint.west>:minLon)) AND
