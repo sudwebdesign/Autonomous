@@ -60,9 +60,8 @@ foreach($taxonomyTree as $name=>$v){
 
 R::drop('geoname');
 
-R::getDatabaseAdapter()->getDatabase()->getPDO()->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
-R::exec(file_get_contents('model/full-geoname/geoname-schema.sql'));
-R::exec(file_get_contents('model/full-geoname/geoname-with-radius.sql'));
+R::execFile('model/full-geoname/geoname-schema.sql');
+R::execFile('model/full-geoname/geoname-with-radius.sql');
 /*
 CsvImporter::importation('geoname',
 	array(
