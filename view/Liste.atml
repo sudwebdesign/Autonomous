@@ -6,20 +6,22 @@
 			<h3>Options de Recherche</h3>
 			<form method="GET" action="<?=uri::param(0)?>">
 				<fieldset>
+					<legend>Phonémique</legend>
+					<input type="text" name="search" />
+				</fieldset>
+				<fieldset>
 					<legend>Thématiques</legend>
-					<input type="text" is="select2" name="search" placeholder="" data-minchar="4" data-maxchar="25" data-max="5" data-url="service/autocomplete/taxonomy?name=<?=$taxonomy?>"
-						value="<?=implode(' ',$find->submerge('taxonomyId','tagId','text')->getArray())?>"
-					/>
-					<?$dynVar='taxonomy'.ucfirst($taxonomy);?>
-					<if "isset($$dynVar)">
-						<span class="tags-suggests">Suggestions:
-							<foreach "$$dynVar as $key=>$val" cacheSync="model.taxonomy"><?=$val?> </foreach>
-						</span>
+					<?$subTaxonomy='taxonomy'.ucfirst($taxonomy);?>
+					<if "isset($$subTaxonomy)">
+						<select name="thematics[]" is="select2" multiple>
+							<foreach "$$subTaxonomy as $key=>$val" cacheSync="model.taxonomy">
+								<option value="<?=$val?>"><?=$val?></option>
+							</foreach>
+						</select>
 					</if>
 				</fieldset>
 				<fieldset>
 					<legend>Localité <small>(lieu,adresse ou commune)</small></legend>
-					<?/*=@$assocParams->localityId[0]*/?>
 					<include "geo-completer.btml">
 				</fieldset>
 				<input type="submit" value="Rechercher">
