@@ -14,6 +14,7 @@ use view\Exception as View_Exception;
 class liste extends \present{
 	use Mixin_Pagination;
 	protected $limitation				= 10;
+	protected $truncation				= 369;
 	function assign(){
 		parent::assign();
 		$this->taxonomy = end($this->presentNamespaces);
@@ -62,13 +63,20 @@ class liste extends \present{
 				//$this->Query->joinWhere($t.'.id IN ?',array((array)$this->find->$k));
 		//}
 		//
-		if($uri->search)
-			$this->Query->whereFullText('document',$uri->search);
+		if($uri->search){
+			$this->Query
+				->whereFullText('document',$uri->search)
+				->selectFullTextHighlite('presentationHtml',$uri->search,$this->truncation)
+				->orderByFullTextRank('document',$uri->search)
+			;
+		}
+		else{
+			$this->Query
+				->selectTruncation('presentationHtml',$this->truncation)
+			;
+		}
 		$this->Query
 			->select(array('title','tel','url'))
-			//->selectTruncation('presentation',369)
-			->selectFullTextHighlite('presentationHtml',$uri->search,369)
-			->orderByFullTextRank('document',$uri->search)
 			->select('created')
 		;
 
