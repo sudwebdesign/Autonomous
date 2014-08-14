@@ -1,2 +1,2 @@
-<present:ajouter:mediatheque uri="static" />
+<present:ajouter:mediatheque uri="static" TAXONOMY="Médiathèque" />
 <extend file="Ajouter.atml"></extend>

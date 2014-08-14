@@ -1,4 +1,4 @@
-<present:ajouter:association uri="static" />
+<present:ajouter:association uri="static" TAXONOMY="Association" />
 <extend file="Ajouter.atml">
 	<after selector="main form fieldset:has([name=title])">
 		<fieldset>

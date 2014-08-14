@@ -1,2 +1,2 @@
-<present:ajouter:annonce uri="static" />
+<present:ajouter:annonce uri="static" TAXONOMY="Annonce" />
 <extend file="Ajouter.atml"></extend>
