@@ -94,13 +94,6 @@ $js(true,[
 			
 			var geocoder = new google.maps.Geocoder();
 			var autocompleteService = new google.maps.places.AutocompleteService();
-			var distance = function(lat1, lon1, lat2, lon2){
-				var R = 6371; // Radius of the earth in km
-				var dLat = (lat2 - lat1) * Math.PI / 180;  // deg2rad below
-				var dLon = (lon2 - lon1) * Math.PI / 180;
-				var a = 0.5 - Math.cos(dLat)/2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * (1 - Math.cos(dLon))/2;
-				return R * 2 * Math.asin(Math.sqrt(a));
-			};
 			
 			var params = <!--#include virtual="/service/autocomplete/geoinit" -->; //Pyrénées-Orientales Square
 			//$.getJSON('service/autocomplete/geoinit',function(params){
@@ -195,8 +188,8 @@ $js(true,[
 					var southWest = place.geometry.viewport.getSouthWest();
 					//var lat = center.lat();
 					//var lng = center.lng();
-					//var r = (distance(lat,lng,northEast.lat(),northEast.lng())+distance(lat,lng,southWest.lat(),southWest.lng()))/2.0;
-					var r = (distance(northEast.lat(),northEast.lng(),southWest.lat(),southWest.lng()))/2.0;
+					//var r = (window.geocoding.getDistance(lat,lng,northEast.lat(),northEast.lng())+distance(lat,lng,southWest.lat(),southWest.lng()))/2.0;
+					var r = (window.geocoding.distance(northEast.lat(),northEast.lng(),southWest.lat(),southWest.lng()))/2.0;
 					inputRadiusH.val(r);
 					circle.setRadius(r*1000.0);
 					circle.bindTo('center', marker, 'position');
