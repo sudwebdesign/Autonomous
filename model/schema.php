@@ -1,7 +1,10 @@
 <?php namespace model;
 use surikat\control\Geocoder\RadiusFinder;
+use surikat\control\CsvImporter;
 
 set_time_limit(0);
+ob_implicit_flush(true);
+ob_end_flush();
 
 R::nuke();
 
@@ -56,7 +59,12 @@ foreach($taxonomyTree as $name=>$v){
 }
 
 R::drop('geoname');
-\control\CsvImporter::importation('geoname',
+
+R::getDatabaseAdapter()->getDatabase()->getPDO()->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
+R::exec(file_get_contents('model/full-geoname/geoname-schema.sql'));
+R::exec(file_get_contents('model/full-geoname/geoname-with-radius.sql'));
+/*
+CsvImporter::importation('geoname',
 	array(
 		'geonameid', //         : integer id of record in geonames database
 		'name', //              : name of geographical point (utf8) varchar(200)
@@ -92,3 +100,4 @@ R::drop('geoname');
 		}
 	)
 );
+*/
