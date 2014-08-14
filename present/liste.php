@@ -31,10 +31,6 @@ class liste extends \present{
 			'date			>		start',
 			'date			>		end',
 			'tag			<>		name',
-			'taxonomy		<>		name',
-			//'taxonomy		<> 		taxonomy <>	name',
-			//'tag::thematics	<>		name',
-			//'taxonomy		<> 		taxonomy::thematics <>	name',
 		));
 		
 		$uri = view::getUri();
