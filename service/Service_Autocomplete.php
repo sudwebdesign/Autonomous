@@ -28,11 +28,12 @@ class Service_Autocomplete {
 		echo json_encode($results,JSON_UNESCAPED_UNICODE);
 	}
 	static function taxonomy(){
-		R::debug(2);
+		//R::debug(true,2);
 		$results = [];
 		if(isset($_GET['term'])&&strlen($term=trim($_GET['term']))>=1){
 			if(isset($_GET['name'])&&($name=trim($_GET['name']))){
-				$tags = model::getAssoc('tag',[
+				$results = model::getCol('tag',[
+					'select'=>'tag.name',
 					'joinOn'=>'taxonomy',
 					'where'=>['tag.name LIKE :like AND taxonomy.name=:taxonomy',[
 						':like'=>str_replace('%','',$term).'%',
@@ -40,16 +41,7 @@ class Service_Autocomplete {
 					]],
 					'limit'=>10,
 				]);
-				$tags = array_values($tags);
-				$results = array_merge($results,$tags);
 			};
-			
-			$taxonomy = model::getAssoc('taxonomy',[
-				'where'=>['name LIKE ?',[str_replace('%','',$term).'%']],
-				'limit'=>10,
-			]);
-			$taxonomy = array_values($taxonomy);
-			$results = array_merge($results,$taxonomy);
 		}
 		header('Content-Type:application/json; charset=utf-8');
 		echo json_encode($results,JSON_UNESCAPED_UNICODE);
