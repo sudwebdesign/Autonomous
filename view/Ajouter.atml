@@ -71,7 +71,7 @@
 			</fieldset>
 			<fieldset>
 				<legend>Lien</legend>
-				<input name="url" type="number" value="" placeholder="http://">
+				<input name="url" type="url" value="" placeholder="http://">
 			</fieldset>
 			<fieldset>
 				<legend>Téléphone</legend>
