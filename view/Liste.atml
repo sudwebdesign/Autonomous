@@ -11,9 +11,9 @@
 						value="<?=implode(' ',$find->submerge('taxonomyId','tagId','text')->getArray())?>"
 					/>
 					<?$dynVar='taxonomy'.ucfirst($taxonomy);?>
-					<if e="isset($$dynVar)">
+					<if "isset($$dynVar)">
 						<span class="tags-suggests">Suggestions:
-							<foreach e="$$dynVar as $key=>$val" cacheSync="model.taxonomy"><?=$val?> </foreach>
+							<foreach "$$dynVar as $key=>$val" cacheSync="model.taxonomy"><?=$val?> </foreach>
 						</span>
 					</if>
 				</fieldset>
@@ -28,32 +28,33 @@
 		<article>
 			<h1><?=$h1?> (<?=$countListe?> / <?=$count?> résultats)</h1>
 			<?$allLinks = array();?>
-			<foreach e="(array)@$liste as $id=>$item">
+			<foreach "(array)@$liste as $id=>$item">
 				<?$href=$subUri.'|'.uri::filterParam($item->title).'|'.$id;?>
 				<h2><a href="<?=$href?>"><?=$item->title?></a></h2>
 				<a href="<?=$href?>">
-					<if e="$img=$THIS->imageByItem($item)">
+					<if "$img=$THIS->imageByItem($item)">
 						<img src="<?=$img?>" alt="<?=$item->title?>" title="<?=$item->title?>" />
 					</if>
 					<?=$item->presentation?>
-					<if e="$item->presentation_length>strlen($item->presentation)">
+					<if "$item->presentation_length>strlen($item->presentation)">
 						<i>(En savoir plus ...)</i>
 					</if>
 				</a>
-				<?$tags=$item->groupKey(array('taxonomy','locality','tag'),'name',true);?>
-				<if e="$tags->count()">
+				<if "is_object($item->tag)&&$item->tag->count()">
 					<ul class="tags">
-						<?foreach($tags as $tag):?>
-							<li><h5><a href="<?=$URI.'|'.$tag?>"><?=$tag?></a></h5></li>
-							<?$allLinks[] = '<a href="'.$URI.'|'.$tag.'"> '.$tag.' </a>';?>
-						<?endforeach;?>
+						<foreach "$item->tag as $tag">
+							<if "$tag">
+								<li><h5><a href="<?=$URI.'|'.$tag->name?>"><?=$tag->name?></a></h5></li>
+								<?$allLinks[] = '<a href="'.$URI.'|'.$tag->name.'"> '.$tag->name.' </a>';?>
+							</if>
+						</foreach>
 					</ul>
 				</if>
 				<hr>
 			</foreach>
-			<if e="$count">
+			<if "$count">
 				<ul class="simple-pagination light-theme">
-					<if e="$page==1">
+					<if "$page==1">
 						<li class="active"><span class="current prev">Début</span></li>
 						<li class="active"><span class="current prev">Précédent</span></li>
 					<else>
@@ -61,7 +62,7 @@
 						<li><a class="prev page-link" href="<?=$uri.($page==2?'':$pagination->prefix.($page-1))?>">Précédent</a></li>
 					</if>
 					<for from="$pagination->start" to="$pagination->end">
-						<if e="$page==$i">
+						<if "$page==$i">
 							<li class="active"><span class="current"><?=$i?></span></li>
 						<else>
 							<li>
@@ -69,7 +70,7 @@
 							</li>
 						</if>
 					</for>
-					<if e="$page==$pagination->pagesTotal">
+					<if "$page==$pagination->pagesTotal">
 						<li class="active">
 							<span class="current next">Suivant</span>
 						</li>
@@ -85,12 +86,7 @@
 			<br><?//$THIS->debug();?>
 		</article>
 		<aside>
-			<h3></h3>
-			<h4>Sémantiques en développement :</h4>
-			<?shuffle($allLinks);?>
-				<foreach e="(array)@$allLinks as $taggy">
-					<i><?=$taggy?></i>
-				</foreach>			
+						
 		</aside>
 	</write>
 </extend>

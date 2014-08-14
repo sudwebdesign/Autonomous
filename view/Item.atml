@@ -7,16 +7,16 @@
 		<article class="<?=$taxonomy?>s">
 			<h1><?=$URI?> : <?=$title?></h1>
 			<h2>Présentation : </h2>
-			<if e="$srcimg[0]"><img src="<?= $srcimg[0]?>" alt="<?=$title?>" title="<?=$title?>" /></if>
+			<if "$srcimg[0]"><img src="<?= $srcimg[0]?>" alt="<?=$title?>" title="<?=$title?>" /></if>
 			<?=$presentation?>
 			<hr />
-			<if e="$lien"><p><i>Lien : </i><a href="<?=$lien?>" title="<?=$title?>"><?=$title?></a></p></if>
-			<if e="$tel"><p><i>Télépnone : </i><?=$tel?></p></if>
+			<if "$lien"><p><i>Lien : </i><a href="<?=$lien?>" title="<?=$title?>"><?=$title?></a></p></if>
+			<if "$tel"><p><i>Télépnone : </i><?=$tel?></p></if>
 			<!-- <p><i>Créé le : </i><?=date('l jS F Y \à H:i:s',strtotime($création))?></p> -->
 			<p><i>Créé le : </i><?=strftime('%A %e %B %G à %k:%M:%S',strtotime($création))?></p>
 			<hr />
 			<?$tags=$raw->groupKey(array('taxonomy','locality','tag'),'name',true);?>
-			<if e="$tags->count()">
+			<if "$tags->count()">
 				<ul class="tags">
 					<?foreach($tags as $tag):?>
 						<li><h5><a href="<?=$URI.'s|'.$tag?>"><?=$tag?></a></h5></li>

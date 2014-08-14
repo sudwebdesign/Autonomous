@@ -17,17 +17,17 @@
 			</aside>
 			<article>
 			<h1><?=$h1?> (<?=$countListe?> résultats)</h1>	
-			<foreach e="(array)@$liste as $taxonomy=>$founds">	
+			<foreach "(array)@$liste as $taxonomy=>$founds">	
 				<h2><?=$h1?> dans <?=$taxonomy?> (<?=$count[$taxonomy]?> / <?=$countListe?> résultats)</h2>
 				<?$allLinks = array();?>
-				<foreach e="(array)@$founds as $id=>$item">
+				<foreach "(array)@$founds as $id=>$item">
 					<?$href=$taxonomy.'|'.uri::filterParam($item->title).'|'.$id;?>
 					<h3><a href="<?=$href?>"><?=$item->title?></a></h3>
 					<a href="<?=$href?>">
-						<if e="$imgsItems[$taxonomy][$id]"><img src="<?= $imgsItems[$taxonomy][$id][0]?>" alt="<?=$item->title?>" title="<?=$item->title?>" /></if>
+						<if "$imgsItems[$taxonomy][$id]"><img src="<?= $imgsItems[$taxonomy][$id][0]?>" alt="<?=$item->title?>" title="<?=$item->title?>" /></if>
 						<?=Truncating::truncatehtml($item->presentation);?>
 					</a>
-					<if e="(array)@$item->groupKey(array('taxonomy','locality','tag'),'name',true)">
+					<if "(array)@$item->groupKey(array('taxonomy','locality','tag'),'name',true)">
 						<ul class="tags">
 							<?foreach($item->groupKey(array('taxonomy','locality','tag'),'name',true) as $tag):?>
 								<li><h5><a href="<?=$taxonomy.'|'.$tag?>"><?=$tag?></a></h5></li>
