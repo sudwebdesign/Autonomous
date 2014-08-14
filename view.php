@@ -19,6 +19,7 @@ class view extends surikat\view{
 		i18n::set(model::DEFAULT_LG_CODE);
 		i18n::handle();
 	}
+	/*
 	static function postHooks(){ #don't forget to call exit to avoid 404 when hook found
 		if(strpos(static::$URI->getPath(),'/blog/')===0){
 			control::dev(false);
@@ -30,46 +31,11 @@ class view extends surikat\view{
 		}
 		
 	}
+	*/
+	/* //add here your jquery-like manipulation on dom before compile
 	static function document($TML){
 		parent::document($TML); #register "present:" in tml templates & auto min when PROD
 		
-
-		//add here your jquery-style manipulation on dom before compile
-		
-	}
-	/*
-	static function getUriParams($path){
-		static $sepEq = ':';
-		static $sepAnd = '|';
-		static $sepOr = '&';
-		static $sepWord = '-';
-		$uriParams = array();
-		$min = array();
-		if(($pos=strpos($path,$sepEq))!==false)
-			$min[] = $pos;
-		if(($pos=strpos($path,$sepAnd))!==false)
-			$min[] = $pos;
-		if(!empty($min)){
-			$sepDir = min($min);
-			$uriParams[0] = substr($path,0,$sepDir);
-			$path = substr($path,$sepDir);
-			$x = explode($sepAnd,$path);
-			foreach($x as $v){
-				$x2 = explode($sepOr,$v);
-				if($k=$i=strpos($v,$sepEq)){
-					$k = substr($v,0,$i);
-					$v = substr($v,$i+1);
-				}
-				$v = strpos($v,$sepOr)?explode($sepOr,$v):$v;
-				if($k)
-					$uriParams[$k] = $v;
-				elseif(!empty($v))
-					$uriParams[] = $v;
-			}
-		}
-		else
-			$uriParams[0] = $path;
-		return $uriParams;
 	}
 	*/
 }
