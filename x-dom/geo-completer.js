@@ -189,7 +189,7 @@ $js(true,[
 					//var lat = center.lat();
 					//var lng = center.lng();
 					//var r = (window.geocoding.getDistance(lat,lng,northEast.lat(),northEast.lng())+distance(lat,lng,southWest.lat(),southWest.lng()))/2.0;
-					var r = (window.geocoding.distance(northEast.lat(),northEast.lng(),southWest.lat(),southWest.lng()))/2.0;
+					var r = (window.geocoding.getDistance(northEast.lat(),northEast.lng(),southWest.lat(),southWest.lng()))/2.0;
 					inputRadiusH.val(r);
 					circle.setRadius(r*1000.0);
 					circle.bindTo('center', marker, 'position');
