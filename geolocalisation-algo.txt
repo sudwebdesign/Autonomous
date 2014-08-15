@@ -17,7 +17,9 @@ FROM
 LEFT OUTER JOIN
 	geopoint ON geopoint.evenement_id=evenement.id
 WHERE
-	[...]
+	((geopoint.south>:minLat OR geopoint.north<:maxLat) AND
+	(geopoint.east<:maxLon OR geopoint.west>:minLon)) AND
+	
 	distance<:dist OR distance_proxima<:dist
 ORDER BY
 	distance,distance_proxima
