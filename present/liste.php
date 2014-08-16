@@ -67,6 +67,7 @@ class liste extends \present{
 			$this->Query
 				->whereFullText('document',$uri->search)
 				->selectFullTextHighlite('presentation',$uri->search,$this->truncation)
+				//->selectFullTextHighlight('presentation',$uri->search,'french')
 				->orderByFullTextRank('document',$uri->search)
 			;
 		}
