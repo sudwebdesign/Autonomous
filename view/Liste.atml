@@ -37,8 +37,8 @@
 					<if "$img=$THIS->imageByItem($item)">
 						<img src="<?=$img?>" alt="<?=$item->title?>" title="<?=$item->title?>" />
 					</if>
-					<?=$item->presentation?>
-					<if "$item->presentation_length>strlen($item->presentation)">
+					<?=$item->presentationHtml?>
+					<if "$item->presentation_length>strlen($item->presentationHtml)">
 						<i>(En savoir plus ...)</i>
 					</if>
 				</a>
