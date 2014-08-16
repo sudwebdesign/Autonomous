@@ -35,40 +35,23 @@ class liste extends \present{
 		));
 		
 		$uri = view::getUri();
-		//$uri->resolveMap(array(
-			//':int'=>function($param){
+		$uri->resolveMap(array(
+			':int'=>function($param){
 				//return R::load('taxonomy',$param);
-			//},
-			//'geo',
-			//'search'=>true,
-		//));
-		//$this->taxonomies = array();
-		//$redirect = '';
-		//foreach($this->finders as $fr){
-			//if(!isset($this->assocParams[$fr]))
-				//continue;
-			//$this->assocParams[$fr]->sort(SORT_NATURAL|SORT_FLAG_CASE);
-			//$redirect .= implode('|',(array)$this->assocParams[$fr]).'|';
-		//}
-		$this->keywords = array();
-		//$i = 0;
-		//while(($param = uri::param($i+=1))!==null){
-			//$this->keywords[] = $param;
-			//$this->uri .= '|'.$param;
-		//}
-		$this->find = array();
-		//foreach(array('taxonomy','locality','tag') as $t){
-			//$k = $t.'Id';
-			//if(!empty($this->find->$k))
-				//$this->Query->joinWhere($t.'.id IN ?',array((array)$this->find->$k));
-		//}
-		//
-		if($uri->search){
+				return R::load('tag',$param);
+			},
+			'geo',
+			'phonemic'=>true,
+		));
+		if($uri[1]){
+			$this->Query->joinWhere('tag.name IN ?',[[$uri[1]]]);
+		}
+		if($uri->phonemic){
 			$this->Query
-				->whereFullText('document',$uri->search)
-				->selectFullTextHighlite('presentation',$uri->search,$this->truncation)
-				//->selectFullTextHighlight('presentation',$uri->search,'french')
-				->orderByFullTextRank('document',$uri->search)
+				->whereFullText('document',$uri->phonemic)
+				->selectFullTextHighlite('presentation',$uri->phonemic,$this->truncation,'french')
+				//->selectFullTextHighlight('presentation',$uri->phonemic,'french')
+				->orderByFullTextRank('document',$uri->phonemic)
 			;
 		}
 		else{
