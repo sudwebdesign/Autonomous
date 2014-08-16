@@ -31,7 +31,7 @@
 			<h1><?=$h1?> (<?=$countListe?> / <?=$count?> résultats)</h1>
 			<?$allLinks = array();?>
 			<foreach "(array)@$liste as $id=>$item">
-				<?$href=$subUri.'|'.uri::filterParam($item->title).'|'.$id;?>
+				<?$href=$subUri.'+'.uri::filterParam($item->title).'+'.$id;?>
 				<h2><a href="<?=$href?>"><?=$item->title?></a></h2>
 				<a href="<?=$href?>">
 					<if "$img=$THIS->imageByItem($item)">
@@ -46,8 +46,8 @@
 					<ul class="tags">
 						<foreach "$item->tag as $tag">
 							<if "$tag">
-								<li><h5><a href="<?=$URI.'|'.$tag->name?>"><?=$tag->name?></a></h5></li>
-								<?$allLinks[] = '<a href="'.$URI.'|'.$tag->name.'"> '.$tag->name.' </a>';?>
+								<li><h5><a href="<?=$URI.'+'.$tag->name?>"><?=$tag->name?></a></h5></li>
+								<?$allLinks[] = '<a href="'.$URI.'+'.$tag->name.'"> '.$tag->name.' </a>';?>
 							</if>
 						</foreach>
 					</ul>

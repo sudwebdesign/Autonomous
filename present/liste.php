@@ -35,13 +35,13 @@ class liste extends \present{
 		));
 		
 		$uri = view::getUri();
-		$uri->resolveMap(array(
-			':int'=>function($param){
-				return R::load('taxonomy',$param);
-			},
-			'geo',
-			'search'=>true,
-		));
+		//$uri->resolveMap(array(
+			//':int'=>function($param){
+				//return R::load('taxonomy',$param);
+			//},
+			//'geo',
+			//'search'=>true,
+		//));
 		//$this->taxonomies = array();
 		//$redirect = '';
 		//foreach($this->finders as $fr){

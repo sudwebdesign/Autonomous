@@ -35,7 +35,7 @@
 				<a href="Événements">Événements</a>
 				<ul>
 					<foreach "$taxonomyEvenement as $key=>$val" cacheSync="model.taxonomy">
-						<li><a href="Événements|<?=$val?>"><?=$val?></a></li>
+						<li><a href="Événements+<?=$val?>"><?=$val?></a></li>
 					</foreach>
 				</ul> 	
 			</li>
@@ -43,7 +43,7 @@
 				<a href="Ressources">Ressources</a>
 				<ul>
 					<foreach "$taxonomyRessource as $key=>$val" cacheSync="model.taxonomy">
-						<li><a href="Ressources|<?=$val?>"><?=$val?></a></li>
+						<li><a href="Ressources+<?=$val?>"><?=$val?></a></li>
 					</foreach>
 				</ul> 	
 			</li>
@@ -52,8 +52,8 @@
 			<li>
 				<a href="Annonces">Annonces</a>	    				
 				<ul>
-					<li><a href="Annonces|Offres">Offres</a></li>
-					<li><a href="Annonces|Demandes">Demandes</a></li>
+					<li><a href="Annonces+Offres">Offres</a></li>
+					<li><a href="Annonces+Demandes">Demandes</a></li>
 				</ul> 	
 			</li>
 			<li><a href="Médiathèques">Médiathèque</a></li>
