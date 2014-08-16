@@ -66,13 +66,13 @@ class liste extends \present{
 		if($uri->search){
 			$this->Query
 				->whereFullText('document',$uri->search)
-				->selectFullTextHighlite('presentationHtml',$uri->search,$this->truncation)
+				->selectFullTextHighlite('presentation',$uri->search,$this->truncation)
 				->orderByFullTextRank('document',$uri->search)
 			;
 		}
 		else{
 			$this->Query
-				->selectTruncation('presentationHtml',$this->truncation)
+				->selectTruncation('presentation',$this->truncation)
 			;
 		}
 		$this->Query
