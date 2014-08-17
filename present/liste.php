@@ -26,23 +26,23 @@ class liste extends \present{
 		$this->subUri = (strrpos($this->URI,'s')===strlen($this->URI)-1?substr($this->URI,0,-1):$this->URI);
 		$this->imgDir = 'content/'.$this->taxonomy.'/';
 
-		$this->Query = model::newFrom($this->taxonomy);
-		$this->Query->selectRelationnal(array(
-			'user			<		email',
-			'date			>		start',
-			'date			>		end',
-			'tag			<>		name',
-		));
-		
 		$uri = view::getUri();
-		$uri->resolveMap(array(
+		$uri->resolveMap([
 			':int'=>function($param){
 				//return R::load('taxonomy',$param);
 				return R::load('tag',$param);
 			},
 			'geo',
 			'phonemic'=>true,
-		));
+		]);
+		
+		$this->Query = model::newFrom($this->taxonomy);
+		$this->Query->selectRelationnal([
+			'user			<		email',
+			'date			>		start',
+			'date			>		end',
+			'tag			<>		name',
+		]);
 		if($uri[1]){
 			$this->Query->joinWhere('tag.name IN ?',[[$uri[1]]]);
 		}
@@ -63,15 +63,11 @@ class liste extends \present{
 			->select(array('title','tel','url'))
 			->select('created')
 		;
-
 		$this->count = $this->Query->count();
-		
 		$this->pagination();
-		
 		$this->liste = $this->Query->limit($this->limit,$this->offset)->tableMD();
 		//exit(print($this->liste));
 		$this->countListe = count($this->liste);
-		
 		$this->h1 = uri::param(0);
 		if(!empty($this->keywords))
 			$this->h1 .= ' - '.implode(' ',(array)$this->keywords);
