@@ -30,7 +30,18 @@ class liste extends \present{
 		$uri->resolveMap([
 			':int'=>function($param){
 				//return R::load('taxonomy',$param);
-				return R::load('tag',$param);
+				if(is_array($param)){
+					$r = [];
+					foreach($param as $p){
+						if($t=R::load('tag',$p))
+							$r[] = $t;
+						else
+							return false;
+					}
+					return $r;
+				}
+				else
+					return R::load('tag',$param);
 			},
 			'geo',
 			'phonemic'=>true,
@@ -43,9 +54,18 @@ class liste extends \present{
 			'date			>		end',
 			'tag			<>		name',
 		]);
-		if($uri[1]){
-			$this->Query->joinWhere('tag.name IN ?',[[$uri[1]]]);
-		}
+
+		$i = 0;
+		$tagName = [];
+		while($u=$uri[$i+=1])
+			if(is_array($u))
+				$this->Query->joinWhere('tag.name IN ?',[$u]);
+			else
+				$tagName[] = $u;
+		if(!empty($tagName))
+			$this->Query->joinWhere('tag.name IN ?',[$tagName]);
+
+		
 		if($uri->phonemic){
 			$this->Query
 				->whereFullText('document',$uri->phonemic)
