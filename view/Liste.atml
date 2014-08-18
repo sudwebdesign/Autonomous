@@ -11,13 +11,12 @@
 				</fieldset>
 				<fieldset>
 					<legend>Thématiques</legend>
+					<input name="thematics[]" type="text" value="" placeholder="" is="tagsinput" data-url="service/autocomplete/taxonomy?name=<?=$presentAttributes->TAXONOMY?>" data-minchar="4" data-maxchar="25" data-max="5" />
 					<?$subTaxonomy='taxonomy'.ucfirst($taxonomy);?>
-					<if "isset($$subTaxonomy)">
-						<select name="thematics[]" is="select2" multiple>
-							<foreach "$$subTaxonomy as $key=>$val" cacheSync="model.taxonomy">
-								<option value="<?=$val?>"><?=$val?></option>
-							</foreach>
-						</select>
+						<if "isset($$subTaxonomy)">
+						<span class="tags-suggests">Suggestions:
+							<foreach "$$subTaxonomy as $key=>$val" cacheSync="model.taxonomy"><?=$val?> </foreach>
+						</span>
 					</if>
 				</fieldset>
 				<fieldset>
