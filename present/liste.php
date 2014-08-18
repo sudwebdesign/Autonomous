@@ -13,7 +13,7 @@ use control\ArrayObject;
 use view\Exception as View_Exception;
 class liste extends \present{
 	use Mixin_Pagination;
-	protected $limitation				= 10;
+	protected $limitation				= 5;
 	protected $truncation				= 369;
 	function assign(){
 		parent::assign();
@@ -45,6 +45,7 @@ class liste extends \present{
 			},
 			'geo',
 			'phonemic'=>true,
+			'page'=>true,
 		]);
 		
 		$this->Query = model::newFrom($this->taxonomy);
