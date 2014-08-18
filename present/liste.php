@@ -58,10 +58,13 @@ class liste extends \present{
 		$i = 0;
 		$tagName = [];
 		while($u=$uri[$i+=1])
-			if(is_array($u))
-				$this->Query->joinWhere('tag.name IN ?',[$u]);
+			if(is_array($u)){
+				foreach($u as $_u)
+					$this->Query->joinWhere('tag.name IN ?',[[$_u]]);
+			}
 			else
 				$tagName[] = $u;
+		
 		if(!empty($tagName))
 			$this->Query->joinWhere('tag.name IN ?',[$tagName]);
 
