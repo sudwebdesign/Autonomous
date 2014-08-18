@@ -30,19 +30,14 @@ class ajouter extends \present{
 			return;
 		$this->formPosted = true;
 		$type = $this->taxonomy;
-		R::begin();
 		try{
 			$entry = $this->POST_Common($type);
 			if(method_exists($this,'POST_Specifications'))
 				$this->POST_Specifications($entry);
 			R::store($entry);
-			if($e=$entry->getErrors())
-				throw new Exception_Validation('Données manquantes ou erronées',$e);
-			R::commit();
 			post::clearPersistance();
 		}
 		catch(Exception_Validation $e){
-			R::rollback();
 			$this->formErrors = $e->getData();
 			$this->formPosted = false;
 		}
@@ -69,7 +64,7 @@ class ajouter extends \present{
 			$entry->user = $user;
 		}
 		else
-			$entry->error('user','required');
+			$entry->error('user','required',true);
 		$P = post::getObject();
 		$entry->title = strip_tags($P->title);
 		$entry->tel = $P->tel;
