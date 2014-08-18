@@ -54,19 +54,25 @@ class liste extends \present{
 			'date			>		start',
 			'date			>		end',
 			'tag			<>		name',
+			'tag::thematic	..		name',
 		]);
 
 		$i = 0;
+		$allTags = [];
 		$this->Query->open_having_or();
 		while($tag=$uri[$i+=1]){
 			if(is_array($tag)){
 				$this->Query->open_having_and();
-				foreach($tag as $subTag)
+				foreach($tag as $subTag){
 					$this->Query->joinWhere('tag.name = ? ',[$subTag]);
+					$allTags[] = $subTag;
+				}
 				$this->Query->close_having();
 			}
-			else
+			else{
 				$this->Query->joinWhere('tag.name = ? ',[$tag]);
+				$allTags[] = $tag;
+			}
 		}
 		$this->Query->close_having();
 		
@@ -87,7 +93,21 @@ class liste extends \present{
 			->select(array('title','tel','url'))
 			->select('created')
 		;
+		
+		$this->Query
+			//->select('COUNT(evenement_thematic.id) as count_tag_rank')
+			//->order_by('count_tag_rank DESC')
+			//->join('LEFT OUTER JOIN evenement_tag as evenement_thematic ON evenement_thematic.evenement_id=evenement.id')
+			//->join('INNER JOIN tag as thematic ON thematic.id=evenement_thematic.tag_id')
+			//->where('thematic.name IN ?',[$allTags])
+
+			->select('COUNT(thematic__evenement_tag.id) as count_tag_rank')
+			->order_by('count_tag_rank DESC')
+			->where('thematic__tag.name IN ?',[$allTags])
+		;
+
 		$this->count = $this->Query->count();
+		
 		$this->pagination();
 		$this->liste = $this->Query->limit($this->limit,$this->offset)->tableMD();
 		//exit(print($this->liste));

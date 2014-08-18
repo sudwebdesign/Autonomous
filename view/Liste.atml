@@ -30,6 +30,7 @@
 			<h1><?=$h1?> (<?=$countListe?> / <?=$count?> résultats)</h1>
 			<?$allLinks = array();?>
 			<foreach "(array)@$liste as $id=>$item">
+				<?=$item->count_tag_name?>
 				<?$href=$subUri.'+'.uri::filterParam($item->title).'+'.$id;?>
 				<h2><a href="<?=$href?>"><?=$item->title?></a></h2>
 				<a href="<?=$href?>">
