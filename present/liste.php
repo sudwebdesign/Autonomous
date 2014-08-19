@@ -93,12 +93,13 @@ class liste extends \present{
 			->select(array('title','tel','url'))
 			->select('created')
 		;
-		
-		$this->Query
-			->select('COUNT(thematic__evenement_tag.id) as count_tag_rank')
-			->order_by('count_tag_rank DESC')
-			->where('thematic__tag.name IN ?',[$allTags])
-		;
+
+		if(!empty($allTags))
+			$this->Query
+				->select('COUNT(thematic__evenement_tag.id) as count_tag_rank')
+				->order_by('count_tag_rank DESC')
+				->where('thematic__tag.name IN ?',[$allTags])
+			;
 
 		$this->count = $this->Query->count();
 		
