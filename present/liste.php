@@ -54,7 +54,7 @@ class liste extends \present{
 			'date			>		start',
 			'date			>		end',
 			'tag			<>		name',
-			//'tag::thematic	<>		name',
+			'tag::thematic	<>		name',
 		]);
 
 		$i = 0;
@@ -96,15 +96,9 @@ class liste extends \present{
 
 		if(!empty($allTags))
 			$this->Query
-				->join('LEFT OUTER JOIN evenement_tag as __thematic ON __thematic.evenement_id=evenement.id')
-				->join('LEFT OUTER JOIN tag as _thematic ON _thematic.id=__thematic.tag_id')
-				->where('_thematic.name IN ?',[$allTags])
-				->select('COUNT(DISTINCT(_thematic.name)) as count_tag_rank')
+				->select('COUNT(DISTINCT(thematic__tag.name)) as count_tag_rank')
+				->where('thematic__tag.name IN ?',[$allTags])
 				->order_by('count_tag_rank DESC')
-
-				//->select('COUNT(DISTINCT(thematic__tag.name)) as count_tag_rank')
-				//->where('thematic__tag.name IN ?',[$allTags])
-				//->order_by('count_tag_rank DESC')
 			;
 
 		$this->count = $this->Query->count();
