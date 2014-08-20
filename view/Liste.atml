@@ -53,6 +53,7 @@
 					<if "$img=$THIS->imageByItem($item)">
 						<img src="<?=$img?>" alt="<?=$item->title?>" title="<?=$item->title?>" />
 					</if>
+					<if "view::getUri()->phonemic"> ... </if>
 					<?=$item->presentation?>
 					<?/* <p>Auteur: <?=$item->user->email?></p> */?>
 					<if "$item->presentation_length>strlen($item->presentation)">
