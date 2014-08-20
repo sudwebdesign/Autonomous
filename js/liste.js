@@ -5,7 +5,6 @@ $js('jquery',function(){
 		eq = ':';
 		location = decodeURIComponent(document.location.pathname.substr(1));
 		location = location.split('+').shift();
-		console.log(location);
 		data = $(this).serializeArray();
 		ndata = {};
 		newloc = [];
