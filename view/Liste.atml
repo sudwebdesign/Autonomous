@@ -21,7 +21,24 @@
 				</fieldset>
 				<fieldset>
 					<legend>Localité <small>(lieu,adresse ou commune)</small></legend>
-					<include "geo-completer.btml">
+					<geo-completer>
+						<fieldset>
+							<input id="geoname" class="geoname" name="xownGeopoint[label]" data-url="service/autocomplete/geoname" type="text"  value="<?=view::getUri()->geo?>">
+							<a class="show_button" href="<?=$URI?>#map">Rechercher sur la carte</a>
+							<fieldset>
+								<label for="geo-lat">Latitude</label>
+								<input name="xownGeopoint[lat]" type="number" step="any" min="-90" max="90" id="geo-lat" value="<?=view::getUri()->lat?>">
+								<label for="geo-lng">Longitude</label>
+								<input name="xownGeopoint[lon]" type="number" step="any" min="-180" max="180" id="geo-lng"  value="<?=view::getUri()->lon?>">
+								<label for="geo-rayon">Rayon en km</label>
+								<input name="xownGeopoint[radius]" type="number" step="1" min="0" max="67" id="geo-rayon"  value="<?=view::getUri()->rad?>">
+							</fieldset>
+							<div class="remodal" data-remodal-id="map">
+								<input class="gg-maps" type="text" value="" placeholder="Rechercher un adresse, un lieu ou une commune">
+								<a class="remodal-confirm" href="#">OK</a>
+							</div>
+						</fieldset>
+					</geo-completer>
 				</fieldset>
 				<input type="submit" value="Rechercher">
 			</form>

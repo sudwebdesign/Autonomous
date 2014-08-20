@@ -15,12 +15,12 @@ $js('jquery',function(){
 			newloc.push(ndata['thematic'][i]);
 		if(ndata['phonemic'])
 			newloc.push('phonemic'+eq+ndata['phonemic']);
-		if(ndata['xownGeopoint[lon]']!=''&&ndata['xownGeopoint[lat]']!='')
-			newloc.push('geo'+eq+'('+ndata['xownGeopoint[lat]']+','+ndata['xownGeopoint[lon]']+')');
-		else if(ndata['xownGeopoint[label]']!='')
+		if(ndata['xownGeopoint[label]']!='')
 			newloc.push('geo'+eq+ndata['xownGeopoint[label]']);
 		if(ndata['xownGeopoint[radius]']!='')
 			newloc.push('rad'+eq+ndata['xownGeopoint[radius]']);
+		if(ndata['xownGeopoint[lon]']!=''&&ndata['xownGeopoint[lat]']!='')
+			newloc.push('lat'+eq+ndata['xownGeopoint[lat]']+'+lon'+eq+ndata['xownGeopoint[lon]']);
 		newloc = newloc.join('+');
 		if(newloc)
 			newloc = '+'+newloc;
