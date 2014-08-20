@@ -10,7 +10,6 @@ $js('jquery',function(){
 		newloc = [];
 		for(var k in data)
 			ndata[data[k].name] = data[k].value;
-		console.log(ndata);
 		ndata['thematic'] = ndata['thematic'].split(' ');
 		for(var i in ndata['thematic'])
 			newloc.push(ndata['thematic'][i]);
