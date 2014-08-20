@@ -1,19 +1,19 @@
 <extend>
-	<css liste>
+	<css+js liste>
 	<attr selector="main" addClass="present-liste">
 	<write main>
 		<aside>
 			<h3>Options de Recherche</h3>
-			<form method="GET" action="<?=uri::param(0)?>">
+			<form id="search_panel" class="search-panel" method="GET" action="<?=uri::param(0)?>">
 				<fieldset>
 					<legend>Phonémique</legend>
 					<input type="text" name="phonemic" value="<?=view::getUri()->phonemic?>" />
 				</fieldset>
 				<fieldset>
 					<legend>Thématiques</legend>
-					<input name="thematics[]" type="text" value="" placeholder="" is="tagsinput" data-url="service/autocomplete/taxonomy?name=<?=$presentAttributes->TAXONOMY?>" data-minchar="4" data-maxchar="25" data-max="5" />
+					<input name="thematic" type="text" value="<?=$thematics->implode(' ')?>" placeholder="" is="tagsinput" data-url="service/autocomplete/taxonomy?name=<?=$presentAttributes->TAXONOMY?>" data-minchar="4" data-maxchar="25" data-max="5" />
 					<?$subTaxonomy='taxonomy'.ucfirst($taxonomy);?>
-						<if "isset($$subTaxonomy)">
+					<if "isset($$subTaxonomy)">
 						<span class="tags-suggests">Suggestions:
 							<foreach "$$subTaxonomy as $key=>$val" cacheSync="model.taxonomy"><?=$val?> </foreach>
 						</span>
@@ -30,7 +30,6 @@
 			<h1><?=$h1?> (<?=$countListe?> / <?=$count?> résultats)</h1>
 			<?$allLinks = array();?>
 			<foreach "(array)@$liste as $id=>$item">
-				<?=$item->count_tag_name?>
 				<?$href=$subUri.'+'.uri::filterParam($item->title).'+'.$id;?>
 				<h2><a href="<?=$href?>"><?=$item->title?></a></h2>
 				<a href="<?=$href?>">
@@ -38,6 +37,7 @@
 						<img src="<?=$img?>" alt="<?=$item->title?>" title="<?=$item->title?>" />
 					</if>
 					<?=$item->presentation?>
+					<?/* <p>Auteur: <?=$item->user->email?></p> */?>
 					<if "$item->presentation_length>strlen($item->presentation)">
 						<i>(En savoir plus ...)</i>
 					</if>

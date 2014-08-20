@@ -20,8 +20,8 @@ $js('jquery',function(){
 	}
 	var location = document.location.pathname;
 	location = decodeURIComponent(location.substr(1));
-	var loc = splitter(location,['|','/',':','-']);
-	var loc2 = splitterOnce(location,['|','-']);
+	var loc = splitter(location,['+','/',':','-']);
+	var loc2 = splitterOnce(location,['+','-']);
 	var selectorMenu = 'body>nav>ul[is=dropdown]>li:has(>a[href^="'+loc+'"])';
 	if(loc!=loc2)
 		selectorMenu += ',body>nav>ul[is=dropdown]>li>ul>li:has(>a[href^="'+loc2+'"])';

@@ -27,27 +27,7 @@ class liste extends \present{
 		$this->imgDir = 'content/'.$this->taxonomy.'/';
 
 		$uri = view::getUri();
-		$uri->resolveMap([
-			':int'=>function($param){
-				//return R::load('taxonomy',$param);
-				if(is_array($param)){
-					$r = [];
-					foreach($param as $p){
-						if($t=R::load('tag',$p))
-							$r[] = $t;
-						else
-							return false;
-					}
-					return $r;
-				}
-				else
-					return R::load('tag',$param);
-			},
-			'geo',
-			'phonemic'=>true,
-			'page'=>true,
-		]);
-		
+				
 		$this->Query = model::newFrom($this->taxonomy);
 		$this->Query->selectRelationnal([
 			'user			<		email',
@@ -58,20 +38,20 @@ class liste extends \present{
 		]);
 
 		$i = 0;
-		$allTags = [];
+		$this->thematics = [];
 		$this->Query->open_having_or();
 		while($tag=$uri[$i+=1]){
 			if(is_array($tag)){
 				$this->Query->open_having_and();
 				foreach($tag as $subTag){
 					$this->Query->joinWhere('tag.name = ? ',[$subTag]);
-					$allTags[] = $subTag;
+					$this->thematics[] = $subTag;
 				}
 				$this->Query->close_having();
 			}
 			else{
 				$this->Query->joinWhere('tag.name = ? ',[$tag]);
-				$allTags[] = $tag;
+				$this->thematics[] = $tag;
 			}
 		}
 		$this->Query->close_having();
@@ -94,18 +74,16 @@ class liste extends \present{
 			->select('created')
 		;
 
-		if(!empty($allTags))
+		if($this->thematics->count())
 			$this->Query
 				->select('COUNT(DISTINCT(thematic__tag.name)) as count_tag_rank')
-				->where('thematic__tag.name IN ?',[$allTags])
+				->where('thematic__tag.name IN ?',[$this->thematics->getArray()])
 				->order_by('count_tag_rank DESC')
 			;
 
 		$this->count = $this->Query->count();
-		
 		$this->pagination();
 		$this->liste = $this->Query->limit($this->limit,$this->offset)->tableMD();
-		//exit(print($this->liste));
 		$this->countListe = count($this->liste);
 		$this->h1 = uri::param(0);
 		if(!empty($this->keywords))
