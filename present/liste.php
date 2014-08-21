@@ -56,6 +56,13 @@ class liste extends \present{
 		}
 		$this->Query->close_having();
 		
+		if($uri->geo||($uri->lat&&$uri->lon)){
+			//$this->Query
+				//->select('')
+				//->where('')
+			//;
+		}
+		
 		if($uri->phonemic){
 			$this->Query
 				->whereFullText('document',$uri->phonemic)
