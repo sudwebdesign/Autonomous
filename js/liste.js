@@ -10,9 +10,11 @@ $js('jquery',function(){
 		newloc = [];
 		for(var k in data)
 			ndata[data[k].name] = data[k].value;
-		ndata['thematic'] = ndata['thematic'].split(' ');
-		for(var i in ndata['thematic'])
-			newloc.push(ndata['thematic'][i]);
+		if(ndata['thematic'].trim()){
+			ndata['thematic'] = ndata['thematic'].split(' ');
+			for(var i in ndata['thematic'])
+				newloc.push(ndata['thematic'][i]);
+		}
 		if(ndata['phonemic'])
 			newloc.push('phonemic'+eq+ndata['phonemic']);
 		if(ndata['xownGeopoint[label]']!='')
