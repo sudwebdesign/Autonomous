@@ -39,22 +39,22 @@ class liste extends \present{
 
 		$i = 0;
 		$this->thematics = [];
-		$this->Query->open_having_or();
+		$this->Query->openHavingOr();
 		while($tag=$uri[$i+=1]){
 			if(is_array($tag)){
-				$this->Query->open_having_and();
+				$this->Query->openHavingAnd();
 				foreach($tag as $subTag){
 					$this->Query->joinWhere('tag.name = ? ',[$subTag]);
 					$this->thematics[] = $subTag;
 				}
-				$this->Query->close_having();
+				$this->Query->closeHaving();
 			}
 			else{
 				$this->Query->joinWhere('tag.name = ? ',[$tag]);
 				$this->thematics[] = $tag;
 			}
 		}
-		$this->Query->close_having();
+		$this->Query->closeHaving();
 		
 		if($uri->geo||($uri->lat&&$uri->lon)){
 			//$this->Query
@@ -85,8 +85,12 @@ class liste extends \present{
 			$this->Query
 				->select('COUNT(DISTINCT(thematic__tag.name)) as count_tag_rank')
 				->where('thematic__tag.name IN ?',[$this->thematics->getArray()])
-				->order_by('count_tag_rank DESC')
+				->orderBy('count_tag_rank DESC')
 			;
+
+		$this->Query
+			->orderBy('created ASC')
+		;
 
 		$this->count = $this->Query->count();
 		$this->pagination();
