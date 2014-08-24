@@ -36,7 +36,7 @@ abstract class ATable_Keyword extends Table{
 			'select'	=>'id',
 			'where'		=>$ci.'name'.$cie.' = :equal OR '.$ci.'name'.$cie.' LIKE :like',
 			'limit'		=>$limit,
-			'order_by'	=>'created DESC',
+			'orderBy'	=>'created DESC',
 		),array(
 			'equal'	=>$find,
 			'like'	=>"%$find%"

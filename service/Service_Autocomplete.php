@@ -15,7 +15,7 @@ class Service_Autocomplete {
 				->select('longitude')
 				->select('radius')
 				->where('fcode = ?',['ADM4'])
-				->order_by('name ASC')
+				->orderBy('name ASC')
 			;
 			if(strlen($term)>=1)
 				$q->where('asciiname LIKE ?',[strtolower(str_replace('%','',str::unaccent($term)).'%')]);
