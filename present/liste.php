@@ -27,7 +27,6 @@ class liste extends \present{
 		$this->imgDir = 'content/'.$this->taxonomy.'/';
 
 		$uri = view::getUri();
-				
 		$this->Query = model::newFrom($this->taxonomy);
 		$this->Query->selectRelationnal([
 			'user			<		email',
@@ -35,6 +34,7 @@ class liste extends \present{
 			'date			>		end',
 			'tag			<>		name',
 			'tag::thematic	<>		name',
+			'geopoint		>		label',
 		]);
 
 		$i = 0;
@@ -57,10 +57,16 @@ class liste extends \present{
 		$this->Query->closeHaving();
 		
 		if($uri->geo||($uri->lat&&$uri->lon)){
-			//$this->Query
-				//->select('')
-				//->where('')
-			//;
+			//R::debug(true,2);
+			$this->Query
+				->select('geodistance(geopoint.point,POINT(?,?))+geopoint.radius as distance',[$uri->lat,$uri->lon])
+				->select('geodistance(geopoint.point,POINT(?,?))-geopoint.radius as proximity',[$uri->lat,$uri->lon])
+				->orderBy('distance ASC')
+			;
+			if($uri->rad)
+				$this->Query
+					->where('distance <= ?',[$uri->rad])
+				;
 		}
 		
 		if($uri->phonemic){
@@ -89,12 +95,13 @@ class liste extends \present{
 			;
 
 		$this->Query
-			->orderBy('created ASC')
+			->orderBy('created DESC')
 		;
 
 		$this->count = $this->Query->count();
 		$this->pagination();
 		$this->liste = $this->Query->limit($this->limit,$this->offset)->tableMD();
+		//exit($this->liste);
 		$this->countListe = count($this->liste);
 		$this->h1 = uri::param(0);
 		if(!empty($this->keywords))

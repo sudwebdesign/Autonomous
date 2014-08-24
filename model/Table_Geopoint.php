@@ -7,7 +7,9 @@ final class Table_Geopoint extends Table{
 		if(!$this->checkLon($this->lon))
 			$this->error('xownGeopoint.lon','La longitude doit être comprise entre 180 et -180');
 		$this->setPoint($this->lat,$this->lon);
-		if($this->radius)
+		if($this->radius){
+			$this->radius = (float)$this->radius;
 			$this->setBounds($this->lat,$this->lon,$this->radius);
+		}
 	}
 }

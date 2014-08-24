@@ -45,7 +45,6 @@
 		</aside>
 		<article>
 			<h1><?=$h1?> (<?=$countListe?> / <?=$count?> résultats)</h1>
-			<?$allLinks = array();?>
 			<foreach "(array)@$liste as $id=>$item">
 				<?$href=$subUri.'+'.uri::filterParam($item->title).'+'.$id;?>
 				<h2><a href="<?=$href?>"><?=$item->title?></a></h2>
@@ -65,9 +64,13 @@
 						<foreach "$item->tag as $tag">
 							<if "$tag">
 								<li><h5><a href="<?=$URI.'+'.$tag->name?>"><?=$tag->name?></a></h5></li>
-								<?$allLinks[] = '<a href="'.$URI.'+'.$tag->name.'"> '.$tag->name.' </a>';?>
 							</if>
 						</foreach>
+						<if "is_object($item->geopoint)&&$item->geopoint->count()">
+							<foreach "$item->geopoint as $geopoint">
+								<li><h5><a href="<?=$URI.'+geo:'.$geopoint->label?>"><?=$geopoint->label?></a></h5></li>
+							</foreach>
+						</if>
 					</ul>
 				</if>
 				<hr>

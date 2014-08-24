@@ -5,17 +5,9 @@ final class Table_Tag extends ATable_Keyword{
 	protected $maxLabelLength = 25;
 	function onValidate(){
 		parent::onValidate();
-		if(!ruler::minchar($this->label,$this->minLabelLength))
-			$this->error('label','Le label doit comporter minimum '.$this->minLabelLength.' caractères');
-		elseif(!ruler::maxchar($this->label,$this->maxLabelLength))
-			$this->error('label','Le label doit comporter maximum '.$this->maxLabelLength.' caractères');
+		if(!ruler::minchar($this->name,$this->minLabelLength))
+			$this->error('sharedTag.name','Le tag doit comporter minimum '.$this->minLabelLength.' caractères');
+		elseif(!ruler::maxchar($this->name,$this->maxLabelLength))
+			$this->error('sharedTag.name','Le tag doit comporter maximum '.$this->maxLabelLength.' caractères');
 	}
-	//function onNew(){}
-	//function onCreate(){}
-	//function onCreated(){}
-	//function onUpdate(){}
-	//function onRead(){}
-	//function onUpdated(){}
-	//function onDelete(){}
-	//function onDeleted(){}
 }
