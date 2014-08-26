@@ -24,7 +24,7 @@
 					<geo-completer>
 						<fieldset>
 							<input id="geoname" class="geoname" name="xownGeopoint[label]" data-url="service/autocomplete/geoname" type="text"  value="<?=view::getUri()->geo?>">
-							<a class="show_button" href="<?=$URI?>#map">Rechercher sur la carte</a>
+							<a class="show_button" href="<?=view::getUri()->getPath()?>#map">Rechercher sur la carte</a>
 							<fieldset>
 								<label for="geo-lat">Latitude</label>
 								<input name="xownGeopoint[lat]" type="number" step="any" min="-90" max="90" id="geo-lat" value="<?=view::getUri()->lat?>">
@@ -68,7 +68,9 @@
 						</foreach>
 						<if "is_object($item->geopoint)&&$item->geopoint->count()">
 							<foreach "$item->geopoint as $geopoint">
-								<li><h5><a href="<?=$URI.'+geo:'.$geopoint->label?>"><?=$geopoint->label?></a></h5></li>
+								<li><h5><a href="<?=$URI.'+geo:'.$geopoint->label?>">
+									<?=$geopoint->label?>
+								</a></h5></li>
 							</foreach>
 						</if>
 					</ul>
