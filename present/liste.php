@@ -1,15 +1,8 @@
 <?php namespace present;
-use URI;
 use view;
 use model;
 use model\Query;
-use model\Query4D;
 use model\R;
-use control\str;
-use model\Table_Taxonomy as taxonomy;
-use model\Table_Tag as tag;
-use model\Table_Locality as locality;
-use control\ArrayObject;
 use view\Exception as View_Exception;
 class liste extends \present{
 	use Mixin_Pagination;
@@ -21,20 +14,22 @@ class liste extends \present{
 	}
 	function dynamic(){
 		parent::dynamic();
-		$this->page = uri::param('page');
+		$uri = view::getUri();
+		$this->page = $uri->page;
 		$this->uri = $this->URI;
 		$this->subUri = (strrpos($this->URI,'s')===strlen($this->URI)-1?substr($this->URI,0,-1):$this->URI);
 		$this->imgDir = 'content/'.$this->taxonomy.'/';
 
-		$uri = view::getUri();
 		$this->Query = model::newFrom($this->taxonomy);
 		$this->Query->selectRelationnal([
 			'user			<		email',
+
 			'date			>		start',
 			'date			>		end',
+			'geopoint		>		label',
+
 			'tag			<>		name',
 			'tag::thematic	<>		name',
-			'geopoint		>		label',
 		]);
 
 		$i = 0;
@@ -57,15 +52,28 @@ class liste extends \present{
 		$this->Query->closeHaving();
 		
 		if($uri->geo||($uri->lat&&$uri->lon)){
-			//R::debug(true,2);
+			R::debug(true,2);
+			$rad = (float)$uri->rad;
+			if($uri->lat&&$uri->lon){
+				$lat = (float)$uri->lat;
+				$lon = (float)$uri->lon;
+			}
+			else{
+				$point = R::findOne('geoname','WHERE name LIKE ?',['%'.str_replace('%','',$uri->geo)]);
+				$lat = (float)$point->latitude;
+				$lon = (float)$point->longitude;
+				if(!$rad)
+					$rad = (float)$point->radius;
+			}
 			$this->Query
-				->select('geodistance(geopoint.point,POINT(?,?))+geopoint.radius as distance',[$uri->lat,$uri->lon])
-				->select('geodistance(geopoint.point,POINT(?,?))-geopoint.radius as proximity',[$uri->lat,$uri->lon])
+				->select('(geodistance(geopoint.point,POINT(?,?))+COALESCE(geopoint.radius,0)) as distance',[$lat,$lon])
+				->select('(geodistance(geopoint.point,POINT(?,?))-COALESCE(geopoint.radius,0)) as proximity',[$lat,$lon])
 				->orderBy('distance ASC')
 			;
-			if($uri->rad)
+			if($rad)
 				$this->Query
-					->where('distance <= ?',[$uri->rad])
+					//->where('distance <= ?',[$rad])
+					//->joinWhere('distance <= ?',[$rad])
 				;
 		}
 		
@@ -103,7 +111,7 @@ class liste extends \present{
 		$this->liste = $this->Query->limit($this->limit,$this->offset)->tableMD();
 		//exit($this->liste);
 		$this->countListe = count($this->liste);
-		$this->h1 = uri::param(0);
+		$this->h1 = $uri[0];
 		if(!empty($this->keywords))
 			$this->h1 .= ' - '.implode(' ',(array)$this->keywords);
 		if($this->page>1)
