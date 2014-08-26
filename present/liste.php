@@ -1,6 +1,6 @@
 <?php namespace present;
+use uri;
 use view;
-use model;
 use model\Query;
 use model\R;
 use view\Exception as View_Exception;
@@ -8,6 +8,7 @@ class liste extends \present{
 	use Mixin_Pagination;
 	protected $limitation				= 5;
 	protected $truncation				= 369;
+	protected $Query;
 	function assign(){
 		parent::assign();
 		$this->taxonomy = end($this->presentNamespaces);
@@ -18,9 +19,7 @@ class liste extends \present{
 		$this->page = $uri->page;
 		$this->uri = $this->URI;
 		$this->subUri = (strrpos($this->URI,'s')===strlen($this->URI)-1?substr($this->URI,0,-1):$this->URI);
-		$this->imgDir = 'content/'.$this->taxonomy.'/';
-
-		$this->Query = model::newFrom($this->taxonomy);
+		$this->Query = Query::getNew($this->taxonomy);
 		$this->Query->selectRelationnal([
 			'user			<		email',
 
@@ -51,30 +50,30 @@ class liste extends \present{
 		}
 		$this->Query->closeHaving();
 		
+		$rad = null;
 		if($uri->geo||($uri->lat&&$uri->lon)){
-			R::debug(true,2);
 			$rad = (float)$uri->rad;
 			if($uri->lat&&$uri->lon){
 				$lat = (float)$uri->lat;
 				$lon = (float)$uri->lon;
 			}
 			else{
-				$point = R::findOne('geoname','WHERE name LIKE ?',['%'.str_replace('%','',$uri->geo)]);
+				$point = R::findOne('geoname','WHERE name LIKE ?',[str_replace('%','',$uri->geo).'%']);
 				$lat = (float)$point->latitude;
 				$lon = (float)$point->longitude;
 				if(!$rad)
 					$rad = (float)$point->radius;
 			}
 			$this->Query
-				->select('(geodistance(geopoint.point,POINT(?,?))+COALESCE(geopoint.radius,0)) as distance',[$lat,$lon])
-				->select('(geodistance(geopoint.point,POINT(?,?))-COALESCE(geopoint.radius,0)) as proximity',[$lat,$lon])
+				->groupBy('geopoint.lat')
+				->groupBy('geopoint.lon')
+				//->select('geodistance(geopoint.lat,geopoint.lon,?,?) as dist',[$lat,$lon])
+				//->orderBy('dist ASC')
+				->groupBy('geopoint.radius')
+				->select('(geodistance(geopoint.lat,geopoint.lon,?,?)+COALESCE(geopoint.radius,0)) as distance',[$lat,$lon])
+				->select('(geodistance(geopoint.lat,geopoint.lon,?,?)-COALESCE(geopoint.radius,0)) as proximity',[$lat,$lon])
 				->orderBy('distance ASC')
 			;
-			if($rad)
-				$this->Query
-					//->where('distance <= ?',[$rad])
-					//->joinWhere('distance <= ?',[$rad])
-				;
 		}
 		
 		if($uri->phonemic){
@@ -91,8 +90,7 @@ class liste extends \present{
 			;
 		}
 		$this->Query
-			->select(array('title','tel','url'))
-			->select('created')
+			->select(['id','title','tel','url','created'])
 		;
 
 		if($this->thematics->count())
@@ -106,10 +104,32 @@ class liste extends \present{
 			->orderBy('created DESC')
 		;
 
-		$this->count = $this->Query->count();
+		if($rad){
+			//$this->Query
+				//->joinWhere('distance <= ?',[$rad])
+			//;
+			//R::debug(true,2);
+			//$query = "WITH view AS ({$this->Query}) SELECT * FROM view WHERE distance <= ?";
+			//$this->liste = R::getAll4D($query,array_merge($this->Query->getParams(),[$rad]));
+			$this->Query = Query::getNew()
+				->with("view AS ({$this->Query})",$this->Query->getParams())
+				->select('*')
+				->from('view')
+				->where('distance >= ?',[$rad])
+				->limit($this->limit,$this->offset)
+			;
+		}
+		else
+			$this->Query
+				->limit($this->limit,$this->offset)
+			;
+
+		$this->count = $this->Query->countAll();
 		$this->pagination();
-		$this->liste = $this->Query->limit($this->limit,$this->offset)->tableMD();
+
+		$this->liste = $this->Query->tableMD();
 		//exit($this->liste);
+
 		$this->countListe = count($this->liste);
 		$this->h1 = $uri[0];
 		if(!empty($this->keywords))
@@ -118,6 +138,6 @@ class liste extends \present{
 			$this->h1 .= ' - page '.$this->page;
 	}
 	function imageByItem($item){
-		return $this->imgDir.$item->id.'/'.uri::filterParam($item->title).'.png';
+		return '/content/'.$this->taxonomy.'/'.$item->id.'/'.uri::filterParam($item->title).'.png';
 	}
 }
