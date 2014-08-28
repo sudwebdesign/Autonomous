@@ -17,12 +17,14 @@ $js('jquery',function(){
 		}
 		if(ndata['phonemic'])
 			newloc.push('phonemic'+eq+ndata['phonemic']);
-		if(ndata['xownGeopoint[label]']!='')
-			newloc.push('geo'+eq+ndata['xownGeopoint[label]']);
-		if(ndata['xownGeopoint[radius]']!='')
-			newloc.push('rad'+eq+ndata['xownGeopoint[radius]']);
-		if(ndata['xownGeopoint[lon]']!=''&&ndata['xownGeopoint[lat]']!='')
-			newloc.push('lat'+eq+ndata['xownGeopoint[lat]']+'+lon'+eq+ndata['xownGeopoint[lon]']);
+		if(ndata['geo']!='')
+			newloc.push('geo'+eq+ndata['geo']);
+		if(ndata['rad'])
+			newloc.push('rad'+eq+ndata['rad']);
+		if(ndata['lon']!=''&&ndata['lat']!='')
+			newloc.push('lat'+eq+ndata['lat']+'+lon'+eq+ndata['lon']);
+		if(ndata['proxima'])
+			newloc.push('proxima'+eq+ndata['proxima']);
 		newloc = newloc.join('+');
 		if(newloc)
 			newloc = '+'+newloc;

@@ -67,15 +67,13 @@ class liste extends \present{
 			$this->Query
 				->groupBy('geopoint.lat')
 				->groupBy('geopoint.lon')
-				//->select('geodistance(geopoint.lat,geopoint.lon,?,?) as dist',[$lat,$lon])
-				//->orderBy('dist ASC')
 				->groupBy('geopoint.radius')
-				->select('(geodistance(geopoint.lat,geopoint.lon,?,?)+COALESCE(geopoint.radius,0)) as distance',[$lat,$lon])
-				->select('(geodistance(geopoint.lat,geopoint.lon,?,?)-COALESCE(geopoint.radius,0)) as proximity',[$lat,$lon])
+				->select('geodistance(geopoint.lat,geopoint.lon,?,?) as distance',[$lat,$lon])
+				->select('(geodistance(geopoint.lat,geopoint.lon,?,?)+COALESCE(geopoint.radius,0)) as distance2inc',[$lat,$lon])
+				->select('(geodistance(geopoint.lat,geopoint.lon,?,?)-COALESCE(geopoint.radius,0)) as distance2touch',[$lat,$lon])
 				->orderBy('distance ASC')
 			;
 		}
-		
 		if($uri->phonemic){
 			$this->Query
 				->whereFullText('document',$uri->phonemic)
@@ -105,17 +103,13 @@ class liste extends \present{
 		;
 
 		if($rad){
-			//$this->Query
-				//->joinWhere('distance <= ?',[$rad])
-			//;
-			//R::debug(true,2);
-			//$query = "WITH view AS ({$this->Query}) SELECT * FROM view WHERE distance <= ?";
-			//$this->liste = R::getAll4D($query,array_merge($this->Query->getParams(),[$rad]));
+			$distance2 = $uri->proxima?'touch':'inc';
+			//$this->Query->joinWhere("distance2{$distance2} <= ?",[$rad]); //mysql
 			$this->Query = Query::getNew()
 				->with("view AS ({$this->Query})",$this->Query->getParams())
 				->select('*')
 				->from('view')
-				->where('distance >= ?',[$rad])
+				->where("distance2{$distance2} <= ?",[$rad])
 				->limit($this->limit,$this->offset)
 			;
 		}
