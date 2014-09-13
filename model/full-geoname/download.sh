@@ -1,5 +1,5 @@
 #!/bin/bash
-WORKPATH="${HOME}/tmp/GIS/gisnames/geodata"
+WORKPATH="/var/www/geoname-data/.tmp"
 WORKPATH_DB="/var/www/geoname-data"
 TMPPATH="tmp"
 PCPATH="pc"
@@ -12,7 +12,9 @@ if [ -d "$WORKPATH" ]; then
 	sleep 0
 else
 	echo "$WORKPATH and subdirectories will be created..."
-	mkdir -p $WORKPATH/{$TMPPATH,$PCPATH}
+	mkdir $WORKPATH
+	mkdir "$WORKPATH/$TMPPATH"
+	mkdir "$WORKPATH/$PCPATH"
 	echo "created $WORKPATH"
 fi
 
