@@ -56,11 +56,11 @@
 						<a class="show_button" href="<?=$URI?>#map">Rechercher sur la carte</a>
 						<fieldset>
 							<label for="geo-lat">Latitude</label>
-							<input name="xownGeopoint[lat]" type="number" step="any" min="-90" max="90" id="geo-lat">
+							<input name="xownGeopoint[lat]" id="geo-lat" class="in-latitude">
 							<label for="geo-lng">Longitude</label>
-							<input name="xownGeopoint[lon]" type="number" step="any" min="-180" max="180" id="geo-lng">
+							<input name="xownGeopoint[lon]" id="geo-lng" class="in-longitude">
 							<label for="geo-rayon">Rayon en km</label>
-							<input name="xownGeopoint[radius]" type="number" step="1" min="0" max="67" id="geo-rayon">
+							<input name="xownGeopoint[radius]" id="geo-rayon" class="in-radius">
 						</fieldset>
 						<div class="remodal" data-remodal-id="map">
 							<input class="gg-maps" type="text" value="" placeholder="Rechercher un adresse, un lieu ou une commune">

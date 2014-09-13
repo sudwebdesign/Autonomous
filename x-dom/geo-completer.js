@@ -22,9 +22,9 @@ $js(true,[
 	$('geo-completer').each(function(){
 		var THIS = $(this);
 		var geolocal = $('.remodal',THIS);
-		var inputLat = $('input[type=number][step=any]:eq(0)',THIS);
-		var inputLng = $('input[type=number][step=any]:eq(1)',THIS);
-		var inputRadius = $('input[type=number][step][step!=any]:eq(0)',THIS);
+		var inputLat = $('input.in-latitude',THIS);
+		var inputLng = $('input.in-longitude',THIS);
+		var inputRadius = $('input.in-radius',THIS);
 		var inputGG = $('input.gg-maps',THIS);
 			inputGG.after('<div class="map-wrapper"><div class="map-canvas"></div></div>');
 		var confirmGG = $('.remodal-confirm',THIS);
