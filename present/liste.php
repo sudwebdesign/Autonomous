@@ -1,9 +1,10 @@
 <?php namespace present;
 use uri;
-use view;
 use model\Query;
 use model\R;
+use view;
 use view\Exception as View_Exception;
+use control\Geocoding;
 class liste extends \present{
 	use Mixin_Pagination;
 	protected $limitation				= 5;
@@ -69,10 +70,14 @@ class liste extends \present{
 				->groupBy('geopoint.lon')
 				->groupBy('geopoint.radius')
 				->select('geodistance(geopoint.lat,geopoint.lon,?,?) as distance',[$lat,$lon])
-				->select('(geodistance(geopoint.lat,geopoint.lon,?,?)+COALESCE(geopoint.radius,0)) as distance2inc',[$lat,$lon])
-				->select('(geodistance(geopoint.lat,geopoint.lon,?,?)-COALESCE(geopoint.radius,0)) as distance2touch',[$lat,$lon])
 				->orderBy('distance ASC')
 			;
+			if($rad){
+				$this->Query
+					->select('(geodistance(geopoint.lat,geopoint.lon,?,?)+COALESCE(geopoint.radius,0)) as distance2inc',[$lat,$lon])
+					->select('(geodistance(geopoint.lat,geopoint.lon,?,?)-COALESCE(geopoint.radius,0)) as distance2touch',[$lat,$lon])
+				;
+			}
 		}
 		if($uri->phonemic){
 			$this->Query
@@ -90,7 +95,6 @@ class liste extends \present{
 		$this->Query
 			->select(['id','title','tel','url','created'])
 		;
-
 		if($this->thematics->count())
 			$this->Query
 				->select('COUNT(DISTINCT(thematic__tag.name)) as count_tag_rank')
@@ -103,8 +107,24 @@ class liste extends \present{
 		;
 
 		if($rad){
-			$distance2 = $uri->proxima?'touch':'inc';
-			//$this->Query->joinWhere("distance2{$distance2} <= ?",[$rad]); //mysql
+			list($minlon, $minlat, $maxlon, $maxlat) = Geocoding::getBoundingBox([$lat,$lon],$rad,Geocoding::getEarthRadius('km'));
+			if($uri->proxima){
+				$distance2 = 'touch';
+				$this->Query
+					//->where('(geopoint.minlat>=? AND geopoint.maxlon<=?) OR (geopoint.maxlat<=? AND geopoint.minlon>=?)',[$minlat,$maxlon,$maxlat,$minlon])
+					//->where('((geopoint.minlat>=? OR geopoint.maxlat<=?) AND (geopoint.maxlon<=? OR geopoint.minlon>=?))',[$minlat,$maxlat,$maxlon,$minlon])
+					->where('(geopoint.lat BETWEEN ? AND ?) AND (geopoint.lon BETWEEN ? AND ?)',[$minlat,$maxlat,$minlon,$maxlon])
+				;
+			}
+			else{
+				$distance2 = 'inc';
+				$this->Query->where('geopoint.minlat>=? AND geopoint.maxlat<=? AND geopoint.minlon>=? AND geopoint.maxlon<=?',[$minlat,$maxlat,$minlon,$maxlon]);
+			}
+			
+			//mysql - so simple - non sql standard
+			//$this->Query->joinWhere("distance2{$distance2} <= ?",[$rad]);
+			
+			//pgsql - more complex - non sql standard
 			$this->Query = Query::getNew()
 				->with("view AS ({$this->Query})",$this->Query->getParams())
 				->select('*')
@@ -113,10 +133,11 @@ class liste extends \present{
 				->limit($this->limit,$this->offset)
 			;
 		}
-		else
+		else{
 			$this->Query
 				->limit($this->limit,$this->offset)
 			;
+		}
 
 		$this->count = $this->Query->countAll();
 		$this->pagination();
