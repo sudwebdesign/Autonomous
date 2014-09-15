@@ -111,14 +111,14 @@ class liste extends \present{
 			if($uri->proxima){
 				$distance2 = 'touch';
 				$this->Query
-					//->where('(geopoint.minlat>=? AND geopoint.maxlon<=?) OR (geopoint.maxlat<=? AND geopoint.minlon>=?)',[$minlat,$maxlon,$maxlat,$minlon])
-					//->where('((geopoint.minlat>=? OR geopoint.maxlat<=?) AND (geopoint.maxlon<=? OR geopoint.minlon>=?))',[$minlat,$maxlat,$maxlon,$minlon])
-					->where('(geopoint.lat BETWEEN ? AND ?) AND (geopoint.lon BETWEEN ? AND ?)',[$minlat,$maxlat,$minlon,$maxlon])
+					->where('(geopoint.lat BETWEEN ? AND ?) OR (geopoint.lon BETWEEN ? AND ?)',[$minlat,$maxlat,$minlon,$maxlon])
 				;
 			}
 			else{
 				$distance2 = 'inc';
-				$this->Query->where('geopoint.minlat>=? AND geopoint.maxlat<=? AND geopoint.minlon>=? AND geopoint.maxlon<=?',[$minlat,$maxlat,$minlon,$maxlon]);
+				$this->Query
+					->where('geopoint.minlat>=? AND geopoint.maxlat<=? AND geopoint.minlon>=? AND geopoint.maxlon<=?',[$minlat,$maxlat,$minlon,$maxlon])
+				;
 			}
 			
 			//mysql - so simple - non sql standard
