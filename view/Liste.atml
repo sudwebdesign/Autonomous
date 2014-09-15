@@ -4,14 +4,14 @@
 	<write main>
 		<aside>
 			<h3>Options de Recherche</h3>
-			<form id="search_panel" class="search-panel" method="GET" action="<?=uri::param(0)?>">
+			<form id="search_panel" class="search-panel" method="GET" action="<?=uri::param(0)?>" role="search">
 				<fieldset>
 					<legend>Phonémique</legend>
-					<input type="text" name="phonemic" value="<?=view::getUri()->phonemic?>" />
+					<input type="text" name="phonemic" value="<?=view::getUri()->phonemic?>" autocomplete="off" />
 				</fieldset>
 				<fieldset>
 					<legend>Thématiques</legend>
-					<input name="thematic" type="text" value="<?=$thematics->implode(' ')?>" placeholder="" is="tagsinput" data-url="service/autocomplete/taxonomy?name=<?=$presentAttributes->TAXONOMY?>" data-minchar="4" data-maxchar="25" data-max="5" />
+					<input name="thematic" type="text" value="<?=$thematics->implode(' ')?>" placeholder="" is="tagsinput" data-url="service/autocomplete/taxonomy?name=<?=$presentAttributes->TAXONOMY?>" data-minchar="4" data-maxchar="25" data-max="5" autocomplete="off" />
 					<?$subTaxonomy='taxonomy'.ucfirst($taxonomy);?>
 					<if "isset($$subTaxonomy)">
 						<span class="tags-suggests">Suggestions:
@@ -23,20 +23,20 @@
 					<legend>Localité <small>(lieu,adresse ou commune)</small></legend>
 					<geo-completer>
 						<fieldset>
-							<input id="geoname" class="geoname" name="geo" data-url="service/autocomplete/geoname" type="text"  value="<?=view::getUri()->geo?>">
+							<input id="geoname" class="geoname" name="geo" data-url="service/autocomplete/geoname" type="text"  value="<?=view::getUri()->geo?>" autocomplete="off">
 							<a class="show_button" href="<?=view::getUri()->getPath()?>#map">Rechercher sur la carte</a>
 							<fieldset>
 								<label for="geo-lat">Latitude</label>
-								<input name="lat" id="geo-lat" class="in-latitude" value="<?=view::getUri()->lat?>">
+								<input name="lat" id="geo-lat" class="in-latitude" value="<?=view::getUri()->lat?>" autocomplete="off">
 								<label for="geo-lng">Longitude</label>
-								<input name="lon" id="geo-lng" class="in-longitude" value="<?=view::getUri()->lon?>">
+								<input name="lon" id="geo-lng" class="in-longitude" value="<?=view::getUri()->lon?>" autocomplete="off">
 								<label for="geo-rayon">Rayon en km</label>
-								<input name="rad" id="geo-rayon" class="in-radius" value="<?=view::getUri()->rad?>">
+								<input name="rad" id="geo-rayon" class="in-radius" value="<?=view::getUri()->rad?>" autocomplete="off">
 								<label for="geo-proxima">à proximité</label>
-								<input name="proxima" type="checkbox" id="geo-proxima" value="1" <?=view::getUri()->proxima?'checked':''?>>
+								<input name="proxima" type="checkbox" id="geo-proxima" value="1" <?=view::getUri()->proxima?'checked':''?> autocomplete="off">
 							</fieldset>
 							<div class="remodal" data-remodal-id="map">
-								<input class="gg-maps" type="text" value="" placeholder="Rechercher un adresse, un lieu ou une commune">
+								<input class="gg-maps" type="text" value="" placeholder="Rechercher un adresse, un lieu ou une commune" autocomplete="off">
 								<a class="remodal-confirm" href="#">OK</a>
 							</div>
 						</fieldset>
@@ -110,7 +110,7 @@
 			<else>
 				Aucune Entrée
 			</if>
-			<br><?//$THIS->debug();?>
+			<br>
 		</article>
 		<aside>
 						
