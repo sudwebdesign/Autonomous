@@ -111,7 +111,13 @@ class liste extends \present{
 			if($uri->proxima){
 				$distance2 = 'touch';
 				$this->Query
-					->where('(geopoint.lat BETWEEN ? AND ?) OR (geopoint.lon BETWEEN ? AND ?)',[$minlat,$maxlat,$minlon,$maxlon])
+					//->where('(geopoint.lat BETWEEN ? AND ?) OR (geopoint.lon BETWEEN ? AND ?)',[$minlat,$maxlat,$minlon,$maxlon])
+					->openWhereOr()
+					->where('geopoint.minlat BETWEEN ? AND ?',[$minlat,$maxlat])
+					->where('geopoint.minlon BETWEEN ? AND ?',[$minlon,$maxlon])
+					->where('geopoint.maxlat BETWEEN ? AND ?',[$minlat,$maxlat])
+					->where('geopoint.maxlon BETWEEN ? AND ?',[$minlon,$maxlon])
+					->closeWhere()
 				;
 			}
 			else{
