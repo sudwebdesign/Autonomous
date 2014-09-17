@@ -1,5 +1,6 @@
 <?php namespace model;
-use surikat\control\ruler;
+use uri;
+use control\ruler;
 abstract class ATable_Main extends Table{
 	protected $minTitreLength = 8;
 	protected $maxTitreLength = 250;
@@ -20,9 +21,9 @@ abstract class ATable_Main extends Table{
 			$this->error('tel','Numéro de téléphone non valide');
 		if($this->url&&!ruler::url($this->url))
 			$this->error('url','Lien non valide');
-
 		$this->presentationHtml = $this->presentation;
 		$this->presentation = html_entity_decode(strip_tags($this->presentationHtml));
+		$this->titleHref = uri::filterParam($this->title);
 	}
 	function onUpdate(){
 		$this->modified = date('Y-m-d H:i:s');

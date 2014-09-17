@@ -16,10 +16,9 @@ class liste extends \present{
 	}
 	function dynamic(){
 		parent::dynamic();
-		$uri = view::getUri();
+		$uri = $this->URI;
 		$this->page = $uri->page;
-		$this->uri = $this->URI;
-		$this->subUri = (strrpos($this->URI,'s')===strlen($this->URI)-1?substr($this->URI,0,-1):$this->URI);
+		$this->subUri = (strrpos($uri[0],'s')===strlen($uri[0])-1?substr($uri[0],0,-1):$uri[0]);
 		$this->Query = Query::getNew($this->taxonomy);
 		$this->Query->selectRelationnal([
 			'user			<		email',

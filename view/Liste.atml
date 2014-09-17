@@ -7,7 +7,7 @@
 			<form id="search_panel" class="search-panel" method="GET" action="<?=uri::param(0)?>" role="search">
 				<fieldset>
 					<legend>Phonémique</legend>
-					<input type="text" name="phonemic" value="<?=view::getUri()->phonemic?>" autocomplete="off" />
+					<input type="text" name="phonemic" value="<?=$URI->phonemic?>" autocomplete="off" />
 				</fieldset>
 				<fieldset>
 					<legend>Thématiques</legend>
@@ -23,20 +23,20 @@
 					<legend>Localité <small>(lieu,adresse ou commune)</small></legend>
 					<geo-completer>
 						<fieldset>
-							<input id="geoname" class="geoname" name="geo" data-url="service/autocomplete/geoname" type="text"  value="<?=view::getUri()->geo?>" autocomplete="off">
-							<a class="show_button" href="<?=view::getUri()->getPath()?>#map">Rechercher sur la carte</a>
+							<input id="geoname" class="geoname" name="geo" data-url="service/autocomplete/geoname" type="text"  value="<?=$URI->geo?>" autocomplete="off">
+							<a class="show_button" href="<?=$URI->getPath()?>#map">Rechercher sur la carte</a>
 							<fieldset>
 								<label for="geo-lat">Latitude</label>
-								<input name="lat" id="geo-lat" class="in-latitude" value="<?=view::getUri()->lat?>" autocomplete="off">
+								<input name="lat" id="geo-lat" class="in-latitude" value="<?=$URI->lat?>" autocomplete="off">
 								<label for="geo-lng">Longitude</label>
-								<input name="lon" id="geo-lng" class="in-longitude" value="<?=view::getUri()->lon?>" autocomplete="off">
+								<input name="lon" id="geo-lng" class="in-longitude" value="<?=$URI->lon?>" autocomplete="off">
 								<label for="geo-rayon">Rayon en km</label>
-								<input name="rad" id="geo-rayon" class="in-radius" value="<?=view::getUri()->rad?>" autocomplete="off">
+								<input name="rad" id="geo-rayon" class="in-radius" value="<?=$URI->rad?>" autocomplete="off">
 								<label for="geo-proxima">à proximité</label>
-								<input name="proxima" type="checkbox" id="geo-proxima" value="1" <?=view::getUri()->proxima?'checked':''?> autocomplete="off">
+								<input name="proxima" type="checkbox" id="geo-proxima" value="1" <?=$URI->proxima?'checked':''?> autocomplete="off">
 							</fieldset>
 							<div class="remodal" data-remodal-id="map">
-								<input class="gg-maps" type="text" value="" placeholder="Rechercher un adresse, un lieu ou une commune" autocomplete="off">
+								<input class="gg-maps" type="text" value="" placeholder="Rechercher une adresse, un lieu ou une commune" autocomplete="off">
 								<a class="remodal-confirm" href="#">OK</a>
 							</div>
 						</fieldset>
@@ -54,7 +54,7 @@
 					<if "$img=$THIS->imageByItem($item)">
 						<img src="<?=$img?>" alt="<?=$item->title?>" title="<?=$item->title?>" />
 					</if>
-					<if "view::getUri()->phonemic"> ... </if>
+					<if "$URI->phonemic"> ... </if>
 					<?=$item->presentation?>
 					<?/* <p>Auteur: <?=$item->user->email?></p> */?>
 					<if "$item->presentation_length>strlen($item->presentation)">
@@ -65,12 +65,12 @@
 					<ul class="tags">
 						<foreach "$item->tag as $tag">
 							<if "$tag">
-								<li><h5><a href="<?=$URI.'+'.$tag->name?>"><?=$tag->name?></a></h5></li>
+								<li><h5><a href="<?=$URI[0].'+'.$tag->name?>"><?=$tag->name?></a></h5></li>
 							</if>
 						</foreach>
 						<if "is_object($item->geopoint)&&$item->geopoint->count()">
 							<foreach "$item->geopoint as $geopoint">
-								<li><h5><a href="<?=$URI.'+geo:'.$geopoint->label?>">
+								<li><h5><a href="<?=$URI[0].'+geo:'.$geopoint->label?>">
 									<?=$geopoint->label?>
 								</a></h5></li>
 							</foreach>
@@ -85,15 +85,15 @@
 						<li class="active"><span class="current prev">Début</span></li>
 						<li class="active"><span class="current prev">Précédent</span></li>
 					<else>
-						<li><a class="prev page-link" href="<?=$uri?>">Début</a></li>
-						<li><a class="prev page-link" href="<?=$uri.($page==2?'':$pagination->prefix.($page-1))?>">Précédent</a></li>
+						<li><a class="prev page-link" href="<?=$URI[0]?>">Début</a></li>
+						<li><a class="prev page-link" href="<?=$URI[0].($page==2?'':$pagination->prefix.($page-1))?>">Précédent</a></li>
 					</if>
 					<for from="$pagination->start" to="$pagination->end">
 						<if "$page==$i">
 							<li class="active"><span class="current"><?=$i?></span></li>
 						<else>
 							<li>
-								<a class="page-link" href="<?=$uri.($i>1?$pagination->prefix.$i:'')?>"><?=$i?></a>
+								<a class="page-link" href="<?=$URI[0].($i>1?$pagination->prefix.$i:'')?>"><?=$i?></a>
 							</li>
 						</if>
 					</for>
@@ -103,7 +103,7 @@
 						</li>
 					<else>
 						<li>
-							<a class="next page-link" href="<?=$uri.$pagination->prefix.($page+1)?>">Suivant</a>
+							<a class="next page-link" href="<?=$URI[0].$pagination->prefix.($page+1)?>">Suivant</a>
 						</li>
 					</if>
 				</ul>

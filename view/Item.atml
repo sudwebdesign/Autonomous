@@ -5,31 +5,36 @@
 	<append title> dans <?=$taxonomy?></append>
 	<write main>
 		<article class="<?=$taxonomy?>s">
-			<h1><?=$URI?> : <?=$title?></h1>
-			<h2>Présentation : </h2>
-			<if "$srcimg[0]"><img src="<?= $srcimg[0]?>" alt="<?=$title?>" title="<?=$title?>" /></if>
-			<?=$presentation?>
-			<hr />
-			<if "$lien"><p><i>Lien : </i><a href="<?=$lien?>" title="<?=$title?>"><?=$title?></a></p></if>
-			<if "$tel"><p><i>Télépnone : </i><?=$tel?></p></if>
-			<!-- <p><i>Créé le : </i><?=date('l jS F Y \à H:i:s',strtotime($création))?></p> -->
-			<p><i>Créé le : </i><?=strftime('%A %e %B %G à %k:%M:%S',strtotime($création))?></p>
-			<hr />
-			<?$tags=$raw->groupKey(array('taxonomy','locality','tag'),'name',true);?>
-			<if "$tags->count()">
+			<h1><?=$URI[0]?> : <?=$item->title?></h1>
+			<if "$img"><img src="<?=$img?>" alt="<?=$item->title?>" title="<?=$item->title?>" /></if>
+			<?=$item->presentationHtml?>
+			<hr>
+			<if "$item->url"><p><i>Lien : </i><a href="<?=$item->url?>" title="<?=$item->title?>"><?=$item->title?></a></p></if>
+			<if "$item->tel"><p><i>Télépnone : </i><?=$item->tel?></p></if>
+			<p><i>Créé le : </i><?=strftime('%A %e %B %G à %k:%M:%S',strtotime($item->created))?></p>
+			<hr>
+			<if "is_object($item->tag)&&$item->tag->count()">
 				<ul class="tags">
-					<?foreach($tags as $tag):?>
-						<li><h5><a href="<?=$URI.'s|'.$tag?>"><?=$tag?></a></h5></li>
-					<?endforeach;?>
+					<foreach "$item->tag as $tag">
+						<if "$tag">
+							<li><h5><a href="<?=$URI[0].'s+'.$tag->name?>"><?=$tag->name?></a></h5></li>
+						</if>
+					</foreach>
+					<if "is_object($item->geopoint)&&$item->geopoint->count()">
+						<foreach "$item->geopoint as $geopoint">
+							<li><h5><a href="<?=$URI[0].'s+geo:'.$geopoint->label?>">
+								<?=$geopoint->label?>
+							</a></h5></li>
+						</foreach>
+					</if>
 				</ul>
 			</if>
-			<hr />
-			
-			<pre style="display:none;"><?print_r($srcimg[0])?></pre>
-			<pre style="display:none;"><?print_r($raw)?></pre>
+			<hr>
+			<?/* <p>Auteur: <?=$item->user->email?></p> */?>
+			<hr>
 		</article>
 		<aside>
-			<h3>Partie En développement...</h3>
+			<h3>Flux d'autres articles</h3>
 		</aside>
 	</write>
 </extend>
