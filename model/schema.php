@@ -60,8 +60,34 @@ foreach($taxonomyTree as $name=>$v){
 
 R::drop('geoname');
 
-R::execFile('model/full-geoname/geoname-schema.sql');
-R::execFile('model/full-geoname/geoname-with-radius.sql');
+R::execMulti('
+	CREATE TABLE "geoname" (id SERIAL PRIMARY KEY);
+	ALTER TABLE "geoname" ADD "geonameid" bigint;
+	ALTER TABLE "geoname" ADD "name" text;
+	ALTER TABLE "geoname" ADD "asciiname" text;
+	ALTER TABLE "geoname" ADD "geoaltnames" text;
+	ALTER TABLE "geoname" ADD "latitude" double precision;
+	ALTER TABLE "geoname" ADD "longitude" double precision;
+	ALTER TABLE "geoname" ADD "fclass" text;
+	ALTER TABLE "geoname" ADD "fcode" text;
+	ALTER TABLE "geoname" ADD "country" text;
+	ALTER TABLE "geoname" ADD "cc2" text;
+	ALTER TABLE "geoname" ADD "admin1" text;
+	ALTER TABLE "geoname" ADD "admin2" text;
+	ALTER TABLE "geoname" ADD "admin3" text;
+	ALTER TABLE "geoname" ADD "admin4" text;
+	ALTER TABLE "geoname" ADD "population" integer;
+	ALTER TABLE "geoname" ADD "elevation" text;
+	ALTER TABLE "geoname" ADD "gtopo30" integer;
+	ALTER TABLE "geoname" ADD "timezone" text;
+	ALTER TABLE "geoname" ADD "moddate" date;
+	ALTER TABLE "geoname" ADD "radius" double precision;
+	ALTER TABLE "geoname" ADD "point" point;
+');
+R::execFile('.data/geoname-with-radius.sql');
+
+R::execFile('model/function.geodistance.pgsql');
+
 /*
 CsvImporter::importation('geoname',
 	array(

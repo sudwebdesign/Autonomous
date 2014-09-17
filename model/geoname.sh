@@ -1,15 +1,95 @@
 #!/bin/bash
 
-#variant for RedBean Integration by Surikat
+DBNAME='geonames'
 
-WORKPATH_DB="/var/www/geoname-data"
+DBUSER='postgres'
 DBHOST="localhost"
 DBPORT="5432"
-DBUSER='postgres'
-DBNAME='geonames'
-echo "FILL DATABASE ( can be very long ) ..."
+WORKPATH="~/.geoname-data/.tmp"
+WORKPATH_DB="~/.geoname-data"
 
-psql -e -U $DBUSER -h $DBHOST -p $DBPORT $DBNAME <<EOT
+TMPPATH="tmp"
+PCPATH="pc"
+PREFIX="_"
+FILES="allCountries.zip alternateNames.zip userTags.zip admin1CodesASCII.txt admin2Codes.txt countryInfo.txt featureCodes_en.txt iso-languagecodes.txt timeZones.txt"
+
+case $1 in
+  install)
+	sh "$0 download"
+	sh "$0 db_import"
+	;;
+  install_all)
+	sh "$0 download"
+	sh "$0 db_import_all"
+	;;
+  download)
+		# check if needed directories do already exsist
+		if [ -d "$WORKPATH" ]; then
+			echo "$WORKPATH exists..."
+			sleep 0
+		else
+			echo "$WORKPATH and subdirectories will be created..."
+			mkdir $WORKPATH
+			mkdir "$WORKPATH/$TMPPATH"
+			mkdir "$WORKPATH/$PCPATH"
+			echo "created $WORKPATH"
+		fi
+
+		echo
+		echo ",---- STARTING (downloading, unpacking and preparing)"
+		cd $WORKPATH/$TMPPATH
+
+		for i in $FILES
+		do
+			wget -N -q "http://download.geonames.org/export/dump/$i" # get newer files
+			if [ $i -nt $PREFIX$i ] || [ ! -e $PREFIX$i ] ; then
+				cp -p $i $PREFIX$i
+				unzip -u -q $i
+
+				case "$i" in
+					iso-languagecodes.txt)
+						tail -n +2 iso-languagecodes.txt > iso-languagecodes.txt.tmp;
+						;;
+					countryInfo.txt)
+						grep -v '^#' countryInfo.txt | head -n -2 > countryInfo.txt.tmp;
+						;;
+					timeZones.txt)
+						tail -n +2 timeZones.txt > timeZones.txt.tmp;
+						;;
+				esac
+				echo "| $1 has been downloaded";
+			else
+				echo "| $i is already the latest version"
+			fi
+		done
+
+		# download the postalcodes. You must know yourself the url
+		cd $WORKPATH/$PCPATH
+		wget -q -N "http://download.geonames.org/export/zip/allCountries.zip"
+
+		if [ $WORKPATH/$PCPATH/allCountries.zip -nt $WORKPATH/$PCPATH/allCountries$PREFIX.zip ] || [ ! -e $WORKPATH/$PCPATH/allCountries.zip ]; then
+			echo "Attempt to unzip $WORKPATH/$PCPATH/allCountries.zip file..."
+			unzip -u -q $WORKPATH/$PCPATH/allCountries.zip
+			cp -p $WORKPATH/$PCPATH/allCountries.zip $WORKPATH/$PCPATH/allCountries$PREFIX.zip
+			echo "| ....zip has been downloaded"
+		else
+			echo "| ....zip is already the latest version"
+		fi
+
+		cp "${WORKPATH}/${TMPPATH}/allCountries.txt" "${WORKPATH_DB}/geoname.csv"
+		cp "${WORKPATH}/${PCPATH}/allCountries.txt" "${WORKPATH_DB}/geopostal.csv"
+		cp "${WORKPATH}/${TMPPATH}/timeZones.txt.tmp" "${WORKPATH_DB}/geotimezone.csv"
+		cp "${WORKPATH}/${TMPPATH}/featureCodes_en.txt" "${WORKPATH_DB}/geotype.csv"
+		cp "${WORKPATH}/${TMPPATH}/admin1CodesASCII.txt" "${WORKPATH_DB}/geoarea1admin.csv"
+		cp "${WORKPATH}/${TMPPATH}/admin2Codes.txt" "${WORKPATH_DB}/geoarea2admin.csv"
+		cp "${WORKPATH}/${TMPPATH}/iso-languagecodes.txt.tmp" "${WORKPATH_DB}/geolang.csv"
+		cp "${WORKPATH}/${TMPPATH}/countryInfo.txt.tmp" "${WORKPATH_DB}/geocountry.csv"
+		cp "${WORKPATH}/${TMPPATH}/alternateNames.txt" "${WORKPATH_DB}/geoaltname.csv"
+		#sed -i -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' "${WORKPATH_DB}/geoaltname.csv"
+	;;
+  db_import_all)
+		echo "FILL DATABASE ( can be very long ) ..."
+		psql -e -U $DBUSER -h $DBHOST -p $DBPORT $DBNAME <<EOT
 
 DROP TABLE geoname CASCADE;
 CREATE TABLE geoname (
@@ -195,5 +275,67 @@ UPDATE geoname SET the_geom = ST_PointFromText('POINT(' || longitude || ' ' || l
 CREATE INDEX idx_geoname_the_geom ON public.geoname USING gist(the_geom);
 
 EOT
+	echo "'----- DONE ( have fun... )"
+	;;
+  db_import)
+	echo "FILL DATABASE ( can be very long ) ..."
+	psql -e -U $DBUSER -h $DBHOST -p $DBPORT $DBNAME <<EOT
 
-echo "'----- DONE ( have fun... )"
+DROP TABLE geoname CASCADE;
+CREATE TABLE geoname (
+	id				SERIAL PRIMARY KEY,
+	name			VARCHAR(200),
+	asciiname		VARCHAR(200),
+	geoaltnames	TEXT,
+	latitude		FLOAT,
+	longitude		FLOAT,
+	fclass			CHAR(1),
+	fcode			VARCHAR(10),
+	country			VARCHAR(2),
+	cc2				VARCHAR(60),
+	admin1			VARCHAR(20),
+	admin2			VARCHAR(80),
+	admin3			VARCHAR(20),
+	admin4			VARCHAR(20),
+	population		BIGINT,
+	elevation		INT,
+	gtopo30			INT,
+	timezone		VARCHAR(40),
+	moddate			DATE
+);
+	
+COPY geoname (id,name,asciiname,geoaltnames,latitude,longitude,fclass,fcode,country,cc2,admin1,admin2,admin3,admin4,population,elevation,gtopo30,timezone,moddate) FROM '${WORKPATH_DB}/geoname.csv' null as '';
+
+CREATE EXTENSION postgis;
+CREATE EXTENSION postgis_topology;
+CREATE EXTENSION postgis_tiger_geocoder;
+SELECT AddGeometryColumn ('public','geoname','the_geom',4326,'POINT',2);
+UPDATE geoname SET the_geom = ST_PointFromText('POINT(' || longitude || ' ' || latitude || ')', 4326);
+CREATE INDEX idx_geoname_the_geom ON public.geoname USING gist(the_geom);
+
+EOT
+	echo "'----- DONE ( have fun... )"
+	;;
+  db_export)
+	echo "FILL DATABASE ( can be very long ) ..."
+	psql -e -U $DBUSER -h $DBHOST -p $DBPORT $DBNAME <<EOT
+
+	COPY geoname (id,name,asciiname,geoaltnames,latitude,longitude,fclass,fcode,country,cc2,admin1,admin2,admin3,admin4,population,elevation,gtopo30,timezone,moddate) TO '${WORKPATH_DB}/geoname.csv';
+	COPY geopostal (id,countrycode,geopostal,placename,admin1name,admin1code,admin2name,admin2code,admin3name,admin3code,latitude,longitude,accuracy) TO '${WORKPATH_DB}/geopostal.csv';
+	COPY geotimezone (id,countrycode,time_zone,gmt_offset,dst_offset,raw_offset) TO '${WORKPATH_DB}/geotimezone.csv';
+	COPY geotype (id,code,name,description) TO '${WORKPATH_DB}/geotype.csv';
+	COPY geoarea1admin (id,code,name,name_ascii,geoname_id) TO '${WORKPATH_DB}/geoarea1admin.csv';
+	COPY geoarea2admin (id,code,name,name_ascii,geoname_id) TO '${WORKPATH_DB}/geoarea2admin.csv';
+	COPY geolang (id,iso_639_3,iso_639_2,iso_639_1,name) TO '${WORKPATH_DB}/geolang.csv';
+	COPY geocountry (id,iso_alpha2,iso_alpha3,iso_numeric,fips_code,country,capital,areainsqkm,population,continent,tld,currency_code,currency_name,phone,postal,postal_regex,languages,geoname_id,neighbours,equivalent_fips_code) TO '${WORKPATH_DB}/geocountry.csv';
+	COPY geoaltname_tmp (id,geoname_id,geoaltnameid,iso_language,name,is_preferred_name,is_short_name,unknow1,unknow2) TO '${WORKPATH_DB}/geoaltname.csv';
+
+EOT
+
+	echo "'----- DONE"
+	;;
+  *)
+	echo "Usage: $0 {install|install_all|download|db_import_all|db_import|db_export}"
+	exit 1
+	;;
+esac
