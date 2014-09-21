@@ -49,12 +49,12 @@ class Service_Autocomplete {
 	static function geoinit(){
 		header('Content-Type:application/json; charset=utf-8');
 		echo json_encode([
-			'centerLatMainBound'=>model::getCenterLatOfMainBound(),
-			'centerLngMainBound'=>model::getCenterLongOfMainBound(),
-			'southWestLatMainBound'=>model::getSouthWestLatOfMainBound(),
-			'southWestLngMainBound'=>model::getSouthWestLongOfMainBound(),
-			'northEastLatMainBound'=>model::getNorthEastLatOfMainBound(),
-			'northEastLngMainBound'=>model::getNorthEastLongOfMainBound(),
+			'centerLatMainBound'=>model::CenterLatOfMainBound,
+			'centerLngMainBound'=>model::CenterLongOfMainBound,
+			'southWestLatMainBound'=>model::SouthWestLatOfMainBound,
+			'southWestLngMainBound'=>model::SouthWestLongOfMainBound,
+			'northEastLatMainBound'=>model::NorthEastLatOfMainBound,
+			'northEastLngMainBound'=>model::NorthEastLongOfMainBound,
 			'country'=>model::DEFAULT_COUNTRY_CODE,
 			'region'=>model::DEFAULT_COUNTRY_CODE
 		],JSON_UNESCAPED_UNICODE);
