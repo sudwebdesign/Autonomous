@@ -32,7 +32,8 @@ body>header{
 		}
 		
 		@?include grid( 72, 18, 10);
-		@?include grid( 82, 8, 10, 768px);
+		@?include grid( 74, 16, 10, 768px);
+		@?include grid( 82, 8, 10, 1024px);
 		
 		select{
 			height:100%;
