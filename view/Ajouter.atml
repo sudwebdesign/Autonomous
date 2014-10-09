@@ -7,15 +7,14 @@
 	<write main>
 		<?
 			$x = explode('-',uri::param(0));
-			$Type = str::ucfirst(end($x));
 			$type = str::tolower(end($x));
 		?>
-		<form modelRules="<?=$taxonomy?>" apply="forms.tpl" id="<?=$type?>" action="<?=$action?>" method="POST" enctype="multipart/form-data" role="form" <?=isset($formPosted)?'class="form-posted"':''?>>
+		<form modelRules="<?=$taxonomy?>" apply="forms.tpl" id="<?=$THIS->taxonomy?>" action="<?=$action?>" method="POST" enctype="multipart/form-data" role="form" <?=isset($formPosted)?'class="form-posted"':''?>>
 			<h1>Ajouter: <i><?=$type?></i></h1>
 			<if "isset($formPosted)">
 				<h4>
 					<if "$formPosted">
-						Votre <?=str::tolower($type)?> a bien été pris en compte
+						Votre <?=$type?> a bien été pris en compte
 					<else>
 						Données manquantes ou erronées pour valider l'<?=$type?>
 						<dev><pre><?=$formErrors?></pre></dev>
