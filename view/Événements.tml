@@ -1,4 +1,5 @@
 <present:liste:evenement TAXONOMY="Événement" />
+
 <extend file="Liste.atml">
 	<attr selector="main" addClass="evenements">
 </extend>
