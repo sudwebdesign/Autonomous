@@ -22,15 +22,14 @@ class liste extends \present{
 		$this->Query = Query::getNew($this->taxonomy);
 		$this->Query->selectRelationnal([
 			'user			<		email',
-
-			'date			>		start',
-			'date			>		end',
 			'geopoint		>		label',
-
 			'tag			<>		name',
 			'tag::thematic	<>		name',
 		]);
-
+		
+		if(method_exists($this,'addSelect'))
+			$this->addSelect();
+		
 		$i = 0;
 		$this->thematics = [];
 		$this->Query->openHavingOr();
