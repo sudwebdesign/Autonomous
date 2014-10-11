@@ -5,7 +5,7 @@ use model\Query;
 use control\JSON;
 use control\str;
 class Service_Autocomplete {
-	static function geoname(){
+	protected static function getGeoname(){
 		$results = [];
 		if(isset($_GET['term'])){
 			$term = trim($_GET['term']);
@@ -22,13 +22,10 @@ class Service_Autocomplete {
 			else
 				$q->where('population >= ?',[6000]);
 			$results = $q->getAll();
-			
 		}
-		header('Content-Type:application/json; charset=utf-8');
-		echo json_encode($results,JSON_UNESCAPED_UNICODE);
+		return $results;
 	}
-	static function taxonomy(){
-		//R::debug(true,2);
+	protected static function getTaxonomy(){
 		$results = [];
 		if(isset($_GET['term'])&&strlen($term=trim($_GET['term']))>=1){
 			if(isset($_GET['name'])&&($name=trim($_GET['name']))){
@@ -43,8 +40,19 @@ class Service_Autocomplete {
 				]);
 			};
 		}
+		return $results;
+	}
+	static function geoname(){
 		header('Content-Type:application/json; charset=utf-8');
-		echo json_encode($results,JSON_UNESCAPED_UNICODE);
+		echo json_encode(self::getGeoname(),JSON_UNESCAPED_UNICODE);
+	}
+	static function taxonomy(){
+		header('Content-Type:application/json; charset=utf-8');
+		echo json_encode(self::getTaxonomy(),JSON_UNESCAPED_UNICODE);
+	}
+	static function searchbox(){
+		header('Content-Type:application/json; charset=utf-8');
+		echo json_encode(array_merge(self::getTaxonomy(),self::getGeoname()),JSON_UNESCAPED_UNICODE);
 	}
 	static function geoinit(){
 		header('Content-Type:application/json; charset=utf-8');
