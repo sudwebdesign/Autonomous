@@ -94,6 +94,7 @@ class liste extends \present{
 			->select(['id','title','tel','url','created'])
 		;
 		
+		//for PgSql8 (no need in >=PgSql9.3)
 		$this->Query
 			->groupBy($this->taxonomy.'.id')
 			->groupBy($this->taxonomy.'.title')
