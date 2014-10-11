@@ -4,9 +4,9 @@ control::dev(
 	control::dev_default //control+view+present+model
 	//|control::dev_uri
 	
-	//|control::dev_model_redbean
+	|control::dev_model_redbean
 	//|control::dev_model_data
-	//|control::dev_model_sql
+	|control::dev_model_sql
 	
 	|control::dev_css
 	|control::dev_js
