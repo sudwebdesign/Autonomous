@@ -100,8 +100,9 @@ class liste extends \present{
 			->groupBy($this->taxonomy.'.tel')
 			->groupBy($this->taxonomy.'.url')
 			->groupBy($this->taxonomy.'.created')
-			
-			->groupBy('presentation')
+			->groupBy($this->taxonomy.'.presentation')
+			->groupBy('"user".id')
+			->groupBy('"user".email')
 		;
 		
 		if($this->thematics->count())
