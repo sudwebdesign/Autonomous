@@ -96,12 +96,25 @@ body>header{
 				padding:0.1em 0.1em 0.1em 1em;
 			}
 		}
-		input[type=search]{
+		>div{
 			height:100%;
-			border:0;
-			margin:0;
 			border-radius: 5px;
-			font-size:1.2em;
+			margin:0;
+			input[type=search]{
+				height:100%;
+				width:100%;
+				margin:0;
+				border-radius: 5px;
+				font-size:1.2em;
+
+				&,
+				&:focus,
+				&:hover,
+				&:active{
+					border:0;
+					box-shadow: none;
+				}
+			}
 		}
 	}
 	>ul[is=dropdown]{

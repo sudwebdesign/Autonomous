@@ -5,23 +5,29 @@ use model\Query;
 use control\JSON;
 use control\str;
 class Service_Autocomplete {
-	protected static function getGeoname(){
+	protected static function getGeoname($complete=true){
 		$results = [];
 		if(isset($_GET['term'])){
 			$term = trim($_GET['term']);
 			$q = model::newFrom('geoname')
 				->select('name')
-				->select('latitude')
-				->select('longitude')
-				->select('radius')
 				->where('fcode = ?',['ADM4'])
 				->orderBy('name ASC')
 			;
+			if($complete)
+				$q
+					->select('latitude')
+					->select('longitude')
+					->select('radius')
+				;
 			if(strlen($term)>=1)
 				$q->where('asciiname LIKE ?',[strtolower(str_replace('%','',str::unaccent($term)).'%')]);
 			else
 				$q->where('population >= ?',[6000]);
-			$results = $q->getAll();
+			if($complete)
+				$results = $q->getAll();
+			else
+				$results = $q->getCol();
 		}
 		return $results;
 	}
@@ -29,6 +35,7 @@ class Service_Autocomplete {
 		$results = [];
 		if(isset($_GET['term'])&&strlen($term=trim($_GET['term']))>=1){
 			if(isset($_GET['name'])&&($name=trim($_GET['name']))){
+				$name = rtrim($name,'s');
 				$results = model::getCol('tag',[
 					'select'=>'tag.name',
 					'joinOn'=>'taxonomy',
@@ -52,7 +59,7 @@ class Service_Autocomplete {
 	}
 	static function searchbox(){
 		header('Content-Type:application/json; charset=utf-8');
-		echo json_encode(array_merge(self::getTaxonomy(),self::getGeoname()),JSON_UNESCAPED_UNICODE);
+		echo json_encode(array_merge(self::getTaxonomy(),self::getGeoname(false)),JSON_UNESCAPED_UNICODE);
 	}
 	static function geoinit(){
 		header('Content-Type:application/json; charset=utf-8');
