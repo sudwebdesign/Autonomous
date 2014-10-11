@@ -38,9 +38,7 @@ body>header{
 		select{
 			height:100%;
 			background: #fff;
-			border:0;
-			margin:0;
-			
+			margin:0;		
 			&,
 			option{
 				font-family: FontAwesome;
@@ -106,14 +104,16 @@ body>header{
 				margin:0;
 				border-radius: 5px;
 				font-size:1.2em;
-
-				&,
-				&:focus,
-				&:hover,
-				&:active{
-					border:0;
-					box-shadow: none;
-				}
+			}
+		}
+		input,
+		select{
+			&,
+			&:focus,
+			&:hover,
+			&:active{
+				border:0;
+				box-shadow: none;
 			}
 		}
 	}
