@@ -105,6 +105,8 @@ class liste extends \present{
 			->groupBy('"user".id')
 			->groupBy('"user".email')
 		;
+		if($uri->phonemic)
+			$this->Query->groupBy($this->taxonomy.'.document');
 		
 		if($this->thematics->count())
 			$this->Query
