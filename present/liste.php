@@ -93,6 +93,17 @@ class liste extends \present{
 		$this->Query
 			->select(['id','title','tel','url','created'])
 		;
+		
+		$this->Query
+			->groupBy($this->taxonomy.'.id')
+			->groupBy($this->taxonomy.'.title')
+			->groupBy($this->taxonomy.'.tel')
+			->groupBy($this->taxonomy.'.url')
+			->groupBy($this->taxonomy.'.created')
+			
+			->groupBy('presentation')
+		;
+		
 		if($this->thematics->count())
 			$this->Query
 				->select('COUNT(DISTINCT(thematic__tag.name)) as count_tag_rank')
