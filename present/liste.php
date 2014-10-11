@@ -79,7 +79,7 @@ class liste extends \present{
 		}
 		if($uri->phonemic){
 			$this->Query
-				->whereFullText('document',$uri->phonemic)
+				->whereFullText('document',$uri->phonemic,'french')
 				->selectFullTextHighlite('presentation',$uri->phonemic,$this->truncation,'french')
 				//->selectFullTextHighlight('presentation',$uri->phonemic,'french')
 				->orderByFullTextRank('document',$uri->phonemic,'french')
