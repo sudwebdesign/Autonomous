@@ -24,7 +24,7 @@
 					<geo-completer>
 						<fieldset>
 							<input id="geoname" class="geoname" name="geo" data-url="service/autocomplete/geoname" type="text"  value="<?=$URI->geo?>" autocomplete="off">
-							<a class="show_button" href="<?=$URI->getPath()?>#map">Rechercher sur la carte</a>
+							<a class="show_button" href="<?=$URI->getPath()?>#map">Afficher la carte</a>
 							<fieldset>
 								<label for="geo-lat">Latitude</label>
 								<input name="lat" id="geo-lat" class="in-latitude" value="<?=$URI->lat?>" autocomplete="off">
