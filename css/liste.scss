@@ -1,7 +1,17 @@
+@import 'jquery-ui/core';
+@import 'jquery-ui/autocomplete';
+@import 'jquery-ui/themes/trontastic';
+@import 'jquery-ui/theme';
+/*
+@import 'jquery-ui/datepicker';
+@import 'jquery-ui/timepicker';
+@import 'jquery-ui/slider';
+@import 'form-dom';
+* */
 main.present-liste{
 	@?include grid( 1-45-1, 1-51-1, 1-98-1,	768px);
 	@?include grid( 1-23-1, 1-48-1, 1-23-1,	1024px);
-	@?include grid( 1-23-1, 1-48-1, 1-23-1,	1260px);
+	@?include grid( 1-23-1, 1-48-1, 1-23-1,	1268px);
 	>aside:nth-child(1){
 		min-height:100%;
 		height:auto;

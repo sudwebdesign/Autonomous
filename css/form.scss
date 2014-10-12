@@ -23,6 +23,20 @@ body>main>form{
 	label>*{
 		float:left;
 	}
+	h4{
+		border: 1px solid rgb(204, 204, 204);
+		color: rgb(94, 107, 29);
+		border-radius: 4px;
+		margin: 0px 5px 5px 0px;
+		>i{
+			border: 1px solid rgb(204, 123, 012);
+			color: rgb(94, 107, 29);
+			}
+		>b{
+			border: 1px solid rgb(204, 204, 204);
+			color: rgb(94, 107, 29);
+		}
+	}	
 }
 main.present-ajouter h1{
 	@?include icon(plus);
