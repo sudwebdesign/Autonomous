@@ -22,15 +22,14 @@ class liste extends \present{
 		$this->Query = Query::getNew($this->taxonomy);
 		$this->Query->selectRelationnal([
 			'user			<		email',
-
-			'date			>		start',
-			'date			>		end',
 			'geopoint		>		label',
-
 			'tag			<>		name',
 			'tag::thematic	<>		name',
 		]);
-
+		
+		if(method_exists($this,'addSelect'))
+			$this->addSelect();
+		
 		$i = 0;
 		$this->thematics = [];
 		$this->Query->openHavingOr();
@@ -80,10 +79,10 @@ class liste extends \present{
 		}
 		if($uri->phonemic){
 			$this->Query
-				->whereFullText('document',$uri->phonemic)
+				->whereFullText('document',$uri->phonemic,'french')
 				->selectFullTextHighlite('presentation',$uri->phonemic,$this->truncation,'french')
 				//->selectFullTextHighlight('presentation',$uri->phonemic,'french')
-				->orderByFullTextRank('document',$uri->phonemic)
+				->orderByFullTextRank('document',$uri->phonemic,'french') 
 			;
 		}
 		else{
@@ -94,6 +93,21 @@ class liste extends \present{
 		$this->Query
 			->select(['id','title','tel','url','created'])
 		;
+		
+		//for PgSql8 (no need in >=PgSql9.3)
+		$this->Query
+			->groupBy($this->taxonomy.'.id')
+			->groupBy($this->taxonomy.'.title')
+			->groupBy($this->taxonomy.'.tel')
+			->groupBy($this->taxonomy.'.url')
+			->groupBy($this->taxonomy.'.created')
+			->groupBy($this->taxonomy.'.presentation')
+			->groupBy('"user".id')
+			->groupBy('"user".email')
+		;
+		if($uri->phonemic)
+			$this->Query->groupBy($this->taxonomy.'.document');
+		
 		if($this->thematics->count())
 			$this->Query
 				->select('COUNT(DISTINCT(thematic__tag.name)) as count_tag_rank')

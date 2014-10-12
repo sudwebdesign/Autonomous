@@ -1,9 +1,6 @@
 <extend>
 	<attr selector="main" addClass="home">
 	<write main>
-		<aside>
-			Search Options
-		</aside>
 		<article>
 			<h1>Bienvenue sur le Réseau UDAC66</h1>
 			<loremipsum 150>

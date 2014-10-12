@@ -22,19 +22,99 @@ body>header{
 		@include clearfix();
 	}
 	>form[role=search]{
-		padding-top: 0.5em;
-		height:2.4em;
-		input[type=search]{
+		margin-top:0.5em;
+		height:2.2em;
+		border-radius: 5px;
+		background: #fff;
+		padding-left:0.5em;
+		@media(min-width:768px){
+			padding:0.1em 0.1em 0.1em 1em;
+		}
+		
+		@?include grid( 72, 18, 10);
+		@?include grid( 74, 16, 10, 768px);
+		@?include grid( 82, 8, 10, 1024px);
+		
+		select{
 			height:100%;
-			width:100%;
-			border:0;
+			background: #fff;
+			margin:0;		
+			&,
+			option{
+				font-family: FontAwesome;
+				font-style: normal;
+				font-weight: normal;
+				line-height: normal;
+				-webkit-font-smoothing: antialiased;
+				speak:none;
+				text-align:center
+			}
+			option{
+				height:100%;
+				width:100%;
+				display:block;
+				/*
+				&[value="Événements"]{
+					@?include icon(calendar);
+				}
+				&[value="Ressources"]{
+					@?include icon(cog);
+				}
+				&[value="Projets"]{
+					@?include icon(star);
+				}
+				&[value="Associations"]{
+					@?include icon(group);
+				}
+				&[value="Annonces"]{
+					@?include icon(exchange);
+				}
+				&[value="Médiathèques"]{
+					@?include icon(book);
+				}
+				*/
+			}
+		}
+		input[type=submit]{
+			height:100%;
+			border-radius: 4px;
 			margin:0;
+			margin-top: 0.2em;
+			cursor:pointer;
+			line-height:0;
+			font-size:0;
+			text-indent:-999px;
+			color: transparent;
+			background: url(#{$img}search32.png) no-repeat center transparent;
+			opacity: 0.8;
+			&:hover {
+				opacity: 1;
+			}
 			@media(min-width:768px){
 				padding:0.1em 0.1em 0.1em 1em;
 			}
-			border-radius: 8px;
-			border: solid #000 1px;
-			font-size:1.2em;
+		}
+		>div{
+			height:100%;
+			border-radius: 5px;
+			margin:0;
+			input[type=search]{
+				height:100%;
+				width:100%;
+				margin:0;
+				border-radius: 5px;
+				font-size:1.2em;
+			}
+		}
+		input,
+		select{
+			&,
+			&:focus,
+			&:hover,
+			&:active{
+				border:0;
+				box-shadow: none;
+			}
 		}
 	}
 	>ul[is=dropdown]{

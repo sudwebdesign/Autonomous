@@ -11,8 +11,19 @@
 <body>
 	<header>
 		<a href="" title="Accueil"><img src="img/udac.png" alt="L'UDAC 66" /></a>
-		<form action="search" role="search" method="POST">
-			<input type="search" is="searchbox" name="search" data-url="service/autocomplete/searchbox" placeholder="Rechercher">
+		<form role="search" is="searchbox">
+			<div>
+				<input type="search" name="phonemic" placeholder="Rechercher" value="<?=$URI->phonemic?>" data-url="service/autocomplete/searchbox">
+			</div>
+			<select>
+				<option value="Événements" <?=$URI[0]=='Événements'?'selected="selected"':''?>>&#xf073;</option>
+				<option value="Ressources" <?=$URI[0]=='Ressources'?'selected="selected"':''?>>&#xf013;</option>
+				<option value="Projets" <?=$URI[0]=='Projets'?'selected="selected"':''?>>&#xf005;</option>
+				<option value="Associations" <?=$URI[0]=='Associations'?'selected="selected"':''?>>&#xf0c0;</option>
+				<option value="Annonces" <?=$URI[0]=='Annonces'?'selected="selected"':''?>>&#xf0ec;</option>
+				<option value="Médiathèques" <?=$URI[0]=='Médiathèques'?'selected="selected"':''?>>&#xf02d;</option>
+			</select>
+			<input type="submit" value="Rechercher">
 		</form>
 		<ul is="dropdown">
 			<li>

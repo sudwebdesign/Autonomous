@@ -1,35 +1,31 @@
 <extend>
 	<title>Qui sommes nous - Autonomie et Partage - L'UDAC 66</title>
 	<write main>
-		<div class="container-fluid">
-			<div class="row-fluid">
-				<div class="col-md-12">
-					<h1>Qui sommes nous</h1>
-					<p>Bonjour ,<br>
-					<span style="font-weight:bold;">L'Association UDAC 66, basée dans les P.O.,</span><br>
-					<span style="font-weight:bold;">a le plaisir de vous présenter son nouveau site!</span><br>
-					<br>
-					Entièrement <span style="font-weight:bold;">gratuit</span>, il s'adresse essentiellement aux personnes souhaitant diminuer leurs <span style="font-weight:bold;">dépendance</span> et <span style="font-weight:bold;">participation</span> au <span style="font-weight:bold;">consumérisme</span>.<br>
-					<br>
-					Axé sur l'<span style="font-weight:bold;">Autonomie</span> et le <span style="font-weight:bold;">Partage</span>, il fonctionne en plate forme regroupant nombre d'informations utiles en ce sens.<br>
-					<br>
-					Idées, entraides, échanges et conseils... y sont développés indépendamment par des personnes, associations ou collectifs, rejoignant cette éthique, chacun dans leur domaine de compétences.<br>
-					<br>
-					L'UDAC se veut d'être un outil pratique, rassemblant en un même lieu diverses informations et liens, permettant d'orienter plus facilement vos recherches.<br>
-					Son rôle est de vous permettre d'y trouver des réponses, autant que d'y partager les vôtres.<br>
-					Ceci dans un même but d'évolution, en échange des richesses de nos expériences présentes et à venir...<br>
-					<br>
-					<span style="font-weight:bold;">Toute l'équipe vous y souhaite la bienvenue!</span><br>
-					<br>
-					Vous trouverez sur ce site:<br>
-					- Un <span style="font-weight:bold;">agenda</span> d'événements divers classé par thématique, un <span style="font-weight:bold;">annuaire</span>, une <span style="font-weight:bold;">new-letter </span>et des <span style="font-weight:bold;">liens</span> d'informations:<br>
-					<span style="font-weight:bold;">- Autonomie</span>, les <span style="font-weight:bold;">SELS</span>, <span style="font-weight:bold;">monnaies alternatives</span>, <span style="font-weight:bold;">chantiers collectifs </span>etc.<br>
-					Aussi des adresses pour <span style="font-weight:bold;">consommer local</span>, pour <span style="font-weight:bold;">s'entraider</span> et connaitre d'autres modes de vies...<br>
-					<br>
-					Bonne visite<br>
-					Cordialement, l'équipe UDAC 66.</p>
-				</div> <!-- /span12 -->
-			</div> <!-- /row -->
-		</div> <!-- /container -->		
+		<article>
+			<h1>Qui sommes nous</h1>
+			<p>Bonjour ,<br>
+			<span style="font-weight:bold;">L'Association UDAC 66, basée dans les P.O.,</span><br>
+			<span style="font-weight:bold;">a le plaisir de vous présenter son nouveau site!</span><br>
+			<br>
+			Entièrement <span style="font-weight:bold;">gratuit</span>, il s'adresse essentiellement aux personnes souhaitant diminuer leurs <span style="font-weight:bold;">dépendance</span> et <span style="font-weight:bold;">participation</span> au <span style="font-weight:bold;">consumérisme</span>.<br>
+			<br>
+			Axé sur l'<span style="font-weight:bold;">Autonomie</span> et le <span style="font-weight:bold;">Partage</span>, il fonctionne en plate forme regroupant nombre d'informations utiles en ce sens.<br>
+			<br>
+			Idées, entraides, échanges et conseils... y sont développés indépendamment par des personnes, associations ou collectifs, rejoignant cette éthique, chacun dans leur domaine de compétences.<br>
+			<br>
+			L'UDAC se veut d'être un outil pratique, rassemblant en un même lieu diverses informations et liens, permettant d'orienter plus facilement vos recherches.<br>
+			Son rôle est de vous permettre d'y trouver des réponses, autant que d'y partager les vôtres.<br>
+			Ceci dans un même but d'évolution, en échange des richesses de nos expériences présentes et à venir...<br>
+			<br>
+			<span style="font-weight:bold;">Toute l'équipe vous y souhaite la bienvenue!</span><br>
+			<br>
+			Vous trouverez sur ce site:<br>
+			- Un <span style="font-weight:bold;">agenda</span> d'événements divers classé par thématique, un <span style="font-weight:bold;">annuaire</span>, une <span style="font-weight:bold;">new-letter </span>et des <span style="font-weight:bold;">liens</span> d'informations:<br>
+			<span style="font-weight:bold;">- Autonomie</span>, les <span style="font-weight:bold;">SELS</span>, <span style="font-weight:bold;">monnaies alternatives</span>, <span style="font-weight:bold;">chantiers collectifs </span>etc.<br>
+			Aussi des adresses pour <span style="font-weight:bold;">consommer local</span>, pour <span style="font-weight:bold;">s'entraider</span> et connaitre d'autres modes de vies...<br>
+			<br>
+			Bonne visite<br>
+			Cordialement, l'équipe UDAC 66.</p>
+		</article>
 	</write>
 </extend>
