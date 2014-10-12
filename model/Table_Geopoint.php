@@ -2,9 +2,9 @@
 final class Table_Geopoint extends Table{
 	use Mixin_Geopoint;
 	function onValidate(){
-		if(!$this->checkLat($this->lat))
+		if(false===($this->lat=$this->checkLat($this->lat)))
 			$this->error('xownGeopoint.lat','La latitude doit être comprise entre 90 et -90');
-		if(!$this->checkLon($this->lon))
+		if(false===($this->lon=$this->checkLon($this->lon)))
 			$this->error('xownGeopoint.lon','La longitude doit être comprise entre 180 et -180');
 		$this->setPoint($this->lat,$this->lon);
 		if($this->radius){
