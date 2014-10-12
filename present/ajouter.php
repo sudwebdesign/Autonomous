@@ -86,7 +86,7 @@ class ajouter extends \present{
 				$entry->sharedTag[] = $tag;
 			}
 		}
-		if(is_object($G=$P->xownGeopoint)){
+		if(is_object($G=$P->xownGeopoint)&&$G->label&&$G->lat!=''&&$G->lon!=''){
 			$entry->xownGeopoint[] = R::create('geopoint',[
 				'label' => $G->label,
 				'lat' => $G->lat,
