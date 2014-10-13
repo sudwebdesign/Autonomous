@@ -80,20 +80,21 @@
 				<hr>
 			</foreach>
 			<if "$count">
+				<?$irup=str_replace($pagination->prefix.($page),'',$URI)?>
 				<ul class="simple-pagination light-theme">
 					<if "$page==1">
 						<li class="active"><span class="current prev">Début</span></li>
 						<li class="active"><span class="current prev">Précédent</span></li>
 					<else>
-						<li><a class="prev page-link" href="<?=$URI[0]?>">Début</a></li>
-						<li><a class="prev page-link" href="<?=$URI[0].($page==2?'':$pagination->prefix.($page-1))?>">Précédent</a></li>
+						<li><a class="prev page-link" href="<?=$irup?>">Début</a></li>
+						<li><a class="prev page-link" href="<?=$irup.($page==2?'':$pagination->prefix.($page-1))?>">Précédent</a></li>
 					</if>
 					<for from="$pagination->start" to="$pagination->end">
 						<if "$page==$i">
 							<li class="active"><span class="current"><?=$i?></span></li>
 						<else>
 							<li>
-								<a class="page-link" href="<?=$URI[0].($i>1?$pagination->prefix.$i:'')?>"><?=$i?></a>
+								<a class="page-link" href="<?=$irup.($i>1?$pagination->prefix.$i:'')?>"><?=$i?></a>
 							</li>
 						</if>
 					</for>
@@ -103,7 +104,7 @@
 						</li>
 					<else>
 						<li>
-							<a class="next page-link" href="<?=$URI[0].$pagination->prefix.($page+1)?>">Suivant</a>
+							<a class="next page-link" href="<?=$irup.$pagination->prefix.($page+1)?>">Suivant</a>
 						</li>
 					</if>
 				</ul>
