@@ -162,10 +162,10 @@ RewriteRule "(^|/)\." - [F]
 DirectoryIndex index.php
 RewriteBase /
 
-#RewriteCond %{REQUEST_FILENAME} !-f
-#RewriteCond %{REQUEST_URI} !^/surikat/
-#RewriteCond %{DOCUMENT_ROOT}/surikat/$1.$2 -f
-#RewriteRule ^(.*)\.(css|js|png|jpg|gif|ttf|woff)$ /surikat/$1.$2 [L,QSA]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} !^/surikat/
+RewriteCond %{DOCUMENT_ROOT}/surikat/$1.$2 -f
+RewriteRule ^(.*)\.(css|js|png|jpg|gif|ttf|woff)$ /surikat/$1.$2 [L,QSA]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)\.(css|js)$ /service/synaptic?file=$1.$2 [L]
