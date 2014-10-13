@@ -41,7 +41,7 @@ body>main>form{
 main.present-ajouter h1{
 	@?include icon(plus);
 }
-#événement>h1>i{
+#evenement>h1>i{
 	@?include icon(calendar);
 }
 #ressource>h1>i{
@@ -56,7 +56,7 @@ main.present-ajouter h1{
 #annonce>h1>i{
 	@?include icon(exchange);
 }
-#médiathèque>h1>i{
+#mediatheque>h1>i{
 	@?include icon(book);
 }
 #mon_compte>h1{
