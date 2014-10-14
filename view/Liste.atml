@@ -114,7 +114,15 @@
 			<br>
 		</article>
 		<aside>
-						
+			<foreach "(array)@$sublist as $id=>$item">
+				<?$href=$subUri.'+'.uri::filterParam($item->title).'+'.$id;?>
+				<h2><a href="<?=$href?>"><?=$item->title?></a></h2>
+				<a href="<?=$href?>">
+					<if "$URI->phonemic"> ... </if>
+					<?=$item->presentation?>
+					<if "$item->presentation_length>strlen($item->presentation)"> ...</if>
+				</a>
+			</foreach>
 		</aside>
 	</write>
 </extend>
