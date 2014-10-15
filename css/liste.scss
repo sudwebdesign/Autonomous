@@ -10,13 +10,23 @@
 * */
 main.present-liste{
 	@?include grid( 1-45-1, 1-51-1, 1-98-1,	768px);
-	@?include grid( 1-23-1, 1-48-1, 1-23-1,	1024px);
+	@?include grid( 1-32-1, 1-62-1, 1-98-1,	1024px);
 	@?include grid( 1-23-1, 1-48-1, 1-23-1,	1268px);
+	>aside #search_panel {
+		> fieldset:nth-child(1){
+			width:100%;
+		}
+		> input:nth-child(4){
+			width:100%;
+			margin-top: 0.25em;
+		}	
+	}
 	>aside:nth-child(1){
-		min-height:100%;
+		//min-height:100%;
 		height:auto;
+		padding-bottom:0.6em;
 		input {
-			width:98%;
+			//width:98%;
 			background-image: none;
 			border: 1px solid #CCCCCC;
 			border-radius: 4px;
@@ -34,6 +44,10 @@ main.present-liste{
 			background: darken($color-light,15%);
 			margin:0;
 		}
+	}
+	>aside>h3{
+		padding: 6px 0.2em;
+		text-align: center;
 	}
 	>article>h1{
 		&::before{
