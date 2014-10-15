@@ -9,6 +9,8 @@ class liste extends \present{
 	use Mixin_Pagination;
 	protected $limitation				= 5;
 	protected $truncation				= 369;
+	protected $limitation2				= 10;
+	protected $truncation2				= 60;
 	protected $Query;
 	function assign(){
 		parent::assign();
@@ -19,8 +21,8 @@ class liste extends \present{
 		$uri = $this->URI;
 		$this->page = $uri->page;
 		$this->subUri = (strrpos($uri[0],'s')===strlen($uri[0])-1?substr($uri[0],0,-1):$uri[0]);
-		$this->Query = Query::getNew($this->taxonomy);
-		$this->Query->selectRelationnal([
+		$Query = Query::getNew($this->taxonomy);
+		$Query->selectRelationnal([
 			'user			<		email',
 			'geopoint		>		label',
 			'tag			<>		name',
@@ -28,26 +30,26 @@ class liste extends \present{
 		]);
 		
 		if(method_exists($this,'addSelect'))
-			$this->addSelect();
+			$this->addSelect($Query);
 		
 		$i = 0;
 		$this->thematics = [];
-		$this->Query->openHavingOr();
+		$Query->openHavingOr();
 		while($tag=$uri[$i+=1]){
 			if(is_array($tag)){
-				$this->Query->openHavingAnd();
+				$Query->openHavingAnd();
 				foreach($tag as $subTag){
-					$this->Query->joinWhere('tag.name = ? ',[$subTag]);
+					$Query->joinWhere('tag.name = ? ',[$subTag]);
 					$this->thematics[] = $subTag;
 				}
-				$this->Query->closeHaving();
+				$Query->closeHaving();
 			}
 			else{
-				$this->Query->joinWhere('tag.name = ? ',[$tag]);
+				$Query->joinWhere('tag.name = ? ',[$tag]);
 				$this->thematics[] = $tag;
 			}
 		}
-		$this->Query->closeHaving();
+		$Query->closeHaving();
 		
 		$rad = null;
 		if($uri->geo||($uri->lat&&$uri->lon)){
@@ -63,7 +65,7 @@ class liste extends \present{
 				if(!$rad)
 					$rad = (float)$point->radius;
 			}
-			$this->Query
+			$Query
 				->groupBy('geopoint.lat')
 				->groupBy('geopoint.lon')
 				->groupBy('geopoint.radius')
@@ -71,14 +73,14 @@ class liste extends \present{
 				->orderBy('distance ASC')
 			;
 			if($rad){
-				$this->Query
+				$Query
 					->select('(geodistance(geopoint.lat,geopoint.lon,?,?)+COALESCE(geopoint.radius,0)) as distance2inc',[$lat,$lon])
 					->select('(geodistance(geopoint.lat,geopoint.lon,?,?)-COALESCE(geopoint.radius,0)) as distance2touch',[$lat,$lon])
 				;
 			}
 		}
 		if($uri->phonemic){
-			$this->Query
+			$Query
 				->whereFullText('document',$uri->phonemic,'french')
 				->selectFullTextHighlite('presentation',$uri->phonemic,$this->truncation,'french')
 				//->selectFullTextHighlight('presentation',$uri->phonemic,'french')
@@ -86,16 +88,16 @@ class liste extends \present{
 			;
 		}
 		else{
-			$this->Query
+			$Query
 				->selectTruncation('presentation',$this->truncation)
 			;
 		}
-		$this->Query
+		$Query
 			->select(['id','title','tel','url','created'])
 		;
 		
 		//for PgSql8 (no need in >=PgSql9.3)
-		$this->Query
+		$Query
 			->groupBy($this->taxonomy.'.id')
 			->groupBy($this->taxonomy.'.title')
 			->groupBy($this->taxonomy.'.tel')
@@ -106,16 +108,16 @@ class liste extends \present{
 			->groupBy('"user".email')
 		;
 		if($uri->phonemic)
-			$this->Query->groupBy($this->taxonomy.'.document');
+			$Query->groupBy($this->taxonomy.'.document');
 		
 		if($this->thematics->count())
-			$this->Query
+			$Query
 				->select('COUNT(DISTINCT(thematic__tag.name)) as count_tag_rank')
 				->where('thematic__tag.name IN ?',[$this->thematics->getArray()])
 				->orderBy('count_tag_rank DESC')
 			;
 
-		$this->Query
+		$Query
 			->orderBy('created DESC')
 		;
 
@@ -123,7 +125,7 @@ class liste extends \present{
 			list($minlon, $minlat, $maxlon, $maxlat) = Geocoding::getBoundingBox([$lat,$lon],$rad,Geocoding::getEarthRadius('km'));
 			if($uri->proxima){
 				$distance2 = 'touch';
-				$this->Query
+				$Query
 					//->where('(geopoint.lat BETWEEN ? AND ?) OR (geopoint.lon BETWEEN ? AND ?)',[$minlat,$maxlat,$minlon,$maxlon])
 					->openWhereOr()
 					->where('geopoint.minlat BETWEEN ? AND ?',[$minlat,$maxlat])
@@ -135,17 +137,17 @@ class liste extends \present{
 			}
 			else{
 				$distance2 = 'inc';
-				$this->Query
+				$Query
 					->where('geopoint.minlat>=? AND geopoint.maxlat<=? AND geopoint.minlon>=? AND geopoint.maxlon<=?',[$minlat,$maxlat,$minlon,$maxlon])
 				;
 			}
 			
 			//mysql - so simple - non sql standard
-			//$this->Query->joinWhere("distance2{$distance2} <= ?",[$rad]);
+			//$Query->joinWhere("distance2{$distance2} <= ?",[$rad]);
 			
 			//pgsql - more complex - non sql standard
-			$this->Query = Query::getNew()
-				->with("view AS ({$this->Query})",$this->Query->getParams())
+			$Query = Query::getNew()
+				->with("view AS ({$Query})",$Query->getParams())
 				->select('*')
 				->from('view')
 				->where("distance2{$distance2} <= ?",[$rad])
@@ -153,18 +155,50 @@ class liste extends \present{
 			;
 		}
 		else{
-			$this->Query
+			$Query
 				->limit($this->limit,$this->offset)
 			;
 		}
 
-		$this->count = $this->Query->countAll();
+		$this->count = $Query->countAll();
 		$this->pagination();
 
-		$this->liste = $this->Query->tableMD();
-		//exit($this->liste);
-
+		$this->liste = $Query->tableMD();
 		$this->countListe = count($this->liste);
+		//exit($this->liste);
+		
+		//sub flux
+		$subCategories = ['evenement','ressource','projet','association','annonce','mediatheque'];
+		unset($subCategories[array_search($this->taxonomy,$subCategories)]);
+		
+		$full = [];
+		$full = array_merge($full,$this->thematics->getArray());
+		if($uri->phonemic)
+			$full[] = $uri->phonemic;
+		if($uri->geo)
+			$full[] = $uri->geo;
+			
+		$full = implode(' ',$full);
+		
+		$XQuery2 = [];
+		foreach($subCategories as $cat){
+			if(!Query::tableExists($cat))
+				continue;
+			$Query2 = Query::getNew()
+				->select(['id','title'])
+				->limit($this->limitation2)
+				->from($cat)
+			;
+			if($full)
+				$Query2->selectFullTextHighlite('presentation',$full,$this->truncation2,'french');
+			else
+				$Query2->selectTruncation('presentation',$this->truncation2);
+			$XQuery2[] = "($Query2)";
+		}
+		if(!empty($XQuery2))
+			$this->liste2 = R::getAll(implode(' UNION ',$XQuery2));
+		//exit($this->liste2);
+		
 		$this->h1 = $uri[0];
 		if(!empty($this->keywords))
 			$this->h1 .= ' - '.implode(' ',(array)$this->keywords);
