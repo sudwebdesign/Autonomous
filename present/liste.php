@@ -185,9 +185,10 @@ class liste extends \present{
 			if(!Query::tableExists($cat))
 				continue;
 			$Query2 = Query::getNew()
-				->select(['id','title'])
+				->select(['id','pg_class.relname AS table','title','created'])
 				->limit($this->limitation2)
-				->from($cat)
+				->from($cat.'","'.'pg_class')
+				->where($cat.'.tableoid = pg_class.oid')
 			;
 			if($full)
 				$Query2->selectFullTextHighlite('presentation',$full,$this->truncation2,'french');
@@ -197,7 +198,11 @@ class liste extends \present{
 		}
 		if(!empty($XQuery2))
 			$this->liste2 = R::getAll(implode(' UNION ',$XQuery2));
-		//exit($this->liste2);
+		$subCatSea = ['evenement','ressource','projet','association','annonce','mediatheque'];	
+		$urlSubCat = ['Événement','Ressource','Projet','Association','Annonce','Médiathèque'];
+		for ($l2=0;$l2<count($this->liste2);$l2++)
+			$this->liste2[$l2]['table'] = str_replace($subCatSea,$urlSubCat,$this->liste2[$l2]['table']);
+		//exit($this->liste2);		
 		
 		$this->h1 = $uri[0];
 		if(!empty($this->keywords))
