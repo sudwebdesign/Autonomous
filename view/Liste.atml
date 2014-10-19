@@ -122,7 +122,7 @@
 					<if "$URI->phonemic"> ... </if>
 					<?=$item->presentation?>
 					<if "$item->presentation_length>strlen($item->presentation)"> ...</if>
-					<p><?=$item->created?></p>
+					<p><?=$item->table?> du <?=$item->created?></p>
 				</a>
 			</foreach>
 		</aside>

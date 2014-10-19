@@ -190,20 +190,21 @@ class liste extends \present{
 				->from($cat.'","'.'pg_class')
 				->where($cat.'.tableoid = pg_class.oid')
 			;
-			if($full)
-				$Query2->selectFullTextHighlite('presentation',$full,$this->truncation2,'french');
+			if($full)#fu selectFullTextHighlite($query,$col,$t,$truncation=369,$lang=null,$config=[],$getl=true)
+				$Query2->selectFullTextHighlite($full,'presentation',$this->truncation2,'french',['StartSel' => '"<b>"', 'StopSel' => '"</b>"']);#$Query2->selectFullTextHighlite($full,'presentation',$this->truncation2,'french');
 			else
 				$Query2->selectTruncation('presentation',$this->truncation2);
-			$XQuery2[] = "($Query2)";
+			$XQuery2[] = "($Query2)";#var_dump($XQuery2);
 		}
-		if(!empty($XQuery2))
+#exit(var_dump($full).'<br />'.var_export(implode(' UNION ',$XQuery2)));//fdb
+		if(!empty($XQuery2)){
 			$this->liste2 = R::getAll(implode(' UNION ',$XQuery2));
-		$subCatSea = ['evenement','ressource','projet','association','annonce','mediatheque'];	
-		$urlSubCat = ['Événement','Ressource','Projet','Association','Annonce','Médiathèque'];
-		for ($l2=0;$l2<count($this->liste2);$l2++)
-			$this->liste2[$l2]['table'] = str_replace($subCatSea,$urlSubCat,$this->liste2[$l2]['table']);
-		//exit($this->liste2);		
-		
+			$subCatSea = ['evenement','ressource','projet','association','annonce','mediatheque'];	
+			$urlSubCat = ['Événement','Ressource','Projet','Association','Annonce','Médiathèque'];
+			for ($l2=0;$l2<count($this->liste2);$l2++)
+				$this->liste2[$l2]['table'] = str_replace($subCatSea,$urlSubCat,$this->liste2[$l2]['table']);
+			//exit($this->liste2);		
+		}
 		$this->h1 = $uri[0];
 		if(!empty($this->keywords))
 			$this->h1 .= ' - '.implode(' ',(array)$this->keywords);
