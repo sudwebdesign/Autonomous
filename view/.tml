@@ -2,7 +2,7 @@
 	<attr selector="main" addClass="home">
 	<write main>
 		<article>
-			<h1>Bienvenue sur le Réseau UDAC66</h1>
+			<h1>Bienvenue</h1>
 			<loremipsum 150>
 		</article>
 		<aside>

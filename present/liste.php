@@ -170,16 +170,13 @@ class liste extends \present{
 		//sub flux
 		$subCategories = ['evenement','ressource','projet','association','annonce','mediatheque'];
 		unset($subCategories[array_search($this->taxonomy,$subCategories)]);
-		
 		$full = [];
 		$full = array_merge($full,$this->thematics->getArray());
 		if($uri->phonemic)
 			$full[] = $uri->phonemic;
 		if($uri->geo)
 			$full[] = $uri->geo;
-			
 		$full = implode(' ',$full);
-		
 		$XQuery2 = [];
 		foreach($subCategories as $cat){
 			if(!Query::tableExists($cat))

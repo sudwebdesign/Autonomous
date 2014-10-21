@@ -27,6 +27,7 @@ body>main{
 		padding-top:5px;
 		padding-bottom:5px;
 		color: #F86D2E;
+		background-color:#222222;
 		@include gradient-vertical(#3c3c3c,#222222);
 	}
 	@?include grid(*,2-96-2);
