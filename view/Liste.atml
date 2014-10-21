@@ -70,9 +70,11 @@
 						</foreach>
 						<if "is_object($item->geopoint)&&$item->geopoint->count()">
 							<foreach "$item->geopoint as $geopoint">
-								<li><h5><a href="<?=$URI[0].'+geo:'.$geopoint->label?>">
-									<?=$geopoint->label?>
-								</a></h5></li>
+								<if "$geopoint->label">
+									<li><h5><a href="<?=$URI[0].'+geo:'.$geopoint->label.'+lat:'.$geopoint->lat.'+lon:'.$geopoint->lon.'+radius:'.$geopoint->radius?>">
+										<?=$geopoint->label?>
+									</a></h5></li>
+								</if>
 							</foreach>
 						</if>
 					</ul>
