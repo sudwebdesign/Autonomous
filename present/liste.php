@@ -25,6 +25,9 @@ class liste extends \present{
 		$Query->selectRelationnal([
 			'user			<		email',
 			'geopoint		>		label',
+			'geopoint		>		lat',
+			'geopoint		>		lon',
+			'geopoint		>		radius',
 			'tag			<>		name',
 			'tag::thematic	<>		name',
 		]);
