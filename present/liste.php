@@ -52,6 +52,8 @@ class liste extends \present{
 		$Query->closeHaving();
 		
 		$rad = null;
+		$lat = null;
+		$lon = null;
 		if($uri->geo||($uri->lat&&$uri->lon)){
 			$rad = (float)$uri->rad;
 			if($uri->lat&&$uri->lon){
@@ -60,24 +62,26 @@ class liste extends \present{
 			}
 			else{
 				$point = R::findOne('geoname','WHERE name LIKE ?',[str_replace('%','',$uri->geo).'%']);
-				$lat = (float)$point->latitude;
-				$lon = (float)$point->longitude;
-				if(!$rad)
-					$rad = (float)$point->radius;
+				if($point){
+					$lat = (float)$point->latitude;
+					$lon = (float)$point->longitude;
+					if(!$rad)
+						$rad = (float)$point->radius;
+				}
 			}
-			$Query
-				->groupBy('geopoint.lat')
-				->groupBy('geopoint.lon')
-				->groupBy('geopoint.radius')
-				->select('geodistance(geopoint.lat,geopoint.lon,?,?) as distance',[$lat,$lon])
-				->orderBy('distance ASC')
-			;
-			if($rad){
+			if($lat!==null&&$lon!==null)
+				$Query
+					->groupBy('geopoint.lat')
+					->groupBy('geopoint.lon')
+					->groupBy('geopoint.radius')
+					->select('geodistance(geopoint.lat,geopoint.lon,?,?) as distance',[$lat,$lon])
+					->orderBy('distance ASC')
+				;
+			if($rad)
 				$Query
 					->select('(geodistance(geopoint.lat,geopoint.lon,?,?)+COALESCE(geopoint.radius,0)) as distance2inc',[$lat,$lon])
 					->select('(geodistance(geopoint.lat,geopoint.lon,?,?)-COALESCE(geopoint.radius,0)) as distance2touch',[$lat,$lon])
 				;
-			}
 		}
 		if($uri->phonemic){
 			$Query
@@ -187,13 +191,15 @@ class liste extends \present{
 				->from($cat.'","'.'pg_class')
 				->where($cat.'.tableoid = pg_class.oid')
 			;
-			if($full)#fu selectFullTextHighlite($query,$col,$t,$truncation=369,$lang=null,$config=[],$getl=true)
-				$Query2->selectFullTextHighlite($full,'presentation',$this->truncation2,'french',['StartSel' => '"<b>"', 'StopSel' => '"</b>"']);#$Query2->selectFullTextHighlite($full,'presentation',$this->truncation2,'french');
+			if($full)
+				$Query2
+					->whereFullText('document',$uri->phonemic,'french')
+					->selectFullTextHighlite('presentation',$full,$this->truncation2,'french',['StartSel' => '"<b>"', 'StopSel' => '"</b>"'])
+				;
 			else
 				$Query2->selectTruncation('presentation',$this->truncation2);
-			$XQuery2[] = "($Query2)";#var_dump($XQuery2);
+			$XQuery2[] = "($Query2)";
 		}
-#exit(var_dump($full).'<br />'.var_export(implode(' UNION ',$XQuery2)));//fdb
 		if(!empty($XQuery2)){
 			$this->liste2 = R::getAll(implode(' UNION ',$XQuery2));
 			$subCatSea = ['evenement','ressource','projet','association','annonce','mediatheque'];	
