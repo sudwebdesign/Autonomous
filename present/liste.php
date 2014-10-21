@@ -182,6 +182,7 @@ class liste extends \present{
 			$full[] = $uri->geo;
 		$full = implode(' ',$full);
 		$XQuery2 = [];
+		$XQuery2P = [];
 		foreach($subCategories as $cat){
 			if(!Query::tableExists($cat))
 				continue;
@@ -199,9 +200,10 @@ class liste extends \present{
 			else
 				$Query2->selectTruncation('presentation',$this->truncation2);
 			$XQuery2[] = "($Query2)";
+			$XQuery2P = array_merge($XQuery2P,$Query2->getParams());
 		}
 		if(!empty($XQuery2)){
-			$this->liste2 = R::getAll(implode(' UNION ',$XQuery2));
+			$this->liste2 = R::getAll(implode(' UNION ',$XQuery2),$XQuery2P);
 			$subCatSea = ['evenement','ressource','projet','association','annonce','mediatheque'];	
 			$urlSubCat = ['Événement','Ressource','Projet','Association','Annonce','Médiathèque'];
 			for ($l2=0;$l2<count($this->liste2);$l2++)
