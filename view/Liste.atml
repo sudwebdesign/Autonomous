@@ -52,7 +52,7 @@
 				<h2><a href="<?=$href?>"><?=$item->title?></a></h2>
 				<a href="<?=$href?>">
 					<if "$img=$THIS->imageByItem($item)">
-						<img src="<?=$img?>" alt="<?=$item->title?>" title="<?=$item->title?>" />
+						<img src="<?=$img?>" alt="<?=$item->atitle?>" title="<?=$item->atitle?>" />
 					</if>
 					<if "$URI->phonemic"> ... </if>
 					<?=$item->presentation?>

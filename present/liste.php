@@ -174,8 +174,12 @@ class liste extends \present{
 
 		$this->liste = $Query->tableMD();
 		$this->countListe = count($this->liste);
+		foreach($this->liste as $akey => $avlue){
+			$this->liste[$akey]['atitle']=htmlspecialchars($this->liste[$akey]['title'], ENT_COMPAT);
+		}
+		unset($akey,$avlue);
 		//exit($this->liste);
-		
+
 		//sub flux
 		$subCategories = ['evenement','ressource','projet','association','annonce','mediatheque'];
 		unset($subCategories[array_search($this->taxonomy,$subCategories)]);
@@ -213,7 +217,7 @@ class liste extends \present{
 			$urlSubCat = ['Événement','Ressource','Projet','Association','Annonce','Médiathèque'];
 			for ($l2=0;$l2<count($this->liste2);$l2++)
 				$this->liste2[$l2]['table'] = str_replace($subCatSea,$urlSubCat,$this->liste2[$l2]['table']);
-			//exit($this->liste);		
+			//exit($this->liste2);		
 		}
 		$this->h1 = $uri[0];
 		if(!empty($this->keywords))
