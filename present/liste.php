@@ -79,7 +79,7 @@ class liste extends \present{
 					->groupBy('geopoint.lat')
 					->groupBy('geopoint.lon')
 					->groupBy('geopoint.radius')
-					->select("geodistance(geopoint.lat,geopoint.lon,?,?) as distance",[$lat,$lon])
+					->select('geodistance(geopoint.lat,geopoint.lon,?,?) as distance',[$lat,$lon])
 					->orderBy('distance ASC')
 				;
 			if($rad)
