@@ -63,22 +63,22 @@ main.present-liste{
 		position: relative;
 		top: 0.1em;
 	}
-	&.evenements>article>h1{
+	&.evenements>article>h1, >aside>h2>a.Événement{
 		@?include icon(calendar);
 	}
-	&.ressources>article>h1{
+	&.ressources>article>h1, >aside>h2>a.Ressource{
 		@?include icon(cog);
 	}
-	&.projets>article>h1{
+	&.projets>article>h1, >aside>h2>a.Projet{
 		@?include icon(star);
 	}
-	&.associations>article>h1{
+	&.associations>article>h1, >aside>h2>a.Association{
 		@?include icon(group);
 	}
-	&.annonces>article>h1{
+	&.annonces>article>h1, >aside>h2>a.Annonce{
 		@?include icon(exchange);
 	}
-	&.mediatheques>article>h1{
+	&.mediatheques>article>h1, >aside>h2>a.Médiathèque{
 		@?include icon(book);
 	}
 	>article>h2{
