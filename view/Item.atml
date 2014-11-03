@@ -6,10 +6,10 @@
 	<write main>
 		<article class="<?=$taxonomy?>s">
 			<h1><?=$URI[0]?> : <?=$item->title?></h1>
-			<if "$img"><img src="<?=$img?>" alt="<?=$item->title?>" title="<?=$item->title?>" /></if>
+			<if "$img"><img src="<?=$img?>" alt="<?=$item->atitle?>" title="<?=$item->atitle?>" /></if>
 			<?=$item->presentationHtml?>
 			<hr>
-			<if "$item->url"><p><i>Lien : </i><a href="<?=$item->url?>" title="<?=$item->title?>"><?=$item->title?></a></p></if>
+			<if "$item->url"><p><i>Lien : </i><a href="<?=$item->url?>" title="<?=$item->atitle?>"><?=$item->title?></a></p></if>
 			<if "$item->tel"><p><i>Télépnone : </i><?=$item->tel?></p></if>
 			<p><i>Créé le : </i><?=strftime('%A %e %B %G à %k:%M:%S',strtotime($item->created))?></p>
 			<hr>

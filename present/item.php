@@ -31,6 +31,7 @@ class item extends \present{
 			$this->redirect($this->item->titleHref);
 		$this->img = $this->imageByItem();
 		$this->files = $this->filesByItem();
+		$this->item->atitle = htmlspecialchars($this->item->title, ENT_COMPAT);
 	}
 	function imageByItem($item=null){
 		if(!isset($item))
