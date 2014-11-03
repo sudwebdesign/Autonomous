@@ -22,6 +22,7 @@ main.present-liste{
 		}	
 	}
 	>aside:nth-child(1){
+		>h3{@?include icon(search);}
 		//min-height:100%;
 		height:auto;
 		padding-bottom:0.6em;
@@ -44,6 +45,9 @@ main.present-liste{
 			background: darken($color-light,15%);
 			margin:0;
 		}
+	}
+	>aside:nth-child(3){
+		>h3{@?include icon(bookmark-o);}
 	}
 	>aside>h3{
 		padding: 6px 0.2em;
