@@ -62,6 +62,13 @@ main.present-ajouter h1{
 #mon_compte>h1{
 	@?include icon(th);
 }
+input[required],select[required]{
+//  @?include icon(asterisk);
+//    background-image: url("../img/invalid_form.png");
+    background-image: url("data:image/gif;base64,R0lGODlhEwATAIABAP8AAP///yH5BAEKAAEALAAAAAATABMAAAI6jH+Au2oeIAP0JdmcxjZWRWnXF4ZPdZZqOa0sk66ZS6OjDHt1W796bPp5UhGh7dI5ZhJEmA3CyUUNBQA7");
+    background-repeat: no-repeat;
+    background-position: calc(100% - 10px) center;
+}
 /*
 .geo-details > legend:nth-child(1) > small:nth-child(1) > a:nth-child(1){
 	@?include icon(minus,after);
@@ -111,4 +118,6 @@ geo-local{
 		}
 	}
 }
+* 
+
 */
