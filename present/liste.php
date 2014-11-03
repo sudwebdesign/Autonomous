@@ -20,6 +20,8 @@ class liste extends \present{
 		parent::dynamic();
 		$uri = $this->URI;
 		$this->page = $uri->page;
+		$this->limit = $this->limitation;
+		$this->offset = ($this->page!=NULL)?(($this->page-1)*$this->limitation):0;
 		$this->subUri = (strrpos($uri[0],'s')===strlen($uri[0])-1?substr($uri[0],0,-1):$uri[0]);
 		$Query = Query::getNew($this->taxonomy);
 		$Query->selectRelationnal([
@@ -77,7 +79,8 @@ class liste extends \present{
 					->groupBy('geopoint.lat')
 					->groupBy('geopoint.lon')
 					->groupBy('geopoint.radius')
-					->select('geodistance(geopoint.lat,geopoint.lon,?,?) as distance',[$lat,$lon])
+					->select('geodistance('.$lat.','.$lon.') as distance')
+					//->select("geodistance(geopoint.lat,geopoint.lon,?,?) as distance",[$lat,$lon])//WnW?
 					->orderBy('distance ASC')
 				;
 			if($rad)
@@ -151,7 +154,7 @@ class liste extends \present{
 			
 			//mysql - so simple - non sql standard
 			//$Query->joinWhere("distance2{$distance2} <= ?",[$rad]);
-			
+
 			//pgsql - more complex - non sql standard
 			$Query = Query::getNew()
 				->with("view AS ({$Query})",$Query->getParams())
@@ -211,7 +214,7 @@ class liste extends \present{
 			$urlSubCat = ['Événement','Ressource','Projet','Association','Annonce','Médiathèque'];
 			for ($l2=0;$l2<count($this->liste2);$l2++)
 				$this->liste2[$l2]['table'] = str_replace($subCatSea,$urlSubCat,$this->liste2[$l2]['table']);
-			//exit($this->liste2);		
+			//exit($this->liste);		
 		}
 		$this->h1 = $uri[0];
 		if(!empty($this->keywords))
