@@ -22,7 +22,7 @@
 						<img src="img/panneau_jaune.gif" alt="Problème Technique" title="Problème Technique" style="float:right;width:69px;height:69px;" />
 						<i><?=$type?> non enregistré. Veuillez corriger afin de valider le formulaire :</i>
 						<foreach "$formErrors as $fkey=>$sol"><br /><i>solution : <?=$sol?></i></foreach>
-						<dev><pre><?=$formErrors?></pre></dev>
+						<dev><?=$formErrors?></dev>
 					</if>
 				</h4>
 			<else>
