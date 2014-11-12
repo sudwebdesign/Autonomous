@@ -187,7 +187,7 @@ class liste extends \present{
 		$XQuery2 = [];
 		$XQuery2P = [];
 		foreach($subCategories as $cat){
-			if(!Query::tableExists($cat))
+			if(!$Query->tableExists($cat))
 				continue;
 			$Query2 = Query::getNew()
 				->select(['id','pg_class.relname AS table','title','created'])
