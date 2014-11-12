@@ -22,6 +22,7 @@ main.present-liste{
 		}	
 	}
 	>aside:nth-child(1){
+		>h3{@?include icon(search);}
 		//min-height:100%;
 		height:auto;
 		padding-bottom:0.6em;
@@ -45,6 +46,9 @@ main.present-liste{
 			margin:0;
 		}
 	}
+	>aside:nth-child(3){
+		>h3{@?include icon(bookmark-o);}
+	}
 	>aside>h3{
 		padding: 6px 0.2em;
 		text-align: center;
@@ -59,22 +63,22 @@ main.present-liste{
 		position: relative;
 		top: 0.1em;
 	}
-	&.evenements>article>h1{
+	&.evenements>article>h1, >aside>h2>a.Événement{
 		@?include icon(calendar);
 	}
-	&.ressources>article>h1{
+	&.ressources>article>h1, >aside>h2>a.Ressource{
 		@?include icon(cog);
 	}
-	&.projets>article>h1{
+	&.projets>article>h1, >aside>h2>a.Projet{
 		@?include icon(star);
 	}
-	&.associations>article>h1{
+	&.associations>article>h1, >aside>h2>a.Association{
 		@?include icon(group);
 	}
-	&.annonces>article>h1{
+	&.annonces>article>h1, >aside>h2>a.Annonce{
 		@?include icon(exchange);
 	}
-	&.mediatheques>article>h1{
+	&.mediatheques>article>h1, >aside>h2>a.Médiathèque{
 		@?include icon(book);
 	}
 	>article>h2{

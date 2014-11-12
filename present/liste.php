@@ -20,6 +20,8 @@ class liste extends \present{
 		parent::dynamic();
 		$uri = $this->URI;
 		$this->page = $uri->page;
+		$this->limit = $this->limitation;
+		$this->offset = ($this->page!=NULL)?(($this->page-1)*$this->limitation):0;
 		$this->subUri = (strrpos($uri[0],'s')===strlen($uri[0])-1?substr($uri[0],0,-1):$uri[0]);
 		$Query = Query::getNew($this->taxonomy);
 		$Query->selectRelationnal([
@@ -151,7 +153,7 @@ class liste extends \present{
 			
 			//mysql - so simple - non sql standard
 			//$Query->joinWhere("distance2{$distance2} <= ?",[$rad]);
-			
+
 			//pgsql - more complex - non sql standard
 			$Query = Query::getNew()
 				->with("view AS ({$Query})",$Query->getParams())
@@ -172,8 +174,12 @@ class liste extends \present{
 
 		$this->liste = $Query->tableMD();
 		$this->countListe = count($this->liste);
+		foreach($this->liste as $akey => $avlue){
+			$this->liste[$akey]['atitle']=htmlspecialchars($this->liste[$akey]['title'], ENT_COMPAT);
+		}
+		unset($akey,$avlue);
 		//exit($this->liste);
-		
+
 		//sub flux
 		$subCategories = ['evenement','ressource','projet','association','annonce','mediatheque'];
 		unset($subCategories[array_search($this->taxonomy,$subCategories)]);

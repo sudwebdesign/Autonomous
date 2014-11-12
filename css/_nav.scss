@@ -137,12 +137,6 @@ body>nav {
 		&[href="Annonces"],&[href="Ajouter-Annonce"]{
 			@?include icon(exchange);
 		}
-		&[href="Annonces|Offres"]{
-			@?include icon(chevron-right);
-		}
-		&[href="Annonces|Demandes"]{
-			@?include icon(chevron-left);
-		}
 		&[href="Médiathèques"],&[href="Ajouter-Médiathèque"]{
 			@?include icon(book);
 		}

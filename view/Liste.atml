@@ -52,7 +52,7 @@
 				<h2><a href="<?=$href?>"><?=$item->title?></a></h2>
 				<a href="<?=$href?>">
 					<if "$img=$THIS->imageByItem($item)">
-						<img src="<?=$img?>" alt="<?=$item->title?>" title="<?=$item->title?>" />
+						<img src="<?=$img?>" alt="<?=$item->atitle?>" title="<?=$item->atitle?>" />
 					</if>
 					<if "$URI->phonemic"> ... </if>
 					<?=$item->presentation?>
@@ -71,7 +71,7 @@
 						<if "is_object($item->geopoint)&&$item->geopoint->count()">
 							<foreach "$item->geopoint as $geopoint">
 								<if "$geopoint->label">
-									<li><h5><a href="<?=$URI[0].'+geo:'.$geopoint->label.'+lat:'.$geopoint->lat.'+lon:'.$geopoint->lon.($geopoint->radius?'+radius:'.$geopoint->radius:'')?>">
+									<li><h5><a href="/<?=ucfirst($URI[0]).'+geo:'.$geopoint->label.'+lat:'.$geopoint->lat.'+lon:'.$geopoint->lon.($geopoint->radius?'+radius:'.$geopoint->radius:'')?>">
 										<?=$geopoint->label?>
 									</a></h5></li>
 								</if>
@@ -119,12 +119,12 @@
 			<h3>Flux d'autres articles</h3>
 			<foreach "(array)@$liste2 as $id=>$item">
 				<?$href=$item->table.'+'.uri::filterParam($item->title).'+'.$item->id;?>
-				<h2><a href="<?=$href?>"><?=$item->title?></a></h2>
+				<h2 title="Ajouté le <?=$item->created?>"><a class="<?=$item->table?>" href="<?=$href?>"><?=$item->title?></a></h2>
 				<a href="<?=$href?>">
 					<if "$URI->phonemic"> ... </if>
 					<?=$item->presentation?>
 					<if "$item->presentation_length>strlen($item->presentation)"> ...</if>
-					<p><?=$item->table?> du <?=$item->created?></p>
+			<!--	<p><?=$item->table?> du <?=$item->created?></p>	-->
 				</a>
 			</foreach>
 		</aside>
