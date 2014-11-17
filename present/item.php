@@ -3,7 +3,7 @@ use uri;
 use view;
 use model;
 use model\Query;
-use control;
+use dev;
 use control\ArrayObject;
 class item extends \present{
 	function assign(){
@@ -62,7 +62,7 @@ class item extends \present{
 				$title = $location2;
 		}
 		$redirect = $this->URI[0].'+'.$title.'+'.$id;
-		if(!control::devHas(control::dev_uri))
+		if(!dev::has(dev::URI))
 			header('Location: '.$redirect,true,301);
 		else
 			echo 'Location: '.$redirect;

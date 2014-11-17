@@ -91,12 +91,12 @@
 	</footer>
 	<script type="text/javascript" src="js/js.pack.js"></script>
 	<script type="text/javascript">
-		<?if(control::devHas(control::dev_css)):?>$css().dev=true;<?endif;?>
-		<?if(control::devHas(control::dev_js)):?>$js().dev=true;<?endif;?>
+		<?if(dev::has(dev::CSS)):?>$css().dev=true;<?endif;?>
+		<?if(dev::has(dev::JS)):?>$js().dev=true;<?endif;?>
 		$js().min = false
 		$css().min = false;
 		$js('script');
-		<?if(control::devHas(control::dev_control)):?>if(console) console.info('Server <?=$timeCompiled===$time?'Compilation+':''?>Exec: <?=control\chrono::get()?> -  Exec <?=date('jMY-H:m:s',$time)?> - Compiled <?=date('jMY-H:m:s',$timeCompiled)?>');<?endif;?>
+		<?if(dev::has(dev::CONTROL)):?>if(console) console.info('Server <?=$timeCompiled===$time?'Compilation+':''?>Exec: <?=control\chrono::get()?> -  Exec <?=date('jMY-H:m:s',$time)?> - Compiled <?=date('jMY-H:m:s',$timeCompiled)?>');<?endif;?>
 	</script>
 </body>
 </html>

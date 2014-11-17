@@ -1,5 +1,5 @@
 <?php
 if(!@include(__DIR__.'/surikat/control.php'))
 	symlink('../surikat','surikat')&&include('surikat/control.php');
-control::dev();
+dev::level(dev::STD);
 view::index();
