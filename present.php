@@ -9,7 +9,7 @@ class present extends surikat\present{
 		$this->taxonomyEvenement	= Table_Taxonomy::getChildrenbyLabel('Événement');
 		$port = ($_SERVER['SERVER_PORT']&&(int)$_SERVER['SERVER_PORT']!=80?':'.$_SERVER['SERVER_PORT']:'');
 		$this->BASE_HREF = 'http'.(@$_SERVER["HTTPS"]=="on"?'s':'').'://'.$_SERVER['SERVER_NAME'].$port.'/';
-		$this->URI		= view::getUri();
+		$this->URI		= view::getInstance()->getUri();
 		$this->HREF		= $this->BASE_HREF.$this->URI[0];
 	}
 	function dynamic(){
