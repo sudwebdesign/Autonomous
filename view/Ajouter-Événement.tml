@@ -1,23 +1,25 @@
 <present:ajouter:evenement uri="static" TAXONOMY="Événement" />
 <extend file="Ajouter.atml">
 	<after selector="main form fieldset:has(geo-completer)">
-		<fieldset is="daterange" apply="forms.tpl">
-			<legend>Date</legend>
-			<div>
-				<fieldset>
-					<legend>Début</legend>
-					<input type="date" class="date-start" name="xownDate[date_start][]" value="" placeholder="Jour">
-					<input type="time" name="xownDate[time_start][]" value="" placeholder="Horaire">
-					<label>Préciser la durée
-						<input name="date_with_end" type="checkbox">
-					</label>
-				</fieldset>
-				<fieldset>
-					<legend>Fin</legend>
-					<input type="date" class="date-end" name="xownDate[date_end][]" value="" placeholder="Jour">
-					<input type="time" name="xownDate[time_end][]" value="" placeholder="Horaire">					
-				</fieldset>
-			</div>
-		</fieldset>
+		<apply "forms.tpl">
+			<fieldset is="daterange">
+				<legend>Date</legend>
+				<div>
+					<fieldset>
+						<legend>Début</legend>
+						<input type="date" class="date-start" name="xownDate[date_start][]" value="" placeholder="Jour">
+						<input type="time" name="xownDate[time_start][]" value="" placeholder="Horaire">
+						<label>Préciser la durée
+							<input name="date_with_end" type="checkbox">
+						</label>
+					</fieldset>
+					<fieldset>
+						<legend>Fin</legend>
+						<input type="date" class="date-end" name="xownDate[date_end][]" value="" placeholder="Jour">
+						<input type="time" name="xownDate[time_end][]" value="" placeholder="Horaire">					
+					</fieldset>
+				</div>
+			</fieldset>
+		</apply>
 	</after>
 </extend>
