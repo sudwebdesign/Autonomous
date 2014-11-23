@@ -13,6 +13,6 @@ class view extends surikat\view{
 	protected $xDom = 'x-dom/';
 	function preHooks(){
 		parent::preHooks();
-		i18n::setLocale('fr');
+#		i18n::setLocale('fr');
 	}
 }
