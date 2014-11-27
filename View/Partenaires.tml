@@ -1,0 +1,19 @@
+<extend>
+	<append main>
+		<?foreach(include('Model/var.sponsors.php') as $sponsor): ?>
+		<div class="sponsor" title="Cliquer pour en savoir plus au sujet de <?=$sponsor[1]?>">
+			<sponsor-flip>
+				<img src="img/Partenaires/<?=$sponsor[0]?>" alt="En savoir plus au sujet de <?=$sponsor[1]?>" />
+			</sponsor-flip>
+			<div class="sponsorData">
+			    <div class="sponsorDataBg">
+    				<div class="sponsorDescription"><?=$sponsor[3]?></div>
+    				<div class="sponsorURL">
+    					<a href="<?=$sponsor[2]?>"><?=$sponsor[2]?></a>
+    				</div>
+    			</div>
+			</div>
+		</div>
+		<?endforeach;?>
+	</append>
+</extend>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title><?=$title?></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+	<base href="<?=$BASE_HREF?>">
+	<link href="css/style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+	<header>
+		<a href="" title="Accueil"><img src="img/udac.png" alt="L'UDAC 66" /></a>
+		<form role="search" is="searchbox">
+			<div>
+				<input type="search" name="phonemic" placeholder="Rechercher" value="<?=$URI->phonemic?>" data-url="service/autocomplete/searchbox">
+			</div>
+			<select>
+				<option value="Événements" <?=$URI[0]=='Événements'?'selected="selected"':''?>>&#xf073;</option>
+				<option value="Ressources" <?=$URI[0]=='Ressources'?'selected="selected"':''?>>&#xf013;</option>
+				<option value="Projets" <?=$URI[0]=='Projets'?'selected="selected"':''?>>&#xf005;</option>
+				<option value="Associations" <?=$URI[0]=='Associations'?'selected="selected"':''?>>&#xf0c0;</option>
+				<option value="Annonces" <?=$URI[0]=='Annonces'?'selected="selected"':''?>>&#xf0ec;</option>
+				<option value="Médiathèques" <?=$URI[0]=='Médiathèques'?'selected="selected"':''?>>&#xf02d;</option>
+			</select>
+			<input type="submit" value="Rechercher">
+		</form>
+		<ul is="dropdown">
+			<li>
+				<a is="persona" data-sitename="UDAC66" data-bgcolor="#93a72d" href="javascript:;">Se connecter</a>
+				<ul class="disabled">
+					<li>
+						<a class="persona logout" href="javascript:;">Déconnexion</a>
+					</li>
+					<li>
+						<a href="Mon-Compte">Mon Compte</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</header>
+	<nav>
+		<a href="#" onclick="return false;" is="collapser">Menu Principal</a>
+		<ul is="dropdown">
+			<li>
+				<a href="Événements">Événements</a>
+				<ul>
+					<foreach "$taxonomyEvenement as $key=>$val" cacheSync="model.taxonomy">
+						<li><a href="Événements+<?=$val?>"><?=$val?></a></li>
+					</foreach>
+				</ul> 	
+			</li>
+			<li>
+				<a href="Ressources">Ressources</a>
+				<ul>
+					<foreach "$taxonomyRessource as $key=>$val" cacheSync="model.taxonomy">
+						<li><a href="Ressources+<?=$val?>"><?=$val?></a></li>
+					</foreach>
+				</ul> 	
+			</li>
+			<li><a href="Projets">Projets</a></li>
+			<li><a href="Associations">Associations</a></li>
+			<li>
+				<a href="Annonces">Annonces</a>	    				
+				<ul>
+					<li><a href="Annonces+Offres">Offres</a></li>
+					<li><a href="Annonces+Demandes">Demandes</a></li>
+				</ul> 	
+			</li>
+			<li><a href="Médiathèques">Médiathèque</a></li>
+			
+				<li>
+					<a href="Ajouter">Ajouter</a>
+					<ul>
+						<li><a href="Ajouter-Événement">Événement</a></li>
+						<li><a href="Ajouter-Ressource">Ressource</a></li>
+						<li><a href="Ajouter-Projet">Projet</a></li>
+						<li><a href="Ajouter-Association">Association</a></li>
+						<li><a href="Ajouter-Annonce">Annonce</a></li>
+						<li><a href="Ajouter-Médiathèque">Médiathèque</a></li>
+					</ul> 				
+				</li>
+		</ul>
+	</nav>
+	<main></main>
+	<footer>
+		<a href="Autonomie-et-Partage">Qui sommes nous ?</a>
+		<a href="Newsletter">Newsletter</a>
+		<a href="Partenaires">Partenaires</a>
+		<a href="Contact">Nous Contacter</a>
+	</footer>
+	<script type="text/javascript" src="js/js.pack.js"></script>
+	<script type="text/javascript">
+		<?if(Dev::has(Dev::CSS)):?>$css().dev=true;<?endif;?>
+		<?if(Dev::has(Dev::JS)):?>$js().dev=true;<?endif;?>
+		$js().min = false
+		$css().min = false;
+		$js('script');
+		<?if(Dev::has(Dev::CONTROL)):?>if(console) console.info('Server <?=$timeCompiled===$time?'Compilation+':''?>Exec: <?=Tool\chrono::get()?> -  Exec <?=date('jMY-H:m:s',$time)?> - Compiled <?=date('jMY-H:m:s',$timeCompiled)?>');<?endif;?>
+	</script>
+</body>
+</html>
