@@ -1,6 +1,6 @@
-<?use control\str;?>
-<?use control\post;?>
-<?use control\session;?>
+<?use Tool\str;?>
+<?use Tool\post;?>
+<?use Tool\session;?>
 <extend>	
 	<css item>
 	<js+css form>

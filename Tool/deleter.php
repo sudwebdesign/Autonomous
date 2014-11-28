@@ -1,4 +1,4 @@
-<?php namespace control;
+<?php namespace Tool;
 class deleter{
 	static function alls($conf){
 		$conf = array_merge([

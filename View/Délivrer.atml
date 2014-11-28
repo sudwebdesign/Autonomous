@@ -1,5 +1,5 @@
-<?use control\str;?>
-<?use control\session;?>
+<?use Tool\str;?>
+<?use Tool\session;?>
 <extend>
 	<css item>
 	<css form>

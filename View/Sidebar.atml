@@ -1,0 +1,29 @@
+<aside>
+	<h3 class='i'>élément</h3>
+	<hr>
+	<p>Auteur: <?=$item->user->email?></p>
+	<hr>
+<!--<p>utilisateur: <?=session::get('email')?></p>
+	<hr>-->
+	<p>
+		<if "$item->user->email == session::get('email')">
+			<i class='c'><a href='Ajouter-<?=$type?>'><?=$item->type?> créer.</a></i><hr>
+			<i class='r'><a href='<?=$type?>+<?=$item->id?>'><?=$item->type?> regarder.</a></i><hr>  
+			<i class='u'><a href='Modifier-<?=$type?>+<?=$item->id?>'><?=$item->type?> unifier.</a></i><hr>
+			<i class='d'><a href='Délivrer-<?=$type?>+<?=$item->id?>'><?=$item->type?> délivrer.</a><?=$item->type?></i><hr>
+		</if>
+		<?/*=var_dump($item)*/?>
+<!--	<i class='u'><a href='Modifier-<?=$URI[0]?>+<?=$item->id?>'> modifier*</a></i>
+		<i class='c'><?=$item->type?> enregistré et</i><hr>
+		<i class='r'><?=$item->type?> publié.</i><hr>  
+		<i class='u'><?=$item->type?> corrigé.</i><hr>
+		<i class='d'><?=$item->type?> supprimé.</i><hr> 
+		<i class='i'><?=$item->type?> information.</i><hr>
+		<i class='v'><?=$item->type?> validé.</i><hr>
+		<i class='o'><?=$item->type?> ouvrir.</i><hr>
+		<i class='e'><?=$item->type?> enveloppe.</i><hr>
+		<i class='s'><?=$item->type?> sauvé.</i><hr>-->
+	</p>
+	<h3 style="margin-top:16px;">Flux d'autres articles</h3>
+</aside>
+
