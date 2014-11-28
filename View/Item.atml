@@ -1,0 +1,39 @@
+<?use Tool\str;?>
+<?use Tool\session;?>
+<extend>
+	<css item>
+	<attr selector="main" addClass="present-item">
+	<append title> dans <?=$taxonomy?></append>
+	<write main>
+		<article class="<?=$taxonomy?>s">
+			<h1><?=$URI[0]?> : <?=$item->title?>
+			</h1>
+			<if "$img"><img src="<?=$img?>" alt="<?=$item->atitle?>" title="<?=$item->atitle?>" /></if>
+			<?=$item->presentationHtml?>
+			<hr>
+			<if "$item->url"><p><i>Lien : </i><a href="<?=$item->url?>" title="<?=$item->atitle?>"><?=$item->title?></a></p></if>
+			<if "$item->tel"><p><i>Télépnone : </i><?=$item->tel?></p></if>
+			<p><i>Créé le : </i><?=strftime('%A %e %B %G à %k:%M:%S',strtotime($item->created))?></p>
+			<hr>
+			<if "is_object($item->tag)&&$item->tag->count()">
+				<ul class="tags">
+					<foreach "$item->tag as $tag">
+						<if "$tag">
+							<li><h5><a href="<?=$type.'s+'.$tag->name?>"><?=$tag->name?></a></h5></li>
+						</if>
+					</foreach>
+					<if "is_object($item->geopoint)&&$item->geopoint->count()">
+						<foreach "$item->geopoint as $geopoint">
+								<if "$geopoint->label">
+									<li><h5><a href="/<?=ucfirst($type).'s+geo:'.$geopoint->label.'+lat:'.$geopoint->lat.'+lon:'.$geopoint->lon.($geopoint->radius?'+radius:'.$geopoint->radius:'')?>">
+										<?=$geopoint->label?>
+									</a></h5></li>
+								</if>
+						</foreach>
+					</if>
+				</ul>
+			</if>
+		</article>
+		<extend file="Sidebar.atml"></extend>
+	</write>
+</extend>
