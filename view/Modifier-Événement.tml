@@ -1,0 +1,2 @@
+<present:modifier:evenement uri="dynamic" TAXONOMY="evenement" />
+	<extend file="Modifier.atml"></extend>

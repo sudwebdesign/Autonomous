@@ -1,3 +1,8 @@
+<?
+	$x = explode('-',$URI[0]);
+	$type = (isset($x[1])?$x[1]:$URI[0]);#str::tolower(end($x));
+	$mode = $x[0];
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -43,6 +48,28 @@
 		<a href="#" onclick="return false;" is="collapser">Menu Principal</a>
 		<ul is="dropdown">
 			<li>
+				<a href="Ajouter">Ajouter</a>
+				<ul>
+					<li><a href="Ajouter-Événement">Événement</a></li>
+					<li><a href="Ajouter-Ressource">Ressource</a></li>
+					<li><a href="Ajouter-Projet">Projet</a></li>
+					<li><a href="Ajouter-Association">Association</a></li>
+					<li><a href="Ajouter-Annonce">Annonce</a></li>
+					<li><a href="Ajouter-Médiathèque">Médiathèque</a></li>
+				</ul> 				
+			</li>
+			<li>
+				<a href="Annonces">Annonces</a>	    				
+				<ul>
+					<li><a href="Annonces+Offres">Offres</a></li>
+					<li><a href="Annonces+Demandes">Demandes</a></li>
+					<foreach "$taxonomyAnnonce as $key=>$val" cacheSync="model.taxonomy">
+						<li><a href="Annonces+<?=$val?>"><?=$val?></a></li>
+					</foreach>
+				</ul> 	
+			</li>
+			<li><a href="Médiathèques">Médiathèque</a></li>
+			<li>
 				<a href="Événements">Événements</a>
 				<ul>
 					<foreach "$taxonomyEvenement as $key=>$val" cacheSync="model.taxonomy">
@@ -58,28 +85,8 @@
 					</foreach>
 				</ul> 	
 			</li>
-			<li><a href="Projets">Projets</a></li>
 			<li><a href="Associations">Associations</a></li>
-			<li>
-				<a href="Annonces">Annonces</a>	    				
-				<ul>
-					<li><a href="Annonces+Offres">Offres</a></li>
-					<li><a href="Annonces+Demandes">Demandes</a></li>
-				</ul> 	
-			</li>
-			<li><a href="Médiathèques">Médiathèque</a></li>
-			
-				<li>
-					<a href="Ajouter">Ajouter</a>
-					<ul>
-						<li><a href="Ajouter-Événement">Événement</a></li>
-						<li><a href="Ajouter-Ressource">Ressource</a></li>
-						<li><a href="Ajouter-Projet">Projet</a></li>
-						<li><a href="Ajouter-Association">Association</a></li>
-						<li><a href="Ajouter-Annonce">Annonce</a></li>
-						<li><a href="Ajouter-Médiathèque">Médiathèque</a></li>
-					</ul> 				
-				</li>
+			<li><a href="Projets">Projets</a></li>
 		</ul>
 	</nav>
 	<main></main>

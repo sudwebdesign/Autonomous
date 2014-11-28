@@ -1,3 +1,12 @@
+.c{@?include icon(database);}
+.r{@?include icon(newspaper-o);}
+.u{@?include icon(pencil-square-o);}
+.d{@?include icon(trash);}
+.i{@?include icon(info);}
+.v{@?include icon(check-square-o);}
+.o{@?include icon(sun-o);}
+.e{@?include icon(comment-o);}
+.s{@?include icon(save);}
 body>main{
     @include clearfix();
     height:100%;

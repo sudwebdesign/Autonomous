@@ -1,0 +1,130 @@
+<?use control\str;?>
+<?use control\post;?>
+<?use control\session;?>
+<extend>	
+	<css item>
+	<js+css form>
+	<attr selector="main" addClass="present-modifier">
+	<append title> dans <?=$taxonomy?></append>
+	<write main>
+		<article class="<?=$taxonomy?>s">
+			<h1><?=$type?> : <?=$item->title?> (original)</h1>
+			<if "$img"><img src="<?=$img?>" alt="<?=$item->atitle?>" title="<?=$item->atitle?>" /></if>
+			<?=$item->presentationHtml?>
+			<hr>
+			<if "$item->url"><p><i>Lien : </i><a href="<?=$item->url?>" title="<?=$item->atitle?>"><?=$item->title?></a></p></if>
+			<if "$item->tel"><p><i>Télépnone : </i><?=$item->tel?></p></if>
+			<p><i>Créé le : </i><?=strftime('%A %e %B %G à %k:%M:%S',strtotime($item->created))?></p>
+			<hr>
+			<if "is_object($item->tag)&&$item->tag->count()">
+				<ul class="tags">
+					<foreach "$item->tag as $tag">
+						<if "$tag">
+							<li><h5><a href="<?=$type.'s+'.$tag->name?>"><?=$tag->name?></a></h5></li>
+						</if>
+					</foreach>
+					<if "is_object($item->geopoint)&&$item->geopoint->count()">
+						<foreach "$item->geopoint as $geopoint">
+								<if "$geopoint->label">
+									<li><h5><a href="/<?=$type.'+geo:'.$geopoint->label.'+lat:'.$geopoint->lat.'+lon:'.$geopoint->lon.($geopoint->radius?'+radius:'.$geopoint->radius:'')?>">
+										<?=$geopoint->label?>
+									</a></h5></li>
+								</if>
+<!--							<li><h5><a href="<?=$type.'s+geo:'.$geopoint->label?>">
+								<?=$geopoint->label?>
+							</a></h5></li>-->
+
+						</foreach>
+					</if>
+				</ul>
+			</if>
+			<apply "forms.tpl">
+				<form modelRules="<?=$taxonomy?>" id="<?=$THIS->taxonomy?>" method="POST" enctype="multipart/form-data" role="form" <?=isset($formPosted)?'class="form-posted"':''?>>
+					<if "isset($formPosted)">
+					<h1><?=$mode?> : <i><?=$type?> (<?=$item->title?>)</i></h1>
+						<h4 style="text-align:center;">
+							<if "$formPosted">
+								<i class='c'><?=$type?> modifié(e) et</i>
+								<i class='r'><?=$type?> publié.</i>
+					<!--		<i class='u'><?=$type?> corrigé.</i>
+								<i class='d'><?=$type?> supprimé.</i> 
+								<i class='i'><?=$type?> information.</i>
+								<i class='v'><?=$type?> validé.</i>
+								<i class='o'><?=$type?> ouvrir.</i>
+								<i class='e'><?=$type?> enveloppe.</i>
+								<i class='s'><?=$type?> sauvé.</i> -->
+							<else>
+								<i class='i'><?=$type?> non modifé(e). Veuillez corriger afin de valider le formulaire :</i>
+								<foreach "$formErrors as $fkey=>$sol"><br /><i>solution : <?=$fkey?> <?=$sol?></i></foreach>
+							</if>
+						</h4>
+					<else>
+						<h1><?=$mode?>: <i><?=$type?> (<?=$item->title?>)</i></h1>
+					</if>
+					<fieldset>
+						<legend>Titre</legend>
+						<input type="text" name="title" value="" />
+					</fieldset>
+					<fieldset>
+						<legend>Présentation</legend>
+						<textarea name="presentation" placeholder="" is="ckeditor"></textarea>
+					</fieldset>
+					<fieldset>
+						<legend>Ajouter Thématiques</legend><?$gats='';?>
+						<foreach "$item->tag as $gat">
+							<if "$gat">
+								<?$gats.=$gat->name.' ';?>
+							</if>
+						</foreach>
+						<input name="sharedTag[name]" type="text" value="" placeholder="" is="tagsinput" data-url="service/autocomplete/taxonomy?name=<?=$presentAttributes->TAXONOMY?>" data-minchar="4" data-maxchar="25" data-max="5" />
+						<?$dynVar='taxonomy'.ucfirst($taxonomy);?>
+						<if "isset($$dynVar)">
+							<span class="tags-suggests">Suggestions:
+								<foreach "$$dynVar as $key=>$val" cacheSync="model.taxonomy"><?=$val?> </foreach>
+							</span>
+						</if>
+					</fieldset>
+					<fieldset>
+						<legend>Changer l'image principale</legend>
+						<input is="inputimg" type="file" name="image" accept="image/*" />
+					</fieldset>
+					<fieldset>
+						<legend>Ajouter des fichiers <small>(images ou documents)</small></legend>
+						<input type="file" name="files[]" accept="application/*,text/*,image/*" title="Sélectionner des Fichiers" multiple />
+					</fieldset>
+					<fieldset>
+						<legend>Ajouter un emplacement <small>(commune,lieu ou adresse)</small></legend>
+						<geo-completer>
+							<fieldset>
+								<input id="geoname" class="geoname" name="xownGeopoint[label]" data-url="service/autocomplete/geoname" type="text" value="">
+								<a class="show_button" href="<?=$URI?>#map">Rechercher sur la carte</a>
+								<fieldset>
+									<label for="geo-lat">Latitude</label>
+									<input name="xownGeopoint[lat]" id="geo-lat" class="in-latitude">
+									<label for="geo-lng">Longitude</label>
+									<input name="xownGeopoint[lon]" id="geo-lng" class="in-longitude">
+									<label for="geo-rayon">Rayon en km</label>
+									<input name="xownGeopoint[radius]" id="geo-rayon" class="in-radius">
+								</fieldset>
+								<div class="remodal" data-remodal-id="map">
+									<input class="gg-maps" type="text" value="" placeholder="Rechercher un adresse, un lieu ou une commune">
+									<a class="remodal-confirm" href="#">OK</a>
+								</div>
+							</fieldset>
+						</geo-completer>
+					</fieldset>
+					<fieldset>
+						<legend>Lien</legend>
+						<input name="url" type="url" value="" placeholder="http://">
+					</fieldset>
+					<fieldset>
+						<legend>Téléphone</legend>
+						<input name="tel" type="tel" pattern="^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$" value="">
+					</fieldset>
+					<input type="submit" value="Modifier">									
+				</form>
+			</apply>
+		</article>
+		<extend file="Sidebar.atml"></extend>
+	</write>
+</extend>

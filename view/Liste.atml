@@ -4,7 +4,7 @@
 	<write main>
 		<aside>
 			<h3>Options de Recherche</h3>
-			<form id="search_panel" class="search-panel" method="GET" action="<?=uri::param(0)?>" role="search">
+			<form id="search_panel" class="search-panel" method="GET" action="<?=$URI[0]?>" role="search">
 				<fieldset>
 					<legend>Phonémique</legend>
 					<input type="text" name="phonemic" value="<?=$URI->phonemic?>" autocomplete="off" />
@@ -46,7 +46,7 @@
 			</form>
 		</aside>
 		<article>
-			<h1><?=$h1?> (<?=$countListe?> / <?=$count?> résultats)</h1>
+			<h1><?=$h1?> (<?=$countListe?> / <?=($count)?$count:$countListe?> résultats)</h1>
 			<foreach "(array)@$liste as $id=>$item">
 				<?$href=$subUri.'+'.uri::filterParam($item->title).'+'.$id;?>
 				<h2><a href="<?=$href?>"><?=$item->title?></a></h2>
@@ -65,13 +65,13 @@
 					<ul class="tags">
 						<foreach "$item->tag as $tag">
 							<if "$tag">
-								<li><h5><a href="<?=$URI[0].'+'.$tag->name?>"><?=$tag->name?></a></h5></li>
+								<li><h5><a href="<?=$type.'+'.$tag->name?>"><?=$tag->name?></a></h5></li>
 							</if>
 						</foreach>
 						<if "is_object($item->geopoint)&&$item->geopoint->count()">
 							<foreach "$item->geopoint as $geopoint">
 								<if "$geopoint->label">
-									<li><h5><a href="/<?=ucfirst($URI[0]).'+geo:'.$geopoint->label.'+lat:'.$geopoint->lat.'+lon:'.$geopoint->lon.($geopoint->radius?'+radius:'.$geopoint->radius:'')?>">
+									<li><h5><a href="/<?=ucfirst($type).'+geo:'.$geopoint->label.'+lat:'.$geopoint->lat.'+lon:'.$geopoint->lon.($geopoint->radius?'+radius:'.$geopoint->radius:'')?>">
 										<?=$geopoint->label?>
 									</a></h5></li>
 								</if>
@@ -111,7 +111,7 @@
 					</if>
 				</ul>
 			<else>
-				Aucune Entrée
+				<if "!$countListe" ?>Aucune Entrée</if>
 			</if>
 			<br>
 		</article>

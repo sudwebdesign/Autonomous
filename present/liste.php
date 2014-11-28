@@ -168,12 +168,13 @@ class liste extends \present{
 				->limit($this->limit,$this->offset)
 			;
 		}
-
 		$this->count = $Query->countAll();
 		$this->pagination();
 
 		$this->liste = $Query->tableMD();
 		$this->countListe = count($this->liste);
+#		$this->count = ($this->count)?$this->count:$this->countListe;
+#var_dump($this->count);exit;
 		foreach($this->liste as $akey => $avlue){
 			$this->liste[$akey]['atitle']=htmlspecialchars($this->liste[$akey]['title'], ENT_COMPAT);
 		}

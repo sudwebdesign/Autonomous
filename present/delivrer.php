@@ -3,13 +3,26 @@ use uri;
 use view;
 use model;
 use model\Query;
+use model\Control_Geocoding;
+use model\R;
+use control;
+use control\str;
+use control\FS;
+use control\PHP;
 use control\session;
-use control\ArrayObject;
+use control\post;
+use control\filter;
+use control\uploader;
+use control\deleter;
+use model\Exception_Validation;
+/**/
 use dev;
-class item extends \present{
+use control\ArrayObject;
+class delivrer extends \present{
 	function assign(){
 		parent::assign();
-		$this->taxonomy = end($this->presentNamespaces);#var_export($this);exit;
+		$this->taxonomy = end($this->presentNamespaces);
+		#var_export($this);exit;
 	}
 	function dynamic(){
 		parent::dynamic();
@@ -22,6 +35,7 @@ class item extends \present{
 			elseif($redirect = $q->select('id')->where('"titleHref"=?',[$uri[1]])->getCell())
 				$this->redirect($redirect);
 			exit;
+
 		}
 		$this->Query = Query::getNew($this->taxonomy)
 			->where($this->taxonomy.'.id=?',[$uri[2]])
@@ -34,7 +48,8 @@ class item extends \present{
 		$this->img = $this->imageByItem();
 		$this->files = $this->filesByItem();
 		$this->item->atitle = htmlspecialchars($this->item->title, ENT_COMPAT);
-		#var_dump($this);
+		$this->POST($uri[2]);
+		
 	}
 	function imageByItem($item=null){
 		if(!isset($item))
@@ -70,5 +85,50 @@ class item extends \present{
 		else
 			echo 'Location: '.$redirect;
 		exit;
+	}	
+/*#addelete*/
+	function POST($id){
+		if(!count($this->presentNamespaces)>count(explode('\\',__CLASS__))||empty($_POST))
+			return;
+		$this->formPosted = true;
+		$this->postDeleted = true;
+		$type = $this->taxonomy;#
+		try{
+			$entry = $this->POST_Common($type,$id);;
+			if(method_exists($this,'POST_Specifications'))
+				$this->POST_Specifications($entry);
+			if($entry){
+				R::trash($entry);
+				deleter::alls(array(
+					'dir'=>'content/'.$type.'/'.$id,
+					'deletion'=>true
+				));
+			}
+			post::clearPersistance();
+		}
+		catch(Exception_Validation $e){
+			$this->formErrors = $e->getData();
+			$this->formPosted = false;
+			$this->postDeleted = false;
+		}
 	}
+	function POST_Common($type,$id){
+		//	public function deleteRecord( $type, $id);
+		$entry = R::findOne($type,'id='.$id);
+/*ForLocalDeBug*/#var_export($entry->user_id);exit;
+		$user = session::get('email');#origin(ajouter)
+		if($user&&$entry->user_id){#()#FLDB
+			$user = R::findOne('user','id='.$entry->user_id);#FLDB
+			#$user = R::findOne('user',array('email'=>$user));#FOOL@
+			$entry->user = $user;
+		}
+		else
+			$entry->error('user','required',true);
+#		$entry->user = R::findOne('user','id=1');#FLDB
+		$P = post::getObject();
+		$entry->deletion = $P->deletion;
+		$entry->validated = $P->validate;
+		return $entry;
+	}
+
 }

@@ -1,0 +1,2 @@
+<present:modifier:annonce uri="dynamic" TAXONOMY="Annonce" />
+	<extend file="Modifier.atml"></extend>

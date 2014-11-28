@@ -6,7 +6,7 @@
 	<attr selector="main" addClass="present-ajouter">
 	<write main>
 		<?
-			$x = explode('-',uri::param(0));
+			$x = explode('-',$URI[0]);
 			$type = str::tolower(end($x));
 		?>
 		<apply "forms.tpl">
@@ -15,13 +15,17 @@
 				<h1>Ajouter: <i><?=$type?></i></h1>
 					<h4 style="text-align:center;">
 						<if "$formPosted">
-							<img src="img/panneau_vert.gif" alt="Informations enregistrées et publiées" title="La Technique ;)" style="width:69px;height:69px;" />
-							<b><?=$type?> publié</b>
-							<img src="img/panneau_vert.gif" alt="Informations enregistrées et publiées" title="La Technique ;)" style="width:69px;height:69px;" />
+							<i class='c'><?=$type?> enregistré et</i>
+							<i class='r'><?=$type?> publié.</i>
+				<!--		<i class='u'><?=$type?> corrigé.</i>
+							<i class='d'><?=$type?> supprimé.</i> 
+							<i class='i'><?=$type?> information.</i>
+							<i class='v'><?=$type?> validé.</i>
+							<i class='o'><?=$type?> ouvrir.</i>
+							<i class='e'><?=$type?> enveloppe.</i>
+							<i class='s'><?=$type?> sauvé.</i> -->
 						<else>
-							<img src="img/panneau_jaune.gif" alt="Problème Technique" title="Problème Technique" style="float:left;width:69px;height:69px;" />
-							<img src="img/panneau_jaune.gif" alt="Problème Technique" title="Problème Technique" style="float:right;width:69px;height:69px;" />
-							<i><?=$type?> non enregistré. Veuillez corriger afin de valider le formulaire :</i>
+							<i class='i'><?=$type?> non enregistré. Veuillez corriger afin de valider le formulaire :</i>
 							<foreach "$formErrors as $fkey=>$sol"><br /><i>solution : <?=$sol?></i></foreach>
 							<dev><?=$formErrors?></dev>
 						</if>

@@ -7,6 +7,7 @@ class present extends surikat\present{
 		$this->timeCompiled			= time();
 		$this->taxonomyRessource	= Table_Taxonomy::getChildrenbyLabel('Ressource');
 		$this->taxonomyEvenement	= Table_Taxonomy::getChildrenbyLabel('Événement');
+		$this->taxonomyAnnonce	= Table_Taxonomy::getChildrenbyLabel('Annonce');
 		$port = ($_SERVER['SERVER_PORT']&&(int)$_SERVER['SERVER_PORT']!=80?':'.$_SERVER['SERVER_PORT']:'');
 		$this->BASE_HREF = 'http'.(@$_SERVER["HTTPS"]=="on"?'s':'').'://'.$_SERVER['SERVER_NAME'].$port.'/';
 		$this->URI		= view::getInstance()->getUri();

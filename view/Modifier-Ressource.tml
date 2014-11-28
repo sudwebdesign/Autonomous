@@ -1,0 +1,2 @@
+<present:modifier:ressource uri="dynamic" TAXONOMY="ressource" />
+	<extend file="Modifier.atml"></extend>

@@ -22,7 +22,7 @@ body>footer{
 			@?include icon(info);
 		}
 		&[href="Newsletter"]{
-			@?include icon(envelope-alt);
+			@?include icon(envelope-o);
 		}
 		&[href="Partenaires"]{
 			@?include icon(heart);

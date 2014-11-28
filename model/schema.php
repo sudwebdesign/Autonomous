@@ -5,7 +5,7 @@ use surikat\control\CsvImporter;
 set_time_limit(0);
 ob_implicit_flush(true);
 ob_end_flush();
-
+#var_dump(R::nuke(););echo '<h1>yep</h1>';exit;
 R::nuke();
 
 R::setUniqCheck(false);

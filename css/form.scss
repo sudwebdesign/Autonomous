@@ -8,7 +8,7 @@
 .help-block{
 	color:red;
 }
-body>main>form{
+body>main>form,body>main>article>form{
 	>fieldset{
 		@?include grid( *, 100 );
 		@?include grid( 4-24-2 , 2-64-4, 32-64-4, 768px );
@@ -23,22 +23,20 @@ body>main>form{
 		float:left;
 	}
 	h4{
-		border: 1px solid rgb(204, 204, 204);
 		color: rgb(94, 107, 29);
-		border-radius: 4px;
-		margin: 0px 5px 5px 0px;
-		>i{
-			border: 1px solid rgb(204, 123, 012);
+		margin: 6px;
+		font-size:36px;
+		>i{	//border: 1px solid rgb(204, 123, 012);
 			color: rgb(94, 107, 29);
 			}
-		>b{
-			border: 1px solid rgb(204, 204, 204);
-			color: rgb(94, 107, 29);
-		}
 	}	
 }
 main.present-ajouter h1{
 	@?include icon(plus);
+}
+main.present-modifier {
+	>article>form h1{margin-top:0.5em;}
+	h1{@?include icon(pencil);}
 }
 #evenement>h1>i{
 	@?include icon(calendar);
