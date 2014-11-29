@@ -18,7 +18,7 @@ use Model\Exception_Validation;
 /**/
 use Dev;
 use Tool\ArrayObject;
-class Delivrer extends \present{
+class Delivrer extends \Present{
 	function assign(){
 		parent::assign();
 		$this->taxonomy = end($this->presentNamespaces);
@@ -38,7 +38,7 @@ class Delivrer extends \present{
 
 		}
 		$this->Query = Query::getNew($this->taxonomy)
-			->where($this->taxonomy.'.id=?',[$uri[2]])
+			->where('"'.$this->taxonomy.'"'.'.id=?',[$uri[2]])
 		;
 		$this->item = $this->Query->row4D();
 		if(!$this->item->titleHref)

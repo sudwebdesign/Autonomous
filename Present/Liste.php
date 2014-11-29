@@ -14,7 +14,7 @@ class Liste extends \Present{
 	protected $Query;
 	function assign(){
 		parent::assign();
-		$this->taxonomy = lcfirst(end($this->presentNamespaces));
+		$this->taxonomy = end($this->presentNamespaces);
 	}
 	function dynamic(){
 		parent::dynamic();
@@ -107,17 +107,17 @@ class Liste extends \Present{
 		
 		//for PgSql8 (no need in >=PgSql9.3)
 		$Query
-			->groupBy($this->taxonomy.'.id')
-			->groupBy($this->taxonomy.'.title')
-			->groupBy($this->taxonomy.'.tel')
-			->groupBy($this->taxonomy.'.url')
-			->groupBy($this->taxonomy.'.created')
-			->groupBy($this->taxonomy.'.presentation')
+			->groupBy('"'.$this->taxonomy.'"'.'.id')
+			->groupBy('"'.$this->taxonomy.'"'.'.title')
+			->groupBy('"'.$this->taxonomy.'"'.'.tel')
+			->groupBy('"'.$this->taxonomy.'"'.'.url')
+			->groupBy('"'.$this->taxonomy.'"'.'.created')
+			->groupBy('"'.$this->taxonomy.'"'.'.presentation')
 			->groupBy('"user".id')
 			->groupBy('"user".email')
 		;
 		if($uri->phonemic)
-			$Query->groupBy($this->taxonomy.'.document');
+			$Query->groupBy('"'.$this->taxonomy.'"'.'.document');
 		
 		if($this->thematics->count())
 			$Query
@@ -182,7 +182,7 @@ class Liste extends \Present{
 		//exit($this->liste);
 
 		//sub flux
-		$subCategories = ['evenement','ressource','projet','association','annonce','mediatheque'];
+		$subCategories = ['Evenement','Ressource','Projet','Association','Annonce','Mediatheque'];
 		unset($subCategories[array_search($this->taxonomy,$subCategories)]);
 		$full = [];
 		$full = array_merge($full,$this->thematics->getArray());
@@ -200,7 +200,7 @@ class Liste extends \Present{
 				->select(['id','pg_class.relname AS table','title','created'])
 				->limit($this->limitation2)
 				->from($cat.'","'.'pg_class')
-				->where($cat.'.tableoid = pg_class.oid')
+				->where('"'.$cat.'".tableoid = pg_class.oid')
 			;
 			if($full)
 				$Query2
@@ -214,7 +214,7 @@ class Liste extends \Present{
 		}
 		if(!empty($XQuery2)){
 			$this->liste2 = R::getAll(implode(' UNION ',$XQuery2),$XQuery2P);
-			$subCatSea = ['evenement','ressource','projet','association','annonce','mediatheque'];	
+			$subCatSea = ['Evenement','Ressource','Projet','Association','Annonce','Mediatheque'];	
 			$urlSubCat = ['Événement','Ressource','Projet','Association','Annonce','Médiathèque'];
 			for ($l2=0;$l2<count($this->liste2);$l2++)
 				$this->liste2[$l2]['table'] = str_replace($subCatSea,$urlSubCat,$this->liste2[$l2]['table']);

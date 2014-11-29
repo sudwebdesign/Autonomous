@@ -16,27 +16,27 @@ use Tool\Geocoding;
 use Model\Exception_Validation;
 use Dev;
 use Tool\ArrayObject;
-class Modifier extends \present{
+class Modifier extends \Present{
 	function assign(){
 		parent::assign();
 		$this->taxonomy = end($this->presentNamespaces);
-#		var_export($this);exit;
 	}
 	function dynamic(){
 		parent::dynamic();
 		session::start(); //session auto start when get a key, if output not bufferised but direct flushed, have to start first
 		$uri = $this->URI;
-		$this->POST($uri[2]);
 		if(!filter_var($uri[2],FILTER_VALIDATE_INT)){
 			$q = Query::getNew($this->taxonomy);
 			if(filter_var($uri[1],FILTER_VALIDATE_INT)&&($redirect = $q->select('titleHref')->where('id=?',[$uri[1]])->getCell()))
 				$this->redirect($redirect,$uri[1]);
-			elseif($redirect = $q->select('id')->where('"titleHref"=?',[$uri[1]])->getCell())
+			elseif($redirect = $q->select('id')->where('"titleHref"=?',[$uri[2]])->getCell())
 				$this->redirect($redirect);
 			exit;
 		}
+
+		$this->POST($uri[2]);
 		$this->Query = Query::getNew($this->taxonomy)
-			->where($this->taxonomy.'.id=?',[$uri[2]])
+			->where('"'.$this->taxonomy.'"'.'.id=?',[$uri[2]])
 		;
 		$this->item = $this->Query->row4D();
 		if(!$this->item->titleHref)
@@ -87,7 +87,7 @@ class Modifier extends \present{
 		if(!count($this->presentNamespaces)>count(explode('\\',__CLASS__))||empty($_POST))
 			return;
 		$this->formPosted = true;
-		$type = $this->taxonomy;#var_export($id);exit;
+		$type = $this->taxonomy;
 		try{
 			$entry = $this->POST_Common($type,$id);
 			if(method_exists($this,'POST_Specifications'))
