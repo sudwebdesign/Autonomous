@@ -7,7 +7,6 @@ Dev::level(
 	|Dev::CSS
 	|Dev::JS
 	//|Dev::IMG
-	//|Dev::URI
 );
 class View extends Surikat\View{
 	protected $xDom = 'x-dom/';
