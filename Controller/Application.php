@@ -9,7 +9,6 @@ Dev::level(
 	|Dev::CSS
 	|Dev::JS
 	//|Dev::IMG
-	//|Dev::URI
 );
 class Application extends \Surikat\Controller\Application{
 	protected $xDom = 'x-dom/';

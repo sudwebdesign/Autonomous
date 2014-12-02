@@ -12,7 +12,7 @@
 
 <attrappend selector="input[name][type=checkbox]" append="<?=isset($formPosted)&&!$formPosted?post::get_checked('{{this:name}}','{{this:checked}}',true):''?>">
 
-<attr selector="input[name][type!=checkbox][type!=hidden]" value="<?=isset($formPosted)&&!$formPosted?post::get_text('{{this:name}}','{{this:+value}}',true):isset($item)?$item['{{this:name}}']:''?>">
+<attr selector="input[name][type!=checkbox][type!=hidden]" value="<?=isset($formPosted)&&!$formPosted?post::get_text('{{this:name}}','{{this:+value}}',true):isset($item)?str_replace('"','&quot;',$item['{{this:name}}']):''?>">
 
 
 

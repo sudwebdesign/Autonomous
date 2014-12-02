@@ -21,7 +21,7 @@ use Tool\ArrayObject;
 class Delivrer extends Basic{
 	function assign(){
 		parent::assign();
-		$this->taxonomy = end($this->presentNamespaces);
+		$this->taxonomy = lcfirst(end($this->presentNamespaces));
 		#var_export($this);exit;
 	}
 	function dynamic(){
@@ -38,7 +38,7 @@ class Delivrer extends Basic{
 
 		}
 		$this->Query = Query::getNew($this->taxonomy)
-			->where($this->taxonomy.'.id=?',[$uri[2]])
+			->where('"'.$this->taxonomy.'"'.'.id=?',[$uri[2]])
 		;
 		$this->item = $this->Query->row4D();
 		if(!$this->item->titleHref)

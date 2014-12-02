@@ -9,7 +9,7 @@ use Tool\ArrayObject;
 class Item extends Basic{
 	function assign(){
 		parent::assign();
-		$this->taxonomy = lcfirst(end($this->presentNamespaces));
+		$this->taxonomy = end($this->presentNamespaces);
 	}
 	function dynamic(){
 		parent::dynamic();
@@ -24,7 +24,7 @@ class Item extends Basic{
 			exit;
 		}
 		$this->Query = Query::getNew($this->taxonomy)
-			->where($this->taxonomy.'.id=?',[$uri[2]])
+			->where('"'.$this->taxonomy.'"'.'.id=?',[$uri[2]])
 		;
 		$this->item = $this->Query->row4D();
 		if(!$this->item->titleHref)
