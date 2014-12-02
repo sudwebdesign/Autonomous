@@ -1,2 +1,2 @@
-<present:modifier:projet uri="dynamic" TAXONOMY="projet" />
+<Presenter:modifier:projet uri="dynamic" TAXONOMY="projet" />
 	<extend file="Modifier.atml"></extend>

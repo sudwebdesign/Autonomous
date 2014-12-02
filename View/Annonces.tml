@@ -1,4 +1,4 @@
-<present:liste:annonce TAXONOMY="Annonce" />
+<Presenter:liste:annonce TAXONOMY="Annonce" />
 <extend file="Liste.atml">
 	<attr selector="main" addClass="annonces">
 </extend>

@@ -1,4 +1,4 @@
-<present:liste:mediatheque TAXONOMY="Médiathèque" />
+<Presenter:liste:mediatheque TAXONOMY="Médiathèque" />
 <extend file="Liste.atml">
 	<attr selector="main" addClass="mediatheques">
 </extend>

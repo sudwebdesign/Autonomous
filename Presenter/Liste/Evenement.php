@@ -1,5 +1,5 @@
-<?php namespace Present\Liste;
-final class Evenement extends \Present\Liste{
+<?php namespace Presenter\Liste;
+final class Evenement extends \Presenter\Liste{
 	function addSelect($Query){
 		$Query->selectRelationnal([
 			'date			>		start',

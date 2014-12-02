@@ -1,4 +1,4 @@
-<?php namespace Present;
+<?php namespace Presenter;
 use Uri;
 use View;
 use Model;
@@ -6,7 +6,7 @@ use Model\Query;
 use Tool\session;
 use Dev;
 use Tool\ArrayObject;
-class Item extends \Present{
+class Item extends Basic{
 	function assign(){
 		parent::assign();
 		$this->taxonomy = lcfirst(end($this->presentNamespaces));

@@ -1,2 +1,2 @@
-<present:item:ressource />
+<Presenter:item:ressource />
 <extend file="Item.atml"></extend>

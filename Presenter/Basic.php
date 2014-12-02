@@ -1,8 +1,9 @@
-<?php
+<?php namespace Presenter;
 use Surikat\Tool\session;
 use Model\Table_Taxonomy;
-use Present\Truncating;
-class Present extends Surikat\Present{
+use Presenter\Truncating;
+use Route\Finder_ByView;
+class Basic extends \Surikat\Presenter\Basic{
 	function assign(){
 		$this->timeCompiled			= time();
 		$this->taxonomyRessource	= Table_Taxonomy::getChildrenbyLabel('Ressource');
@@ -10,7 +11,7 @@ class Present extends Surikat\Present{
 		$this->taxonomyAnnonce	= Table_Taxonomy::getChildrenbyLabel('Annonce');
 		$port = ($_SERVER['SERVER_PORT']&&(int)$_SERVER['SERVER_PORT']!=80?':'.$_SERVER['SERVER_PORT']:'');
 		$this->BASE_HREF = 'http'.(@$_SERVER["HTTPS"]=="on"?'s':'').'://'.$_SERVER['SERVER_NAME'].$port.'/';
-		$this->URI		= view::getInstance()->getUri();
+		$this->URI		= Finder_ByView::getInstance();
 		$this->HREF		= $this->BASE_HREF.$this->URI[0];
 	}
 	function dynamic(){

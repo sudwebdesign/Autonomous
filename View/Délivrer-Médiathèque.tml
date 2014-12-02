@@ -1,2 +1,2 @@
-<present:delivrer:mediatheque: />
+<Presenter:delivrer:mediatheque: />
 	<extend file="Délivrer.atml"></extend>

@@ -1,11 +1,11 @@
-<?php namespace Present;
+<?php namespace Presenter;
 use Uri;
 use Model\Query;
 use Model\R;
 use View;
 use View\Exception as View_Exception;
 use Tool\Geocoding;
-class Liste extends \Present{
+class Liste extends Basic{
 	use Mixin_Pagination;
 	protected $limitation				= 5;
 	protected $truncation				= 369;
@@ -227,6 +227,6 @@ class Liste extends \Present{
 			$this->h1 .= ' - page '.$this->page;
 	}
 	function imageByItem($item){
-		return '/content/'.$this->taxonomy.'/'.$item->id.'/'.uri::filterParam($item->title).'.png';
+		return '/content/'.$this->taxonomy.'/'.$item->id.'/'.$this->URI->filterParam($item->title).'.png';
 	}
 }

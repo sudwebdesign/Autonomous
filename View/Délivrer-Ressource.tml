@@ -1,2 +1,2 @@
-<present:delivrer:ressource: />
+<Presenter:delivrer:ressource: />
 	<extend file="Délivrer.atml"></extend>

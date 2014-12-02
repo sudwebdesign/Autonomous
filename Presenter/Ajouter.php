@@ -1,4 +1,4 @@
-<?php namespace Present;
+<?php namespace Presenter;
 use Uri;
 use View;
 use Model;
@@ -13,7 +13,7 @@ use Tool\post;
 use Tool\filter;
 use Tool\uploader;
 use Model\Exception_Validation;
-class Ajouter extends \Present{
+class Ajouter extends Basic{
 	function assign(){
 		parent::assign();
 		$this->action = uri::param(0);

@@ -1,2 +1,2 @@
-<present:item:mediatheque />
+<Presenter:item:mediatheque />
 <extend file="Item.atml"></extend>

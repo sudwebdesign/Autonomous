@@ -1,4 +1,4 @@
-<?php namespace present;
+<?php namespace Presenter;
 use Uri;
 use View;
 use Model;
@@ -12,22 +12,21 @@ use Tool\session;
 use Tool\post;
 use Tool\filter;
 use Tool\uploader;
-use Tool\deleter;
 use Tool\Geocoding;
 use Model\Exception_Validation;
-/**/
 use Dev;
 use Tool\ArrayObject;
-class Delivrer extends \present{
+class Modifier extends Basic{
 	function assign(){
 		parent::assign();
-		$this->taxonomy = end($this->presentNamespaces);
-		#var_export($this);exit;
+		$this->taxonomy = lcfirst(end($this->presentNamespaces));
+#		var_export($this);exit;
 	}
 	function dynamic(){
 		parent::dynamic();
 		session::start(); //session auto start when get a key, if output not bufferised but direct flushed, have to start first
 		$uri = $this->URI;
+		$this->POST($uri[2]);
 		if(!filter_var($uri[2],FILTER_VALIDATE_INT)){
 			$q = Query::getNew($this->taxonomy);
 			if(filter_var($uri[1],FILTER_VALIDATE_INT)&&($redirect = $q->select('titleHref')->where('id=?',[$uri[1]])->getCell()))
@@ -35,7 +34,6 @@ class Delivrer extends \present{
 			elseif($redirect = $q->select('id')->where('"titleHref"=?',[$uri[1]])->getCell())
 				$this->redirect($redirect);
 			exit;
-
 		}
 		$this->Query = Query::getNew($this->taxonomy)
 			->where($this->taxonomy.'.id=?',[$uri[2]])
@@ -48,8 +46,6 @@ class Delivrer extends \present{
 		$this->img = $this->imageByItem();
 		$this->files = $this->filesByItem();
 		$this->item->atitle = htmlspecialchars($this->item->title, ENT_COMPAT);
-		$this->POST($uri[2]);
-		
 	}
 	function imageByItem($item=null){
 		if(!isset($item))
@@ -86,49 +82,79 @@ class Delivrer extends \present{
 			echo 'Location: '.$redirect;
 		exit;
 	}	
-/*#addelete*/
+/*#adupdate*/
 	function POST($id){
 		if(!count($this->presentNamespaces)>count(explode('\\',__CLASS__))||empty($_POST))
 			return;
 		$this->formPosted = true;
-		$this->postDeleted = true;
-		$type = $this->taxonomy;#
+		$type = $this->taxonomy;#var_export($id);exit;
 		try{
-			$entry = $this->POST_Common($type,$id);;
+			$entry = $this->POST_Common($type,$id);
 			if(method_exists($this,'POST_Specifications'))
 				$this->POST_Specifications($entry);
-			if($entry){
-				R::trash($entry);
-				deleter::alls(array(
-					'dir'=>'content/'.$type.'/'.$id,
-					'deletion'=>true
-				));
-			}
+			R::store($entry);
 			post::clearPersistance();
 		}
 		catch(Exception_Validation $e){
 			$this->formErrors = $e->getData();
 			$this->formPosted = false;
-			$this->postDeleted = false;
 		}
 	}
 	function POST_Common($type,$id){
-		//	public function deleteRecord( $type, $id);
-		$entry = R::findOne($type,'id='.$id);
+		//	public function updateRecord( $type, $updatevalues, $id = NULL );
+		$entry = R::findOne($type,'id='.$id);//R::updateRecord($type);#create
+		$entry->on('updated',function($entry)use($type){
+			uploader::image(array(
+				'dir'=>'content/'.$type.'/'.$entry->id.'/',
+				'key'=>'image',
+				'width'=>'90',
+				'height'=>'90',
+				//'rename'=>true, //image by default
+				'rename'=>uri::filterParam($entry->title),
+				'extensions'=>array('png','jpg'),
+				'conversion'=>'png'
+			));
+			uploader::files('content/'.$type.'/'.$entry->id.'/','files');
+		});
 /*ForLocalDeBug*/#var_export($entry->user_id);exit;
-		$user = session::get('email');#origin(ajouter)
-		if($user&&$entry->user_id){#()#FLDB
+		$user = session::get('email');
+		if($user&&$entry->user_id){#FLDB($user){#FOOL
 			$user = R::findOne('user','id='.$entry->user_id);#FLDB
-			#$user = R::findOne('user',array('email'=>$user));#FOOL@
+#			$user = R::findOne('user',array('email'=>$user));#FOOL@ire
 			$entry->user = $user;
 		}
 		else
 			$entry->error('user','required',true);
-#		$entry->user = R::findOne('user','id=1');#FLDB
+#		$user = R::findOne('user','id=1');#FLDB
 		$P = post::getObject();
-		$entry->deletion = $P->deletion;
-		$entry->validated = $P->validate;
+		$entry->title = strip_tags($P->title);
+		$entry->tel = $P->tel;
+		$entry->url = filter::url($P->url);
+		$entry->presentation = filter::strip_tags_basic($P->presentation);
+		if(is_object($P->sharedTag)&&trim($P->sharedTag->name)){
+			$max = 5;
+			$tags = explode(' ',strip_tags($P->sharedTag->name));
+			$taxonomy = R::load('taxonomy',$this->presentAttributes->TAXONOMY);
+			foreach($tags as $i=>$t){
+				if($i>=$max)
+					break;
+				$t = uri::filterParam($t);
+				if(empty($t))
+					continue;
+				$tag = R::findOrNewOne('tag',$t);
+				$tag->sharedUser[] = $entry->user;
+				$tag->sharedTaxonomy[] = $taxonomy;
+				$entry->sharedTag[] = $tag;
+			}
+		}
+		if(is_object($G=$P->xownGeopoint)&&$G->label&&$G->lat!=''&&$G->lon!=''){
+			$entry->xownGeopoint[] = R::create('geopoint',[
+				'label' => $G->label,
+				'lat' => $G->lat,
+				'lon' => $G->lon,
+				'radius' => $G->radius,
+			]);
+		}
 		return $entry;
 	}
-
 }

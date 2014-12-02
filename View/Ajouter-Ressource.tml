@@ -1,2 +1,2 @@
-<present:ajouter:ressource uri="static" TAXONOMY="Ressource" />
+<Presenter:ajouter:ressource uri="static" TAXONOMY="Ressource" />
 <extend file="Ajouter.atml"></extend>
