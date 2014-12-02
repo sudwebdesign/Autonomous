@@ -14,7 +14,7 @@ class Liste extends Basic{
 	protected $Query;
 	function assign(){
 		parent::assign();
-		$this->taxonomy = end($this->presentNamespaces);
+		$this->taxonomy = lcfirst(end($this->presentNamespaces));
 	}
 	function dynamic(){
 		parent::dynamic();
