@@ -1,6 +1,6 @@
 <?php namespace Controller;
-use Dev;
-use I18n;
+use Surikat\Config\Dev;
+use Surikat\I18n\Lang;
 Dev::level(
 	//Dev::CONTROL
 	Dev::STD
@@ -14,6 +14,6 @@ class Application extends \Surikat\Controller\Application{
 	protected $xDom = 'x-dom/';
 	function preHooks(){
 		parent::preHooks();
-		I18n::setLocale('fr');
+		Lang::set('fr');
 	}
 }
