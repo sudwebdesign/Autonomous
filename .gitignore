@@ -1,8 +1,8 @@
-/deploy.ini
 /content
 /.tmp
-/model/config.php
-/surikat
+/config/deploy.ini
+/config/db.php
+/Surikat
 *.min.css
 *.min.js
 *~
