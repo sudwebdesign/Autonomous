@@ -11,7 +11,6 @@ Dev::level(
 	//|Dev::IMG
 );
 class Application extends \Surikat\Controller\Application{
-	protected $xDom = 'x-dom/';
 	function preHooks(){
 		parent::preHooks();
 		Lang::set('fr');
