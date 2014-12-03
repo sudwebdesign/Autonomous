@@ -47,29 +47,38 @@ body>main{
 		h1{
 			@?include icon(home);
 		}
-	}	
-	& ul.tags{
-		@?include icon(tags);
+	}
+	&.present-liste>article>*{
+		float:left;
+		width:100%;
+	}
+	ul.tags{
+		//@?include icon(tags);
+		@?include icon(cloud);
+		&:before{
+			float:left;
+		}
 		&>li{
-			display:inline-block;
-			margin:5px 0;
-			//float:left;
-			&>h5>a{//frontenda.com/snipped/viewSnip.php?snip=simple-ecommerce-template
-				@?include icon(tag);
+			float:left;
+			//display:inline-block;
+			margin:0;
+			>h5>a{//frontenda.com/snipped/viewSnip.php?snip=simple-ecommerce-template
+				//@?include icon(tag);
+				//@?include icon(cloud);
 				@include transition(all 0.3s);
 				padding: 2px;//2px 12px;
-				border: 1px solid #d6d6d6;
-				border-radius: 4px;
-				background: #f0f0f0;
-				//float: left;
+				//border: 1px solid #d6d6d6;
+				//border-radius: 4px;
+				//background: #f0f0f0;
 				color: #666666;
+				font-weight: normal;
 				font-size: 13px;
 				text-decoration: none;
 				&:hover{
-					color: #1c7ecd;
-					border: 1px solid #444444;
-					background: #666666;
-					color: #ffffff;
+					//border: 1px solid #444444;
+					//background: #666666;
+					//color: #ffffff;
+					color: #000;
 					z-index: 2;
 					position: relative;
 				}
