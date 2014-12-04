@@ -1,18 +1,11 @@
 <?php namespace Controller;
-use Surikat\Config\Dev;
-use Surikat\I18n\Lang;
-Dev::level(
-	//Dev::CONTROL
-	Dev::STD
-	//|Dev::URI
-	//|Dev::MODEL
-	|Dev::CSS
-	|Dev::JS
-	//|Dev::IMG
-);
+use I18n\Lang;
 class Application extends \Surikat\Controller\Application{
-	function preHooks(){
-		parent::preHooks();
-		Lang::set('fr');
+	function run($path){
+		Lang::setLocale('fr');
+		parent::run($path);
+	}
+	function filterParam($path){
+		return $this->Router->filterParam($path);
 	}
 }

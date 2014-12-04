@@ -82,7 +82,7 @@
 				<hr>
 			</foreach>
 			<if "$count">
-				<?$irup=str_replace($pagination->prefix.($page),'',$URI)?>
+				<?$irup=str_replace($pagination->prefix.($page),'',$URI);?>
 				<ul class="simple-pagination light-theme">
 					<if "$page==1">
 						<li class="active"><span class="current prev">Début</span></li>

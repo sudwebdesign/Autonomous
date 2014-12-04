@@ -4,12 +4,12 @@ use View;
 use Model;
 use Model\Query;
 use Tool\session;
-use Dev;
+use Config\Dev;
 use Tool\ArrayObject;
 class Item extends Basic{
 	function assign(){
 		parent::assign();
-		$this->taxonomy = end($this->presentNamespaces);
+		$this->taxonomy = lcfirst(end($this->presentNamespaces));
 	}
 	function dynamic(){
 		parent::dynamic();
@@ -26,9 +26,10 @@ class Item extends Basic{
 		$this->Query = Query::getNew($this->taxonomy)
 			->where('"'.$this->taxonomy.'"'.'.id=?',[$uri[2]])
 		;
+		//Dev::on(Dev::MODEL);
 		$this->item = $this->Query->row4D();
 		if(!$this->item->titleHref)
-			$this->item->titleHref = uri::filterParam($this->item->title);
+			$this->item->titleHref = $this->URI->filterParam($this->item->title);
 		if($uri[1]!=$this->item->titleHref)
 			$this->redirect($this->item->titleHref);
 		$this->img = $this->imageByItem();
@@ -39,7 +40,7 @@ class Item extends Basic{
 	function imageByItem($item=null){
 		if(!isset($item))
 			$item = $this->item;
-		return '/content/'.$this->taxonomy.'/'.$item->id.'/'.uri::filterParam($item->title).'.png';
+		return '/content/'.$this->taxonomy.'/'.$item->id.'/'.$this->URI->filterParam($item->title).'.png';
 	}
 	function filesByItem(){
 		if(!isset($item))
@@ -65,7 +66,7 @@ class Item extends Basic{
 				$title = $location2;
 		}
 		$redirect = $this->URI[0].'+'.$title.'+'.$id;
-		if(!dev::has(dev::URI))
+		if(!Dev::has(Dev::URI))
 			header('Location: '.$redirect,true,301);
 		else
 			echo 'Location: '.$redirect;

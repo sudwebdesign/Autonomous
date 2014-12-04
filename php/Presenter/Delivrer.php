@@ -16,7 +16,7 @@ use Tool\deleter;
 use Tool\Geocoding;
 use Model\Exception_Validation;
 /**/
-use Dev;
+use Config\Dev;
 use Tool\ArrayObject;
 class Delivrer extends Basic{
 	function assign(){
@@ -42,7 +42,7 @@ class Delivrer extends Basic{
 		;
 		$this->item = $this->Query->row4D();
 		if(!$this->item->titleHref)
-			$this->item->titleHref = uri::filterParam($this->item->title);
+			$this->item->titleHref = $this->URI->filterParam($this->item->title);
 		if($uri[1]!=$this->item->titleHref)
 			$this->redirect($this->item->titleHref);
 		$this->img = $this->imageByItem();
@@ -54,7 +54,7 @@ class Delivrer extends Basic{
 	function imageByItem($item=null){
 		if(!isset($item))
 			$item = $this->item;
-		return '/content/'.$this->taxonomy.'/'.$item->id.'/'.uri::filterParam($item->title).'.png';
+		return '/content/'.$this->taxonomy.'/'.$item->id.'/'.$this->URI->filterParam($item->title).'.png';
 	}
 	function filesByItem(){
 		if(!isset($item))
@@ -80,7 +80,7 @@ class Delivrer extends Basic{
 				$title = $location2;
 		}
 		$redirect = $this->URI[0].'+'.$title.'+'.$id;
-		if(!dev::has(dev::URI))
+		if(!Dev::has(Dev::URI))
 			header('Location: '.$redirect,true,301);
 		else
 			echo 'Location: '.$redirect;

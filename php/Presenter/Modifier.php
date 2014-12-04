@@ -14,7 +14,7 @@ use Tool\filter;
 use Tool\uploader;
 use Tool\Geocoding;
 use Model\Exception_Validation;
-use Dev;
+use Config\Dev;
 use Tool\ArrayObject;
 class Modifier extends Basic{
 	function assign(){
@@ -40,7 +40,7 @@ class Modifier extends Basic{
 		;
 		$this->item = $this->Query->row4D();
 		if(!$this->item->titleHref)
-			$this->item->titleHref = uri::filterParam($this->item->title);
+			$this->item->titleHref = $this->URI->filterParam($this->item->title);
 		if($uri[1]!=$this->item->titleHref)
 			$this->redirect($this->item->titleHref);
 		$this->img = $this->imageByItem();
@@ -50,7 +50,7 @@ class Modifier extends Basic{
 	function imageByItem($item=null){
 		if(!isset($item))
 			$item = $this->item;
-		return '/content/'.$this->taxonomy.'/'.$item->id.'/'.uri::filterParam($item->title).'.png';
+		return '/content/'.$this->taxonomy.'/'.$item->id.'/'.$this->URI->filterParam($item->title).'.png';
 	}
 	function filesByItem(){
 		if(!isset($item))
@@ -76,7 +76,7 @@ class Modifier extends Basic{
 				$title = $location2;
 		}
 		$redirect = $this->URI[0].'+'.$title.'+'.$id;
-		if(!dev::has(dev::URI))
+		if(!Dev::has(Dev::URI))
 			header('Location: '.$redirect,true,301);
 		else
 			echo 'Location: '.$redirect;
@@ -110,7 +110,7 @@ class Modifier extends Basic{
 				'width'=>'90',
 				'height'=>'90',
 				//'rename'=>true, //image by default
-				'rename'=>uri::filterParam($entry->title),
+				'rename'=>$this->URI->filterParam($entry->title),
 				'extensions'=>array('png','jpg'),
 				'conversion'=>'png'
 			));
@@ -138,7 +138,7 @@ class Modifier extends Basic{
 			foreach($tags as $i=>$t){
 				if($i>=$max)
 					break;
-				$t = uri::filterParam($t);
+				$t = $this->URI->filterParam($t);
 				if(empty($t))
 					continue;
 				$tag = R::findOrNewOne('tag',$t);

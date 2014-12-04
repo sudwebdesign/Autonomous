@@ -4,7 +4,7 @@
 <extend>
 	<js+css form>
 	<write main>
-		<form id="mon_compte" action="<?=uri::param(0)?>" method="POST" enctype="multipart/form-data" role="form">
+		<form id="mon_compte" action="<?=$HREF?>" method="POST" enctype="multipart/form-data" role="form">
 			<h1>Mon Compte</h1>
 			<fieldset>
 				<legend>Email</legend>

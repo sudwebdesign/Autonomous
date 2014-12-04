@@ -16,7 +16,7 @@ use Model\Exception_Validation;
 class Ajouter extends Basic{
 	function assign(){
 		parent::assign();
-		$this->action = uri::param(0);
+		$this->action = $this->URI[0];
 		$this->taxonomy = end($this->presentNamespaces);
 	}
 	function dynamic(){
@@ -50,7 +50,7 @@ class Ajouter extends Basic{
 				'width'=>'90',
 				'height'=>'90',
 				//'rename'=>true, //image by default
-				'rename'=>uri::filterParam($entry->title),
+				'rename'=>$this->URI->filterParam($entry->title),
 				'extensions'=>array('png','jpg'),
 				'conversion'=>'png'
 			));
@@ -76,7 +76,7 @@ class Ajouter extends Basic{
 			foreach($tags as $i=>$t){
 				if($i>=$max)
 					break;
-				$t = uri::filterParam($t);
+				$t = $this->URI->filterParam($t);
 				if(empty($t))
 					continue;
 				$tag = R::findOrNewOne('tag',$t);
