@@ -1,2 +1,2 @@
 <Presenter:modifier:annonce uri="dynamic" TAXONOMY="Annonce" />
-	<extend file="Modifier"></extend>
+	<extend "Modifier"></extend>

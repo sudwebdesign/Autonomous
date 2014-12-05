@@ -1,2 +1,2 @@
 <Presenter:modifier:mediatheque uri="dynamic" TAXONOMY="mediatheque" />
-	<extend file="Modifier"></extend>
+	<extend "Modifier"></extend>

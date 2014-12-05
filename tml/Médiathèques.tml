@@ -1,4 +1,4 @@
 <Presenter:liste:mediatheque TAXONOMY="Médiathèque" />
-<extend file="Liste">
+<extend "Liste">
 	<attr selector="main" addClass="mediatheques">
 </extend>

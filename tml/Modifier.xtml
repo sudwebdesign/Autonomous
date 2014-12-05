@@ -125,6 +125,6 @@
 				</form>
 			</apply>
 		</article>
-		<extend file="Sidebar"></extend>
+		<extend "Sidebar"></extend>
 	</write>
 </extend>

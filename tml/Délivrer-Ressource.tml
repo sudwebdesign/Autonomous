@@ -1,2 +1,2 @@
 <Presenter:delivrer:ressource: />
-	<extend file="Délivrer"></extend>
+	<extend "Délivrer"></extend>

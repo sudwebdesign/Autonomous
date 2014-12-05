@@ -1,2 +1,2 @@
 <Presenter:ajouter:annonce uri="static" TAXONOMY="Annonce" />
-<extend file="Ajouter"></extend>
+<extend "Ajouter"></extend>

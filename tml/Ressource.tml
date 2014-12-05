@@ -1,2 +1,2 @@
 <Presenter:item:ressource />
-<extend file="Item"></extend>
+<extend "Item"></extend>
