@@ -184,7 +184,14 @@ class Liste extends Basic{
 		//exit($this->liste);
 
 		//sub flux
-		$subCategories = ['evenement','ressource','projet','association','annonce','mediatheque'];
+		$subCategories = [
+			'evenement'=>'Événement',
+			'ressource'=>'Ressource',
+			'projet'=>'Projet',
+			'association'=>'Association',
+			'annonce'=>'Annonce',
+			'mediatheque'=>'Médiathèque'
+		];
 		unset($subCategories[array_search($this->taxonomy,$subCategories)]);
 		$full = [];
 		$full = array_merge($full,$this->thematics->getArray());
@@ -195,7 +202,7 @@ class Liste extends Basic{
 		$full = implode(' ',$full);
 		$XQuery2 = [];
 		$XQuery2P = [];
-		foreach($subCategories as $cat){
+		foreach(array_keys($subCategories) as $cat){
 			if(!$Query->tableExists($cat))
 				continue;
 			$Query2 = (new Query())
@@ -216,10 +223,8 @@ class Liste extends Basic{
 		}
 		if(!empty($XQuery2)){
 			$this->liste2 = R::getAll(implode(' UNION ',$XQuery2),$XQuery2P);
-			$subCatSea = ['Evenement','Ressource','Projet','Association','Annonce','Mediatheque'];	
-			$urlSubCat = ['Événement','Ressource','Projet','Association','Annonce','Médiathèque'];
 			for ($l2=0;$l2<count($this->liste2);$l2++)
-				$this->liste2[$l2]['table'] = str_replace($subCatSea,$urlSubCat,$this->liste2[$l2]['table']);
+				$this->liste2[$l2]['table'] = $subCategories[$this->liste2[$l2]['table']];
 			//exit($this->liste2);		
 		}
 		$this->h1 = $uri[0];
