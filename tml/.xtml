@@ -18,7 +18,7 @@
 		<a href="" title="Accueil"><img src="img/udac.png" alt="L'UDAC 66" /></a>
 		<form role="search" is="searchbox">
 			<div>
-				<input type="search" name="phonemic" placeholder="Rechercher" value="<?=$URI->phonemic?>" data-url="service/autocomplete/searchbox">
+				<input type="search" name="phonemic" placeholder="Rechercher" value="<?=isset($URI)?$URI->phonemic:''?>" data-url="service/autocomplete/searchbox">
 			</div>
 			<select>
 				<option value="Événements" <?=$URI[0]=='Événements'?'selected="selected"':''?>>&#xf073;</option>

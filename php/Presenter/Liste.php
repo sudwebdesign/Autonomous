@@ -1,5 +1,5 @@
 <?php namespace Presenter;
-use Uri;
+use Config\Dev;
 use Model\Query;
 use Model\R;
 use View;
@@ -18,21 +18,25 @@ class Liste extends Basic{
 	}
 	function dynamic(){
 		parent::dynamic();
+		
+		//Dev::on(Dev::MODEL);
+		
 		$uri = $this->URI;
 		$this->page = $uri->page;
 		$this->limit = $this->limitation;
 		$this->offset = ($this->page!=NULL)?(($this->page-1)*$this->limitation):0;
 		$this->subUri = (strrpos($uri[0],'s')===strlen($uri[0])-1?substr($uri[0],0,-1):$uri[0]);
-		$Query = Query::getNew($this->taxonomy);
-		$Query->selectRelationnal([
-			'user			<		email',
-			'geopoint		>		label',
-			'geopoint		>		lat',
-			'geopoint		>		lon',
-			'geopoint		>		radius',
-			'tag			<>		name',
-			'tag::thematic	<>		name',
-		]);
+		$Query = (new Query($this->taxonomy))
+			->selectRelationnal([
+				'user			<		email',
+				'geopoint		>		label',
+				'geopoint		>		lat',
+				'geopoint		>		lon',
+				'geopoint		>		radius',
+				'tag			<>		name',
+				'tag::thematic	<>		name',
+			])
+		;
 		
 		if(method_exists($this,'addSelect'))
 			$this->addSelect($Query);
@@ -155,7 +159,7 @@ class Liste extends Basic{
 			//$Query->joinWhere("distance2{$distance2} <= ?",[$rad]);
 
 			//pgsql - more complex - non sql standard
-			$Query = Query::getNew()
+			$Query = (new Query())
 				->with("view AS ({$Query})",$Query->getParams())
 				->select('*')
 				->from('view')
@@ -173,8 +177,6 @@ class Liste extends Basic{
 
 		$this->liste = $Query->tableMD();
 		$this->countListe = count($this->liste);
-#		$this->count = ($this->count)?$this->count:$this->countListe;
-#var_dump($this->count);exit;
 		foreach($this->liste as $akey => $avlue){
 			$this->liste[$akey]['atitle']=htmlspecialchars($this->liste[$akey]['title'], ENT_COMPAT);
 		}
@@ -182,7 +184,7 @@ class Liste extends Basic{
 		//exit($this->liste);
 
 		//sub flux
-		$subCategories = ['Evenement','Ressource','Projet','Association','Annonce','Mediatheque'];
+		$subCategories = ['evenement','ressource','projet','association','annonce','mediatheque'];
 		unset($subCategories[array_search($this->taxonomy,$subCategories)]);
 		$full = [];
 		$full = array_merge($full,$this->thematics->getArray());
@@ -196,7 +198,7 @@ class Liste extends Basic{
 		foreach($subCategories as $cat){
 			if(!$Query->tableExists($cat))
 				continue;
-			$Query2 = Query::getNew()
+			$Query2 = (new Query())
 				->select(['id','pg_class.relname AS table','title','created'])
 				->limit($this->limitation2)
 				->from($cat.'","'.'pg_class')

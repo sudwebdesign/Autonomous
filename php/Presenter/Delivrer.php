@@ -29,7 +29,7 @@ class Delivrer extends Basic{
 		session::start(); //session auto start when get a key, if output not bufferised but direct flushed, have to start first
 		$uri = $this->URI;
 		if(!filter_var($uri[2],FILTER_VALIDATE_INT)){
-			$q = Query::getNew($this->taxonomy);
+			$q = new Query($this->taxonomy);
 			if(filter_var($uri[1],FILTER_VALIDATE_INT)&&($redirect = $q->select('titleHref')->where('id=?',[$uri[1]])->getCell()))
 				$this->redirect($redirect,$uri[1]);
 			elseif($redirect = $q->select('id')->where('"titleHref"=?',[$uri[1]])->getCell())
@@ -37,7 +37,7 @@ class Delivrer extends Basic{
 			exit;
 
 		}
-		$this->Query = Query::getNew($this->taxonomy)
+		$this->Query = (new Query($this->taxonomy))
 			->where('"'.$this->taxonomy.'"'.'.id=?',[$uri[2]])
 		;
 		$this->item = $this->Query->row4D();

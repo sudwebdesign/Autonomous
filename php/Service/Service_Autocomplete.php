@@ -19,7 +19,7 @@ class Service_Autocomplete {
 		$results = [];
 		if(isset($_GET['term'])){
 			$term = trim($_GET['term']);
-			$q = Query::getNew('geoname')
+			$q = (new Query('geoname'))
 				->select('name')
 				->where('fcode = ?',['ADM4'])
 				->orderBy('name ASC')
@@ -46,7 +46,7 @@ class Service_Autocomplete {
 		if(isset($_GET['term'])&&strlen($term=trim($_GET['term']))>=1){
 			if(isset($_GET['name'])&&($name=trim($_GET['name']))){
 				$name = rtrim($name,'s');
-				$results = Query::getNew('tag')
+				$results = (new Query('tag'))
 					->select('tag.name')
 					->joinOn('taxonomy')
 					->where('tag.name LIKE ? AND taxonomy.name=?',[str_replace('%','',$term).'%',$name,])

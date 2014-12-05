@@ -6,7 +6,7 @@ final class Table_Taxonomy extends ATable_Keyword{
 		
 	}
 	static function getChildrenbyLabel($params=null){
-		$q = Query::getNew('taxonomy');
+		$q = new Query('taxonomy');
 		if($params)
 			return $q
 				->joinOn('taxonomy')
