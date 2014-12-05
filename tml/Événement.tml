@@ -1,5 +1,5 @@
 <Presenter:item:evenement />
-<extend file="Item.atml">
+<extend file="Item">
 	
 
 </extend>

@@ -1,2 +1,2 @@
 <Presenter:modifier:ressource uri="dynamic" TAXONOMY="ressource" />
-	<extend file="Modifier.atml"></extend>
+	<extend file="Modifier"></extend>

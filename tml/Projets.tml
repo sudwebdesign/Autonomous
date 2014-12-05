@@ -1,4 +1,4 @@
 <Presenter:liste:projet TAXONOMY="Projet" />
-<extend file="Liste.atml">
+<extend file="Liste">
 	<attr selector="main" addClass="projets">
 </extend>

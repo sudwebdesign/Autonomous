@@ -1,5 +1,5 @@
 <Presenter:ajouter:association uri="static" TAXONOMY="Association" />
-<extend file="Ajouter.atml">
+<extend file="Ajouter">
 	<after selector="main form fieldset:has([name=title])">
 		<fieldset>
 			<legend>Raison</legend>

@@ -1,5 +1,5 @@
 <Presenter:ajouter:evenement uri="static" TAXONOMY="Événement" />
-<extend file="Ajouter.atml">
+<extend file="Ajouter">
 	<after selector="main form fieldset:has(geo-completer)">
 		<apply "forms.tpl">
 			<fieldset is="daterange">

@@ -34,6 +34,6 @@
 				</ul>
 			</if>
 		</article>
-		<extend file="Sidebar.atml"></extend>
+		<extend file="Sidebar"></extend>
 	</write>
 </extend>

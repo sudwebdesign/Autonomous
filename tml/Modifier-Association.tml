@@ -1,2 +1,2 @@
 <Presenter:modifier:association uri="dynamic" TAXONOMY="association" />
-	<extend file="Modifier.atml"></extend>
+	<extend file="Modifier"></extend>

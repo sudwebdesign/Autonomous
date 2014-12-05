@@ -1,2 +1,2 @@
 <Presenter:delivrer:projet: />
-	<extend file="Délivrer.atml"></extend>
+	<extend file="Délivrer"></extend>

@@ -1,2 +1,2 @@
 <Presenter:item:annonce />
-<extend file="Item.atml"></extend>
+<extend file="Item"></extend>

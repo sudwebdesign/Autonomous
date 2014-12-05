@@ -1,2 +1,2 @@
 <Presenter:ajouter:projet uri="static" TAXONOMY="Projet" />
-<extend file="Ajouter.atml"></extend>
+<extend file="Ajouter"></extend>

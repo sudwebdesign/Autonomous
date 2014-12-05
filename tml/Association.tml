@@ -1,2 +1,2 @@
 <Presenter:item:association />
-<extend file="Item.atml"></extend>
+<extend file="Item"></extend>

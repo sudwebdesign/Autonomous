@@ -1,4 +1,4 @@
 <Presenter:liste:ressource />
-<extend file="Liste.atml">
+<extend file="Liste">
 	<attr selector="main" addClass="ressources">
 </extend>

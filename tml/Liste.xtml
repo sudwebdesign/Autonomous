@@ -48,7 +48,7 @@
 		<article>
 			<h1><?=$h1?> (<?=$countListe?> / <?=($count)?$count:$countListe?> résultats)</h1>
 			<foreach "(array)@$liste as $id=>$item">
-				<?$href=$subUri.'+'.$THIS->URI->filterParam($item->title).'+'.$id;?>
+				<?$href=$subUri.'+'.$URI->filterParam($item->title).'+'.$id;?>
 				<h2><a href="<?=$href?>"><?=$item->title?></a></h2>
 				<a href="<?=$href?>">
 					<if "$img=$THIS->imageByItem($item)">
@@ -118,7 +118,7 @@
 		<aside>
 			<h3>Flux d'autres articles</h3>
 			<foreach "(array)@$liste2 as $id=>$item">
-				<?$href=$item->table.'+'.$THIS->URI->filterParam($item->title).'+'.$item->id;?>
+				<?$href=$item->table.'+'.$URI->filterParam($item->title).'+'.$item->id;?>
 				<h2 title="Ajouté le <?=$item->created?>"><a class="<?=$item->table?>" href="<?=$href?>"><?=$item->title?></a></h2>
 				<a href="<?=$href?>">
 					<if "$URI->phonemic"> ... </if>
