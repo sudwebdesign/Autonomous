@@ -96,7 +96,6 @@ class Liste extends Basic{
 			$Query
 				->whereFullText('document',$uri->phonemic,'french')
 				->selectFullTextHighlite('presentation',$uri->phonemic,$this->truncation,'french')
-				//->selectFullTextHighlight('presentation',$uri->phonemic,'french')
 				->orderByFullTextRank('document',$uri->phonemic,'french') 
 			;
 		}
@@ -139,7 +138,6 @@ class Liste extends Basic{
 			if($uri->proxima){
 				$distance2 = 'touch';
 				$Query
-					//->where('(geopoint.lat BETWEEN ? AND ?) OR (geopoint.lon BETWEEN ? AND ?)',[$minlat,$maxlat,$minlon,$maxlon])
 					->openWhereOr()
 					->where('geopoint.minlat BETWEEN ? AND ?',[$minlat,$maxlat])
 					->where('geopoint.minlon BETWEEN ? AND ?',[$minlon,$maxlon])
@@ -177,10 +175,9 @@ class Liste extends Basic{
 
 		$this->liste = $Query->tableMD();
 		$this->countListe = count($this->liste);
-		foreach($this->liste as $akey => $avlue){
+		foreach($this->liste->keys() as $akey){
 			$this->liste[$akey]['atitle']=htmlspecialchars($this->liste[$akey]['title'], ENT_COMPAT);
 		}
-		unset($akey,$avlue);
 		//exit($this->liste);
 
 		//sub flux
@@ -192,7 +189,7 @@ class Liste extends Basic{
 			'annonce'=>'Annonce',
 			'mediatheque'=>'Médiathèque'
 		];
-		unset($subCategories[array_search($this->taxonomy,$subCategories)]);
+		unset($subCategories[$this->taxonomy]);
 		$full = [];
 		$full = array_merge($full,$this->thematics->getArray());
 		if($uri->phonemic)
