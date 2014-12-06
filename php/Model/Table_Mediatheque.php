@@ -1,8 +1,6 @@
 <?php namespace Model;
 final class Table_Mediatheque extends ATable_Main{
-	//function onValidate(){
-		//parent::onValidate();
-	//}
+	//function onValidate(){}
 	//function onNew(){}
 	//function onCreate(){}
 	//function onCreated(){}

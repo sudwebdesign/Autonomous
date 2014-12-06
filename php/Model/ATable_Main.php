@@ -1,5 +1,6 @@
 <?php namespace Model;
 use Tool\ruler;
+use Route\Router_SuperURI;
 abstract class ATable_Main extends Table{
 	protected $minTitreLength = 8;
 	protected $maxTitreLength = 250;
@@ -22,7 +23,7 @@ abstract class ATable_Main extends Table{
 			$this->error('url','Lien non valide');
 		$this->presentationHtml = $this->presentation;
 		$this->presentation = html_entity_decode(strip_tags($this->presentationHtml));
-		$this->titleHref = $this->Controller->filterParam($this->title);
+		$this->titleHref = (new Router_SuperURI())->filterParam($this->title);
 	}
 	function onUpdate(){
 		$this->modified = date('Y-m-d H:i:s');

@@ -1,6 +1,5 @@
 <?php namespace Model;
-final class Table_Association extends ATable_Main{
-	
+final class Table_Association extends ATable_Main{	
 	function onValidate(){
 		parent::onValidate();
 		if(strlen($this->raison)>200)

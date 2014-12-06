@@ -1,7 +1,6 @@
 <?php namespace Model;
 class Table extends \Surikat\Model\Table{
-	//function onNew(){
-	//}
+	//function onNew(){}
 	//function onUpdate(){
 		//$this->modified = date('Y-m-d H:i:s');
 	//}

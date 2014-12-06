@@ -35,6 +35,7 @@ class Liste extends Basic{
 				'geopoint		>		radius',
 				'tag			<>		name',
 				'tag::thematic	<>		name',
+				//'tag<>		taxonomy:taxo<> taxonomy<> name',
 			])
 		;
 		
@@ -48,13 +49,13 @@ class Liste extends Basic{
 			if(is_array($tag)){
 				$Query->openHavingAnd();
 				foreach($tag as $subTag){
-					$Query->joinWhere('tag.name = ? ',[$subTag]);
+					$Query->joinWhere('{$prefix}tag.name = ? ',[$subTag]);
 					$this->thematics[] = $subTag;
 				}
 				$Query->closeHaving();
 			}
 			else{
-				$Query->joinWhere('tag.name = ? ',[$tag]);
+				$Query->joinWhere('{$prefix}tag.name = ? ',[$tag]);
 				$this->thematics[] = $tag;
 			}
 		}
@@ -80,16 +81,16 @@ class Liste extends Basic{
 			}
 			if($lat!==null&&$lon!==null)
 				$Query
-					->groupBy('geopoint.lat')
-					->groupBy('geopoint.lon')
-					->groupBy('geopoint.radius')
-					->select('geodistance(geopoint.lat,geopoint.lon,?,?) as distance',[$lat,$lon])
+					->groupBy('{$prefix}geopoint.lat')
+					->groupBy('{$prefix}geopoint.lon')
+					->groupBy('{$prefix}geopoint.radius')
+					->select('geodistance({$prefix}geopoint.lat,{$prefix}geopoint.lon,?,?) as distance',[$lat,$lon])
 					->orderBy('distance ASC')
 				;
 			if($rad)
 				$Query
-					->select('(geodistance(geopoint.lat,geopoint.lon,?,?)+COALESCE(geopoint.radius,0)) as distance2inc',[$lat,$lon])
-					->select('(geodistance(geopoint.lat,geopoint.lon,?,?)-COALESCE(geopoint.radius,0)) as distance2touch',[$lat,$lon])
+					->select('(geodistance({$prefix}geopoint.lat,{$prefix}geopoint.lon,?,?)+COALESCE({$prefix}geopoint.radius,0)) as distance2inc',[$lat,$lon])
+					->select('(geodistance({$prefix}geopoint.lat,{$prefix}geopoint.lon,?,?)-COALESCE({$prefix}geopoint.radius,0)) as distance2touch',[$lat,$lon])
 				;
 		}
 		if($uri->phonemic){
@@ -110,22 +111,23 @@ class Liste extends Basic{
 		
 		//for PgSql8 (no need in >=PgSql9.3)
 		$Query
-			->groupBy('"'.$this->taxonomy.'"'.'.id')
-			->groupBy('"'.$this->taxonomy.'"'.'.title')
-			->groupBy('"'.$this->taxonomy.'"'.'.tel')
-			->groupBy('"'.$this->taxonomy.'"'.'.url')
-			->groupBy('"'.$this->taxonomy.'"'.'.created')
-			->groupBy('"'.$this->taxonomy.'"'.'.presentation')
-			->groupBy('"user".id')
-			->groupBy('"user".email')
+			->groupBy('id')
+			->groupBy('title')
+			->groupBy('tel')
+			->groupBy('url')
+			->groupBy('created')
+			->groupBy('presentation')
+			->groupBy('"{$prefix}user".id')
+			->groupBy('"{$prefix}user".email')
 		;
+		
 		if($uri->phonemic)
-			$Query->groupBy('"'.$this->taxonomy.'"'.'.document');
+			$Query->groupBy('document');
 		
 		if($this->thematics->count())
 			$Query
-				->select('COUNT(DISTINCT(thematic__tag.name)) as count_tag_rank')
-				->where('thematic__tag.name IN ?',[$this->thematics->getArray()])
+				->select('COUNT(DISTINCT({$prefix}thematic__tag.name)) as count_tag_rank')
+				->where('{$prefix}thematic__tag.name IN ?',[$this->thematics->getArray()])
 				->orderBy('count_tag_rank DESC')
 			;
 
@@ -139,17 +141,17 @@ class Liste extends Basic{
 				$distance2 = 'touch';
 				$Query
 					->openWhereOr()
-					->where('geopoint.minlat BETWEEN ? AND ?',[$minlat,$maxlat])
-					->where('geopoint.minlon BETWEEN ? AND ?',[$minlon,$maxlon])
-					->where('geopoint.maxlat BETWEEN ? AND ?',[$minlat,$maxlat])
-					->where('geopoint.maxlon BETWEEN ? AND ?',[$minlon,$maxlon])
+					->where('{$prefix}geopoint.minlat BETWEEN ? AND ?',[$minlat,$maxlat])
+					->where('{$prefix}geopoint.minlon BETWEEN ? AND ?',[$minlon,$maxlon])
+					->where('{$prefix}geopoint.maxlat BETWEEN ? AND ?',[$minlat,$maxlat])
+					->where('{$prefix}geopoint.maxlon BETWEEN ? AND ?',[$minlon,$maxlon])
 					->closeWhere()
 				;
 			}
 			else{
 				$distance2 = 'inc';
 				$Query
-					->where('geopoint.minlat>=? AND geopoint.maxlat<=? AND geopoint.minlon>=? AND geopoint.maxlon<=?',[$minlat,$maxlat,$minlon,$maxlon])
+					->where('{$prefix}geopoint.minlat>=? AND {$prefix}geopoint.maxlat<=? AND {$prefix}geopoint.minlon>=? AND {$prefix}geopoint.maxlon<=?',[$minlat,$maxlat,$minlon,$maxlon])
 				;
 			}
 			
@@ -158,7 +160,7 @@ class Liste extends Basic{
 
 			//pgsql - more complex - non sql standard
 			$Query = (new Query())
-				->with("view AS ({$Query})",$Query->getParams())
+				->with('{$prefix}view AS ('.$Query.')',$Query->getParams())
 				->select('*')
 				->from('view')
 				->where("distance2{$distance2} <= ?",[$rad])
@@ -206,7 +208,7 @@ class Liste extends Basic{
 				->select(['id','pg_class.relname AS table','title','created'])
 				->limit($this->limitation2)
 				->from($cat.'","'.'pg_class')
-				->where('"'.$cat.'".tableoid = pg_class.oid')
+				->where('"{$prefix}'.$cat.'".tableoid = pg_class.oid')
 			;
 			if($full)
 				$Query2

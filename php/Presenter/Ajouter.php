@@ -17,7 +17,7 @@ class Ajouter extends Basic{
 	function assign(){
 		parent::assign();
 		$this->action = $this->URI[0];
-		$this->taxonomy = end($this->presentNamespaces);
+		$this->taxonomy = lcfirst(end($this->presentNamespaces));
 	}
 	function dynamic(){
 		parent::dynamic();
