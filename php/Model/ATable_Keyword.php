@@ -1,14 +1,16 @@
 <?php namespace Model;
-use Model;
+use Model\Query;
 use Tool\str;
 abstract class ATable_Keyword extends Table{
 	static function findRewrite($find,&$rewrite){
 		$table = R::getClassModel(get_called_class());
-		$row = Model::row($table,array(
-			'select'	=>array('id','name'),
-			'where'		=>'LOWER(uaccent(name)) = ?',
-			'limit'		=>1,
-		),array(strtolower(str::unaccent($find))));
+		$row = (new Query($table))
+			->select('id')
+			->select('name')
+			->where('LOWER(uaccent(name)) = ?',[strtolower(str::unaccent($find))])
+			->limit(1)
+			->getRow()
+		;
 		if(!$row)
 			return;
 		if($row['name']!=$find)
@@ -31,15 +33,13 @@ abstract class ATable_Keyword extends Table{
 			}
 		}
 		$table = R::getClassModel(get_called_class());
-		$method = $limit>1?'col':'cell';
-		return Model::$method($table,array(
-			'select'	=>'id',
-			'where'		=>$ci.'name'.$cie.' = :equal OR '.$ci.'name'.$cie.' LIKE :like',
-			'limit'		=>$limit,
-			'orderBy'	=>'created DESC',
-		),array(
-			'equal'	=>$find,
-			'like'	=>"%$find%"
-		));
+		$method = $limit>1?'getCol':'getCell';
+		return (new Query($table))
+			->select('id')
+			->where($ci.'name'.$cie.' = ? OR '.$ci.'name'.$cie.' LIKE ?',[$find,"%$find%"])
+			->limit($limit)
+			->orderBy('created DESC')
+			->$method()
+		;
 	}
 }

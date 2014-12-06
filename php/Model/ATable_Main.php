@@ -4,13 +4,13 @@ abstract class ATable_Main extends Table{
 	protected $minTitreLength = 8;
 	protected $maxTitreLength = 250;
 	protected static $columnDocumentFulltextLanguage = 'french';
-	protected static $columnDocumentFulltext = array(
+	protected static $columnDocumentFulltext = [
 		'title							/A',
 		'tag			<>	name		/A',
 		'presentation					/B',
 		'geopoint		>	label		/B',
 		'user			<	email		/C',
-	);
+	];
 	function onValidate(){
 		if(!ruler::minchar($this->title,$this->minTitreLength))
 			$this->error('title','Le titre doit comporter minimum '.$this->minTitreLength.' caractères');
