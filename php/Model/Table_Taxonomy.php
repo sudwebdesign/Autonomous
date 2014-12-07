@@ -1,6 +1,5 @@
 <?php namespace Model;
 use Model\Query;
-use Tool\str;
 final class Table_Taxonomy extends ATable_Keyword{
 	function onUpdate(){
 		

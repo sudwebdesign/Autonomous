@@ -1,4 +1,5 @@
 <?php namespace Tool;
+use Core\FS;
 class deleter{
 	static function alls($conf){
 		$conf = array_merge([
@@ -22,38 +23,19 @@ class deleter{
 	}
 	static function removeFile($dir,$callback=null){
 		if(isset($dir)){
-			if(!is_dir($dir)) {
-				   unlink($dir);#rmdir($dir);#FS::rmdir($dir);
+			if(!is_dir($dir)){
+				unlink($dir);
+				if($callback&&is_callable($callback))
+					call_user_func($callback,$dir);
 				return true;
 			}
 		}
 	}
-	static function removeFiles($dir,$callback=null){
-		if(isset($dir)){
-	#function deldir($dir) {//effacage recursif des fichiers du dossier, Guy Hendrickx, factux.org
-	   $dh=opendir($dir);
-	   while ($file=readdir($dh)) {
-		   if($file!="." && $file!="..") {
-			   $fullpath=$dir."/".$file;
-			   if(!is_dir($fullpath)) {
-				   unlink($fullpath);
-			   } else {
-				   deldir($fullpath);
-			   }
-		   }
-	   }
-
-	   closedir($dh);
-	  
-	   if(rmdir($dir)) {
-		   return true;
-	   } else {
-		   return false;
-	   }
-	#}			
-			
-			//rmdir($dir);#FS::rmdir($dir);
-			//return true;
+	static function removeFiles($dir,$callback=null){	
+		if(FS::rmdir($dir)){
+			if($callback&&is_callable($callback))
+				call_user_func($callback,$dir);
+			return true;
 		}
 	}
 }

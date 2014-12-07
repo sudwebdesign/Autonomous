@@ -14,17 +14,17 @@ final class Evenement extends \Presenter\Ajouter{
 		if(!isset($_POST['xownDate']))
 			return;
 		foreach($vars as $k) $$k = isset($_POST['xownDate'][$k])?$_POST['xownDate'][$k]:null;
-		dates::dp_to_date_fr($date_start);
-		dates::dp_to_date_fr($date_end);
+		Dates::dp_to_date_fr($date_start);
+		Dates::dp_to_date_fr($date_end);
 		$multi = is_array($date_start);
-		if(!dates::validate_date($date_start,true))
+		if(!Dates::validate_date($date_start,true))
 			$bean->error('xownDate.date_start','missing or invalid format');
-		if(!dates::validate_time($time_start))
+		if(!Dates::validate_time($time_start))
 			$bean->error('xownDate.time_start','invalid format');
 		if(isset($_POST['date_with_end'])){
-			if(!dates::validate_date($date_end))
+			if(!Dates::validate_date($date_end))
 				$bean->error('xownDate.date_end','invalid format');
-			if(!dates::validate_time($time_end))
+			if(!Dates::validate_time($time_end))
 				$bean->error('xownDate.time_end','invalid format');
 		}
 		if($multi){
@@ -34,9 +34,9 @@ final class Evenement extends \Presenter\Ajouter{
 						'start'=>@$date_start[$i]?$date_start[$i].' '.(@$time_start[$i]?$time_start[$i]:'00:00:00'):null,
 						'end'=>@$date_end[$i]?$date_end[$i].' '.(@$time_end[$i]?$time_end[$i]:'00:00:00'):null,
 					);
-					if(!dates::validate_datetime($date['start']))
+					if(!Dates::validate_datetime($date['start']))
 						$bean->error('xownDate.date_start','missing or invalid format');
-					if($date['end']&&!dates::validate_datetime($date['end']))
+					if($date['end']&&!Dates::validate_datetime($date['end']))
 						$bean->error('xownDate.date_end','missing or invalid format');
 					//var_dump($date);exit;
 				}

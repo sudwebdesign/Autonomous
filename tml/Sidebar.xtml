@@ -3,10 +3,10 @@
 	<hr>
 	<p>Auteur: <?=$item->user->email?></p>
 	<hr>
-<!--<p>utilisateur: <?=session::get('email')?></p>
+<!--<p>utilisateur: <?=Session::get('email')?></p>
 	<hr>-->
 	<p>
-		<if "$item->user->email == session::get('email')">
+		<if "$item->user->email == Session::get('email')">
 			<i class='c'><a href='Ajouter-<?=$type?>'><?=$item->type?> créer.</a></i><hr>
 			<i class='r'><a href='<?=$type?>+<?=$item->id?>'><?=$item->type?> regarder.</a></i><hr>  
 			<i class='u'><a href='Modifier-<?=$type?>+<?=$item->id?>'><?=$item->type?> unifier.</a></i><hr>

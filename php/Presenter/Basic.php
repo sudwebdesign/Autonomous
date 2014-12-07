@@ -1,5 +1,5 @@
 <?php namespace Presenter;
-use Surikat\Config\Domain;
+use Surikat\Core\Domain;
 use Surikat\Tool\session;
 use Model\Table_Taxonomy;
 use Presenter\Truncating;
@@ -18,7 +18,7 @@ class Basic extends \Surikat\Presenter\Basic{
 		$this->HREF = $this->BASE_HREF.$this->URI[0];
 		
 		$x = explode('-',$this->URI[0]);
-		$this->type = (isset($x[1])?$x[1]:$this->URI[0]);#str::tolower(end($x));
+		$this->type = (isset($x[1])?$x[1]:$this->URI[0]);
 		$this->mode = $x[0];
 	}
 	function dynamic(){

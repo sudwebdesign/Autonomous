@@ -92,13 +92,13 @@
 		<a href="Contact">Nous Contacter</a>
 	</footer>
 	<script type="text/javascript" src="js/js.pack.js"></script>
-	<script type="text/javascript"><?use Surikat\Config\Dev;?>
+	<script type="text/javascript"><?use Surikat\Core\Dev;?>
 		<?if(Dev::has(Dev::CSS)):?>$css().dev=true;<?endif;?>
 		<?if(Dev::has(Dev::JS)):?>$js().dev=true;<?endif;?>
 		$js().min = false
 		$css().min = false;
 		$js('script');
-		<?if(Dev::has(Dev::CONTROL)):?>if(console) console.info('Server <?=$timeCompiled===$time?'Compilation+':''?>Exec: <?=Tool\chrono::get()?> -  Exec <?=@date('jMY-H:m:s',$time)?> - Compiled <?=@date('jMY-H:m:s',$timeCompiled)?>');<?endif;?>
+		<?if(Dev::has(Dev::CONTROL)):?>if(console) console.info('Server <?=$timeCompiled===$time?'Compilation+':''?>Exec: <?=Core\Chrono::get()?> -  Exec <?=@date('jMY-H:m:s',$time)?> - Compiled <?=@date('jMY-H:m:s',$timeCompiled)?>');<?endif;?>
 	</script>
 </body>
 </html>

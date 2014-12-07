@@ -3,9 +3,8 @@ use Uri;
 use View;
 use Model;
 use Model\Query;
-use Tool\session;
-use Config\Dev;
-use Tool\ArrayObject;
+use Core\Session;
+use Core\Dev;
 class Item extends Basic{
 	function assign(){
 		parent::assign();
@@ -13,7 +12,7 @@ class Item extends Basic{
 	}
 	function dynamic(){
 		parent::dynamic();
-		session::start(); //session auto start when get a key, if output not bufferised but direct flushed, have to start first
+		Session::start(); //session auto start when get a key, if output not bufferised but direct flushed, have to start first
 		$uri = $this->URI;
 		if(!filter_var($uri[2],FILTER_VALIDATE_INT)){
 			$q = new Query($this->taxonomy);

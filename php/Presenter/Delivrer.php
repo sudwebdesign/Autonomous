@@ -4,20 +4,16 @@ use View;
 use Model;
 use Model\Query;
 use Model\R;
-use Tool;
-use Tool\str;
 use Tool\FS;
 use Tool\PHP;
-use Tool\session;
-use Tool\post;
+use Core\Session;
+use Core\Post;
 use Tool\filter;
 use Tool\uploader;
 use Tool\deleter;
 use Tool\Geocoding;
 use Model\Exception_Validation;
-/**/
-use Config\Dev;
-use Tool\ArrayObject;
+use Core\Dev;
 class Delivrer extends Basic{
 	function assign(){
 		parent::assign();
@@ -26,7 +22,7 @@ class Delivrer extends Basic{
 	}
 	function dynamic(){
 		parent::dynamic();
-		session::start(); //session auto start when get a key, if output not bufferised but direct flushed, have to start first
+		Session::start(); //session auto start when get a key, if output not bufferised but direct flushed, have to start first
 		$uri = $this->URI;
 		if(!filter_var($uri[2],FILTER_VALIDATE_INT)){
 			$q = new Query($this->taxonomy);
@@ -104,7 +100,7 @@ class Delivrer extends Basic{
 					'deletion'=>true
 				));
 			}
-			post::clearPersistance();
+			Post::clearPersistance();
 		}
 		catch(Exception_Validation $e){
 			$this->formErrors = $e->getData();
@@ -116,7 +112,7 @@ class Delivrer extends Basic{
 		//	public function deleteRecord( $type, $id);
 		$entry = R::findOne($type,'id='.$id);
 /*ForLocalDeBug*/#var_export($entry->user_id);exit;
-		$user = session::get('email');#origin(ajouter)
+		$user = Session::get('email');#origin(ajouter)
 		if($user&&$entry->user_id){#()#FLDB
 			$user = R::findOne('user','id='.$entry->user_id);#FLDB
 			#$user = R::findOne('user',array('email'=>$user));#FOOL@
@@ -125,7 +121,7 @@ class Delivrer extends Basic{
 		else
 			$entry->error('user','required',true);
 #		$entry->user = R::findOne('user','id=1');#FLDB
-		$P = post::getObject();
+		$P = Post::getObject();
 		$entry->deletion = $P->deletion;
 		$entry->validated = $P->validate;
 		return $entry;

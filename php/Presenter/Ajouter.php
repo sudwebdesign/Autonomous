@@ -8,10 +8,10 @@ use Model\R;
 use Tool\str;
 use Tool\FS;
 use Tool\PHP;
-use Tool\session;
-use Tool\post;
-use Tool\filter;
-use Tool\uploader;
+use Core\Session;
+use Core\Post;
+use Core\Filter;
+use Core\Uploader;
 use Model\Exception_Validation;
 class Ajouter extends Basic{
 	function assign(){
@@ -21,7 +21,7 @@ class Ajouter extends Basic{
 	}
 	function dynamic(){
 		parent::dynamic();
-		session::start(); //session auto start when get a key, if output not bufferised but direct flushed, have to start first
+		Session::start(); //session auto start when get a key, if output not bufferised but direct flushed, have to start first
 		$this->POST();
 	}
 	function POST(){
@@ -34,7 +34,7 @@ class Ajouter extends Basic{
 			if(method_exists($this,'POST_Specifications'))
 				$this->POST_Specifications($entry);
 			R::store($entry);
-			post::clearPersistance();
+			Post::clearPersistance();
 		}
 		catch(Exception_Validation $e){
 			$this->formErrors = $e->getData();
@@ -44,7 +44,7 @@ class Ajouter extends Basic{
 	function POST_Common($type){
 		$entry = R::create($type);
 		$entry->on('created',function($entry)use($type){
-			uploader::image(array(
+			Uploader::image(array(
 				'dir'=>'content/'.$type.'/'.$entry->id.'/',
 				'key'=>'image',
 				'width'=>'90',
@@ -54,21 +54,21 @@ class Ajouter extends Basic{
 				'extensions'=>array('png','jpg'),
 				'conversion'=>'png'
 			));
-			uploader::files('content/'.$type.'/'.$entry->id.'/','files');
+			Uploader::files('content/'.$type.'/'.$entry->id.'/','files');
 		});
 
-		$user = session::get('email');
+		$user = Session::get('email');
 		if($user){
 			$user = R::findOrNewOne('user',array('email'=>$user));
 			$entry->user = $user;
 		}
 		else
 			$entry->error('user','required',true);
-		$P = post::getObject();
+		$P = Post::getObject();
 		$entry->title = strip_tags($P->title);
 		$entry->tel = $P->tel;
-		$entry->url = filter::url($P->url);
-		$entry->presentation = filter::strip_tags_basic($P->presentation);
+		$entry->url = Filter::url($P->url);
+		$entry->presentation = Filter::strip_tags_basic($P->presentation);
 		if(is_object($P->sharedTag)&&trim($P->sharedTag->name)){
 			$max = 5;
 			$tags = explode(' ',strip_tags($P->sharedTag->name));

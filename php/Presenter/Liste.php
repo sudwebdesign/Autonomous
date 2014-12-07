@@ -1,5 +1,5 @@
 <?php namespace Presenter;
-use Config\Dev;
+use Core\Dev;
 use Model\Query;
 use Model\R;
 use View;

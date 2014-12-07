@@ -5,6 +5,7 @@
 	'user'			=>'postgres',
 	'password'		=>'postgres',
 	'port'			=>'',
+	'prefix'		=>'',
 	'freeze'		=>false,
 	'case'			=>true,
 ];

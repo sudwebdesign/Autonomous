@@ -8,14 +8,13 @@ use Tool;
 use Tool\str;
 use Tool\FS;
 use Tool\PHP;
-use Tool\session;
-use Tool\post;
-use Tool\filter;
-use Tool\uploader;
+use Core\Session;
+use Core\Post;
+use Core\Filter;
+use Core\Uploader;
 use Tool\Geocoding;
 use Model\Exception_Validation;
-use Config\Dev;
-use Tool\ArrayObject;
+use Core\Dev;
 class Modifier extends Basic{
 	function assign(){
 		parent::assign();
@@ -23,7 +22,7 @@ class Modifier extends Basic{
 	}
 	function dynamic(){
 		parent::dynamic();
-		session::start(); //session auto start when get a key, if output not bufferised but direct flushed, have to start first
+		Session::start(); //session auto start when get a key, if output not bufferised but direct flushed, have to start first
 		$uri = $this->URI;
 		if(!filter_var($uri[2],FILTER_VALIDATE_INT)){
 			$q = new Query($this->taxonomy);
@@ -93,7 +92,7 @@ class Modifier extends Basic{
 			if(method_exists($this,'POST_Specifications'))
 				$this->POST_Specifications($entry);
 			R::store($entry);
-			post::clearPersistance();
+			Post::clearPersistance();
 		}
 		catch(Exception_Validation $e){
 			$this->formErrors = $e->getData();
@@ -104,7 +103,7 @@ class Modifier extends Basic{
 		//	public function updateRecord( $type, $updatevalues, $id = NULL );
 		$entry = R::findOne($type,'id='.$id);//R::updateRecord($type);#create
 		$entry->on('updated',function($entry)use($type){
-			uploader::image(array(
+			Uploader::image(array(
 				'dir'=>'content/'.$type.'/'.$entry->id.'/',
 				'key'=>'image',
 				'width'=>'90',
@@ -114,10 +113,10 @@ class Modifier extends Basic{
 				'extensions'=>array('png','jpg'),
 				'conversion'=>'png'
 			));
-			uploader::files('content/'.$type.'/'.$entry->id.'/','files');
+			Uploader::files('content/'.$type.'/'.$entry->id.'/','files');
 		});
 /*ForLocalDeBug*/#var_export($entry->user_id);exit;
-		$user = session::get('email');
+		$user = Session::get('email');
 		if($user&&$entry->user_id){#FLDB($user){#FOOL
 			$user = R::findOne('user','id='.$entry->user_id);#FLDB
 #			$user = R::findOne('user',array('email'=>$user));#FOOL@ire
@@ -126,11 +125,11 @@ class Modifier extends Basic{
 		else
 			$entry->error('user','required',true);
 #		$user = R::findOne('user','id=1');#FLDB
-		$P = post::getObject();
+		$P = Post::getObject();
 		$entry->title = strip_tags($P->title);
 		$entry->tel = $P->tel;
-		$entry->url = filter::url($P->url);
-		$entry->presentation = filter::strip_tags_basic($P->presentation);
+		$entry->url = Filter::url($P->url);
+		$entry->presentation = Filter::strip_tags_basic($P->presentation);
 		if(is_object($P->sharedTag)&&trim($P->sharedTag->name)){
 			$max = 5;
 			$tags = explode(' ',strip_tags($P->sharedTag->name));

@@ -1,13 +1,13 @@
 <?php namespace Model;
 use Model\Query;
-use Tool\str;
+use Core\STR;
 abstract class ATable_Keyword extends Table{
 	static function findRewrite($find,&$rewrite){
 		$table = R::getClassModel(get_called_class());
 		$row = (new Query($table))
 			->select('id')
 			->select('name')
-			->where('LOWER(uaccent(name)) = ?',[strtolower(str::unaccent($find))])
+			->where('LOWER(uaccent(name)) = ?',[strtolower(STR::unaccent($find))])
 			->limit(1)
 			->getRow()
 		;
@@ -24,12 +24,12 @@ abstract class ATable_Keyword extends Table{
 			if($flag&Query::FLAG_ACCENT_INSENSITIVE){
 				$ci .= 'uaccent(';
 				$cie .= ')';
-				$find = str::unaccent($find);
+				$find = STR::unaccent($find);
 			}
 			if($flag&Query::FLAG_CASE_INSENSITIVE){
 				$ci .= 'LOWER(';
 				$cie .= ')';
-				$find = str::tolower($find);
+				$find = STR::tolower($find);
 			}
 		}
 		$table = R::getClassModel(get_called_class());

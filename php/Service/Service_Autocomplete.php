@@ -2,7 +2,7 @@
 use Model\R;
 use Model\Query;
 use Tool\JSON;
-use Tool\str;
+use Core\STR;
 class Service_Autocomplete {
 	const DEFAULT_LG_CODE = 'fr';
 	const DEFAULT_COUNTRY_CODE = 'fr';
@@ -31,7 +31,7 @@ class Service_Autocomplete {
 					->select('radius')
 				;
 			if(strlen($term)>=1)
-				$q->where('asciiname LIKE ?',[strtolower(str_replace('%','',str::unaccent($term)).'%')]);
+				$q->where('asciiname LIKE ?',[strtolower(str_replace('%','',STR::unaccent($term)).'%')]);
 			else
 				$q->where('population >= ?',[6000]);
 			if($complete)
