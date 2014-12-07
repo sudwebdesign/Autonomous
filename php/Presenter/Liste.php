@@ -34,8 +34,10 @@ class Liste extends Basic{
 				'geopoint		>		lon',
 				'geopoint		>		radius',
 				'tag			<>		name',
-				'tag::thematic	<>		name',
-				//'tag<>		taxonomy:taxo<> taxonomy<> name',
+				'tag:thematic	<>		name',
+				
+				//'tag<>			taxonomy<> name',
+				//'tag<>			taxonomy<> taxonomy2:taxonomies<> name',
 			])
 		;
 		
@@ -126,8 +128,8 @@ class Liste extends Basic{
 		
 		if($this->thematics->count())
 			$Query
-				->select('COUNT(DISTINCT({$prefix}thematic__tag.name)) as count_tag_rank')
-				->where('{$prefix}thematic__tag.name IN ?',[$this->thematics->getArray()])
+				->select('COUNT(DISTINCT({$prefix}thematic.name)) as count_tag_rank')
+				->where('{$prefix}thematic.name IN ?',[$this->thematics->getArray()])
 				->orderBy('count_tag_rank DESC')
 			;
 
