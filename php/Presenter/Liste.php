@@ -225,7 +225,7 @@ class Liste extends Basic{
 		if(!empty($XQuery2)){
 			$this->liste2 = R::getAll(implode(' UNION ',$XQuery2),$XQuery2P);
 			for ($l2=0;$l2<count($this->liste2);$l2++)
-				$this->liste2[$l2]['table'] = $subCategories[$this->liste2[$l2]['table']];
+				$this->liste2[$l2]['table'] = $subCategories[substr($this->liste2[$l2]['table'],strlen($Query2->getPrefix()))];
 			//exit($this->liste2);		
 		}
 		$this->h1 = $uri[0];
