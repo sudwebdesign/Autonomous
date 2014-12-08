@@ -91,7 +91,7 @@
 		<a href="Partenaires">Partenaires</a>
 		<a href="Contact">Nous Contacter</a>
 	</footer>
-	<script type="text/javascript" src="js/js.pack.js"></script>
+	<script type="text/javascript" src="js/js-is.pack.js"></script>
 	<script type="text/javascript"><?use Surikat\Core\Dev;?>
 		<?if(Dev::has(Dev::CSS)):?>$css().dev=true;<?endif;?>
 		<?if(Dev::has(Dev::JS)):?>$js().dev=true;<?endif;?>
