@@ -1,10 +1,6 @@
 <?php namespace Model;
-final class Table_Association extends ATable_Main{	
-	function onValidate(){
-		parent::onValidate();
-		if(strlen($this->raison)>200)
-			$this->error('raison','Votre dépasse 200');
-	}
+final class TableRessource extends AbstractMainTable{
+	//function onValidate(){}
 	//function onNew(){}
 	//function onCreate(){}
 	//function onCreated(){}

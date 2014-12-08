@@ -1,7 +1,7 @@
 <?php namespace Model;
 use Model\Query;
 use Core\STR;
-abstract class ATable_Keyword extends Table{
+abstract class AbstractKeywordTable extends Table{
 	static function findRewrite($find,&$rewrite){
 		$table = R::getClassModel(get_called_class());
 		$row = (new Query($table))

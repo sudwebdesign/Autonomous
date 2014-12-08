@@ -1,15 +1,12 @@
 <?php namespace Model;
-class Table_User extends Table{
-	//function onNew(){}
-	//function onUpdate(){}
-	function onCreate(){
-		$this->created = date('Y-m-d H:i:s');
-	}
+final class TableMediatheque extends AbstractMainTable{
 	//function onValidate(){}
+	//function onNew(){}
+	//function onCreate(){}
 	//function onCreated(){}
 	//function onRead(){}
+	//function onUpdate(){}
 	//function onUpdated(){}
 	//function onDelete(){}
 	//function onDeleted(){}
-
 }

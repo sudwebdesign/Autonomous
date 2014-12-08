@@ -1,5 +1,5 @@
 <?php namespace Model;
-final class Table_Mediatheque extends ATable_Main{
+final class TableProjet extends AbstractMainTable{
 	//function onValidate(){}
 	//function onNew(){}
 	//function onCreate(){}

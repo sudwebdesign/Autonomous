@@ -1,7 +1,7 @@
 <?php namespace Presenter;
 use Surikat\Core\Domain;
 use Surikat\Tool\session;
-use Model\Table_Taxonomy;
+use Model\TableTaxonomy;
 use Presenter\Truncating;
 use Route\Finder_ByTml;
 class Basic extends \Surikat\Presenter\Basic{
@@ -11,9 +11,9 @@ class Basic extends \Surikat\Presenter\Basic{
 		$this->URI = $this->getView()->getController()->getRouter();
 		
 		$this->timeCompiled			= time();
-		$this->taxonomyRessource	= Table_Taxonomy::getChildrenbyLabel('Ressource');
-		$this->taxonomyEvenement	= Table_Taxonomy::getChildrenbyLabel('Événement');
-		$this->taxonomyAnnonce	= Table_Taxonomy::getChildrenbyLabel('Annonce');
+		$this->taxonomyRessource	= TableTaxonomy::getChildrenbyLabel('Ressource');
+		$this->taxonomyEvenement	= TableTaxonomy::getChildrenbyLabel('Événement');
+		$this->taxonomyAnnonce	= TableTaxonomy::getChildrenbyLabel('Annonce');
 		$this->BASE_HREF = Domain::getBaseHref();
 		$this->HREF = $this->BASE_HREF.$this->URI[0];
 		

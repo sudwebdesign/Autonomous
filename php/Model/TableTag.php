@@ -1,6 +1,6 @@
 <?php namespace Model;
 use Surikat\Core\Ruler;
-final class Table_Tag extends ATable_Keyword{
+final class TableTag extends AbstractKeywordTable{
 	protected $minLabelLength = 4;
 	protected $maxLabelLength = 25;
 	function onValidate(){

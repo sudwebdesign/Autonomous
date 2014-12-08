@@ -1,7 +1,7 @@
 <?php namespace Model;
 use Core\Ruler;
 use Route\Router_SuperURI;
-abstract class ATable_Main extends Table{
+abstract class AbstractMainTable extends Table{
 	protected $minTitreLength = 8;
 	protected $maxTitreLength = 250;
 	protected static $columnDocumentFulltextLanguage = 'french';

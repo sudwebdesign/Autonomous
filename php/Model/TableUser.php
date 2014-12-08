@@ -1,14 +1,15 @@
 <?php namespace Model;
-final class Table_Annonce extends ATable_Main{
-	//function onValidate(){
-		//parent::onValidate();
-	//}
+class TableUser extends Table{
 	//function onNew(){}
-	//function onCreate(){}
+	//function onUpdate(){}
+	function onCreate(){
+		$this->created = date('Y-m-d H:i:s');
+	}
+	//function onValidate(){}
 	//function onCreated(){}
 	//function onRead(){}
-	//function onUpdate(){}
 	//function onUpdated(){}
 	//function onDelete(){}
 	//function onDeleted(){}
+
 }

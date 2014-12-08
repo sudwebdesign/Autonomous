@@ -1,5 +1,5 @@
 <?php namespace Model;
-final class Table_Geoname extends Table{	
+final class TableGeoname extends Table{	
 	static $columnPointCast	= 'point';
 	//var $columnPointWriteCol = 'GeomFromText'; //MySql
 	//var $columnPointReadCol	= 'asText'; //MySql

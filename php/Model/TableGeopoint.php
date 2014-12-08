@@ -1,5 +1,5 @@
 <?php namespace Model;
-final class Table_Geopoint extends Table{
+final class TableGeopoint extends Table{
 	use Mixin_Geopoint;
 	function onValidate(){
 		if(false===($this->lat=$this->checkLat($this->lat)))

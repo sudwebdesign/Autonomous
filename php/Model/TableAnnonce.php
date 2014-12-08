@@ -1,6 +1,8 @@
 <?php namespace Model;
-final class Table_Projet extends ATable_Main{
-	//function onValidate(){}
+final class TableAnnonce extends AbstractMainTable{
+	//function onValidate(){
+		//parent::onValidate();
+	//}
 	//function onNew(){}
 	//function onCreate(){}
 	//function onCreated(){}

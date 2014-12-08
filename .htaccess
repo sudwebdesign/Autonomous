@@ -136,7 +136,6 @@ AddType text/x-vcard                   vcf
 </IfModule>
 FileETag None
 Options -MultiViews 
-ErrorDocument 404 /404.html
 AddDefaultCharset utf-8
 AddCharset utf-8 .html .css .js .xml .json .rss .atom
 <IfModule php5_module>
@@ -182,6 +181,8 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_URI} !^/Surikat/
 RewriteCond %{DOCUMENT_ROOT}/Surikat/$1.$2 -f
 RewriteRule ^(.*)\.(css|js|png|jpg|gif|ttf|woff)$ /Surikat/$1.$2 [L,QSA]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)\.(png|gif|jpg|jpeg|bmp|tiff)$ /img/404.png [L,QSA]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)\.(css|js)$ /service/synaptic?file=$1.$2 [L]
 
