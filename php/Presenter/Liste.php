@@ -47,8 +47,10 @@ class Liste extends Basic{
 		$i = 0;
 		$this->thematics = [];
 		$Query->openHavingOr();
+		$this->groupingByAnd = false;
 		while($tag=$uri[$i+=1]){
 			if(is_array($tag)){
+				$this->groupingByAnd = true;
 				$Query->openHavingAnd();
 				foreach($tag as $subTag){
 					$Query->joinWhere('{$prefix}tag.name = ? ',[$subTag]);

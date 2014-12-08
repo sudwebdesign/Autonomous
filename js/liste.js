@@ -1,7 +1,7 @@
 $js('jquery',function(){
 	$('form#search_panel').submit(function(e){
 		e.preventDefault();
-		var data,ndata,location,eq,newloc,nlocation;
+		var data,ndata,location,eq,newloc,nlocation,joiner,thematic;
 		eq = ':';
 		location = decodeURIComponent(document.location.pathname.substr(1));
 		location = location.split('+').shift();
@@ -10,10 +10,16 @@ $js('jquery',function(){
 		newloc = [];
 		for(var k in data)
 			ndata[data[k].name] = data[k].value;
+		if(ndata['groupingByAnd'])
+			joiner = '&';
+		else
+			joiner = '+';
 		if(ndata['thematic'].trim()){
 			ndata['thematic'] = ndata['thematic'].split(' ');
+			thematic = [];
 			for(var i in ndata['thematic'])
-				newloc.push(ndata['thematic'][i]);
+				thematic.push(ndata['thematic'][i]);
+			newloc.push(thematic.join(joiner));
 		}
 		if(ndata['phonemic'])
 			newloc.push('phonemic'+eq+ndata['phonemic']);
