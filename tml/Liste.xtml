@@ -54,10 +54,11 @@
 					<if "$img=$THIS->imageByItem($item)">
 						<img src="<?=$img?>" alt="<?=$item->atitle?>" title="<?=$item->atitle?>" />
 					</if>
-					<if "$URI->phonemic"> ... </if>
+					<?$presentation_length=strlen($item->presentation);?>
+					<if "$URI->phonemic&&$presentation_length!=$item->presentation_length"> ... </if>
 					<?=$item->presentation?>
 					<?/* <p>Auteur: <?=$item->user->email?></p> */?>
-					<if "$item->presentation_length>strlen($item->presentation)">
+					<if "$item->presentation_length>$presentation_length">
 						<i>(En savoir plus ...)</i>
 					</if>
 				</a>
