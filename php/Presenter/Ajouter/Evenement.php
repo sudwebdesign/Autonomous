@@ -1,8 +1,8 @@
 <?php namespace Presenter\Ajouter;
 use Model;
 use Model\R;
-use Tool\dates;
-use Tool\filter;
+use Tool\Dates;
+use Core\Filter;
 final class Evenement extends \Presenter\Ajouter{
 	function POST_Specifications($bean){
 		$this->POST_Dates($bean);

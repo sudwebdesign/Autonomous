@@ -1,5 +1,5 @@
 <?php namespace Model;
-use Tool\ruler;
+use Core\Ruler;
 use Route\Router_SuperURI;
 abstract class ATable_Main extends Table{
 	protected $minTitreLength = 8;
@@ -13,13 +13,13 @@ abstract class ATable_Main extends Table{
 		'user			<	email		/C',
 	];
 	function onValidate(){
-		if(!ruler::minchar($this->title,$this->minTitreLength))
+		if(!Ruler::minchar($this->title,$this->minTitreLength))
 			$this->error('title','Le titre doit comporter minimum '.$this->minTitreLength.' caractères');
-		elseif(!ruler::maxchar($this->titre,$this->maxTitreLength))
+		elseif(!Ruler::maxchar($this->titre,$this->maxTitreLength))
 			$this->error('title','Le titre doit comporter maximum '.$this->maxTitreLength.' caractères');
-		if($this->tel&&!ruler::tel($this->tel))
+		if($this->tel&&!Ruler::tel($this->tel))
 			$this->error('tel','Numéro de téléphone non valide');
-		if($this->url&&!ruler::url($this->url))
+		if($this->url&&!Ruler::url($this->url))
 			$this->error('url','Lien non valide');
 		$this->presentationHtml = $this->presentation;
 		$this->presentation = html_entity_decode(strip_tags($this->presentationHtml));
