@@ -1,5 +1,4 @@
 <?php namespace Presenter;
-use Surikat\Core\Domain;
 use Surikat\Tool\session;
 use Model\TableTaxonomy;
 use Presenter\Truncating;
@@ -9,12 +8,9 @@ class Basic extends \Surikat\Presenter\Basic{
 	function assign(){
 		//$this->URI = $this->View->get('URI');
 		$this->URI = $this->getView()->getController()->getRouter();
-		
-		$this->timeCompiled			= time();
 		$this->taxonomyRessource	= TableTaxonomy::getChildrenbyLabel('Ressource');
 		$this->taxonomyEvenement	= TableTaxonomy::getChildrenbyLabel('Événement');
 		$this->taxonomyAnnonce	= TableTaxonomy::getChildrenbyLabel('Annonce');
-		$this->BASE_HREF = Domain::getBaseHref();
 		$this->HREF = $this->BASE_HREF.$this->URI[0];
 		
 		$x = explode('-',$this->URI[0]);
@@ -24,8 +20,6 @@ class Basic extends \Surikat\Presenter\Basic{
 	function dynamic(){
 		//$this->URI = $this->View->get('URI');
 		$this->URI = $this->getView()->getController()->getRouter();
-		
-		$this->time		= time();
 		$this->title	= (($u=$this->URI[0])?$u.' - ':'').'Autonomie et Partage';
 		$this->h1		= $this->title;
 	}

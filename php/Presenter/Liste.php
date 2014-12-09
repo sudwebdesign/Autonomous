@@ -131,6 +131,7 @@ class Liste extends Basic{
 		if($this->thematics->count())
 			$Query
 				->select('COUNT(DISTINCT({$prefix}thematic.name)) as count_tag_rank')
+				//->where('{$prefix}thematic.name IN ?',[$this->thematics->getArray()])
 				->where('{$prefix}thematic.name IN :thematic')
 				->set('thematic',$this->thematics->getArray())
 				->orderBy('count_tag_rank DESC')
