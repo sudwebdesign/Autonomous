@@ -13,7 +13,7 @@
 			<hr>
 			<if "$item->url"><p><i>Lien : </i><a href="<?=$item->url?>" title="<?=$item->atitle?>"><?=$item->title?></a></p></if>
 			<if "$item->tel"><p><i>Télépnone : </i><?=$item->tel?></p></if>
-			<p><i>Créé le : </i><?=strftime('%A %e %B %G à %k:%M:%S',strtotime($item->created))?></p>
+			<p><i>Créé le : </i><?=strftime('%A %e %B %G à %k:%M:%S',@strtotime($item->created))?></p>
 			<hr>
 			<if "is_object($item->tag)&&$item->tag->count()">
 				<ul class="tags">
