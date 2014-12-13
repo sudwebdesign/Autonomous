@@ -93,7 +93,10 @@
 	</footer>
 	<script type="text/javascript" src="js/js-is.pack.js"></script>
 	<script type="text/javascript"><?use Surikat\Core\Dev;?>
-		<?if(Dev::has(Dev::CSS)):?>$css().dev=true;<?endif;?>
+		<?if(Dev::has(Dev::CSS)):?>
+			$css().dev=true;
+			$js('window-size-bookmarklet');
+		<?endif;?>
 		<?if(Dev::has(Dev::JS)):?>$js().dev=true;<?endif;?>
 		$js().min = false
 		$css().min = false;
