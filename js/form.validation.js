@@ -26,8 +26,27 @@ $js('jquery',function(){
 			val = decodeURIComponent(val);
 		}
 		catch(e){}
+		var prefixs,prefix,prefixing,brk;
+		prefixs = ['https://','http://']
 		if(val.indexOf('://')<0){
-			val = 'http://'+val;
+			if(val){
+				for(var y=0;y<prefixs.length;y++){
+					prefix = prefixs[y];
+					prefixing = '';
+					for(var i=0;i<prefix.length;i++){
+						prefixing += prefix.charAt(i);
+						if(val==prefixing){
+							val = '';
+							brk = true;
+							break;
+						}
+					}
+					if(brk){
+						break;
+					}
+				}
+				val = prefix+val;
+			}
 		}
 		if(oval!=val){
 			self.val(val);
