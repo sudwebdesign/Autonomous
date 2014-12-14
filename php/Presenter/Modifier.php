@@ -95,7 +95,7 @@ class Modifier extends Basic{
 			Post::clearPersistance();
 		}
 		catch(Exception_Validation $e){
-			$this->formErrors = $e->getData();
+			$this->formErrors = $e->getFlattenData();
 			$this->formPosted = false;
 		}
 	}
@@ -146,7 +146,7 @@ class Modifier extends Basic{
 				$entry->sharedTag[] = $tag;
 			}
 		}
-		if(is_object($G=$P->xownGeopoint)&&$G->label&&$G->lat!=''&&$G->lon!=''){
+		if(is_object($G=$P->ownGeopoint)&&$G->label&&$G->lat!=''&&$G->lon!=''){
 			$entry->xownGeopoint[] = R::create('geopoint',[
 				'label' => $G->label,
 				'lat' => $G->lat,

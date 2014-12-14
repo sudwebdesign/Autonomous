@@ -6,8 +6,8 @@ final class TableTag extends AbstractKeywordTable{
 	function onValidate(){
 		parent::onValidate();
 		if(!Ruler::minchar($this->name,$this->minLabelLength))
-			$this->error('sharedTag.name','Le tag doit comporter minimum '.$this->minLabelLength.' caractères');
+			$this->error('name','Le tag doit comporter minimum '.$this->minLabelLength.' caractères');
 		elseif(!Ruler::maxchar($this->name,$this->maxLabelLength))
-			$this->error('sharedTag.name','Le tag doit comporter maximum '.$this->maxLabelLength.' caractères');
+			$this->error('name','Le tag doit comporter maximum '.$this->maxLabelLength.' caractères');
 	}
 }

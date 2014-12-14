@@ -33,11 +33,11 @@ class Ajouter extends Basic{
 			$entry = $this->POST_Common($type);
 			if(method_exists($this,'POST_Specifications'))
 				$this->POST_Specifications($entry);
-			R::store($entry);
+			$entry->store();
 			Post::clearPersistance();
 		}
 		catch(Exception_Validation $e){
-			$this->formErrors = $e->getData();
+			$this->formErrors = $e->getFlattenData();
 			$this->formPosted = false;
 		}
 	}
@@ -85,7 +85,7 @@ class Ajouter extends Basic{
 				$entry->sharedTag[] = $tag;
 			}
 		}
-		if(is_object($G=$P->xownGeopoint)&&$G->label&&$G->lat!=''&&$G->lon!=''){
+		if(is_object($G=$P->ownGeopoint)&&$G->label&&$G->lat!=''&&$G->lon!=''){
 			$entry->xownGeopoint[] = R::create('geopoint',[
 				'label' => $G->label,
 				'lat' => $G->lat,

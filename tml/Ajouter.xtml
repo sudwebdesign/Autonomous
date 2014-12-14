@@ -26,7 +26,6 @@
 							<i class='s'><?=$type?> sauvé.</i> -->
 						<else>
 							<i class='i'><?=$type?> non enregistré. Veuillez corriger afin de valider le formulaire :</i>
-							<foreach "$formErrors as $fkey=>$sol"><br /><i>solution : <?=$sol?></i></foreach>
 							<dev><?=$formErrors?></dev>
 						</if>
 					</h4>
@@ -63,15 +62,15 @@
 					<legend>Emplacement <small>(commune,lieu ou adresse)</small></legend>
 					<geo-completer>
 						<fieldset>
-							<input id="geoname" class="geoname" name="xownGeopoint[label]" data-url="service/autocomplete/geoname" type="text" value="">
+							<input id="geoname" class="geoname" name="ownGeopoint[label]" data-url="service/autocomplete/geoname" type="text" value="">
 							<a class="show_button" href="<?=$URI?>#map">Rechercher sur la carte</a>
 							<fieldset>
 								<label for="geo-lat">Latitude</label>
-								<input name="xownGeopoint[lat]" id="geo-lat" class="in-latitude">
+								<input name="ownGeopoint[lat]" id="geo-lat" class="in-latitude">
 								<label for="geo-lng">Longitude</label>
-								<input name="xownGeopoint[lon]" id="geo-lng" class="in-longitude">
+								<input name="ownGeopoint[lon]" id="geo-lng" class="in-longitude">
 								<label for="geo-rayon">Rayon en km</label>
-								<input name="xownGeopoint[radius]" id="geo-rayon" class="in-radius">
+								<input name="ownGeopoint[radius]" id="geo-rayon" class="in-radius">
 							</fieldset>
 							<div class="remodal" data-remodal-id="map">
 								<input class="gg-maps" type="text" value="" placeholder="Rechercher un adresse, un lieu ou une commune">

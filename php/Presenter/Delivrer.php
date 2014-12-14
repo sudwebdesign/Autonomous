@@ -103,7 +103,7 @@ class Delivrer extends Basic{
 			Post::clearPersistance();
 		}
 		catch(Exception_Validation $e){
-			$this->formErrors = $e->getData();
+			$this->formErrors = $e->getFlattenData();
 			$this->formPosted = false;
 			$this->postDeleted = false;
 		}
