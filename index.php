@@ -5,10 +5,13 @@ use Core\Dev;
 Dev::level(
 	//Dev::CONTROL
 	Dev::STD
-	//|Dev::URI
+	//|Dev::ROUTE
 	//|Dev::MODEL
 	|Dev::CSS
 	|Dev::JS
 	//|Dev::IMG
 );
+
+//Model\R::remove('association');
+
 (new Controller\Application())->run(@$_SERVER['PATH_INFO']);

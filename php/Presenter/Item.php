@@ -65,7 +65,7 @@ class Item extends Basic{
 				$title = $location2;
 		}
 		$redirect = $this->URI[0].'+'.$title.'+'.$id;
-		if(!Dev::has(Dev::URI))
+		if(!Dev::has(Dev::ROUTE))
 			header('Location: '.$redirect,true,301);
 		else
 			echo 'Location: '.$redirect;
