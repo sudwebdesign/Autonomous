@@ -134,11 +134,13 @@ class Liste extends Basic{
 				//->where('{$prefix}thematic.name IN ?',[$this->thematics->getArray()])
 				->where('{$prefix}thematic.name IN :thematic')
 				->set('thematic',$this->thematics->getArray())
-				->orderBy('count_tag_rank DESC')
+				->orderBy('count_tag_rank')
+				->sort('DESC')
 			;
 
 		$Query
-			->orderBy('created DESC')
+			->orderBy('created')
+			->sort('DESC')
 		;
 
 		if($rad){
