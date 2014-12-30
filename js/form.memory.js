@@ -3,6 +3,6 @@ $js(true,[
 	'is.ckeditor',
 	'is.daterange',
 ],function(){
-	<!--#include virtual="/js/sisyphus.js" -->
+	<!--#include virtual="./sisyphus.js" -->
 	$('main>form[id][action][role=form]:not(.form-posted)').sisyphus();
 });

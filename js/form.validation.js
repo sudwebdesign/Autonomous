@@ -1,5 +1,5 @@
 $js('jquery',function(){
-	<!--#include virtual="/js/validate.js" -->
+	<!--#include virtual="./validate.js" -->
 	var onSubmit = function(e){
 		e.preventDefault();
 		var email = $(document).data('persona.email');

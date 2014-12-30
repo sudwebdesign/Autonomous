@@ -27,7 +27,10 @@
 		</form>
 		<ul is="dropdown">
 			<li>
-				<a is="persona" data-sitename="UDAC66" data-bgcolor="#93a72d" href="javascript:;">Se connecter</a>
+				<!--
+				<a href="Login">Se connecter</a>
+				-->
+					<a is="persona" data-sitename="Autonomous" data-bgcolor="#93a72d" href="javascript:;">Se connecter</a>
 				<ul class="disabled">
 					<li>
 						<a class="persona logout" href="javascript:;">Déconnexion</a>

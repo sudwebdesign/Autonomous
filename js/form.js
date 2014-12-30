@@ -1,2 +1,2 @@
-<!--#include virtual="/js/form.memory.js" -->
-<!--#include virtual="/js/form.validation.js" -->
+<!--#include virtual="./form.memory.js" -->
+<!--#include virtual="./form.validation.js" -->
