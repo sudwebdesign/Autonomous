@@ -16,12 +16,12 @@
 				<input type="search" name="phonemic" placeholder="Rechercher" value="<?=isset($URI)?$URI->phonemic:''?>" data-url="service/autocomplete/searchbox">
 			</div>
 			<select>
-				<option value="Événements" <?=$URI[0]=='Événements'?'selected="selected"':''?>>&#xf073;</option>
-				<option value="Ressources" <?=$URI[0]=='Ressources'?'selected="selected"':''?>>&#xf013;</option>
-				<option value="Projets" <?=$URI[0]=='Projets'?'selected="selected"':''?>>&#xf005;</option>
-				<option value="Associations" <?=$URI[0]=='Associations'?'selected="selected"':''?>>&#xf0c0;</option>
-				<option value="Annonces" <?=$URI[0]=='Annonces'?'selected="selected"':''?>>&#xf0ec;</option>
-				<option value="Médiathèques" <?=$URI[0]=='Médiathèques'?'selected="selected"':''?>>&#xf02d;</option>
+				<option value="Événements" <?=isset($URI)&&$URI[0]=='Événements'?'selected="selected"':''?>>&#xf073;</option>
+				<option value="Ressources" <?=isset($URI)&&$URI[0]=='Ressources'?'selected="selected"':''?>>&#xf013;</option>
+				<option value="Projets" <?=isset($URI)&&$URI[0]=='Projets'?'selected="selected"':''?>>&#xf005;</option>
+				<option value="Associations" <?=isset($URI)&&$URI[0]=='Associations'?'selected="selected"':''?>>&#xf0c0;</option>
+				<option value="Annonces" <?=isset($URI)&&$URI[0]=='Annonces'?'selected="selected"':''?>>&#xf0ec;</option>
+				<option value="Médiathèques" <?=isset($URI)&&$URI[0]=='Médiathèques'?'selected="selected"':''?>>&#xf02d;</option>
 			</select>
 			<input type="submit" value="Rechercher">
 		</form>

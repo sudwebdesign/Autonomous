@@ -11,7 +11,4 @@ Dev::level(
 	|Dev::JS
 	//|Dev::IMG
 );
-
-//Model\R::remove('association');
-
 (new Controller\Application())->run(@$_SERVER['PATH_INFO']);
