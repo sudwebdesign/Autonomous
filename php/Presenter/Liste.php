@@ -140,7 +140,7 @@ class Liste extends Basic{
 			;
 
 		$Query
-			->orderBy('created')
+			->orderBy('{$prefix}'.$this->taxonomy.'.created')
 			->sort('DESC')
 		;
 
@@ -213,10 +213,10 @@ class Liste extends Basic{
 		foreach(array_keys($subCategories) as $cat){
 			if(!$Query->tableExists($cat))
 				continue;
-			$Query2 = (new Query())
+			$Query2 = (new Query($cat))
 				->select(['id','pg_class.relname AS table','title','created'])
 				->limit($this->limitation2)
-				->from($cat.'","'.'pg_class')
+				->from('pg_class')
 				->where('"{$prefix}'.$cat.'".tableoid = pg_class.oid')
 			;
 			if($full)
