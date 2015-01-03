@@ -6,7 +6,7 @@ use Core\Dev;
 //Dev::on(Dev::CONTROL);
 //Dev::on(Dev::VIEW);
 //Dev::on(Dev::PRESENT);
-Dev::on(Dev::MODEL);
+//Dev::on(Dev::MODEL);
 //Dev::on(Dev::MODEL_SCHEMA);
 //Dev::on(Dev::ROUTE);
 //Dev::on(Dev::I18N);
