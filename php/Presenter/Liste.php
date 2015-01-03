@@ -89,7 +89,8 @@ class Liste extends Basic{
 					->groupBy('{$prefix}geopoint.lon')
 					->groupBy('{$prefix}geopoint.radius')
 					->select('geodistance({$prefix}geopoint.lat,{$prefix}geopoint.lon,?,?) as distance',[$lat,$lon])
-					->orderBy('distance ASC')
+					->orderBy('distance')
+					->sort('ASC')
 				;
 			if($rad)
 				$Query
