@@ -16,4 +16,4 @@ use Core\Dev;
 Dev::on(Dev::STD);		//PHP+CONTROL+VIEW+PRESENT+MODEL_SCHEMA+I18N
 Dev::on(Dev::CSS);
 Dev::on(Dev::JS);
-(new Controller\Application())->run(@$_SERVER['PATH_INFO']);
+(new Dispatcher\Index())->run(@$_SERVER['PATH_INFO']);

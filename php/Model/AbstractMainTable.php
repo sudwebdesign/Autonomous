@@ -1,6 +1,6 @@
 <?php namespace Model;
 use Core\Ruler;
-use Route\Router_SuperURI;
+use Route\Faceted;
 abstract class AbstractMainTable extends Table{
 	protected $minTitreLength = 8;
 	protected $maxTitreLength = 250;
@@ -23,7 +23,7 @@ abstract class AbstractMainTable extends Table{
 			$this->error('url','Lien non valide');
 		$this->presentationHtml = $this->presentation;
 		$this->presentation = html_entity_decode(strip_tags($this->presentationHtml));
-		$this->titleHref = (new Router_SuperURI())->filterParam($this->title);
+		$this->titleHref = (new Faceted())->filterParam($this->title);
 	}
 	function onUpdate(){
 		$this->modified = date('Y-m-d H:i:s');
