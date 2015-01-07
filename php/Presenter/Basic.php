@@ -6,7 +6,6 @@ use Route\Finder_ByTml;
 class Basic extends \Surikat\Presenter\Basic{
 	protected $URI;
 	function assign(){
-		//$this->URI = $this->View->get('URI');
 		$this->URI = $this->getView()->getController()->getRouter();
 		$this->taxonomyRessource	= TableTaxonomy::getChildrenbyLabel('Ressource');
 		$this->taxonomyEvenement	= TableTaxonomy::getChildrenbyLabel('Événement');
@@ -18,7 +17,6 @@ class Basic extends \Surikat\Presenter\Basic{
 		$this->mode = $x[0];
 	}
 	function dynamic(){
-		//$this->URI = $this->View->get('URI');
 		$this->URI = $this->getView()->getController()->getRouter();
 		$this->title	= (($u=$this->URI[0])?$u.' - ':'').'Autonomie et Partage';
 		$this->h1		= $this->title;
