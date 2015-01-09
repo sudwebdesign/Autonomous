@@ -3,7 +3,7 @@ use Model\R;
 use Model\Query;
 use Tool\JSON;
 use Core\STR;
-class Service_Autocomplete {
+class ServiceAutocomplete {
 	const DEFAULT_LG_CODE = 'fr';
 	const DEFAULT_COUNTRY_CODE = 'fr';
 	const DEFAULT_COUNTRY = 'France';

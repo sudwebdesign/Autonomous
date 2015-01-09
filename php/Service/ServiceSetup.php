@@ -2,7 +2,7 @@
 use Surikat\Tool\Geocoder\RadiusFinder;
 use Surikat\Tool\CsvImporter;
 use Surikat\Model\R;
-class Service_Setup {
+class ServiceSetup {
 	static function method(){
 		set_time_limit(0);
 		ob_implicit_flush(true);
