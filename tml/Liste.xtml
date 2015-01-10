@@ -30,7 +30,7 @@
 					<geo-completer>
 						<fieldset>
 							<input id="geoname" class="geoname" name="geo" data-url="service/autocomplete/geoname" type="text"  value="<?=$URI->geo?>" autocomplete="off">
-							<a class="show_button" href="<?=$URI->getPath()?>#map">Afficher la carte</a>
+							<a class="show_button" href="./<?=$URI?>#map">Afficher la carte</a>
 							<fieldset>
 								<label for="geo-lat">Latitude</label>
 								<input name="lat" id="geo-lat" class="in-latitude" value="<?=$URI->lat?>" autocomplete="off">
@@ -55,8 +55,8 @@
 			<h1><?=$h1?> (<?=$countListe?> / <?=($count)?$count:$countListe?> résultats)</h1>
 			<foreach "(array)@$liste as $id=>$item">
 				<?$href=$subUri.'+'.$URI->filterParam($item->title).'+'.$id;?>
-				<h2><a href="<?=$href?>"><?=$item->title?></a></h2>
-				<a href="<?=$href?>">
+				<h2><a href="./<?=$href?>"><?=$item->title?></a></h2>
+				<a href="./<?=$href?>">
 					<if "$img=$THIS->imageByItem($item)">
 						<img src="<?=$img?>" alt="<?=$item->atitle?>" title="<?=$item->atitle?>" />
 					</if>
@@ -72,13 +72,13 @@
 					<ul class="tags">
 						<foreach "$item->tag as $tag">
 							<if "$tag">
-								<li><h5><a href="<?=$type.'+'.$tag->name?>"><?=$tag->name?></a></h5></li>
+								<li><h5><a href="./<?=$type.'+'.$tag->name?>"><?=$tag->name?></a></h5></li>
 							</if>
 						</foreach>
 						<if "is_object($item->geopoint)&&$item->geopoint->count()">
 							<foreach "$item->geopoint as $geopoint">
 								<if "$geopoint->label">
-									<li><h5><a href="/<?=ucfirst($type).'+geo:'.$geopoint->label.'+lat:'.$geopoint->lat.'+lon:'.$geopoint->lon.($geopoint->radius?'+rad:'.$geopoint->radius:'')?>">
+									<li><h5><a href="./<?=ucfirst($type).'+geo:'.$geopoint->label.'+lat:'.$geopoint->lat.'+lon:'.$geopoint->lon.($geopoint->radius?'+rad:'.$geopoint->radius:'')?>">
 										<?=$geopoint->label?>
 									</a></h5></li>
 								</if>
@@ -89,21 +89,20 @@
 				<hr>
 			</foreach>
 			<if "$count">
-				<?$irup=str_replace($pagination->prefix.($page),'',$URI);?>
 				<ul class="simple-pagination light-theme">
 					<if "$page==1">
 						<li class="active"><span class="current prev">Début</span></li>
 						<li class="active"><span class="current prev">Précédent</span></li>
 					<else>
-						<li><a class="prev page-link" href="<?=$irup?>">Début</a></li>
-						<li><a class="prev page-link" href="<?=$irup.($page==2?'':$pagination->prefix.($page-1))?>">Précédent</a></li>
+						<li><a class="prev page-link" href="./<?=$pagination->href?>">Début</a></li>
+						<li><a class="prev page-link" href="./<?=$pagination->href.($page==2?'':$pagination->prefix.($page-1))?>">Précédent</a></li>
 					</if>
 					<for from="$pagination->start" to="$pagination->end">
 						<if "$page==$i">
 							<li class="active"><span class="current"><?=$i?></span></li>
 						<else>
 							<li>
-								<a class="page-link" href="<?=$irup.($i>1?$pagination->prefix.$i:'')?>"><?=$i?></a>
+								<a class="page-link" href="./<?=$pagination->href.($i>1?$pagination->prefix.$i:'')?>"><?=$i?></a>
 							</li>
 						</if>
 					</for>
@@ -113,7 +112,7 @@
 						</li>
 					<else>
 						<li>
-							<a class="next page-link" href="<?=$irup.$pagination->prefix.($page+1)?>">Suivant</a>
+							<a class="next page-link" href="./<?=$pagination->href.$pagination->prefix.($page+1)?>">Suivant</a>
 						</li>
 					</if>
 				</ul>
@@ -126,8 +125,8 @@
 			<h3>Flux d'autres articles</h3>
 			<foreach "(array)@$liste2 as $id=>$item">
 				<?$href=$item->table.'+'.$URI->filterParam($item->title).'+'.$item->id;?>
-				<h2 title="Ajouté le <?=$item->created?>"><a class="<?=$item->table?>" href="<?=$href?>"><?=$item->title?></a></h2>
-				<a href="<?=$href?>">
+				<h2 title="Ajouté le <?=$item->created?>"><a class="<?=$item->table?>" href="./<?=$href?>"><?=$item->title?></a></h2>
+				<a href="./<?=$href?>">
 					<if "$URI->phonemic"> ... </if>
 					<?=$item->presentation?>
 					<if "$item->presentation_length>strlen($item->presentation)"> ...</if>

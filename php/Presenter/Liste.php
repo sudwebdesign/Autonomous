@@ -1,5 +1,6 @@
 <?php namespace Presenter;
 use Core\Dev;
+use Core\Domain;
 use Model\Query;
 use Model\R;
 use View;
@@ -40,6 +41,8 @@ class Liste extends Basic{
 				//'tag<>			taxonomy<> taxonomy2:taxonomies<> name',
 			])
 		;
+		
+		//$Query->from('test')->where('test.evenement_id = '.$this->taxonomy.'.id')->select('test.name as testName')->groupBy('test.name');
 		
 		if(method_exists($this,'addSelect'))
 			$this->addSelect($Query);
@@ -122,8 +125,8 @@ class Liste extends Basic{
 			->groupBy('url')
 			->groupBy('created')
 			->groupBy('presentation')
-			->groupBy('"{$prefix}user".id')
-			->groupBy('"{$prefix}user".email')
+			->groupBy('"{$prefix}user"."id"')
+			->groupBy('"{$prefix}user"."email"')
 		;
 		
 		if($uri->phonemic)
@@ -181,9 +184,15 @@ class Liste extends Basic{
 				->limit($this->limit,$this->offset)
 			;
 		}
+		
 		$this->count = $Query->countAll();
+		
+		
 		$this->pagination();
-
+		$this->pagination->href = clone $this->URI;
+		unset($this->pagination->href->page);
+		$this->pagination->href = $this->pagination->href;
+		
 		$this->liste = $Query->tableMD();
 		$this->countListe = count($this->liste);
 		foreach($this->liste->keys() as $akey){
