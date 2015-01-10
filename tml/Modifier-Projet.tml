@@ -1,2 +1,2 @@
-<Presenter:modifier:projet uri="dynamic" TAXONOMY="projet" />
+<Presenter:modifier:projet uri="dynamic" TAXONOMY="Projet" />
 	<extend "Modifier"></extend>

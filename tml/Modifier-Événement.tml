@@ -1,2 +1,2 @@
-<Presenter:modifier:evenement uri="dynamic" TAXONOMY="evenement" />
+<Presenter:modifier:evenement uri="dynamic" TAXONOMY="Événement" />
 	<extend "Modifier"></extend>
