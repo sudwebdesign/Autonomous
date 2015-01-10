@@ -1,6 +1,8 @@
-<?use Core\STR;?>
-<?use Core\Post;?>
-<?use Core\Session;?>
+<?
+	use Core\STR;
+	use Core\Post;
+	use Core\Session;
+?>
 <extend>	
 	<js+css form>
 	<attr selector="main" addClass="present-ajouter">
