@@ -16,25 +16,33 @@ class Item extends Basic{
 		$uri = $this->URI;
 		if(!filter_var($uri[2],FILTER_VALIDATE_INT)){
 			$q = new Query($this->taxonomy);
-			if(filter_var($uri[1],FILTER_VALIDATE_INT)&&($redirect = $q->select('titleHref')->where('id=?',[$uri[1]])->getCell()))
+			if(filter_var($uri[1],FILTER_VALIDATE_INT)){
+				$redirect = $q->select('titleHref')->where('id=?',[$uri[1]])->getCell();
 				$this->redirect($redirect,$uri[1]);
-			elseif($redirect = $q->select('id')->where('"titleHref"=?',[$uri[1]])->getCell())
-				$this->redirect($redirect);
+			}
+			else{
+				$redirect = $q->select('id')->where('"titleHref"=?',[$uri[1]])->getCell();
+				if($redirect){
+					$this->redirect($redirect);
+				}
+			}
 			exit;
 		}
 		$this->Query = (new Query($this->taxonomy))
-			->where('"'.$this->taxonomy.'"'.'.id=?',[$uri[2]])
+			->where('"{$prefix}'.$this->taxonomy.'"'.'.id=?',[$uri[2]])
 		;
-		//Dev::on(Dev::MODEL);
 		$this->item = $this->Query->row4D();
-		if(!$this->item->titleHref)
+		if(empty($this->item))
+			$this->getView()->getController()->error(404);
+		if(!$this->item->titleHref){
 			$this->item->titleHref = $this->URI->filterParam($this->item->title);
-		if($uri[1]!=$this->item->titleHref)
+		}
+		if($uri[1]!=$this->item->titleHref){
 			$this->redirect($this->item->titleHref);
+		}
 		$this->img = $this->imageByItem();
 		$this->files = $this->filesByItem();
 		$this->item->atitle = htmlspecialchars($this->item->title, ENT_COMPAT);
-		#var_dump($this);
 	}
 	function imageByItem($item=null){
 		if(!isset($item))
