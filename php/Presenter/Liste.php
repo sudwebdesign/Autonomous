@@ -117,17 +117,18 @@ class Liste extends Basic{
 			->select(['id','title','tel','url','created'])
 		;
 		
-		//for PgSql8 (no need in >=PgSql9.3)
-		$Query
-			->groupBy('id')
-			->groupBy('title')
-			->groupBy('tel')
-			->groupBy('url')
-			->groupBy('created')
-			->groupBy('presentation')
-			->groupBy('"{$prefix}user"."id"')
-			->groupBy('"{$prefix}user"."email"')
-		;
+		if($Query->getDB()->getType()=='pgsql8'){ //for PgSql8 (no need in >=PgSql9.3)
+			$Query
+				->groupBy('id')
+				->groupBy('title')
+				->groupBy('tel')
+				->groupBy('url')
+				->groupBy('created')
+				->groupBy('presentation')
+				->groupBy('"{$prefix}user"."id"')
+				->groupBy('"{$prefix}user"."email"')
+			;
+		}
 		
 		if($uri->phonemic)
 			$Query->groupBy('document');
@@ -186,7 +187,7 @@ class Liste extends Basic{
 		}
 		
 		$this->count = $Query->countAll();
-		
+		//$this->count = R::count($this->taxonomy);
 		
 		$this->pagination();
 		$this->pagination->href = clone $this->URI;
@@ -194,7 +195,10 @@ class Liste extends Basic{
 		$this->pagination->href = $this->pagination->href;
 		
 		$this->liste = $Query->tableMD();
+		//$this->liste = R::findAll($this->taxonomy,' LIMIT '.$this->limitation.' OFFSET '.$this->offset);
+		
 		$this->countListe = count($this->liste);
+		
 		foreach($this->liste->keys() as $akey){
 			$this->liste[$akey]['atitle']=htmlspecialchars($this->liste[$akey]['title'], ENT_COMPAT);
 		}
@@ -225,7 +229,7 @@ class Liste extends Basic{
 			$Query2 = (new Query($cat))
 				->select(['id','pg_class.relname AS table','title','created'])
 				->limit($this->limitation2)
-				->from('pg_class')
+				->from('"pg_class"')
 				->where('"{$prefix}'.$cat.'".tableoid = pg_class.oid')
 			;
 			if($full)
