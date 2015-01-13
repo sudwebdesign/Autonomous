@@ -89,10 +89,13 @@
 	</nav>
 	<main></main>
 	<footer>
-		<a href="Autonomie-et-Partage">Qui sommes nous ?</a>
-		<a href="Newsletter">Newsletter</a>
-		<a href="Partenaires">Partenaires</a>
-		<a href="Contact">Nous Contacter</a>
+		<include "surikat-powered.btml">
+		<div>
+			<a href="Autonomie-et-Partage">Qui sommes nous ?</a>
+			<a href="Newsletter">Newsletter</a>
+			<a href="Partenaires">Partenaires</a>
+			<a href="Contact">Nous Contacter</a>
+		</div>
 	</footer>
 	<script type="text/javascript" src="js/js-is.pack.js"></script>
 	<script type="text/javascript"><?use Surikat\Core\Dev;?>
