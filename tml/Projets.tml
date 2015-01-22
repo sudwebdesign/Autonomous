@@ -1,4 +1,0 @@
-<Presenter:liste:projet TAXONOMY="Projet" />
-<extend "Liste">
-	<attr selector="main" addClass="projets">
-</extend>

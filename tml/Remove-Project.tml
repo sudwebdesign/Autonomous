@@ -1,0 +1,168 @@
+<?
+use Core\STR;
+use Core\Session;
+use Core\Dev;
+use Model\Query;
+use Model\R;
+use Tool\FS;
+use Tool\PHP;
+use Core\Session;
+use Core\Post;
+use Tool\filter;
+use Tool\uploader;
+use Tool\deleter;
+use Tool\Geocoding;
+use Model\Exception_Validation;
+
+$taxonomy = 'project';
+$imageByItem = function($item=null)use($taxonomy){
+	if(!isset($item))
+		$item = $item;
+	return '/content/'.$taxonomy.'/'.$item->id.'/'.$URI->filterParam($item->title).'.png';
+};
+$filesByItem = function($item)use($taxonomy,$imageByItem){
+	$files = glob('content/'.$taxonomy.'/'.$item->id.'/*', GLOB_BRACE);
+	if(($i=array_search($imageByItem($item),$files))!==false)
+		unset($files[$i]);
+	return $files;
+};
+$redirection = function($location=null,$location2=null)use($URI){
+	$title = $URI[1];
+	$id = $URI[2];
+	if(isset($location)){
+		if(filter_var($location,FILTER_VALIDATE_INT))
+			$id = $location;
+		else
+			$title = $location;
+	}
+	if(isset($location2)){
+		if(filter_var($location2,FILTER_VALIDATE_INT))
+			$id = $location2;
+		else
+			$title = $location2;
+	}
+	$redirect = $URI[0].'+'.$title.'+'.$id;
+	if(!Dev::has(Dev::ROUTE))
+		header('Location: '.$redirect,true,301);
+	else
+		echo 'Location: '.$redirect;
+	exit;
+};
+
+Session::start();
+if(!filter_var($URI[2],FILTER_VALIDATE_INT)){
+	$q = new Query($this->taxonomy);
+	if(filter_var($URI[1],FILTER_VALIDATE_INT)&&($redirect = $q->select('titleHref')->where('id=?',[$URI[1]])->getCell()))
+		$redirection($redirect,$URI[1]);
+	elseif($redirect = $q->select('id')->where('"titleHref"=?',[$URI[1]])->getCell())
+		$redirection($redirect);
+	exit;
+
+}
+$this->Query = (new Query($this->taxonomy))
+	->where('"'.$this->taxonomy.'"'.'.id=?',[$URI[2]])
+;
+$this->item = $this->Query->row4D();
+if(!$this->item->titleHref)
+	$this->item->titleHref = $this->URI->filterParam($this->item->title);
+if($URI[1]!=$this->item->titleHref)
+	$redirection($this->item->titleHref);
+$this->img = $this->imageByItem();
+$this->files = $this->filesByItem();
+$this->item->atitle = htmlspecialchars($this->item->title, ENT_COMPAT);
+
+if(!empty($_POST)){
+	$this->formPosted = true;
+	$this->postDeleted = true;
+	try{
+		$entry = R::load($taxonomy,$URI[2]);
+		$user = Session::get('email');
+		if($user&&$entry->user_id){
+			$user = R::load('user',$entry->user_id);
+			$entry->user = $user;
+		}
+		else
+			$entry->error('user','required',true);
+		$P = Post::getObject();
+		$entry->deletion = $P->deletion;
+		$entry->validated = $P->validate;
+		if(method_exists($this,'POST_Specifications'))
+			$this->POST_Specifications($entry);
+		if($entry){
+			R::trash($entry);
+			deleter::alls(array(
+				'dir'=>'content/'.$taxonomy.'/'.$URI[2],
+				'deletion'=>true
+			));
+		}
+		Post::clearPersistance();
+	}
+	catch(Exception_Validation $e){
+		$this->formErrors = $e->getFlattenData();
+		$this->formPosted = false;
+		$this->postDeleted = false;
+	}
+}
+?>
+<extend>
+	<css item>
+	<css form>
+	<attr selector="main" addClass="present-item present-delivrer">
+	<append title> <?=$mode?> <?=$taxonomy?></append>
+	<write main>
+		<article class="<?=$taxonomy?>s">
+		<h1><?=$mode?> : <?=$taxonomy?> <i>(<?=$item->title?>)</i></h1>
+			<if "$img"><img src="<?=$img?>" alt="<?=$item->atitle?>" title="<?=$item->atitle?>" /></if>
+			<?=$item->presentationHtml?>
+			<hr>
+			<if "$item->url"><p><i>Lien : </i><a href="<?=$item->url?>" title="<?=$item->atitle?>"><?=$item->title?></a></p></if>
+			<if "$item->tel"><p><i>Télépnone : </i><?=$item->tel?></p></if>
+			<p><i>Créé le : </i><?=strftime('%A %e %B %G à %k:%M:%S',strtotime($item->created))?></p>
+			<hr>
+			<if "is_object($item->tag)&&$item->tag->count()">
+				<ul class="tags">
+					<foreach "$item->tag as $tag">
+						<if "$tag">
+							<li><h5><a href="<?=$taxonomy.'s+'.$tag->name?>"><?=$tag->name?></a></h5></li>
+						</if>
+					</foreach>
+					<if "is_object($item->geopoint)&&$item->geopoint->count()">
+						<foreach "$item->geopoint as $geopoint">
+								<if "$geopoint->label">
+									<li><h5><a href="/<?=$taxonomy.'s+geo:'.$geopoint->label.'+lat:'.$geopoint->lat.'+lon:'.$geopoint->lon.($geopoint->radius?'+rad:'.$geopoint->radius:'')?>">
+										<?=$geopoint->label?>
+									</a></h5></li>
+								</if>
+						</foreach>
+					</if>
+				</ul>
+			</if>
+			<form modelRules="<?=$taxonomy?>" id="<?=$mode?>-<?=$taxonomy?>" method="POST" enctype="multipart/form-data" role="form" <?=isset($formPosted)?'class="form-posted"':''?>>
+				<if "isset($formPosted)">
+					<input type="submit" value="Supprimé!" disabled>
+					<if "$formPosted">
+						<h3 class='o'><i class='d'><?=$taxonomy?> supprimé!</i>Dernier affichage pour ultime sauvegarde sur votre ordinateur (<?=$taxonomy?> enlevé)</h3>
+						<!--		
+							<i class='c'><?=$taxonomy?> enregistré et</i>
+							<i class='r'><?=$taxonomy?> publié.</i>
+							<i class='u'><?=$taxonomy?> corrigé.</i>
+							<i class='i'><?=$taxonomy?> information.</i>
+							<i class='v'><?=$taxonomy?> validé.</i>
+							<i class='o'><?=$taxonomy?> ouvrir.</i>
+							<i class='e'><?=$taxonomy?> enveloppe.</i>
+							<i class='s'><?=$taxonomy?> sauvé.</i>
+						-->
+					<else>
+						<h3 class='i'><i><?=$taxonomy?> non supprimé!</i></h3>
+						<foreach "$formErrors as $fkey=>$sol"><br /><i>solution : <?=$fkey?> <?=$sol?></i></foreach>
+					</if>
+				<else>
+					<i><?=$mode?> <?=$taxonomy?>? (<?=$item->title?>)</i>
+					<input type="hidden" name="deletion" value="all">
+					<input type="submit" name="validate" value="Supprimer">
+				</if>
+			</form>
+		</article>
+		<extend "Sidebar"></extend>
+	</write>
+</extend>

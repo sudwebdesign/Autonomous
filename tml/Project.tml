@@ -1,0 +1,109 @@
+<Presenter:Presenter />
+<?
+use Core\ArrayObject;
+use Core\Dev;
+use Core\Session;
+use Core\STR;
+use Model\Query;
+$taxonomy = 'projet';
+$imageByItem = function($item)use($taxonomy,$URI){
+	return '/content/'.$taxonomy.'/'.$item->id.'/'.$URI->filterParam($item->title).'.png';
+};
+$filesByItem = function($item)use($taxonomy,$imageByItem){
+	$files = glob('content/'.$taxonomy.'/'.$item->id.'/*', GLOB_BRACE);
+	if(($i=array_search($imageByItem($item),$files))!==false)
+		unset($files[$i]);
+	return $files;
+};
+$redirection = function($location=null,$location2=null)use($URI){
+	$title = $URI[1];
+	$id = $URI[2];
+	if(isset($location)){
+		if(filter_var($location,FILTER_VALIDATE_INT))
+			$id = $location;
+		else
+			$title = $location;
+	}
+	if(isset($location2)){
+		if(filter_var($location2,FILTER_VALIDATE_INT))
+			$id = $location2;
+		else
+			$title = $location2;
+	}
+	$redirect = $URI[0].'+'.$title.'+'.$id;
+	if(!Dev::has(Dev::ROUTE))
+		header('Location: '.$redirect,true,301);
+	else
+		echo 'Location: '.$redirect;
+	exit;
+};
+
+Session::start();
+if(!filter_var($URI[2],FILTER_VALIDATE_INT)){
+	$q = new Query($taxonomy);
+	if(filter_var($URI[1],FILTER_VALIDATE_INT)){
+		$redirect = $q->select('titleHref')->where('id=?',[$URI[1]])->getCell();
+		$redirection($redirect,$URI[1]);
+	}
+	else{
+		$redirect = $q->select('id')->where('"titleHref"=?',[$URI[1]])->getCell();
+		if($redirect){
+			$redirection($redirect);
+		}
+	}
+	exit;
+}
+$Query = (new Query($taxonomy))
+	->where('"{$prefix}'.$taxonomy.'"'.'.id=?',[$URI[2]])
+;
+$item = $Query->row4D();
+if(empty($item))
+	$this->getController()->error(404);
+$item = new ArrayObject($item);
+if(!$item->titleHref){
+	$item->titleHref = $URI->filterParam($item->title);
+}
+if($URI[1]!=$item->titleHref){
+	$redirection($item->titleHref);
+}
+$img = $imageByItem($item);
+$files = $filesByItem($item);
+$item->atitle = htmlspecialchars($item->title, ENT_COMPAT);
+?>
+<extend>
+	<css item>
+	<attr selector="main" addClass="present-item">
+	<append title> dans <?=$taxonomy?></append>
+	<write main>
+		<article class="<?=$taxonomy?>s">
+			<h1><?=$URI[0]?> : <?=$item->title?>
+			</h1>
+			<if "$img"><img src="<?=$img?>" alt="<?=$item->atitle?>" title="<?=$item->atitle?>" /></if>
+			<?=$item->presentationHtml?>
+			<hr>
+			<if "$item->url"><p><i>Lien : </i><a href="<?=$item->url?>" title="<?=$item->atitle?>"><?=$item->title?></a></p></if>
+			<if "$item->tel"><p><i>Télépnone : </i><?=$item->tel?></p></if>
+			<p><i>Créé le : </i><?=strftime('%A %e %B %G à %k:%M:%S',strtotime($item->created))?></p>
+			<hr>
+			<if "is_object($item->tag)&&$item->tag->count()">
+				<ul class="tags">
+					<foreach "$item->tag as $tag">
+						<if "$tag">
+							<li><h5><a href="<?=$type.'s+'.$tag->name?>"><?=$tag->name?></a></h5></li>
+						</if>
+					</foreach>
+					<if "is_object($item->geopoint)&&$item->geopoint->count()">
+						<foreach "$item->geopoint as $geopoint">
+								<if "$geopoint->label">
+									<li><h5><a href="/<?=ucfirst($type).'s+geo:'.$geopoint->label.'+lat:'.$geopoint->lat.'+lon:'.$geopoint->lon.($geopoint->radius?'+radius:'.$geopoint->radius:'')?>">
+										<?=$geopoint->label?>
+									</a></h5></li>
+								</if>
+						</foreach>
+					</if>
+				</ul>
+			</if>
+		</article>
+		<extend "Sidebar"></extend>
+	</write>
+</extend>

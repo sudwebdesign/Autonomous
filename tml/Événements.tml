@@ -1,4 +1,0 @@
-<Presenter:liste:evenement TAXONOMY="Événement" />
-<extend "Liste">
-	<attr selector="main" addClass="evenements">
-</extend>

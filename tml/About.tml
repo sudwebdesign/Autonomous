@@ -1,0 +1,9 @@
+<extend>
+	<attr selector="main" addClass="about">
+	<write main>
+		<article>
+			<h1>About</h1>
+			
+		</article>
+	</write>
+</extend>

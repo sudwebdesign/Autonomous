@@ -5,16 +5,16 @@ body>footer{
 	>div + div {
 		@?include grid( *, 100 );
 		@?include grid( *, 50, 480px);
-		@?include grid( *, 25, 960px);
 		@include clearfix();
 		background: #111;
 		clear: both;
 		width: 100%;
 		border-top: 2px solid $color-dark;
 		>a {
+			height:100%;
 			text-align:center;
-			margin-top:1%;
-			margin-bottom:1%;
+			padding-top:0.5em;
+			padding-bottom:0.5em;
 			font-size: 1.2em;
 			color: #FFF;
 			&.active,
@@ -22,14 +22,8 @@ body>footer{
 			  color: $color-main;
 			  text-decoration:none;
 			}
-			&[href="Autonomie-et-Partage"]{
-				@?include icon(info);
-			}
-			&[href="Newsletter"]{
-				@?include icon(envelope-o);
-			}
-			&[href="Partenaires"]{
-				@?include icon(heart);
+			&[href="About"]{
+				@?include icon(question-circle);
 			}
 			&[href="Contact"]{
 				@?include icon(envelope);

@@ -2,8 +2,8 @@
 	<attr selector="main" addClass="home">
 	<write main>
 		<article>
-			<h1>Bienvenue</h1>
-			<loremipsum 150>
+			<h1>Welcome</h1>
+			
 		</article>
 		<aside>
 			News

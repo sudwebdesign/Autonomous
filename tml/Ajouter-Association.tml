@@ -1,9 +1,0 @@
-<Presenter:ajouter:association uri="static" TAXONOMY="Association" />
-<extend "Ajouter">
-	<after selector="main form fieldset:has([name=title])">
-		<fieldset>
-			<legend>Raison</legend>
-			<input type="text" name="raison" value="" placeholder="Raison sociale">
-		</fieldset>
-	</after>
-</extend>

@@ -1,0 +1,137 @@
+<?
+use Core\Post;
+use Core\Session;
+use Core\Uploader;
+use Model\Exception_Validation;
+use Model\ATableMain;
+
+$taxonomy = 'project';
+if(!empty($_POST)){
+	$formPosted = true;
+	try{
+		$data = $_POST;
+		$data['user'] = Session::get('email');
+		$entry = ATableMain::CREATE($taxonomy,$data);
+		$entry->on('created',function($entry)use($taxonomy,$URI){
+			Uploader::image(array(
+				'dir'=>'content/'.$taxonomy.'/'.$entry->id.'/',
+				'key'=>'image',
+				'width'=>'90',
+				'height'=>'90',
+				//'rename'=>true, //image by default
+				'rename'=>$URI->filterParam($entry->title),
+				'extensions'=>array('png','jpg'),
+				'conversion'=>'png'
+			));
+			Uploader::files('content/'.$taxonomy.'/'.$entry->id.'/','files');
+		});
+		$entry->store();
+		Post::clearPersistance();
+	}
+	catch(Exception_Validation $e){
+		$formErrors = $e->getFlattenData();
+		$formPosted = false;
+	}
+}
+?>
+<extend>	
+	<js+css form>
+	<attr selector="main" addClass="create">
+	<write main>
+		<apply "forms.tpl">
+			<form modelRules="<?=$taxonomy?>" id="<?=$THIS->taxonomy?>" action="<?=$URI[0]?>" method="POST" enctype="multipart/form-data" role="form" <?=isset($formPosted)?'class="form-posted"':''?>>
+				<if "isset($formPosted)">
+				<h1>New <i><?=$taxonomy?></i></h1>
+					<div class="form-return">
+						<if "$formPosted">
+							<i class='c'><?=$taxonomy?> added and</i>
+							<i class='r'><?=$taxonomy?> published</i>
+							<!--		
+								<i class='u'><?=$taxonomy?> updated</i>
+								<i class='d'><?=$taxonomy?> removed</i> 
+							-->
+						<else>
+							<i class='i'><?=$taxonomy?> not added, please correct the form</i>
+							<?var_dump($formErrors);?>
+						</if>
+					</div>
+				<else>
+					<h1>New <?=$taxonomy?></h1>
+				</if>
+				<fieldset>
+					<legend>Title</legend>
+					<input type="text" name="title" value="" required />
+				</fieldset>
+				<fieldset>
+					<legend>Presentation</legend>
+					<textarea name="presentation" placeholder="" is="ckeditor"></textarea>
+				</fieldset>
+				<fieldset>
+					<legend>Tags</legend>
+					<input name="sharedTag[name]" type="text" value="" placeholder="" is="tagsinput" data-url="service/autocomplete/taxonomy" data-minchar="4" data-maxchar="25" data-max="5"  required />
+					<if "isset($tagSuggestions)">
+						<span class="tags-suggests">Suggestions:
+							<foreach "$tagSuggestions as $key=>$val" cacheSync="model.taxonomy"><?=$val?> </foreach>
+						</span>
+					</if>
+				</fieldset>
+				<fieldset>
+					<legend>Join main image</legend>
+					<input is="inputimg" type="file" name="image" accept="image/*" />
+				</fieldset>
+				<fieldset>
+					<legend>Join files <small>(images or documents)</small></legend>
+					<input type="file" name="files[]" accept="application/*,text/*,image/*" title="Sélectionner des Fichiers" multiple />
+				</fieldset>
+				<fieldset>
+					<legend>Place <small>(city,locality or adress)</small></legend>
+					<geo-completer>
+						<fieldset>
+							<input id="geoname" class="geoname" name="ownGeopoint[0][label]" data-url="service/autocomplete/geoname" type="text" value="">
+							<a class="show_button" href="<?=$URI?>#map">Search on the map</a>
+							<fieldset>
+								<label for="geo-lat">Latitude</label>
+								<input name="ownGeopoint[0][lat]" id="geo-lat" class="in-latitude">
+								<label for="geo-lng">Longitude</label>
+								<input name="ownGeopoint[0][lon]" id="geo-lng" class="in-longitude">
+								<label for="geo-rayon">Rayon en km</label>
+								<input name="ownGeopoint[0][radius]" id="geo-rayon" class="in-radius">
+							</fieldset>
+							<div class="remodal" data-remodal-id="map">
+								<input class="gg-maps" type="text" value="" placeholder="Rechercher un adresse, un lieu ou une commune">
+								<a class="remodal-confirm" href="#">OK</a>
+							</div>
+						</fieldset>
+					</geo-completer>
+				</fieldset>
+				<fieldset is="daterange">
+					<legend>Date</legend>
+					<div>
+						<fieldset>
+							<legend>Start</legend>
+							<input type="date" class="date-start" name="xownDate[0][date_start]" value="" placeholder="Day">
+							<input type="time" name="xownDate[0][time_start]" value="" placeholder="Hour">
+							<label>Specify the duration
+								<input name="date_with_end" type="checkbox">
+							</label>
+						</fieldset>
+						<fieldset>
+							<legend>End</legend>
+							<input type="date" class="date-end" name="xownDate[0][date_end]" value="" placeholder="Day">
+							<input type="time" name="xownDate[0][time_end]" value="" placeholder="Hour">					
+						</fieldset>
+					</div>
+				</fieldset>
+				<fieldset>
+					<legend>Link</legend>
+					<input name="url" type="url" value="" placeholder="http://">
+				</fieldset>
+				<fieldset>
+					<legend>Phone number</legend>
+					<input name="tel" type="tel" pattern="^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$" value="">
+				</fieldset>
+				<input type="submit" value="Propose">
+			</form>
+		</apply>
+	</write>
+</extend>

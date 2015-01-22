@@ -1,6 +1,6 @@
 <?php namespace Model;
 use Model\Query;
-final class TableTaxonomy extends AbstractKeywordTable{
+final class TableTaxonomy extends ATableKeyword{
 	function onUpdate(){
 		
 	}

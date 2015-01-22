@@ -1,4 +1,0 @@
-<Presenter:liste:annonce TAXONOMY="Annonce" />
-<extend "Liste">
-	<attr selector="main" addClass="annonces">
-</extend>

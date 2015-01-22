@@ -1,4 +1,0 @@
-<Presenter:liste:association TAXONOMY="Association" />
-<extend "Liste">
-	<attr selector="main" addClass="associations">
-</extend>

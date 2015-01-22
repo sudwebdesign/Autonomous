@@ -9,11 +9,11 @@
 		<if "$item->user->email == Session::get('email')">
 			<i class='c'><a href='Ajouter-<?=$type?>'><?=$item->type?> créer.</a></i><hr>
 			<i class='r'><a href='<?=$type?>+<?=$item->id?>'><?=$item->type?> regarder.</a></i><hr>  
-			<i class='u'><a href='Modifier-<?=$type?>+<?=$item->id?>'><?=$item->type?> unifier.</a></i><hr>
+			<i class='u'><a href='Modify-<?=$type?>+<?=$item->id?>'><?=$item->type?> unifier.</a></i><hr>
 			<i class='d'><a href='Délivrer-<?=$type?>+<?=$item->id?>'><?=$item->type?> délivrer.</a><?=$item->type?></i><hr>
 		</if>
 		<?/*=var_dump($item)*/?>
-<!--	<i class='u'><a href='Modifier-<?=$URI[0]?>+<?=$item->id?>'> modifier*</a></i>
+<!--	<i class='u'><a href='Modify-<?=$URI[0]?>+<?=$item->id?>'> modifier*</a></i>
 		<i class='c'><?=$item->type?> enregistré et</i><hr>
 		<i class='r'><?=$item->type?> publié.</i><hr>  
 		<i class='u'><?=$item->type?> corrigé.</i><hr>

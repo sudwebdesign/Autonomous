@@ -12,7 +12,9 @@ body>main{
     height:100%;
     //min-height:74%;
 	padding-bottom: 4em;
-	>*{
+	>article,
+	>aside,
+	>form{
 		margin-bottom:1em;
 		background: none repeat scroll 0 0 #FFFFFF;
 		min-height: 15em;
@@ -35,7 +37,7 @@ body>main{
 		padding-right:1.5em;
 		padding-top:5px;
 		padding-bottom:5px;
-		color: #F86D2E;
+		color: #ccc;
 		background-color:#222222;
 		@include gradient-vertical(#3c3c3c,#222222);
 	}
@@ -48,13 +50,17 @@ body>main{
 			@?include icon(home);
 		}
 	}
-	&.present-liste>article>*{
-		float:left;
-		width:100%;
+	&.catalog{
+		>article>*{
+			float:left;
+			width:100%;
+		}
+		>nav:last-child>a:first-child{
+			@?include icon(plus);
+		}
 	}
 	ul.tags{
-		//@?include icon(tags);
-		@?include icon(cloud);
+		@?include icon(tags);
 		&:before{
 			float:left;
 		}

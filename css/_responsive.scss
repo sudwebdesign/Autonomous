@@ -9,7 +9,6 @@
 		body>nav{
 			[is=dropdown]{
 				>li{
-					padding-bottom:<?=$fs-10?>px;
 					>a{
 						font-size: <?=$fs?>px;
 						&::before{

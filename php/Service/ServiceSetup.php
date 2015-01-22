@@ -12,7 +12,7 @@ class ServiceSetup {
 
 		R::setUniqCheck(false);
 
-		R::drop('taxonomy');
+		R::dropTable('taxonomy');
 		$taxonomyTree = array(
 			'Événement'=>array(
 				'Salon',
@@ -60,7 +60,7 @@ class ServiceSetup {
 			R::store($b);
 		}
 
-		R::drop('geoname');
+		R::dropTable('geoname');
 		
 		$geoname = R::getWriter()->prefix.'geoname';
 		R::execMulti(<<<SQL

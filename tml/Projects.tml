@@ -1,0 +1,364 @@
+<Presenter:Presenter />
+<?
+use Core\ArrayObject;
+use Core\Dev;
+use Model\Query;
+use Model\R;
+use Tool\Geocoding;
+use Tool\Geohash;
+use View\Exception as View_Exception;
+
+$limitation	= 25;
+$truncation	= 369;
+$taxonomy = 'project';
+$Taxonomy = 'Projects';
+
+//Dev::on(Dev::SQL);
+//Dev::on(Dev::DBSPEED);
+
+$page = $URI->page;
+$offset = ($page!=NULL)?(($page-1)*$limitation):0;
+$subUri = (strrpos($URI[0],'s')===strlen($URI[0])-1?substr($URI[0],0,-1):$URI[0]);
+$Query = new Query($taxonomy);
+
+$Query->selectRelationnal([		
+	'geopoint		>		label',
+	'geopoint		>		lat',
+	'geopoint		>		lon',
+	'geopoint		>		radius',
+	
+	'tag			<>		name',
+	
+]);
+
+if(isset($addSelect))
+	$addSelect($Query);
+
+$tagRank = function()use($taxonomy){
+	$Qt = new Query('tag');
+	$relationShared = $Qt->relationShared($taxonomy);
+	$Qt
+		->select('COUNT("{$prefix}tag"."id")')
+		->from('tag')
+		->join('"{$prefix}'.$relationShared.'"')
+		->joinOn('"{$prefix}'.$relationShared.'"."tag_id" = "{$prefix}tag"."id"
+				AND "{$prefix}'.$relationShared.'"."'.$taxonomy.'_id" = "{$prefix}'.$taxonomy.'"."id"
+				AND "{$prefix}tag"."name" IN ?')
+	;
+	return $Qt;
+};
+
+$i = 0;
+$tags = [];
+if(is_array($URI[1])){
+	$groupingByAnd = true;
+	foreach($URI[1] as $subTag){
+		$tags[] = $subTag;
+	}
+}
+else{
+	$groupingByAnd = false;	
+	while($tag=$URI[$i+=1]){
+		if(is_array($tag)){
+			throw new View_Exception('404');
+		}
+		$tags[] = $tag;
+	}
+}
+if(!empty($tags)){
+	$Query->joinShared('tag');
+	if($groupingByAnd){
+		$Query->joinAdd('AND ('.$tagRank().')=?',$tags,count($tags));
+	}
+	else{
+		$Query->joinAdd('AND "{$prefix}tag"."name" IN ?',$tags);
+	}
+}
+
+$rad = null;
+$lat = null;
+$lon = null;
+if($URI->geohash){
+	list($lat,$lon) = Geohash::decode($URI->geohash);
+}
+
+if($URI->geo||($lat!==null&&$lon!==null)){
+	$rad = (float)$URI->rad;
+	if($lat&&$lon){
+		$lat = (float)$lat;
+		$lon = (float)$lon;
+	}
+	else{
+		$point = R::findOne('geoname','WHERE name LIKE ?',[str_replace('%','',$URI->geo).'%']);
+		if($point){
+			$lat = (float)$point->latitude;
+			$lon = (float)$point->longitude;
+			if(!$rad)
+				$rad = (float)$point->radius;
+		}
+	}
+	if($lat!==null&&$lon!==null){
+		$Qt = (new Query('geopoint'))
+			->select('geodistance("{$prefix}geopoint"."lat","{$prefix}geopoint"."lon",?,?)')
+			->where('"{$prefix}geopoint"."project_id"="{$prefix}project"."id"')
+		;
+		$Query
+			->orderBy("($Qt)",$lat,$lon)
+			->sort('ASC')
+		;
+	}
+}
+if($URI->search){
+	$Query
+		->whereFullText('document',$URI->search,'french')
+		->selectFullTextHighlite('presentation',$URI->search,$truncation,'french')
+		->orderByFullTextRank('document',$URI->search,'french') 
+	;
+}
+else{
+	$Query->selectTruncation('presentation',$truncation);
+}
+$Query->select(['id','title','tel','url','created']);
+
+if(!empty($tags)){
+	$Query
+		->orderBy('('.$tagRank().')',$tags)
+		->sort('DESC')
+	;
+}
+
+$Query
+	->orderBy('{$prefix}'.$taxonomy.'.created')
+	->sort('DESC')
+;
+
+if($rad){
+	$Query->join('"{$prefix}geopoint" ON "{$prefix}geopoint"."project_id" = "{$prefix}project"."id"');
+	list($minlon, $minlat, $maxlon, $maxlat) = Geocoding::getBoundingBox([$lat,$lon],$rad,Geocoding::getEarthRadius('km'));	
+	if($URI->proxima){
+		$Query
+			->openWhereOr()
+			->where('"{$prefix}geopoint"."minlat" BETWEEN ? AND ?',$minlat,$maxlat)
+			->where('"{$prefix}geopoint"."minlon" BETWEEN ? AND ?',$minlon,$maxlon)
+			->where('"{$prefix}geopoint"."maxlat" BETWEEN ? AND ?',$minlat,$maxlat)
+			->where('"{$prefix}geopoint"."maxlon" BETWEEN ? AND ?',$minlon,$maxlon)
+			->closeWhere()
+		;
+		$operator = '-';
+	}
+	else{
+		$Query->where('"{$prefix}geopoint"."minlat">=? AND "{$prefix}geopoint"."maxlat"<=? AND "{$prefix}geopoint"."minlon">=? AND "{$prefix}geopoint"."maxlon"<=?',$minlat,$maxlat,$minlon,$maxlon);
+		$operator = '+';
+	}
+	$Qt = (new Query('geopoint'))
+		->select('(geodistance({$prefix}geopoint.lat,{$prefix}geopoint.lon,?,?)'.$operator.'COALESCE({$prefix}geopoint.radius,0))')
+		->where('"{$prefix}geopoint"."project_id"="{$prefix}project"."id"')
+	;
+	$Query->orderBy("($Qt)",$lat,$lon);
+}
+$Query->limit($limitation,$offset);
+
+
+
+$count = $Query->countAll();
+
+#<pagination>
+$offset	    		= 0;
+$limit = $limitation;
+$pagination = new ArrayObject([
+	'prefix'			=>'+page:',
+	'maxCols'			=>5,
+]);
+if($page===null)
+	$page = 1;
+elseif(
+	!is_integer(filter_var($page,FILTER_VALIDATE_INT))
+	||($page=(int)$page)<2
+	||$count<=($offset=($page-1)*$limit)
+)
+	throw new View_Exception('404');
+
+$pagination->pagesTotal = (int)ceil($count/$limit);
+
+if($pagination->maxCols>$pagination->pagesTotal)
+	$pagination->max = $pagination->pagesTotal-1;
+else
+	$pagination->max = $pagination->maxCols-1;
+	
+$pagination->start = $page-(int)floor($pagination->max/2);
+if($pagination->start<=0)
+	$pagination->start = 1;
+$pagination->end = ($pagination->start+$pagination->max)>$pagination->pagesTotal?$pagination->pagesTotal:$pagination->start+$pagination->max;
+if($pagination->end-$pagination->start<$pagination->max)
+	$pagination->start = $pagination->end-$pagination->max;
+$pagination->href = clone $URI;
+unset($pagination->href->page);
+$pagination->href = $pagination->href;
+#</pagination>
+
+$liste = $Query->tableObject();
+//$liste = $Query->tableRwObject();
+
+
+$countListe = count($liste);
+foreach($liste->keys() as $akey){
+	$liste[$akey]['atitle']=htmlspecialchars($liste[$akey]['title'], ENT_COMPAT);
+}
+$h1 = $URI[0];
+
+$imageByItem = function($item)use($URI,$taxonomy){
+	return '/content/'.$taxonomy.'/'.$item->id.'/'.$URI->filterParam($item->title).'.png';
+};
+?>
+<extend>
+	<css+js catalog>
+	<attr selector="main" addClass="catalog projects">
+	<write main>
+		<aside>
+			<h3>Search Panel</h3>
+			<form id="search_panel" class="search-panel" method="GET" action="<?=$URI[0]?>" role="search">
+				<fieldset>
+					<legend>Text Search</legend>
+					<input type="text" name="search" value="<?=$URI->search?>" autocomplete="off" />
+				</fieldset>
+				<fieldset>
+					<fieldset>
+						<legend>Tags</legend>
+						<input name="thematic" type="text" value="<?=implode(' ',$tags)?>" placeholder="" is="tagsinput" data-url="service/autocomplete/taxonomy" data-minchar="4" data-maxchar="25" data-max="5" autocomplete="off" />
+						<?$subTaxonomy='taxonomy'.ucfirst($taxonomy);?>
+						<if "isset($$subTaxonomy)">
+							<span class="tags-suggests">Suggestions:
+								<foreach "$$subTaxonomy as $key=>$val" cacheSync="model.taxonomy"><?=$val?> </foreach>
+							</span>
+						</if>
+					</fieldset>
+					<fieldset>
+						<label for="groupingByAnd">All Tags</label>
+						<input id="groupingByAnd" type="checkbox" name="groupingByAnd" <?=$groupingByAnd?'checked':''?> value="1" autocomplete="off">
+					</fieldset>
+				</fieldset>
+				<fieldset>
+					<legend>Place</legend>
+					<geo-completer>
+						<fieldset>
+							<input id="geoname" class="geoname" name="geo" data-url="service/autocomplete/geoname" type="text"  value="<?=$URI->geo?>" autocomplete="off">
+							<a class="show_button" href="./<?=$URI?>#map">Show map</a>
+							<fieldset>
+								<label for="geo-lat">latitude</label>
+								<input name="lat" id="geo-lat" class="in-latitude" value="<?=$lat?>" autocomplete="off">
+								<label for="geo-lng">longitude</label>
+								<input name="lon" id="geo-lng" class="in-longitude" value="<?=$lon?>" autocomplete="off">
+								<label for="geo-rayon">radius</label>
+								<input name="rad" id="geo-rayon" class="in-radius" value="<?=$URI->rad?>" autocomplete="off">
+								<label for="geo-proxima">near</label>
+								<input name="proxima" type="checkbox" id="geo-proxima" value="1" <?=$URI->proxima?'checked':''?> autocomplete="off">
+							</fieldset>
+							<div class="remodal" data-remodal-id="map">
+								<input class="gg-maps" type="text" value="" placeholder="Look for a place" autocomplete="off">
+								<a class="remodal-confirm" href="#">OK</a>
+							</div>
+						</fieldset>
+					</geo-completer>
+				</fieldset>
+				<input type="submit" value="Search">
+			</form>
+		</aside>
+		<article>
+			<h1>
+				<?=$h1?> -
+				<small>
+					page <?=$page?>
+					<span>(from <?=($count)?$offset+1:0?> to <?=(($offset+$limit)>$count?$count:$offset+$limit)?> on <?=$count?>)</span>
+				</small>
+			</h1>
+			<foreach "(array)@$liste as $id=>$item">
+				<?$href=$subUri.'+'.$URI->filterParam($item->title).'+'.$id;?>
+				<h2><a href="./<?=$href?>"><?=$item->title?></a></h2>
+				<a href="./<?=$href?>">
+					<if "$img=$imageByItem($item)">
+						<img src="<?=$img?>" alt="<?=$item->atitle?>" title="<?=$item->atitle?>" />
+					</if>
+					<?$presentation_length=strlen($item->presentation);?>
+					<if "$URI->search&&$presentation_length!=$item->presentation_length"> ... </if>
+					<?=$item->presentation?>
+					<?/* <p>Auteur: <?=$item->user->email?></p> */?>
+					<if "$item->presentation_length>$presentation_length">
+						<i>(Read more ...)</i>
+					</if>
+				</a>
+				<if "(is_object($item->tag)&&$item->tag->count())||(is_object($item->geopoint)&&$item->geopoint->count())">
+					<ul class="tags">
+						<if "is_object($item->tag)&&$item->tag->count()">
+							<foreach "$item->tag as $tag">
+								<if "$tag">
+									<li><h5><a href="./<?=$Taxonomy.'+'.$tag->name?>"><?=$tag->name?></a></h5></li>
+								</if>
+							</foreach>
+						</if>
+						<if "is_object($item->geopoint)&&$item->geopoint->count()">
+							<foreach "$item->geopoint as $geopoint">
+								<?
+									$geo = '';
+									if($geopoint->label)
+										$geo .= '+geo:'.$geopoint->label;
+									if($geopoint->lat!==null&&$geopoint->lon!==null){
+										//$geo .= '+lat:'.$geopoint->lat;
+										//$geo .= '+lon:'.$geopoint->lon;
+										$geo .= '+geohash:'.Geohash::encode($geopoint->lat,$geopoint->lon);
+										if($geopoint->radius)
+											$geo .= '+rad:'.$geopoint->radius;
+									}
+								?>
+								<li><h5><a href="./<?=ucfirst($Taxonomy).$geo?>">
+									<?=$geopoint->label?>
+								</a></h5></li>
+							</foreach>
+						</if>
+					</ul>
+				</if>
+				<hr>
+			</foreach>
+			<if "$count">
+				<ul class="simple-pagination light-theme">
+					<if "$page==1">
+						<li class="active"><span class="current prev">First</span></li>
+						<li class="active"><span class="current prev">Previous</span></li>
+					<else>
+						<li><a class="prev page-link" href="./<?=$pagination->href?>">First</a></li>
+						<li><a class="prev page-link" href="./<?=$pagination->href.($page==2?'':$pagination->prefix.($page-1))?>">Previous</a></li>
+					</if>
+					<for from="$pagination->start" to="$pagination->end">
+						<if "$page==$i">
+							<li class="active"><span class="current"><?=$i?></span></li>
+						<else>
+							<li>
+								<a class="page-link" href="./<?=$pagination->href.($i>1?$pagination->prefix.$i:'')?>"><?=$i?></a>
+							</li>
+						</if>
+					</for>
+					<if "$page==$pagination->pagesTotal">
+						<li class="active">
+							<span class="current next">Next</span>
+						</li>
+						<li class="active">
+							<span class="current next">Last</span>
+						</li>
+					<else>
+						<li>
+							<a class="next page-link" href="./<?=$pagination->href.$pagination->prefix.($page+1)?>">Next</a>
+						</li>
+						<li>
+							<a class="next page-link" href="./<?=$pagination->href.$pagination->prefix.($pagination->pagesTotal)?>">Last</a>
+						</li>
+					</if>
+				</ul>
+			<else>
+				<if "!$countListe" ?>No Entry</if>
+			</if>
+			<br>
+		</article>
+		<nav>
+			<a href="Create-Project">Create new Project</a>
+		</nav>
+	</write>
+</extend>

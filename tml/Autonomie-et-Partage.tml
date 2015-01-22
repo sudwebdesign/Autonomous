@@ -1,9 +1,0 @@
-<extend>
-	<title>Qui sommes nous</title>
-	<write main>
-		<article>
-			<h1>Qui sommes nous</h1>
-			<loremipsum>
-		</article>
-	</write>
-</extend>

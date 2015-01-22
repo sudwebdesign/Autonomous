@@ -10,104 +10,62 @@
 </head>
 <body>
 	<header>
-		<a href="" title="Accueil"><img src="img/udac.png" alt="L'UDAC 66" /></a>
+		<a href="" title="Home"><img src="img/autonomous.png" alt="Autonomous" /></a>
 		<form role="search" is="searchbox">
 			<div>
-				<input type="search" name="phonemic" placeholder="Rechercher" value="<?=isset($URI)?$URI->phonemic:''?>" data-url="service/autocomplete/searchbox">
+				<input type="search" name="search" placeholder="Search" value="<?=isset($URI)?$URI->search:''?>" data-url="service/autocomplete/searchbox">
 			</div>
-			<select>
-				<option value="Événements" <?=isset($URI)&&$URI[0]=='Événements'?'selected="selected"':''?>>&#xf073;</option>
-				<option value="Ressources" <?=isset($URI)&&$URI[0]=='Ressources'?'selected="selected"':''?>>&#xf013;</option>
-				<option value="Projets" <?=isset($URI)&&$URI[0]=='Projets'?'selected="selected"':''?>>&#xf005;</option>
-				<option value="Associations" <?=isset($URI)&&$URI[0]=='Associations'?'selected="selected"':''?>>&#xf0c0;</option>
-				<option value="Annonces" <?=isset($URI)&&$URI[0]=='Annonces'?'selected="selected"':''?>>&#xf0ec;</option>
-				<option value="Médiathèques" <?=isset($URI)&&$URI[0]=='Médiathèques'?'selected="selected"':''?>>&#xf02d;</option>
-			</select>
-			<input type="submit" value="Rechercher">
+			<input type="submit" value="Search">
 		</form>
 		<ul is="dropdown">
 			<li>
 				<!--
-				<a href="Login">Se connecter</a>
+				<a is="persona" data-sitename="Autonomous" data-bgcolor="#93a72d" href="javascript:;">Login</a>
 				-->
-					<a is="persona" data-sitename="Autonomous" data-bgcolor="#93a72d" href="javascript:;">Se connecter</a>
+				<a href="Login" is="login-box">Login / Sign In</a>
 				<ul class="disabled">
 					<li>
-						<a class="persona logout" href="javascript:;">Déconnexion</a>
+						<!--
+						<a class="persona logout" href="javascript:;">Logout</a>
+						-->
+						<a href="Logout">Logout</a>
 					</li>
 					<li>
-						<a href="Mon-Compte">Mon Compte</a>
+						<a href="Account">My Account</a>
 					</li>
 				</ul>
 			</li>
 		</ul>
 	</header>
 	<nav>
-		<a href="#" onclick="return false;" is="collapser">Menu Principal</a>
+		<a href="#" onclick="return false;" is="collapser">Main Menu</a>
 		<ul is="dropdown">
-			<li>
-				<a href="Ajouter">Ajouter</a>
-				<ul>
-					<li><a href="Ajouter-Événement">Événement</a></li>
-					<li><a href="Ajouter-Ressource">Ressource</a></li>
-					<li><a href="Ajouter-Projet">Projet</a></li>
-					<li><a href="Ajouter-Association">Association</a></li>
-					<li><a href="Ajouter-Annonce">Annonce</a></li>
-					<li><a href="Ajouter-Médiathèque">Médiathèque</a></li>
-				</ul> 				
-			</li>
-			<li>
-				<a href="Annonces">Annonces</a>	    				
-				<ul>
-					<li><a href="Annonces+Offres">Offres</a></li>
-					<li><a href="Annonces+Demandes">Demandes</a></li>
-					<foreach "$taxonomyAnnonce as $key=>$val" cacheSync="model.taxonomy">
-						<li><a href="Annonces+<?=$val?>"><?=$val?></a></li>
-					</foreach>
-				</ul> 	
-			</li>
-			<li><a href="Médiathèques">Médiathèque</a></li>
-			<li>
-				<a href="Événements">Événements</a>
-				<ul>
-					<foreach "$taxonomyEvenement as $key=>$val" cacheSync="model.taxonomy">
-						<li><a href="Événements+<?=$val?>"><?=$val?></a></li>
-					</foreach>
-				</ul> 	
-			</li>
-			<li>
-				<a href="Ressources">Ressources</a>
-				<ul>
-					<foreach "$taxonomyRessource as $key=>$val" cacheSync="model.taxonomy">
-						<li><a href="Ressources+<?=$val?>"><?=$val?></a></li>
-					</foreach>
-				</ul> 	
-			</li>
-			<li><a href="Associations">Associations</a></li>
-			<li><a href="Projets">Projets</a></li>
+			<li><a href="Projects">Projects</a></li>
+			<li><a href="Profiles">Profiles</a></li>
+			<li><a href="Calendar">Calendar</a></li>
+			<li><a href="Map">Map</a></li>
+			<li><a href="News">News</a></li>
 		</ul>
 	</nav>
 	<main></main>
 	<footer>
 		<include "surikat-powered.btml">
 		<div>
-			<a href="Autonomie-et-Partage">Qui sommes nous ?</a>
-			<a href="Newsletter">Newsletter</a>
-			<a href="Partenaires">Partenaires</a>
-			<a href="Contact">Nous Contacter</a>
+			<a href="About">About</a>
+			<a href="Contact">Contact</a>
 		</div>
 	</footer>
 	<script type="text/javascript" src="js/js-is.pack.js"></script>
-	<script type="text/javascript"><?use Surikat\Core\Dev;?>
-		<?if(Dev::has(Dev::CSS)):?>
+	<script type="text/javascript">
+		<?if(Core\Dev::has(Core\Dev::CSS)):?>
 			$css().dev=true;
-			$js('window-size-bookmarklet');
+			//$js('window-size-bookmarklet');
 		<?endif;?>
-		<?if(Dev::has(Dev::JS)):?>$js().dev=true;<?endif;?>
+		<?if(Core\Dev::has(Core\Dev::JS)):?>$js().dev=true;<?endif;?>
 		$js().min = false
 		$css().min = false;
 		$js('script');
-		<?if(Dev::has(Dev::CONTROL)):?>if(console) console.info('Server <?=$timeCompiled===$time?'Compilation+':''?>Exec: <?=Core\Chrono::get()?> -  Exec <?=@date('jMY-H:m:s',$time)?> - Compiled <?=@date('jMY-H:m:s',$timeCompiled)?>');<?endif;?>
+		<?if(Core\Dev::has(Core\Dev::CONTROL)):?>if(console) console.info('Server <?=$timeCompiled===$time?'Compilation+':''?>Exec: <?=Core\Chrono::get()?> -  Exec <?=@date('jMY-H:m:s',$time)?> - Compiled <?=@date('jMY-H:m:s',$timeCompiled)?>');<?endif;?>
 	</script>
 </body>
 </html>

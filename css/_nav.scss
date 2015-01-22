@@ -2,11 +2,11 @@ body>nav {
 	display:block;
 	position: relative;
 	margin-bottom: 1em;
-	border-top: 2px solid $color-dark; //#595959
+	border-top: 2px solid $color-dark;
+	border-bottom: 2px solid $color-dark;
 	height: auto;
 	@include clearfix();
 	@include gradient-vertical(#414141,#323232);
-	border-bottom: 1px solid #000;
 	[is=dropdown]{
 		>li{
 			position: relative;
@@ -84,13 +84,10 @@ body>nav {
 			> li {
 				border-left: 1px solid #4A4A4A;
 				border-right: 1px solid #292929;
-				width:#{(100%/7)}; //adjust to number of element in menu
+				width:#{(100%/5)}; //adjust to number of element in menu
 				>a{
-					&::before{
-						display: block;
-						padding-bottom: 0.2em;
-						padding-top: 0.4em;
-					}
+					padding-top: 0.1em;
+					padding-bottom: 0.2em;
 				}
 			}
 		}
@@ -119,26 +116,20 @@ body>nav {
 		&::before{
 			clear:both;
 		}
-		&[href="Ajouter"]{
-			@?include icon(plus);
-		}
-		&[href^="Événements"],&[href="Ajouter-Événement"]{
+		&[href^="Calendar"]{
 			@?include icon(calendar);
 		}
-		&[href^="Ressources"],&[href="Ajouter-Ressource"]{
-			@?include icon(cog);
+		&[href^="News"]{
+			@?include icon(newspaper-o);
 		}
-		&[href="Projets"],&[href="Ajouter-Projet"]{
-			@?include icon(star);
+		&[href="Projects"]{
+			@?include icon(cloud);
 		}
-		&[href="Associations"],&[href="Ajouter-Association"]{
+		&[href="Profiles"]{
 			@?include icon(group);
 		}
-		&[href="Annonces"],&[href="Ajouter-Annonce"]{
-			@?include icon(exchange);
-		}
-		&[href="Médiathèques"],&[href="Ajouter-Médiathèque"]{
-			@?include icon(book);
+		&[href="Map"]{
+			@?include icon(globe);
 		}
 	}
 }
