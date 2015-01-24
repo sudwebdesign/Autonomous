@@ -28,7 +28,7 @@ $js(['jquery','geohash'],function(){
 		if(ndata['lon']!=''&&ndata['lat']!='')
 			newloc.push('geohash'+eq+geohash.encode(ndata['lat'], ndata['lon']));
 		if(ndata['rad'])
-			newloc.push('rad'+eq+ndata['rad']);
+			newloc.push('rad'+eq+ndata['rad'].replace(',','.'));
 		if(ndata['proxima'])
 			newloc.push('proxima'+eq+ndata['proxima']);
 		newloc = newloc.join('+');

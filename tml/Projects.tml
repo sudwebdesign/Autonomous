@@ -63,7 +63,7 @@ if($URI->geo||($lat!==null&&$lon!==null)){
 
 
 
-$Query = ATableMain::Query($taxonomy,[
+$Query = ATableMain::QUERY($taxonomy,[
 	'tag'			=>	[$tags,$groupingByAnd],
 	'geo'			=>	[$lat,$lon,$rad,$URI->proxima],
 	'text'			=>	[$URI->search,'french',$truncation],
@@ -79,7 +79,7 @@ $offset	    		= 0;
 $limit = $limitation;
 $pagination = new ArrayObject([
 	'prefix'			=>'+page:',
-	'maxCols'			=>5,
+	'maxCols'			=>6,
 ]);
 if($page===null)
 	$page = 1;
@@ -157,11 +157,11 @@ $imageByItem = function($item)use($URI,$taxonomy){
 							<a class="show_button" href="./<?=$URI?>#map">Show map</a>
 							<fieldset>
 								<label for="geo-lat">latitude</label>
-								<input name="lat" id="geo-lat" class="in-latitude" value="<?=$lat?>" autocomplete="off">
+								<input name="lat" id="geo-lat" class="in-latitude" value="<?=str_replace(',','.',$lat)?>" autocomplete="off">
 								<label for="geo-lng">longitude</label>
-								<input name="lon" id="geo-lng" class="in-longitude" value="<?=$lon?>" autocomplete="off">
+								<input name="lon" id="geo-lng" class="in-longitude" value="<?=str_replace(',','.',$lon)?>" autocomplete="off">
 								<label for="geo-rayon">radius</label>
-								<input name="rad" id="geo-rayon" class="in-radius" value="<?=$URI->rad?>" autocomplete="off">
+								<input name="rad" id="geo-rayon" class="in-radius" value="<?=str_replace(',','.',$URI->rad)?>" autocomplete="off">
 								<label for="geo-proxima">near</label>
 								<input name="proxima" type="checkbox" id="geo-proxima" value="1" <?=$URI->proxima?'checked':''?> autocomplete="off">
 							</fieldset>
@@ -218,7 +218,7 @@ $imageByItem = function($item)use($URI,$taxonomy){
 										//$geo .= '+lon:'.$geopoint->lon;
 										$geo .= '+geohash:'.Geohash::encode($geopoint->lat,$geopoint->lon);
 										if($geopoint->radius)
-											$geo .= '+rad:'.$geopoint->radius;
+											$geo .= '+rad:'.str_replace(',','.',round($geopoint->radius,3,PHP_ROUND_HALF_UP));
 									}
 								?>
 								<li><h5><a href="./<?=ucfirst($Taxonomy).$geo?>">

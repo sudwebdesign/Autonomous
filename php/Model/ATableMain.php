@@ -119,7 +119,7 @@ abstract class ATableMain extends Table{
 		return $entry;
 	}
 	
-	static function Query($taxonomy,$data=[]){
+	static function QUERY($taxonomy,$data=[]){
 		$Query = new Query($taxonomy);
 		$Query->selectRelationnal([		
 			'geopoint		>		label',
