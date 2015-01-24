@@ -2,8 +2,10 @@
 use Core\Ruler;
 use Core\Filter;
 use Model\R;
+use Model\Query;
 use Route\Faceted;
 use Tool\Dates;
+use Tool\Geocoding;
 
 abstract class ATableMain extends Table{
 	protected $minTitreLength = 8;
@@ -115,5 +117,130 @@ abstract class ATableMain extends Table{
 		}
 		
 		return $entry;
+	}
+	
+	static function Query($taxonomy,$data=[]){
+		$Query = new Query($taxonomy);
+		$Query->selectRelationnal([		
+			'geopoint		>		label',
+			'geopoint		>		lat',
+			'geopoint		>		lon',
+			'geopoint		>		radius',
+			
+			'tag			<>		name',
+		]);
+		$Query->select([
+			'id',
+			'title',
+			'tel',
+			'url',
+			'created'
+		]);
+		
+		foreach($data as $k=>$v){
+			switch($k){
+				case 'tag':
+					list($tags,$groupingByAnd) = $v;
+					if(!empty($tags)){
+						$Query->joinShared('tag');
+						if($groupingByAnd){
+							$Query->joinAdd('AND ('.self::tagRank($taxonomy).')=?',$tags,count($tags));
+						}
+						else{
+							$Query->joinAdd('AND "{$prefix}tag"."name" IN ?',$tags);
+						}
+					}
+				break;
+				case 'geo':
+					list($lat,$lon,$rad,$proxima) = $v;
+					if($lat!==null&&$lon!==null&&$rad){
+						$Query->join('"{$prefix}geopoint" ON "{$prefix}geopoint"."project_id" = "{$prefix}project"."id"');
+						list($minlon, $minlat, $maxlon, $maxlat) = Geocoding::getBoundingBox([$lat,$lon],$rad,Geocoding::getEarthRadius('km'));
+						if($proxima){
+							$Query->openWhereOr();
+						}
+						else{
+							$Query->openWhereAnd();
+						}
+						$Query
+							->where('"{$prefix}geopoint"."minlat" BETWEEN ? AND ?',$minlat,$maxlat)
+							->where('"{$prefix}geopoint"."minlon" BETWEEN ? AND ?',$minlon,$maxlon)
+							->where('"{$prefix}geopoint"."maxlat" BETWEEN ? AND ?',$minlat,$maxlat)
+							->where('"{$prefix}geopoint"."maxlon" BETWEEN ? AND ?',$minlon,$maxlon)
+							->closeWhere()
+							->where('(geodistance({$prefix}geopoint.lat,{$prefix}geopoint.lon,?,?)'
+								.($proxima?'-':'+').'COALESCE({$prefix}geopoint.radius,0)) <= ?',$lat,$lon,$rad)
+						;
+					}
+				break;
+				case 'text':
+					list($text,$lang,$truncation) = $v;
+					if($text){
+						$Query
+							->whereFullText('document',$text,$lang)
+							->selectFullTextHighlite('presentation',$text,$truncation,$lang)
+						;
+					}
+					elseif($truncation){
+						$Query->selectTruncation('presentation',$truncation);
+					}
+					else{
+						$Query->select('presentation');
+					}
+				break;
+				
+				case 'orderByOrder':
+					foreach($v as $by){
+						switch($by){
+							case 'geo':
+								if($lat!==null&&$lon!==null){
+									if(!$rad){
+										$Query->join('"{$prefix}geopoint" ON "{$prefix}geopoint"."project_id" = "{$prefix}project"."id"');
+									}
+									$Query
+										->orderBy('geodistance("{$prefix}geopoint"."lat","{$prefix}geopoint"."lon",?,?)',$lat,$lon)
+										->sort('ASC')
+									;
+								}
+							break;
+							case 'text':
+								if($text){
+										$Query->orderByFullTextRank('document',$text,$lang);
+								}
+							break;
+							case 'tag':
+								if(!empty($tags)){
+									$Query
+										->orderBy('('.ATableMain::tagRank($taxonomy).')',$tags)
+										->sort('DESC')
+									;
+								}
+							break;
+							case 'created':
+								$Query
+									->orderBy('{$prefix}'.$taxonomy.'.created')
+									->sort('DESC')
+								;
+							break;
+						}
+					}
+				break;
+			}
+		}
+		
+		return $Query;
+	}
+	static function tagRank($taxonomy){
+		$Qt = new Query('tag');
+		$relationShared = $Qt->relationShared($taxonomy);
+		$Qt
+			->select('COUNT("{$prefix}tag"."id")')
+			->from('tag')
+			->join('"{$prefix}'.$relationShared.'"')
+			->joinOn('"{$prefix}'.$relationShared.'"."tag_id" = "{$prefix}tag"."id"
+					AND "{$prefix}'.$relationShared.'"."'.$taxonomy.'_id" = "{$prefix}'.$taxonomy.'"."id"
+					AND "{$prefix}tag"."name" IN ?')
+		;
+		return $Qt;
 	}
 }

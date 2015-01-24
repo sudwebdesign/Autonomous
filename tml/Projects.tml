@@ -4,7 +4,7 @@ use Core\ArrayObject;
 use Core\Dev;
 use Model\Query;
 use Model\R;
-use Tool\Geocoding;
+use Model\ATableMain;
 use Tool\Geohash;
 use View\Exception as View_Exception;
 
@@ -19,34 +19,6 @@ $Taxonomy = 'Projects';
 $page = $URI->page;
 $offset = ($page!=NULL)?(($page-1)*$limitation):0;
 $subUri = (strrpos($URI[0],'s')===strlen($URI[0])-1?substr($URI[0],0,-1):$URI[0]);
-$Query = new Query($taxonomy);
-
-$Query->selectRelationnal([		
-	'geopoint		>		label',
-	'geopoint		>		lat',
-	'geopoint		>		lon',
-	'geopoint		>		radius',
-	
-	'tag			<>		name',
-	
-]);
-
-if(isset($addSelect))
-	$addSelect($Query);
-
-$tagRank = function()use($taxonomy){
-	$Qt = new Query('tag');
-	$relationShared = $Qt->relationShared($taxonomy);
-	$Qt
-		->select('COUNT("{$prefix}tag"."id")')
-		->from('tag')
-		->join('"{$prefix}'.$relationShared.'"')
-		->joinOn('"{$prefix}'.$relationShared.'"."tag_id" = "{$prefix}tag"."id"
-				AND "{$prefix}'.$relationShared.'"."'.$taxonomy.'_id" = "{$prefix}'.$taxonomy.'"."id"
-				AND "{$prefix}tag"."name" IN ?')
-	;
-	return $Qt;
-};
 
 $i = 0;
 $tags = [];
@@ -65,23 +37,13 @@ else{
 		$tags[] = $tag;
 	}
 }
-if(!empty($tags)){
-	$Query->joinShared('tag');
-	if($groupingByAnd){
-		$Query->joinAdd('AND ('.$tagRank().')=?',$tags,count($tags));
-	}
-	else{
-		$Query->joinAdd('AND "{$prefix}tag"."name" IN ?',$tags);
-	}
-}
 
-$rad = null;
 $lat = null;
 $lon = null;
+$rad = null;
 if($URI->geohash){
 	list($lat,$lon) = Geohash::decode($URI->geohash);
 }
-
 if($URI->geo||($lat!==null&&$lon!==null)){
 	$rad = (float)$URI->rad;
 	if($lat&&$lon){
@@ -97,68 +59,18 @@ if($URI->geo||($lat!==null&&$lon!==null)){
 				$rad = (float)$point->radius;
 		}
 	}
-	if($lat!==null&&$lon!==null){
-		$Qt = (new Query('geopoint'))
-			->select('geodistance("{$prefix}geopoint"."lat","{$prefix}geopoint"."lon",?,?)')
-			->where('"{$prefix}geopoint"."project_id"="{$prefix}project"."id"')
-		;
-		$Query
-			->orderBy("($Qt)",$lat,$lon)
-			->sort('ASC')
-		;
-	}
-}
-if($URI->search){
-	$Query
-		->whereFullText('document',$URI->search,'french')
-		->selectFullTextHighlite('presentation',$URI->search,$truncation,'french')
-		->orderByFullTextRank('document',$URI->search,'french') 
-	;
-}
-else{
-	$Query->selectTruncation('presentation',$truncation);
-}
-$Query->select(['id','title','tel','url','created']);
-
-if(!empty($tags)){
-	$Query
-		->orderBy('('.$tagRank().')',$tags)
-		->sort('DESC')
-	;
 }
 
-$Query
-	->orderBy('{$prefix}'.$taxonomy.'.created')
-	->sort('DESC')
-;
 
-if($rad){
-	$Query->join('"{$prefix}geopoint" ON "{$prefix}geopoint"."project_id" = "{$prefix}project"."id"');
-	list($minlon, $minlat, $maxlon, $maxlat) = Geocoding::getBoundingBox([$lat,$lon],$rad,Geocoding::getEarthRadius('km'));	
-	if($URI->proxima){
-		$Query
-			->openWhereOr()
-			->where('"{$prefix}geopoint"."minlat" BETWEEN ? AND ?',$minlat,$maxlat)
-			->where('"{$prefix}geopoint"."minlon" BETWEEN ? AND ?',$minlon,$maxlon)
-			->where('"{$prefix}geopoint"."maxlat" BETWEEN ? AND ?',$minlat,$maxlat)
-			->where('"{$prefix}geopoint"."maxlon" BETWEEN ? AND ?',$minlon,$maxlon)
-			->closeWhere()
-		;
-		$operator = '-';
-	}
-	else{
-		$Query->where('"{$prefix}geopoint"."minlat">=? AND "{$prefix}geopoint"."maxlat"<=? AND "{$prefix}geopoint"."minlon">=? AND "{$prefix}geopoint"."maxlon"<=?',$minlat,$maxlat,$minlon,$maxlon);
-		$operator = '+';
-	}
-	$Qt = (new Query('geopoint'))
-		->select('(geodistance({$prefix}geopoint.lat,{$prefix}geopoint.lon,?,?)'.$operator.'COALESCE({$prefix}geopoint.radius,0))')
-		->where('"{$prefix}geopoint"."project_id"="{$prefix}project"."id"')
-	;
-	$Query->orderBy("($Qt)",$lat,$lon);
-}
+
+$Query = ATableMain::Query($taxonomy,[
+	'tag'			=>	[$tags,$groupingByAnd],
+	'geo'			=>	[$lat,$lon,$rad,$URI->proxima],
+	'text'			=>	[$URI->search,'french',$truncation],
+	'orderByOrder'	=>	['geo','text','tag','created'],
+]);
+
 $Query->limit($limitation,$offset);
-
-
 
 $count = $Query->countAll();
 
