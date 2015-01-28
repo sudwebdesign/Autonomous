@@ -68,7 +68,7 @@ input[type=submit]{
 	&:focus,
 	&:active,
 	&.active{
-		color:#FFF;
+		color:$color-main;
 		border-color:#323232;
 	}
 	&,
