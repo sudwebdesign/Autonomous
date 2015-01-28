@@ -4,14 +4,15 @@
 @import 'jquery-ui/timepicker';
 @import 'jquery-ui/slider';
 @import 'jquery-ui/themes/trontastic';
-@import 'form-dom';
+//@import 'form-dom';
 .help-block{
 	color:red;
 }
-body>main>form,body>main>article>form{
+main form{
 	>fieldset{
 		@?include grid( *, 100 );
-		@?include grid( 4-24-2 , 2-64-4, 32-64-4, 768px );
+		@?include grid( 100, 1-94-1, 4, 390px );
+		@?include grid( 4-23-2, 2-63-4, 2, 480px );
 		margin-top:0.5em;
 		margin-bottom:0.5em;
 		padding-bottom:1em;
@@ -41,64 +42,26 @@ main.modify {
 #project>h1>i{
 	@?include icon(cloud);
 }
-#profiles>h1>i{
+#people>h1>i{
 	@?include icon(group);
 }
-input[required],select[required]{
-	//@?include icon(asterisk);
-	//background-image: url("../img/invalid_form.png");
-    background-image: url("data:image/gif;base64,R0lGODlhEwATAIABAP8AAP///yH5BAEKAAEALAAAAAATABMAAAI6jH+Au2oeIAP0JdmcxjZWRWnXF4ZPdZZqOa0sk66ZS6OjDHt1W796bPp5UhGh7dI5ZhJEmA3CyUUNBQA7");
-    background-repeat: no-repeat;
-    background-position: calc(100% - 10px) center;
-}
-/*
-.geo-details > legend:nth-child(1) > small:nth-child(1) > a:nth-child(1){
-	@?include icon(minus,after);
-}
-small.geo-toggle > a:nth-child(1){
-	float:right;
-	@?include icon(plus,after);
-	text-decoration: none;
-	padding: 0.2618em;//6px 12px;
-	color: #555;
-	background-color: #FFF;
-	background-image: none; // Reset unusual Firefox-on-Android default style; see https://github.com/necolas/normalize.css/issues/214
-	border: 1px solid #555;
-	border-radius: 4px;
-	@include box-shadow(inset 0 1px 1px rgba(0,0,0,.075));
-}
-fieldset.geo-details{
-	>geo-completer{
-		@?include grid(0-55-0,2-43-0,960px);
-		>*:nth-child(2){
-			display:block !important;
+form{
+	.required{
+		@?include icon(asterisk,true);
+		&:after{
+			font-size: 0.8em;
+			color: #f00;
 		}
 	}
-}
-geo-completer{
-
-}
-geo-local{
-	@?include grid(*,100);
 	
-	>*{
-		&:nth-child(1){
-		}
-		&:nth-child(2){
-			//display:none;
-			@?include grid(*,100);
-			@?include grid(
-				50,50,
-				50,50,
-				50,50,
-				50,50,
-				50,50,
-				50,50,
-				50,50,
-				50,50,
-			480px);
-		}
+	select,
+	textarea,
+	button,
+	input,
+	legend{
+		height: 2em;
+		font-size: 0.9em;
+		line-height: 0.9em;
+		font-weight: normal;
 	}
 }
-
-*/

@@ -10,7 +10,6 @@
 body>main{
     @include clearfix();
     height:100%;
-    //min-height:74%;
 	padding-bottom: 4em;
 	>article,
 	>aside,
@@ -68,11 +67,9 @@ body>main{
 			float:left;
 			//display:inline-block;
 			margin:0;
-			>h5>a{//frontenda.com/snipped/viewSnip.php?snip=simple-ecommerce-template
-				//@?include icon(tag);
-				//@?include icon(cloud);
+			>h5>a{
 				@include transition(all 0.3s);
-				padding: 2px;//2px 12px;
+				padding: 2px;
 				//border: 1px solid #d6d6d6;
 				//border-radius: 4px;
 				//background: #f0f0f0;

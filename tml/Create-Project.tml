@@ -112,7 +112,7 @@ if(!empty($_POST)){
 							<legend>Start</legend>
 							<input type="date" class="date-start" name="xownDate[0][date_start]" value="" placeholder="Day">
 							<input type="time" name="xownDate[0][time_start]" value="" placeholder="Hour">
-							<label>Specify the duration
+							<label>duration
 								<input name="date_with_end" type="checkbox">
 							</label>
 						</fieldset>
