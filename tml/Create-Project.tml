@@ -87,19 +87,20 @@ if(!empty($_POST)){
 					<legend>Place <small>(city,locality or adress)</small></legend>
 					<geo-completer>
 						<fieldset>
-							<input id="geoname" class="geoname" name="ownGeopoint[0][label]" data-url="service/autocomplete/geoname" type="text" value="">
-							<a class="show_button" href="<?=$URI?>#map">Search on the map</a>
+							<div>
+								<input id="geoname" class="geoname" name="ownGeopoint[0][label]" data-url="service/autocomplete/geoname" type="text" value="">
+								<button type="button" class="map-dialog-open" title="Search on the map"></button>
+							</div>
 							<fieldset>
 								<label for="geo-lat">Latitude</label>
-								<input name="ownGeopoint[0][lat]" id="geo-lat" class="in-latitude">
+								<input name="ownGeopoint[0][lat]" id="geo-lat" class="in-latitude" type="text">
 								<label for="geo-lng">Longitude</label>
-								<input name="ownGeopoint[0][lon]" id="geo-lng" class="in-longitude">
-								<label for="geo-rayon">Rayon en km</label>
-								<input name="ownGeopoint[0][radius]" id="geo-rayon" class="in-radius">
+								<input name="ownGeopoint[0][lon]" id="geo-lng" class="in-longitude" type="text">
+								<label for="geo-rayon">Radius (km)</label>
+								<input name="ownGeopoint[0][radius]" id="geo-rayon" class="in-radius" type="text">
 							</fieldset>
-							<div class="remodal" data-remodal-id="map">
-								<input class="gg-maps" type="text" value="" placeholder="Rechercher un adresse, un lieu ou une commune">
-								<a class="remodal-confirm" href="#">OK</a>
+							<div class="map-dialog" title="Find location">
+								<input class="gg-maps" type="text" value="" placeholder="Look for adress, place or city">
 							</div>
 						</fieldset>
 					</geo-completer>

@@ -153,8 +153,10 @@ $imageByItem = function($item)use($URI,$taxonomy){
 					<legend>Place</legend>
 					<geo-completer>
 						<fieldset>
-							<input id="geoname" class="geoname" name="geo" data-url="service/autocomplete/geoname" type="text"  value="<?=$URI->geo?>" autocomplete="off">
-							<a class="show_button" href="./<?=$URI?>#map">Show map</a>
+							<div>
+								<input id="geoname" class="geoname" name="geo" data-url="service/autocomplete/geoname" type="text"  value="<?=$URI->geo?>" autocomplete="off">
+								<button type="button" class="map-dialog-open" title="Search on the map"></button>
+							</div>
 							<fieldset>
 								<label for="geo-lat">latitude</label>
 								<input name="lat" id="geo-lat" class="in-latitude" value="<?=str_replace(',','.',$lat)?>" autocomplete="off">
@@ -165,9 +167,8 @@ $imageByItem = function($item)use($URI,$taxonomy){
 								<label for="geo-proxima">near</label>
 								<input name="proxima" type="checkbox" id="geo-proxima" value="1" <?=$URI->proxima?'checked':''?> autocomplete="off">
 							</fieldset>
-							<div class="remodal" data-remodal-id="map">
-								<input class="gg-maps" type="text" value="" placeholder="Look for a place" autocomplete="off">
-								<a class="remodal-confirm" href="#">OK</a>
+							<div class="map-dialog" title="Find location">
+								<input class="gg-maps" type="text" value="" placeholder="Look for adress, place or city">
 							</div>
 						</fieldset>
 					</geo-completer>

@@ -41,7 +41,7 @@
 		<a href="#" onclick="return false;" is="collapser">Main Menu</a>
 		<ul is="dropdown">
 			<li><a href="Projects">Projects</a></li>
-			<li><a href="Profiles">Profiles</a></li>
+			<li><a href="People">People</a></li>
 			<li><a href="Calendar">Calendar</a></li>
 			<li><a href="Map">Map</a></li>
 			<li><a href="News">News</a></li>
