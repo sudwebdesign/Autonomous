@@ -90,8 +90,9 @@ if(!empty($_POST)){
 							<div>
 								<input id="geoname" class="geoname" name="ownGeopoint[0][label]" data-url="service/autocomplete/geoname" type="text" value="">
 								<button type="button" class="map-dialog-open" title="Search on the map"></button>
+								<button type="button" class="geo-details-drop" title="Location details"></button>
 							</div>
-							<fieldset>
+							<fieldset class="geo-details">
 								<label for="geo-lat">Latitude</label>
 								<input name="ownGeopoint[0][lat]" id="geo-lat" class="in-latitude" type="text">
 								<label for="geo-lng">Longitude</label>

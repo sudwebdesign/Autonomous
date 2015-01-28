@@ -8,6 +8,7 @@
 .e{@?include icon(comment-o);}
 .s{@?include icon(save);}
 body>main{
+	@?include grid(*,2-96-2);
     @include clearfix();
     height:100%;
 	padding-bottom: 4em;
@@ -23,10 +24,13 @@ body>main{
 		border: 1px solid rgba(0,0,0,.15);
 		border-radius: 4px;
 		@include box-shadow(0 6px 12px rgba(0,0,0,.175));
-		overflow:hidden;
 		padding:0.3em;
 	}
-	h1,aside>h3{
+	>article,
+	>form{
+		overflow:hidden;
+	}
+	h1{
 		margin:-0.3em;
 		margin-bottom:0.5em;
 		border-bottom:solid 1px #ccc;
@@ -40,7 +44,6 @@ body>main{
 		background-color:#222222;
 		@include gradient-vertical(#3c3c3c,#222222);
 	}
-	@?include grid(*,2-96-2);
 	&.home{
 		@?include grid( 1-96-1, 1-98-1,	768px);
 		@?include grid( 1-73-1, 1-23-1,	1024px);

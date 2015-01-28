@@ -127,7 +127,6 @@ $imageByItem = function($item)use($URI,$taxonomy){
 	<attr selector="main" addClass="catalog projects">
 	<write main>
 		<aside>
-			<h3>Search Panel</h3>
 			<form id="search_panel" class="search-panel" method="GET" action="<?=$URI[0]?>" role="search">
 				<fieldset>
 					<legend>Text Search</legend>
@@ -145,7 +144,7 @@ $imageByItem = function($item)use($URI,$taxonomy){
 						</if>
 					</fieldset>
 					<fieldset>
-						<label for="groupingByAnd">All Tags</label>
+						<label for="groupingByAnd">All</label>
 						<input id="groupingByAnd" type="checkbox" name="groupingByAnd" <?=$groupingByAnd?'checked':''?> value="1" autocomplete="off">
 					</fieldset>
 				</fieldset>
@@ -156,22 +155,25 @@ $imageByItem = function($item)use($URI,$taxonomy){
 							<div>
 								<input id="geoname" class="geoname" name="geo" data-url="service/autocomplete/geoname" type="text"  value="<?=$URI->geo?>" autocomplete="off">
 								<button type="button" class="map-dialog-open" title="Search on the map"></button>
+								<button type="button" class="geo-details-drop" title="Location details"></button>
 							</div>
-							<fieldset>
+							<fieldset class="geo-details">
 								<label for="geo-lat">latitude</label>
 								<input name="lat" id="geo-lat" class="in-latitude" value="<?=str_replace(',','.',$lat)?>" autocomplete="off">
 								<label for="geo-lng">longitude</label>
 								<input name="lon" id="geo-lng" class="in-longitude" value="<?=str_replace(',','.',$lon)?>" autocomplete="off">
 								<label for="geo-rayon">radius</label>
 								<input name="rad" id="geo-rayon" class="in-radius" value="<?=str_replace(',','.',$URI->rad)?>" autocomplete="off">
-								<label for="geo-proxima">near</label>
-								<input name="proxima" type="checkbox" id="geo-proxima" value="1" <?=$URI->proxima?'checked':''?> autocomplete="off">
 							</fieldset>
 							<div class="map-dialog" title="Find location">
 								<input class="gg-maps" type="text" value="" placeholder="Look for adress, place or city">
 							</div>
 						</fieldset>
 					</geo-completer>
+					<fieldset>
+						<label for="geo-proxima">near</label>
+						<input name="proxima" type="checkbox" id="geo-proxima" value="1" <?=$URI->proxima?'checked':''?> autocomplete="off">
+					</fieldset>
 				</fieldset>
 				<input type="submit" value="Search">
 			</form>
