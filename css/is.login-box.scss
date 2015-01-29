@@ -1,11 +1,23 @@
 .login-dialog{
 	@?include grid(*, 1-98-1);
 	@?include grid(1-48-1, 1-48-1, 680px);
-	form.login,
-	form.signin{
+	form{
 		float:left;
 		display:block;
 		position:relative;
+		&.login{
+			@?include grid(*, 1-98-1);
+			@?include grid(1-98-1, 1-48-1, 1-48-1, 1-48-1, 1-48-1, 1-98-1,  480px);
+		}
+		&.signin{
+			@?include grid(*, 1-98-1);
+			@?include grid(1-98-1, 1-48-1, 1-48-1, 1-48-1, 1-48-1, 1-48-1, 1-48-1, 1-48-1, 1-48-1, 1-98-1, 480px);
+		}
+	}
+	input{
+		line-height:1.2em;
+		height:1.2em;
+		font-size:1.2em;
 	}
 	input[type=submit]{
 		height:2em;
