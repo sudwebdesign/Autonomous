@@ -154,6 +154,7 @@ $imageByItem = function($item)use($URI,$taxonomy){
 						<fieldset>
 							<div>
 								<input id="geoname" class="geoname" name="geo" data-url="service/autocomplete/geoname" type="text"  value="<?=$URI->geo?>" autocomplete="off">
+								<button type="button" class="reset" title="Clear"></button>
 								<button type="button" class="map-dialog-open" title="Search on the map"></button>
 								<button type="button" class="geo-details-drop" title="Location details"></button>
 							</div>

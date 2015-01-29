@@ -4,6 +4,7 @@ use Core\Session;
 use Core\Uploader;
 use Model\Exception_Validation;
 use Model\ATableMain;
+use Model\R;
 
 $taxonomy = 'project';
 if(!empty($_POST)){
@@ -11,6 +12,7 @@ if(!empty($_POST)){
 	try{
 		$data = $_POST;
 		$data['user'] = Session::get('email');
+		R::begin();
 		$entry = ATableMain::CREATE($taxonomy,$data);
 		$entry->on('created',function($entry)use($taxonomy,$URI){
 			Uploader::image(array(
@@ -26,9 +28,11 @@ if(!empty($_POST)){
 			Uploader::files('content/'.$taxonomy.'/'.$entry->id.'/','files');
 		});
 		$entry->store();
+		R::commit();
 		Post::clearPersistance();
 	}
 	catch(Exception_Validation $e){
+		R::rollback();
 		$formErrors = $e->getFlattenData();
 		$formPosted = false;
 	}
@@ -89,6 +93,7 @@ if(!empty($_POST)){
 						<fieldset>
 							<div>
 								<input id="geoname" class="geoname" name="ownGeopoint[0][label]" data-url="service/autocomplete/geoname" type="text" value="">
+								<button type="button" class="reset" title="Clear"></button>
 								<button type="button" class="map-dialog-open" title="Search on the map"></button>
 								<button type="button" class="geo-details-drop" title="Location details"></button>
 							</div>
