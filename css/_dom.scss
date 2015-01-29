@@ -23,7 +23,7 @@ a{
 	&:hover,
 	&:focus {
 		color: $color-dark;
-		text-decoration: underline;
+		text-decoration: none;
 	}
 	&:focus {
 		@include tab-focus();

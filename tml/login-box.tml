@@ -1,14 +1,21 @@
-<form method="post" class="signin" action="#">
-	<fieldset class="textbox">
-		<label class="username">
-			<span>Username or email</span>
-			<input id="username" name="username" autocomplete="on" placeholder="Username" type="text">
-		</label>
-		<label class="password">
-			<span>Password</span>
-			<input id="password" name="password" value="" placeholder="Password" type="password">
-		</label>
-		<button class="submit button" type="button">Sign in</button>
-		<p><a class="forgot" href="#">Forgot your password?</a></p>
-	</fieldset>
+<form method="post" class="login" action="./Login">
+	<h2>Login</h2>
+	<label for="login-username">Username or email</label>
+	<input name="login-username" autocomplete="on" type="text">
+	<label for="login-password">Password</label>
+	<input name="login-password" value="" type="password">
+	<input type="submit" value="Login">
+	<p><a class="forgot" href="New-Password">Forgot your password?</a></p>
+</form>
+<form method="post" class="signin" action="./Login">
+	<h2>Register</h2>
+	<label class="email">Email</label>
+	<input name="email" autocomplete="on" type="text">
+	<label for="username">Username</label>
+	<input name="username" autocomplete="on" type="text">
+	<label class="password">Password</label>
+	<input name="password" value="" type="password">
+	<label for="password-confirm">Password Confirmation</label>
+	<input name="password-confirm" value="" type="password">
+	<input type="submit" value="Register">
 </form>

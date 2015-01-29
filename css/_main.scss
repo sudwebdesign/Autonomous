@@ -61,6 +61,11 @@ body>main{
 			@?include icon(plus);
 		}
 	}
+	&.login{
+		h1{
+			@?include icon(user);
+		}
+	}
 	ul.tags{
 		@?include icon(tags);
 		&:before{

@@ -2,17 +2,19 @@ $css('is.login-box');
 $css('jquery-ui/core');
 $css('jquery-ui/button');
 $css('jquery-ui/dialog');
-$js(['jquery',
+$js([
+	'jquery',
 	'jquery-ui/core',
 	'jquery-ui/widget',
 	'jquery-ui/button',
 	'jquery-ui/dialog'
 ],true,function(){
-	$('body').append('<div class="login-dialog" title="Login"></div>');
-	var login = $('.login-dialog');
+	var login = $('<div class="login-dialog" title="Login / Sign-in"></div>');
+	login.appendTo('body');
 	var dialog = login.dialog({
 		autoOpen:false,
-		modal:true
+		modal:true,
+		width:'85%'
 	});
 	$.get('login-box',function(html){
 		dialog.append(html);

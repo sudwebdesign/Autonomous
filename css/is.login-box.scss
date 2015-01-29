@@ -1,0 +1,13 @@
+.login-dialog{
+	@?include grid(*, 1-98-1);
+	@?include grid(1-48-1, 1-48-1, 680px);
+	form.login,
+	form.signin{
+		float:left;
+		display:block;
+		position:relative;
+	}
+	input[type=submit]{
+		height:2em;
+	}
+}
