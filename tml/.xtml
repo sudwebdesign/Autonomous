@@ -22,7 +22,7 @@
 				<!--
 				<a is="persona" data-sitename="Autonomous" data-bgcolor="#93a72d" href="javascript:;">Login</a>
 				-->
-				<a href="Login" is="login-box">Login / Sign In</a>
+				<a href="Signin" is="login-box">Login / Signin</a>
 				<ul class="disabled">
 					<li>
 						<!--

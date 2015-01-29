@@ -1,0 +1,11 @@
+<extend>
+	<attr selector="main" addClass="login">
+	<write main>
+		<article>
+			<h1>Login</h1>
+			<div class="login-dialog" title="Login / Signin">
+				<include "login-box">
+			</div>
+		</article>
+	</write>
+</extend>

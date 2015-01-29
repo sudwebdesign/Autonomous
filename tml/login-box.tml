@@ -7,7 +7,7 @@
 	<input type="submit" value="Login">
 	<p><a class="forgot" href="New-Password">Forgot your password?</a></p>
 </form>
-<form method="post" class="signin" action="./Login">
+<form method="post" class="signin" action="./Register">
 	<h2>Register</h2>
 	<label class="email">Email</label>
 	<input name="email" autocomplete="on" type="text">
