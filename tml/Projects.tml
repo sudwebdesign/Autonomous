@@ -6,6 +6,7 @@ use Model\Query;
 use Model\R;
 use Model\ATableMain;
 use Tool\Geohash;
+use Tool\Punic\Calendar;
 use View\Exception as View_Exception;
 
 $limitation	= 25;
@@ -225,13 +226,17 @@ $imageByItem = function($item)use($URI,$taxonomy){
 											$geo .= '+rad:'.str_replace(',','.',round($geopoint->radius,3,PHP_ROUND_HALF_UP));
 									}
 								?>
-								<li><h5><a href="./<?=ucfirst($Taxonomy).$geo?>">
+								<li><h5><a href="./<?=$Taxonomy.$geo?>">
 									<?=$geopoint->label?>
 								</a></h5></li>
 							</foreach>
 						</if>
 					</ul>
 				</if>
+				<a href="./<?=$Taxonomy.'+date:'.$item->created?>" class="created">
+					created <?=Calendar::formatDate(Calendar::toDateTime($item->created), 'full', 'en')?>
+					at <?=date('H:m', @strtotime($item->created));?>
+				</a>
 				<hr>
 			</foreach>
 			<if "$count">

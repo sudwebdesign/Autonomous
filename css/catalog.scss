@@ -21,20 +21,26 @@ main.catalog{
 			text-align: center;
 		}
 	}
-	>article>h1{
-		&::before{
-			font-size:0.9em;
-			position: relative;
-			top: -0.1em;
-		}
-		font-size: 1.5em;
-		position: relative;
-		top: 0.1em;
-		>small{
-			font-size:0.8em;
-			>span{
-				font-size:0.7em;
+	>article{
+		>h1{
+			&::before{
+				font-size:0.9em;
+				position: relative;
+				top: -0.1em;
 			}
+			font-size: 1.5em;
+			position: relative;
+			top: 0.1em;
+			>small{
+				font-size:0.8em;
+				>span{
+					font-size:0.7em;
+				}
+			}
+		}
+		.created{
+			font-size:0.9em;
+			@?include icon(clock-o);
 		}
 	}
 	&.projects>article>h1, >aside>h2>a.project{
