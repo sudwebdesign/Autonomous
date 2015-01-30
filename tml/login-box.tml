@@ -1,21 +1,85 @@
-<form method="post" class="login" action="./Login">
-	<h2>Login</h2>
-	<label for="login-username">Username or email</label>
-	<input name="login-username" autocomplete="on" type="text">
-	<label for="login-password">Password</label>
-	<input name="login-password" value="" type="password">
-	<input type="submit" value="Login">
-	<p><a class="forgot" href="New-Password">Forgot your password?</a></p>
-</form>
-<form method="post" class="signin" action="./Register">
-	<h2>Register</h2>
-	<label class="email">Email</label>
-	<input name="email" autocomplete="on" type="text">
-	<label for="username">Username</label>
-	<input name="username" autocomplete="on" type="text">
-	<label class="password">Password</label>
-	<input name="password" value="" type="password">
-	<label for="password-confirm">Password Confirmation</label>
-	<input name="password-confirm" value="" type="password">
-	<input type="submit" value="Register">
-</form>
+<?
+use Tool\Auth;
+$action = isset($_GET['action'])?$_GET['action']:null;
+if($action){
+	$auth = new Auth();
+	$r = null;
+	switch($action){
+		case 'register':
+			if(isset($_POST['email'])&&isset($_POST['name'])&&isset($_POST['password'])&&isset($_POST['confirm'])){
+				$name = trim($_POST['name'])?$_POST['name']:$email;
+				$r = $auth->register($_POST['email'], $name, $_POST['password'], $_POST['confirm']);
+			}
+		break;
+		case 'resendactivate':
+			if(isset($_POST['email'])){
+				$r = $auth->resendActivation($_POST['email']);
+			}
+		break;
+		case 'activate':
+			if(isset($_GET['key'])){
+				$r = $auth->activate($_GET['key']);
+			}
+		break;
+		case 'login':
+			if(isset($_POST['name'])&&isset($_POST['password'])){
+				$r = $auth->login($_POST['name'], $_POST['password']);
+			}
+		break;
+		case 'resetreq':
+			if(isset($_POST['email'])){
+				$r = $auth->requestReset($_POST['email']);
+			}
+		break;
+		case 'resetpass':
+			if(isset($_GET['key'])&&isset($_POST['password'])&&isset($_POST['confirm'])){
+				$r = $auth->resetPass($_GET['key'], $_POST['password'], $_POST['confirm']);
+			}
+		break;
+		default:
+			throw new View\Exception(404);
+		break;
+	}
+	if($r)
+		echo $auth->getMessage($r);
+}
+
+switch($action){
+	default:
+	?>		
+		<form method="post" class="login" action="./Signin?action=login">
+			<h2>Login</h2>
+			<label for="name">Username or email</label>
+			<input name="name" autocomplete="on" type="text">
+			<label for="password">Password</label>
+			<input name="password" value="" type="password">
+			<input type="submit" value="Login">
+			<p><a href="./Signin?action=resetreq">Forgot your password?</a></p>
+		</form>
+		<form method="post" class="signin" action="./Signin?action=register">
+			<h2>Register</h2>
+			<label class="email">Email</label>
+			<input name="email" autocomplete="on" type="text" required>
+			<label for="name">Username</label>
+			<input name="name" autocomplete="on" type="text">
+			<label class="password">Password</label>
+			<input name="password" value="" type="password" required>
+			<label for="confirm">Password Confirmation</label>
+			<input name="confirm" value="" type="password" required>
+			<p><a href="./Signin?action=resendactivate">Resend Activation</a></p>
+			<input type="submit" value="Register">
+		</form>
+	<?
+	break;
+	case 'resendactivate':
+	?>
+		<form method="post" class="login" action="./Signin?action=<?=$action?>">
+			<h2>Resend activation mail</h2>
+			<label class="email">Email</label>
+			<input name="email" autocomplete="on" type="text" required>
+			<input type="submit" value="Resend">
+		</form>
+	<?
+	break;
+}
+?>
