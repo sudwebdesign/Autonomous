@@ -1,6 +1,6 @@
 <?
 use Tool\Auth;
-$action = isset($_GET['action'])?$_GET['action']:null;
+$action = isset($_GET['action'])?$_GET['action']:0;
 if($action){
 	$auth = new Auth();
 	$r = null;
@@ -36,16 +36,17 @@ if($action){
 				$r = $auth->resetPass($_GET['key'], $_POST['password'], $_POST['confirm']);
 			}
 		break;
+		case 'logout':
+			$r = $auth->logout();
+		break;
 		default:
 			throw new View\Exception(404);
 		break;
 	}
-	if($r)
-		echo $auth->getMessage($r);
 }
 
 switch($action){
-	default:
+	case 0:
 	?>		
 		<form method="post" class="login" action="./Signin?action=login">
 			<h2>Login</h2>
@@ -54,6 +55,12 @@ switch($action){
 			<label for="password">Password</label>
 			<input name="password" value="" type="password">
 			<input type="submit" value="Login">
+			<p>
+				<a is="persona" data-sitename="Autonomous" data-bgcolor="#93a72d" href="javascript:;">Login with Mozilla-Persona</a>
+				<!--
+				<a class="persona logout" href="javascript:;">Logout</a>
+				-->
+			</p>
 			<p><a href="./Signin?action=resetreq">Forgot your password?</a></p>
 		</form>
 		<form method="post" class="signin" action="./Signin?action=register">
@@ -80,6 +87,13 @@ switch($action){
 			<input type="submit" value="Resend">
 		</form>
 	<?
+	break;
+	case 'logout':
+		
+	break;
+	default:
+		if($r)
+			echo $auth->getMessage($r);
 	break;
 }
 ?>

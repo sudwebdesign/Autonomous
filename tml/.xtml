@@ -19,16 +19,10 @@
 		</form>
 		<ul is="dropdown">
 			<li>
-				<!--
-				<a is="persona" data-sitename="Autonomous" data-bgcolor="#93a72d" href="javascript:;">Login</a>
-				-->
 				<a href="Signin" is="login-box">Login / Signin</a>
 				<ul class="disabled">
 					<li>
-						<!--
-						<a class="persona logout" href="javascript:;">Logout</a>
-						-->
-						<a href="Logout">Logout</a>
+						<a href="Signin?action=logout">Logout</a>
 					</li>
 					<li>
 						<a href="Account">My Account</a>
