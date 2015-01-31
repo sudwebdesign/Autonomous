@@ -147,14 +147,14 @@ abstract class ATableMain extends Table{
 							$Query->joinAdd('AND ('.self::tagRank($taxonomy).')=?',$tags,count($tags));
 						}
 						else{
-							$Query->joinAdd('AND "{$prefix}tag"."name" IN ?',$tags);
+							$Query->joinAdd('AND "{#prefix}tag"."name" IN ?',$tags);
 						}
 					}
 				break;
 				case 'geo':
 					list($lat,$lon,$rad,$proxima) = $v;
 					if($lat!==null&&$lon!==null&&$rad){
-						$Query->join('"{$prefix}geopoint" ON "{$prefix}geopoint"."project_id" = "{$prefix}project"."id"');
+						$Query->join('"{#prefix}geopoint" ON "{#prefix}geopoint"."project_id" = "{#prefix}project"."id"');
 						list($minlon, $minlat, $maxlon, $maxlat) = Geocoding::getBoundingBox([$lat,$lon],$rad,Geocoding::getEarthRadius('km'));
 						if($proxima){
 							$Query->openWhereOr();
@@ -163,13 +163,13 @@ abstract class ATableMain extends Table{
 							$Query->openWhereAnd();
 						}
 						$Query
-							->where('"{$prefix}geopoint"."minlat" BETWEEN ? AND ?',$minlat,$maxlat)
-							->where('"{$prefix}geopoint"."minlon" BETWEEN ? AND ?',$minlon,$maxlon)
-							->where('"{$prefix}geopoint"."maxlat" BETWEEN ? AND ?',$minlat,$maxlat)
-							->where('"{$prefix}geopoint"."maxlon" BETWEEN ? AND ?',$minlon,$maxlon)
+							->where('"{#prefix}geopoint"."minlat" BETWEEN ? AND ?',$minlat,$maxlat)
+							->where('"{#prefix}geopoint"."minlon" BETWEEN ? AND ?',$minlon,$maxlon)
+							->where('"{#prefix}geopoint"."maxlat" BETWEEN ? AND ?',$minlat,$maxlat)
+							->where('"{#prefix}geopoint"."maxlon" BETWEEN ? AND ?',$minlon,$maxlon)
 							->closeWhere()
-							->where('(geodistance({$prefix}geopoint.lat,{$prefix}geopoint.lon,?,?)'
-								.($proxima?'-':'+').'COALESCE({$prefix}geopoint.radius,0)) <= ?',$lat,$lon,$rad)
+							->where('(geodistance({#prefix}geopoint.lat,{#prefix}geopoint.lon,?,?)'
+								.($proxima?'-':'+').'COALESCE({#prefix}geopoint.radius,0)) <= ?',$lat,$lon,$rad)
 						;
 					}
 				break;
@@ -204,10 +204,10 @@ abstract class ATableMain extends Table{
 							case 'geo':
 								if($lat!==null&&$lon!==null){
 									if(!$rad){
-										$Query->join('"{$prefix}geopoint" ON "{$prefix}geopoint"."project_id" = "{$prefix}project"."id"');
+										$Query->join('"{#prefix}geopoint" ON "{#prefix}geopoint"."project_id" = "{#prefix}project"."id"');
 									}
 									$Query
-										->orderBy('geodistance("{$prefix}geopoint"."lat","{$prefix}geopoint"."lon",?,?)',$lat,$lon)
+										->orderBy('geodistance("{#prefix}geopoint"."lat","{#prefix}geopoint"."lon",?,?)',$lat,$lon)
 										->sort('ASC')
 									;
 								}
@@ -227,7 +227,7 @@ abstract class ATableMain extends Table{
 							break;
 							case 'created':
 								$Query
-									->orderBy('{$prefix}'.$taxonomy.'.created')
+									->orderBy('{#prefix}'.$taxonomy.'.created')
 									->sort('DESC')
 								;
 							break;
@@ -243,12 +243,12 @@ abstract class ATableMain extends Table{
 		$Qt = new Query('tag');
 		$relationShared = $Qt->relationShared($taxonomy);
 		$Qt
-			->select('COUNT("{$prefix}tag"."id")')
+			->select('COUNT("{#prefix}tag"."id")')
 			->from('tag')
-			->join('"{$prefix}'.$relationShared.'"')
-			->joinOn('"{$prefix}'.$relationShared.'"."tag_id" = "{$prefix}tag"."id"
-					AND "{$prefix}'.$relationShared.'"."'.$taxonomy.'_id" = "{$prefix}'.$taxonomy.'"."id"
-					AND "{$prefix}tag"."name" IN ?')
+			->join('"{#prefix}'.$relationShared.'"')
+			->joinOn('"{#prefix}'.$relationShared.'"."tag_id" = "{#prefix}tag"."id"
+					AND "{#prefix}'.$relationShared.'"."'.$taxonomy.'_id" = "{#prefix}'.$taxonomy.'"."id"
+					AND "{#prefix}tag"."name" IN ?')
 		;
 		return $Qt;
 	}

@@ -9,12 +9,12 @@ final class TableTaxonomy extends ATableKeyword{
 		if($params)
 			return $q
 				->joinOn('taxonomy')
-				->where('{$prefix}taxonomy_taxonomy.taxonomy2_id=(SELECT id FROM {$prefix}taxonomy WHERE name=?)',[$params])
+				->where('{#prefix}taxonomy_taxonomy.taxonomy2_id=(SELECT id FROM {#prefix}taxonomy WHERE name=?)',[$params])
 				->getAssoc()
 			;
 		else
 			return $q
-				->where('{$prefix}taxonomy_id IS NULL')
+				->where('{#prefix}taxonomy_id IS NULL')
 				->getAssoc()
 			;
 	}
