@@ -1,4 +1,4 @@
-<Presenter:Presenter />
+<presenter:presenter />
 <?
 use Core\ArrayObject;
 use Core\Dev;
@@ -195,8 +195,10 @@ $imageByItem = function($item)use($URI,$taxonomy){
 					<if "$img=$imageByItem($item)">
 						<img src="<?=$img?>" alt="<?=$item->atitle?>" title="<?=$item->atitle?>" />
 					</if>
-					<?$presentation_length=strlen($item->presentation);?>
-					<if "$URI->search&&$presentation_length!=$item->presentation_length"> ... </if>
+					<?$presentation_length=strlen(str_replace(['<b>','</b>'],'',$item->presentation));?>
+					<if "$URI->search&&$item->presentation_length>$presentation_length&&strpos($item->presentation,'<b>')!==false">
+						...
+					</if>
 					<?=$item->presentation?>
 					<?/* <p>Auteur: <?=$item->user->email?></p> */?>
 					<if "$item->presentation_length>$presentation_length">

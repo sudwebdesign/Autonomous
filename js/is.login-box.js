@@ -9,19 +9,41 @@ $js([
 	'jquery-ui/button',
 	'jquery-ui/dialog'
 ],true,function(){
-	var login = $('<div class="login-dialog" title="Login / Sign-in"></div>');
-	login.appendTo('body');
-	var dialog = login.dialog({
-		autoOpen:false,
-		modal:true,
-		width:'85%'
-	});
-	$.get('login-box',function(html){
-		dialog.append(html);
-		$('[is="login-box"]').show().click(function(e){
+	var loaded,login,dialog,loadDialog,hanldeForm;
+	login = $('<div class="login-dialog" title="Login / Sign-in"></div>').appendTo('body');
+	loadDialog = function(){
+		$.get('login-box',function(html){
+			dialog = login.dialog({
+				modal:true,
+				width:'85%'
+			});
+			dialog.html(html);
+			hanldeForm();
+			loaded = true;
+		});
+	};
+	hanldeForm = function(){
+		dialog.find('form').submit(function(e){
 			e.preventDefault();
-			dialog.dialog('open');
+			var form,url;
+			form = $(this);
+			url = 'login-box';
+			url += '?'+form.attr('action').split('?')[1];
+			$.post(url,form.serialize(),function(html){
+				dialog.html(html);
+				hanldeForm();
+			});
 			return false;
 		});
+	};
+	$('[is="login-box"]').show().click(function(e){
+		e.preventDefault();
+		if(loaded){
+			dialog.dialog('open');
+		}
+		else{
+			loadDialog();
+		}
+		return false;
 	});
 });

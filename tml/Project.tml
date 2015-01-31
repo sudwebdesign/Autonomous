@@ -1,4 +1,4 @@
-<Presenter:Presenter />
+<presenter:presenter />
 <?
 use Core\ArrayObject;
 use Core\Dev;
@@ -56,7 +56,7 @@ if(!filter_var($URI[2],FILTER_VALIDATE_INT)){
 $Query = (new Query($taxonomy))
 	->where('"{$prefix}'.$taxonomy.'"'.'.id=?',[$URI[2]])
 ;
-$item = $Query->row4D();
+$item = $Query->row();
 if(empty($item))
 	$this->getController()->error(404);
 $item = new ArrayObject($item);

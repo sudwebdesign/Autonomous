@@ -178,7 +178,16 @@ abstract class ATableMain extends Table{
 					if($text){
 						$Query
 							->whereFullText('document',$text,$lang)
-							->selectFullTextHighlite('presentation',$text,$truncation,$lang)
+							->selectFullTextHighlightTruncated('presentation',$text,$truncation,$lang,[
+								'MaxFragments'=>2,
+								'MaxWords'=>25,
+								'MinWords'=>20,
+								'ShortWord'=>3,
+								'FragmentDelimiter'=>' ... ',
+								'StartSel'=>'<b>',
+								'StopSel'=>'</b>',
+								'HighlightAll'=>'FALSE',
+							])
 						;
 					}
 					elseif($truncation){

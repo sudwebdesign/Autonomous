@@ -1,9 +1,10 @@
+<presenter:presenter />
 <?
 use Tool\Auth;
-$action = isset($_GET['action'])?$_GET['action']:0;
+$action = isset($_GET['action'])?$_GET['action']:null;
+$r = null;
 if($action){
 	$auth = new Auth();
-	$r = null;
 	switch($action){
 		case 'register':
 			if(isset($_POST['email'])&&isset($_POST['name'])&&isset($_POST['password'])&&isset($_POST['confirm'])){
@@ -39,14 +40,32 @@ if($action){
 		case 'logout':
 			$r = $auth->logout();
 		break;
-		default:
-			throw new View\Exception(404);
-		break;
 	}
 }
 
 switch($action){
-	case 0:
+	case 'register':
+	?>
+		<p><a href="./Signin?action=resendactivate">Resend Activation</a></p>
+	<?
+	break;
+	case 'resendactivate':
+	break;
+	?>
+		<form method="post" class="login" action="./Signin?action=<?=$action?>">
+			<h2>Resend activation mail</h2>
+			<label class="email">Email</label>
+			<input name="email" autocomplete="on" type="text" required>
+			<input type="submit" value="Resend">
+		</form>
+	<?
+	break;
+	case 'logout':
+		
+	break;
+	default:
+		if($r)
+			echo $auth->getMessage($r);
 	?>		
 		<form method="post" class="login" action="./Signin?action=login">
 			<h2>Login</h2>
@@ -73,27 +92,9 @@ switch($action){
 			<input name="password" value="" type="password" required>
 			<label for="confirm">Password Confirmation</label>
 			<input name="confirm" value="" type="password" required>
-			<p><a href="./Signin?action=resendactivate">Resend Activation</a></p>
 			<input type="submit" value="Register">
 		</form>
 	<?
-	break;
-	case 'resendactivate':
-	?>
-		<form method="post" class="login" action="./Signin?action=<?=$action?>">
-			<h2>Resend activation mail</h2>
-			<label class="email">Email</label>
-			<input name="email" autocomplete="on" type="text" required>
-			<input type="submit" value="Resend">
-		</form>
-	<?
-	break;
-	case 'logout':
-		
-	break;
-	default:
-		if($r)
-			echo $auth->getMessage($r);
 	break;
 }
 ?>
