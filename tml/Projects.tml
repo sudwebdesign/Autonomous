@@ -119,8 +119,8 @@ foreach($liste->keys() as $akey){
 }
 $h1 = $URI[0];
 
-$imageByItem = function($item)use($URI,$taxonomy){
-	return '/content/'.$taxonomy.'/'.$item->id.'/'.$URI->filterParam($item->title).'.png';
+$imageByItem = function($item)use($taxonomy){
+	return '/content/'.$taxonomy.'/'.$item->id.'/'.$item->titleHref.'.png';
 };
 ?>
 <extend>
@@ -189,7 +189,7 @@ $imageByItem = function($item)use($URI,$taxonomy){
 				</small>
 			</h1>
 			<foreach "(array)@$liste as $id=>$item">
-				<?$href=$subUri.'+'.$URI->filterParam($item->title).'+'.$id;?>
+				<?$href=$subUri.'+'.$item->titleHref.'+'.$id;?>
 				<h2><a href="./<?=$href?>"><?=$item->title?></a></h2>
 				<a href="./<?=$href?>">
 					<if "$img=$imageByItem($item)">

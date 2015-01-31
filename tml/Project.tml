@@ -6,12 +6,12 @@ use Core\Session;
 use Core\STR;
 use Model\Query;
 
-Dev::on(Dev::SQL);
+//Dev::on(Dev::SQL);
 //Dev::on(Dev::DBSPEED);
 
-$taxonomy = 'projet';
+$taxonomy = 'project';
 $imageByItem = function($item)use($taxonomy,$URI){
-	return '/content/'.$taxonomy.'/'.$item->id.'/'.$URI->filterParam($item->title).'.png';
+	return '/content/'.$taxonomy.'/'.$item->id.'/'.$item->titleHref.'.png';
 };
 $filesByItem = function($item)use($taxonomy,$imageByItem){
 	$files = glob('content/'.$taxonomy.'/'.$item->id.'/*', GLOB_BRACE);
@@ -58,15 +58,32 @@ if(!filter_var($URI[2],FILTER_VALIDATE_INT)){
 	exit;
 }
 $Query = (new Query($taxonomy))
+	->select([
+		'id',
+		'title',
+		'titleHref',
+		'presentationHtml',
+		'tel',
+		'url',
+		'created'
+	])
+	->selectRelationnal([		
+		'geopoint		>		label',
+		'geopoint		>		lat',
+		'geopoint		>		lon',
+		'geopoint		>		radius',
+		
+		'tag			<>		name',
+		
+		'user			<		email',
+		'user			<		name',
+	])
 	->where('"{#prefix}'.$taxonomy.'"'.'.id=?',[$URI[2]])
 ;
-$item = $Query->row();
+$item = $Query->rowObject();
+
 if(empty($item))
 	$this->getController()->error(404);
-$item = new ArrayObject($item);
-if(!$item->titleHref){
-	$item->titleHref = $URI->filterParam($item->title);
-}
 if($URI[1]!=$item->titleHref){
 	$redirection($item->titleHref);
 }

@@ -132,6 +132,7 @@ abstract class ATableMain extends Table{
 		$Query->select([
 			'id',
 			'title',
+			'titleHref',
 			'tel',
 			'url',
 			'created'
