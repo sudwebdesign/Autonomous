@@ -20,13 +20,17 @@ abstract class ATableMain extends Table{
 	];
 	function onValidate(){
 		if(!Ruler::minchar($this->title,$this->minTitreLength))
-			$this->error('title','Le titre doit comporter minimum '.$this->minTitreLength.' caractères');
+			$this->error('title','Title must contain minimum of '.$this->minTitreLength.' characters');
 		elseif(!Ruler::maxchar($this->titre,$this->maxTitreLength))
-			$this->error('title','Le titre doit comporter maximum '.$this->maxTitreLength.' caractères');
+			$this->error('title','Title must contain maximum of '.$this->maxTitreLength.' characters');
 		if($this->tel&&!Ruler::tel($this->tel))
-			$this->error('tel','Numéro de téléphone non valide');
+			$this->error('tel','Ivalide phone number');
 		if($this->url&&!Ruler::url($this->url))
-			$this->error('url','Lien non valide');
+			$this->error('url','Invalide link url');
+		if($this->mass&&!Ruler::integer($this->mass))
+			$this->error('mass','Have to be a integer number');
+		if($this->mass&&!Ruler::minimum($this->mass,0))
+			$this->error('mass','Have to be a positive number');
 		$this->presentationHtml = $this->presentation;
 		$this->presentation = html_entity_decode(strip_tags($this->presentationHtml));
 		$this->titleHref = (new Faceted())->filterParam($this->title);
@@ -56,6 +60,8 @@ abstract class ATableMain extends Table{
 		$entry->tel = $data['tel'];
 		$entry->url = Filter::url($data['url']);
 		$entry->presentation = Filter::strip_tags_basic($data['presentation']);
+		$entry->adhesion = Filter::strip_tags_basic($data['adhesion']);
+		$entry->mass = $data['mass'];
 		if(isset($data['sharedTag'])&&isset($data['sharedTag']['name'])&&trim($data['sharedTag']['name'])){
 			$max = 5;
 			$tags = explode(' ',strip_tags($data['sharedTag']['name']));

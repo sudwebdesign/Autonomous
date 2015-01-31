@@ -1,20 +1,20 @@
 $js('jquery',function(){
 	<!--#include virtual="./validate.js" -->
 	var onSubmit = function(e){
-		e.preventDefault();
-		var email = $(document).data('persona.email');
-		var THIS = $(this);
-		var submit = function(){
-			THIS.off('submit',onSubmit).submit();
-		};
-		if(email){
-			submit();
-		}
-		else{
-			$(document).one('persona.login',submit);
-			$('[is=persona]:first').click();
-		}
-		return false;
+		//e.preventDefault();
+		//var email = $(document).data('persona.email');
+		//var THIS = $(this);
+		//var submit = function(){
+			//THIS.off('submit',onSubmit).submit();
+		//};
+		//if(email){
+			//submit();
+		//}
+		//else{
+			//$(document).one('persona.login',submit);
+			//$('[is=persona]:first').click();
+		//}
+		//return false;
 	};
 	var form = $('main form[action][id]');
 	form.on('submit',onSubmit);

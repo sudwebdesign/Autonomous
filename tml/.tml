@@ -2,10 +2,20 @@
 	<attr selector="main" addClass="home">
 	<write main>
 		<article>
-			<h1>Welcome</h1>
+			<h1>Welcome on Autonomous</h1>
+			<p>Autonomous is a social network designed for sharing
+				<b>projects</b>, <b>ideas</b>, <b>utopias</b> or <b>movement</b> and find peoples that make possible.</p>
+				It's independent from any institution, dogme or political entity. You are encouraged to promote your own philosophy research across your proposals.
+				By adhesion to a project, depending of project definition, you announce you'll bring real support when required number of adherant will reach, or you can just inform you like it, when no critical support is needed.
+				The critical mass concept is a main great feature that make this network singular.
+			<br>
+			<p>
+				<i>"When one man dream is only a dream. But if many dream together is the beginning of a new reality."</i>
+					Friedensreich Hundertwasse
+				<!--
+					Lorsqu'un seul homme rêve, ce n'est qu'un rêve. Mais si beaucoup rêvent ensemble, c'est le début d'une nouvelle réalité.
+				-->
+			</p>
 		</article>
-		<aside>
-			News
-		</aside>
 	</write>
 </extend>

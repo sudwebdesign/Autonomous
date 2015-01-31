@@ -45,9 +45,11 @@ body>main{
 		@include gradient-vertical(#3c3c3c,#222222);
 	}
 	&.home{
+/*
 		@?include grid( 1-96-1, 1-98-1,	768px);
 		@?include grid( 1-73-1, 1-23-1,	1024px);
 		@?include grid( 1-73-1, 1-23-1,	1260px);
+*/
 		h1{
 			@?include icon(home);
 		}

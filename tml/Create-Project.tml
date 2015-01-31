@@ -7,6 +7,7 @@ use Model\ATableMain;
 use Model\R;
 
 $taxonomy = 'project';
+$maxFileSize = Uploader::file_upload_max_size();
 if(!empty($_POST)){
 	$formPosted = true;
 	try{
@@ -14,7 +15,7 @@ if(!empty($_POST)){
 		$data['user'] = Session::get('email');
 		R::begin();
 		$entry = ATableMain::CREATE($taxonomy,$data);
-		$entry->on('created',function($entry)use($taxonomy,$URI){
+		$entry->on('created',function($entry)use($taxonomy,$URI,$maxFileSize){
 			Uploader::image(array(
 				'dir'=>'content/'.$taxonomy.'/'.$entry->id.'/',
 				'key'=>'image',
@@ -25,7 +26,7 @@ if(!empty($_POST)){
 				'extensions'=>array('png','jpg'),
 				'conversion'=>'png'
 			));
-			Uploader::files('content/'.$taxonomy.'/'.$entry->id.'/','files');
+			Uploader::files('content/'.$taxonomy.'/'.$entry->id.'/','files',null,$maxFileSize);
 		});
 		$entry->store();
 		R::commit();
@@ -43,17 +44,13 @@ if(!empty($_POST)){
 	<attr selector="main" addClass="create">
 	<write main>
 		<apply "forms.tpl">
-			<form modelRules="<?=$taxonomy?>" id="<?=$THIS->taxonomy?>" action="<?=$URI[0]?>" method="POST" enctype="multipart/form-data" role="form" <?=isset($formPosted)?'class="form-posted"':''?>>
+			<form id="create_form" action="<?=$URI[0]?>" method="POST" enctype="multipart/form-data" role="form" <?=isset($formPosted)?'class="form-posted"':''?>>
 				<if "isset($formPosted)">
 				<h1>New <i><?=$taxonomy?></i></h1>
 					<div class="form-return">
 						<if "$formPosted">
 							<i class='c'><?=$taxonomy?> added and</i>
 							<i class='r'><?=$taxonomy?> published</i>
-							<!--		
-								<i class='u'><?=$taxonomy?> updated</i>
-								<i class='d'><?=$taxonomy?> removed</i> 
-							-->
 						<else>
 							<i class='i'><?=$taxonomy?> not added, please correct the form</i>
 							<?var_dump($formErrors);?>
@@ -85,7 +82,8 @@ if(!empty($_POST)){
 				</fieldset>
 				<fieldset>
 					<legend>Join files <small>(images or documents)</small></legend>
-					<input type="file" name="files[]" accept="application/*,text/*,image/*" title="Sélectionner des Fichiers" multiple />
+					<input type="file" name="files[]" accept="application/*,text/*,image/*" title="Select files" multiple />
+					<input type="hidden" value="<?=$maxFileSize?>" name="MAX_FILE_SIZE">
 				</fieldset>
 				<fieldset>
 					<legend>Place <small>(city,locality or adress)</small></legend>
@@ -105,11 +103,16 @@ if(!empty($_POST)){
 								<label for="geo-rayon">Radius (km)</label>
 								<input name="ownGeopoint[0][radius]" id="geo-rayon" class="in-radius" type="text">
 							</fieldset>
-							<div class="map-dialog" title="Find location">
-								<input class="gg-maps" type="text" value="" placeholder="Look for adress, place or city">
-							</div>
 						</fieldset>
 					</geo-completer>
+				</fieldset>
+				<fieldset>
+					<legend>Engagement on adhesion</legend>
+					<textarea name="adhesion" type="text" value="" placeholder="" is="ckeditor"></textarea>
+				</fieldset>
+				<fieldset>
+					<legend>Required number of adherent</legend>
+					<input name="mass" type="number" min="0" value="" step="1">
 				</fieldset>
 				<fieldset is="daterange">
 					<legend>Date</legend>

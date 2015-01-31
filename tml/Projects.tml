@@ -167,9 +167,6 @@ $imageByItem = function($item)use($taxonomy){
 								<label for="geo-rayon">radius</label>
 								<input name="rad" id="geo-rayon" class="in-radius" value="<?=str_replace(',','.',$URI->rad)?>" autocomplete="off">
 							</fieldset>
-							<div class="map-dialog" title="Find location">
-								<input class="gg-maps" type="text" value="" placeholder="Look for adress, place or city">
-							</div>
 						</fieldset>
 					</geo-completer>
 					<fieldset>

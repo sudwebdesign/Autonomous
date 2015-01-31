@@ -36,7 +36,7 @@ $redirection = function($location=null,$location2=null)use($URI){
 	}
 	$redirect = $URI[0].'+'.$title.'+'.$id;
 	if(!Dev::has(Dev::ROUTE))
-		header('Location: '.$redirect,true,301);
+		header('Location: '.$redirect,false,301);
 	else
 		echo 'Location: '.$redirect;
 	exit;
