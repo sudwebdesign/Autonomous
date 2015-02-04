@@ -24,7 +24,24 @@ if($action){
 		break;
 		case 'login':
 			if(isset($_POST['name'])&&isset($_POST['password'])){
-				$r = $auth->login($_POST['name'], $_POST['password']);
+				$lifetime = 0;
+				if(isset($_POST['remember'])&&$_POST['remember']&&isset($_POST['lifetime'])){
+					switch($_POST['lifetime']){
+						case 'day':
+							$lifetime = 86400;
+						break;
+						case 'week':
+							$lifetime = 604800;
+						break;
+						case 'month':
+							$lifetime = 2592000;
+						break;
+						case 'year':
+							$lifetime = 31536000;
+						break;
+					}
+				}
+				$r = $auth->login($_POST['name'], $_POST['password'], $lifetime);
 			}
 		break;
 		case 'resetreq':
@@ -65,7 +82,7 @@ switch($action){
 	break;
 	default:
 		if($r)
-			echo $auth->getMessage($r);
+			echo $auth->getMessage($r,true);
 	?>		
 		<form method="post" class="login" action="./Signin?action=login">
 			<h2>Login</h2>
@@ -73,9 +90,24 @@ switch($action){
 			<input name="name" autocomplete="on" type="text">
 			<label for="password">Password</label>
 			<input name="password" value="" type="password">
+			
+			<fieldset>
+				<label for="remember">Remember me</label>
+				<input type="checkbox" name="remember" value="1">
+				<select name="lifetime">
+					<option value="day">One Day</option>
+					<option value="week" selected>One Week</option>
+					<option value="month">One Month</option>
+					<option value="year">One Year</option>
+				</select>
+			</fieldset>
+			
 			<input type="submit" value="Login">
 			<p>
+				<!--
 				<a is="persona" data-sitename="Autonomous" data-bgcolor="#93a72d" href="javascript:;">Login with Mozilla-Persona</a>
+				-->
+				
 				<!--
 				<a class="persona logout" href="javascript:;">Logout</a>
 				-->
