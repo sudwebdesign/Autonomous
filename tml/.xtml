@@ -27,7 +27,7 @@
 						</if>
 						<span><?=$identity['name']?></span>
 					<else>
-						Login / Signin
+						Login / Register
 					</if>
 				</a>
 				<ul <?=$identity?'':'class="disabled"'?>>
