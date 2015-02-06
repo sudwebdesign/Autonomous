@@ -1,61 +1,9 @@
 <?
-if(isset($_GET['action'])&&$_GET['action']){
+if(isset($_GET['action'])&&($action=$_GET['action'])){
 	$auth = new Tool\Auth();
-	$authResult = null;
-	switch($_GET['action']){
-		case 'register':
-			if(isset($_POST['email'])&&isset($_POST['name'])&&isset($_POST['password'])&&isset($_POST['confirm'])){
-				$email = $_POST['email'];
-				$name = trim($_POST['name'])?$_POST['name']:$email;
-				Core\Session::set('signin','email',$email);
-				$authResult = $auth->register($email, $name, $_POST['password'], $_POST['confirm']);
-			}
-		break;
-		case 'resendactivate':
-			if($email=Core\Session::get('signin','email')){
-				$authResult = $auth->resendActivation($email);
-			}
-		break;
-		case 'activate':
-			if(isset($_GET['key'])){
-				$authResult = $auth->activate($_GET['key']);
-			}
-		break;
-		case 'login':
-			if(isset($_POST['name'])&&isset($_POST['password'])){
-				$lifetime = 0;
-				if(isset($_POST['remember'])&&$_POST['remember']&&isset($_POST['lifetime'])){
-					switch($_POST['lifetime']){
-						case 'day':
-							$lifetime = 86400;
-						break;
-						case 'week':
-							$lifetime = 604800;
-						break;
-						case 'month':
-							$lifetime = 2592000;
-						break;
-						case 'year':
-							$lifetime = 31536000;
-						break;
-					}
-				}
-				$authResult = $auth->login($_POST['name'], $_POST['password'], $lifetime);
-			}
-		break;
-		case 'resetreq':
-			if(isset($_POST['email'])){
-				$authResult = $auth->requestReset($_POST['email']);
-			}
-		break;
-		case 'resetpass':
-			if(isset($_GET['key'])&&isset($_POST['password'])&&isset($_POST['confirm'])){
-				$authResult = $auth->resetPass($_GET['key'], $_POST['password'], $_POST['confirm']);
-			}
-		break;
-		case 'logout':
-			$authResult = $auth->logout();
-		break;
+	$authServer = new Tool\AuthServer($auth);
+	if(method_exists($authServer,$action)){
+		$authResult = $authServer->$action();
 	}
 }
 ?>

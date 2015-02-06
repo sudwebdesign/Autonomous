@@ -1,5 +1,5 @@
 <if "isset($authResult)&&$authResult">
-	<?=$auth->getMessage($authResult,true);?>
+	<?=$authServer->getMessage($authResult,true);?>
 </if>
 <?
 $action = isset($_GET['action'])?$_GET['action']:null;
