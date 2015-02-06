@@ -22,7 +22,7 @@
 				<a href="Signin" is="login-box">Login / Signin</a>
 				<ul class="disabled">
 					<li>
-						<a href="Signin?action=logout">Logout</a>
+						<a class="logout" href="Signin?action=logout">Logout</a>
 					</li>
 					<li>
 						<a href="Account">My Account</a>
