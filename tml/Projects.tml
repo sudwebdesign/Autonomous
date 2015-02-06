@@ -125,7 +125,7 @@ $imageByItem = function($item)use($taxonomy){
 ?>
 <extend>
 	<after "head>meta:last">
-		<if "!empty($tags)">
+		<if "!empty($tags)||$URI->geo||$URI->geohash||$URI->start||$URI->end">
 			<meta name="robots" content="noindex,follow" />
 		</if>
 	</after>

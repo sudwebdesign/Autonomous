@@ -117,12 +117,6 @@ switch($action){
 			<input type="submit" value="Login">
 			<p>
 				<a class="persona login" data-sitename="Autonomous" data-bgcolor="#93a72d" href="#">Login with Mozilla-Persona</a>
-				<!--
-				-->
-				
-				<!--
-				<a class="persona logout" href="javascript:;">Logout</a>
-				-->
 			</p>
 			<p><a href="./Signin?action=resetreq">Forgot your password?</a></p>
 		</form>
