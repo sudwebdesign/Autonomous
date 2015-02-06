@@ -1,11 +1,12 @@
 <presenter:presenter />
+<include "login-post.btml">
 <extend>
 	<attr selector="main" addClass="login">
 	<write main>
 		<article>
 			<h1>Login</h1>
 			<div class="login-dialog">
-				<include "login-box">
+				<include "login-view.btml">
 			</div>
 		</article>
 	</write>

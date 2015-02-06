@@ -1,0 +1,75 @@
+<if "isset($authResult)&&$authResult">
+	<?=$auth->getMessage($authResult,true);?>
+</if>
+<?
+$action = isset($_GET['action'])?$_GET['action']:null;
+switch($action){
+	case 'register':
+	?>
+		<p><a href="./Signin?action=resendactivate">Resend Activation</a></p>
+	<?
+	break;
+	case 'resendactivate':
+	?>
+		<form method="post" class="login" action="./Signin?action=<?=$action?>">
+			<h2>Resend activation mail</h2>
+			<label class="email">Email</label>
+			<input name="email" autocomplete="on" type="text" required>
+			<input type="submit" value="Resend">
+		</form>
+	<?
+	break;
+	case 'resetreq':
+	?>
+		<form method="post" class="login" action="./Signin?action=<?=$action?>">
+			<h2>Forgot password</h2>
+			<label class="email">Email</label>
+			<input name="email" autocomplete="on" type="text" required>
+			<input type="submit" value="Send">
+		</form>
+	<?
+	break;
+	case 'logout':
+		
+	break;
+	default:
+	?>		
+		<form method="post" class="login" action="./Signin?action=login">
+			<h2>Login</h2>
+			<label for="name">Username or email</label>
+			<input name="name" autocomplete="on" type="text">
+			<label for="password">Password</label>
+			<input name="password" value="" type="password">
+			
+			<fieldset>
+				<label for="remember">Remember me</label>
+				<input type="checkbox" name="remember" value="1">
+				<select name="lifetime">
+					<option value="day">One Day</option>
+					<option value="week" selected>One Week</option>
+					<option value="month">One Month</option>
+					<option value="year">One Year</option>
+				</select>
+			</fieldset>
+			
+			<input type="submit" value="Login">
+			<p>
+				<a class="persona login" data-sitename="Autonomous" data-bgcolor="#93a72d" href="#">Login with Mozilla-Persona</a>
+			</p>
+			<p><a href="./Signin?action=resetreq">Forgot your password?</a></p>
+		</form>
+		<form method="post" class="signin" action="./Signin?action=register">
+			<h2>Register</h2>
+			<label class="email">Email</label>
+			<input name="email" autocomplete="on" type="text" required>
+			<label for="name">Username</label>
+			<input name="name" autocomplete="on" type="text">
+			<label class="password">Password</label>
+			<input name="password" value="" type="password" required>
+			<label for="confirm">Password Confirmation</label>
+			<input name="confirm" value="" type="password" required>
+			<input type="submit" value="Register">
+		</form>
+	<?
+	break;
+}
