@@ -49,6 +49,12 @@
 			<li><a href="Calendar">Calendar</a></li>
 			<li><a href="Map">Map</a></li>
 			<li><a href="News">News</a></li>
+			<li>
+				<a href="#">New</a>
+				<ul>
+					<li><a href="Create-Project">Project</a></li>
+				</ul>
+			</li>
 		</ul>
 	</nav>
 	<main></main>

@@ -84,7 +84,7 @@ body>nav {
 			> li {
 				border-left: 1px solid #4A4A4A;
 				border-right: 1px solid #292929;
-				width:#{(100%/5)}; //adjust to number of element in menu
+				width:#{(100%/6)}; //adjust to number of element in menu
 				>a{
 					padding-top: 0.1em;
 					padding-bottom: 0.2em;
@@ -122,7 +122,8 @@ body>nav {
 		&[href^="News"]{
 			@?include icon(newspaper-o);
 		}
-		&[href="Projects"]{
+		&[href="Projects"],
+		&[href="Creat-Project"]{
 			@?include icon(cloud);
 		}
 		&[href="People"]{
@@ -130,6 +131,9 @@ body>nav {
 		}
 		&[href="Map"]{
 			@?include icon(globe);
+		}
+		&[href="#"]{
+			@?include icon(plus);
 		}
 	}
 }
