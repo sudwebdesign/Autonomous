@@ -122,8 +122,13 @@ body>header{
 			}
 		}
 	}
-	a[is=persona],
-	a[href="Signin"]{
+	a[href="Account"]{
+		@?include icon(user);
+	}
+	a.logout{
+		@?include icon(power-off);
+	}
+	a[is=loginbox]{
 		display:none;
 		float:right;
 		@?include icon(user);
