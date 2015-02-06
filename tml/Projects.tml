@@ -124,6 +124,11 @@ $imageByItem = function($item)use($taxonomy){
 };
 ?>
 <extend>
+	<after "head>meta:last">
+		<if "!empty($tags)">
+			<meta name="robots" content="noindex,follow" />
+		</if>
+	</after>
 	<css+js catalog>
 	<attr selector="main" addClass="catalog projects">
 	<write main>
@@ -245,7 +250,7 @@ $imageByItem = function($item)use($taxonomy){
 						<li class="active"><span class="current prev">Previous</span></li>
 					<else>
 						<li><a class="prev page-link" href="./<?=$pagination->href?>">First</a></li>
-						<li><a class="prev page-link" href="./<?=$pagination->href.($page==2?'':$pagination->prefix.($page-1))?>">Previous</a></li>
+						<li><a rel="prev" class="prev page-link" href="./<?=$pagination->href.($page==2?'':$pagination->prefix.($page-1))?>">Previous</a></li>
 					</if>
 					<for from="$pagination->start" to="$pagination->end">
 						<if "$page==$i">
@@ -265,7 +270,7 @@ $imageByItem = function($item)use($taxonomy){
 						</li>
 					<else>
 						<li>
-							<a class="next page-link" href="./<?=$pagination->href.$pagination->prefix.($page+1)?>">Next</a>
+							<a rel="next" class="next page-link" href="./<?=$pagination->href.$pagination->prefix.($page+1)?>">Next</a>
 						</li>
 						<li>
 							<a class="next page-link" href="./<?=$pagination->href.$pagination->prefix.($pagination->pagesTotal)?>">Last</a>

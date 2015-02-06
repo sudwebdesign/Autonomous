@@ -8,6 +8,7 @@ class Presenter extends \Surikat\Presenter\Presenter{
 		$this->mode = $x[0];
 	}
 	function dynamic(){
+		ob_implicit_flush(false);
 		$this->URI = $this->getView()->getController()->getRouter();
 		$this->title	= (($u=$this->URI[0])?$u.' - ':'').'Autonomous';
 		$this->h1		= $this->title;

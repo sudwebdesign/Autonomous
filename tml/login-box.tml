@@ -1,6 +1,7 @@
 <presenter:presenter />
 <?
 use Tool\Auth;
+use Core\Session;
 $action = isset($_GET['action'])?$_GET['action']:null;
 $r = null;
 if($action){
@@ -8,13 +9,15 @@ if($action){
 	switch($action){
 		case 'register':
 			if(isset($_POST['email'])&&isset($_POST['name'])&&isset($_POST['password'])&&isset($_POST['confirm'])){
+				$email = $_POST['email'];
 				$name = trim($_POST['name'])?$_POST['name']:$email;
-				$r = $auth->register($_POST['email'], $name, $_POST['password'], $_POST['confirm']);
+				Session::set('signin','email',$email);
+				$r = $auth->register($email, $name, $_POST['password'], $_POST['confirm']);
 			}
 		break;
 		case 'resendactivate':
-			if(isset($_POST['email'])){
-				$r = $auth->resendActivation($_POST['email']);
+			if($email=Session::get('signin','email')){
+				$r = $auth->resendActivation($email);
 			}
 		break;
 		case 'activate':
@@ -58,6 +61,8 @@ if($action){
 			$r = $auth->logout();
 		break;
 	}
+	if($r)
+		echo $auth->getMessage($r,true);
 }
 
 switch($action){
@@ -67,7 +72,6 @@ switch($action){
 	<?
 	break;
 	case 'resendactivate':
-	break;
 	?>
 		<form method="post" class="login" action="./Signin?action=<?=$action?>">
 			<h2>Resend activation mail</h2>
@@ -77,12 +81,20 @@ switch($action){
 		</form>
 	<?
 	break;
+	case 'resetreq':
+	?>
+		<form method="post" class="login" action="./Signin?action=<?=$action?>">
+			<h2>Forgot password</h2>
+			<label class="email">Email</label>
+			<input name="email" autocomplete="on" type="text" required>
+			<input type="submit" value="Send">
+		</form>
+	<?
+	break;
 	case 'logout':
 		
 	break;
 	default:
-		if($r)
-			echo $auth->getMessage($r,true);
 	?>		
 		<form method="post" class="login" action="./Signin?action=login">
 			<h2>Login</h2>
@@ -104,8 +116,8 @@ switch($action){
 			
 			<input type="submit" value="Login">
 			<p>
+				<a class="persona login" data-sitename="Autonomous" data-bgcolor="#93a72d" href="#">Login with Mozilla-Persona</a>
 				<!--
-				<a is="persona" data-sitename="Autonomous" data-bgcolor="#93a72d" href="javascript:;">Login with Mozilla-Persona</a>
 				-->
 				
 				<!--

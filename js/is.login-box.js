@@ -36,14 +36,30 @@ $js([
 			return false;
 		});
 	};
-	$('[is="login-box"]').show().click(function(e){
-		e.preventDefault();
-		if(loaded){
-			dialog.dialog('open');
+	
+	$.getJSON('service/auth/email',function(email){
+		if(email){
+			logonCALL(email);
+			logoutBTN.on('click',function(){
+				out = true;
+				initPersona();
+			});
 		}
 		else{
-			loadDialog();
+			init = true;
+			loginBTN.on('click',function(){
+				initPersona(true);
+			}).show();
 		}
-		return false;
-	});
+		$('[is="login-box"]').show().click(function(e){
+			e.preventDefault();
+			if(loaded){
+				dialog.dialog('open');
+			}
+			else{
+				loadDialog();
+			}
+			return false;
+		});
+	});	
 });

@@ -5,7 +5,7 @@
   //'tableRequests' => 'request',
   //'algo' => PASSWORD_DEFAULT,
   //'siteUrl' => rtrim(Domain::getBaseHref(),'/'),
-  //'siteLoginUri' => 'Login',
-  //'siteActivateUri' => 'Signin',
-  //'siteResetUri' => 'Signin',
+  'siteLoginUri' => 'Login',
+  'siteActivateUri' => 'Signin',
+  'siteResetUri' => 'Signin',
 );
