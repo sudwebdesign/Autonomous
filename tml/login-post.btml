@@ -2,8 +2,6 @@
 if(isset($_GET['action'])&&($action=$_GET['action'])){
 	$auth = new Tool\Auth();
 	$authServer = new Tool\AuthServer($auth);
-	if(method_exists($authServer,$action)){
-		$authResult = $authServer->$action();
-	}
+	$authResult = $authServer->action($action);
 }
 ?>
