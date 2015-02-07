@@ -19,13 +19,16 @@
 		</form>
 		<ul is="dropdown">
 			<li>
-				<?$identity=Core\Session::get('_AUTH_');?>
+				<?
+					$identity = Core\Session::get('_AUTH_');
+					$email = isset($identity['email'])&&$identity['email'];
+				?>
 				<a href="Signin" is="login-box" <?=$identity?'':'class="logged"'?>>
 					<if "$identity">
-						<if "isset($identity['email'])&&$identity['email']">
-							<img src="http://www.gravatar.com/avatar/<?=md5($identity['email']);?>?s=24" width="24" height="24" />
+						<if "$email">
+							<img src="http://www.gravatar.com/avatar/<?=md5($identity['email']);?>?s=24" width="24" height="24" />							
 						</if>
-						<span><?=$identity['name']?></span>
+						<span <?=$email?'':'class="user-std"'?>><?=$identity['name']?></span>
 					<else>
 						Login / Register
 					</if>

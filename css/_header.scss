@@ -125,6 +125,9 @@ body>header{
 	a[href="Account"]{
 		@?include icon(user);
 	}
+	span.user-std{
+		@?include icon(user);
+	}
 	a.logout{
 		@?include icon(power-off);
 	}
