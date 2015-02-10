@@ -6,15 +6,13 @@ $authMsg = null;
 if($authResult&&!is_bool($authResult)){
 	$authMsg = $authServer->getMessage($authResult,true);
 }
-switch($action){
-	case 'register':
-	?>
+?>
+<switch "$action">
+	<case "register">
 		<?=$authMsg?>
 		<p><a href="./Signin?action=resendactivate">Resend Activation</a></p>
-	<?
-	break;
-	case 'resendactivate':
-	?>
+	</case>
+	<case "resendactivate">
 		<form method="post" class="login" action="./Signin?action=<?=$action?>">
 			<h2>Resend activation mail</h2>
 			<label class="email">Email</label>
@@ -22,10 +20,8 @@ switch($action){
 			<input type="submit" value="Resend">
 			<?=$authMsg?>
 		</form>
-	<?
-	break;
-	case 'resetreq':
-	?>	
+	</case>
+	<case "resetreq">
 		<if "$authMsg">
 			<?=$authMsg?>
 		<else>
@@ -37,27 +33,22 @@ switch($action){
 				<?=$authMsg?>
 			</form>
 		</if>
-	<?
-	break;
-	case 'login':
-		echo $authMsg;
-		if($authResult===Auth::OK_LOGGED_IN&&Core\HTTP::isAjax()){
-			echo ' <span data-user-reload="1"></span>';
-		}
-	break;
-	case 'logout':
-		echo $authMsg;
-		if($authResult===Auth::OK_LOGGED_OUT){
-			if(Core\HTTP::isAjax()){
-				echo ' <span data-user-reload="1"></span>';
-			}
-		}
-		elseif($authResult){
-			?>You're not connected<?
-		}
-	break;
-	default:
-	?>
+	</case>
+	<case "login">
+		<span><?=$authMsg?></span>
+		<if "$authResult===Auth::OK_LOGGED_IN&&Core\HTTP::isAjax()">
+			<span data-user-reload="1"></span>
+		</if>
+	</case>
+	<case "logout">
+		<span><?=$authMsg?></span>
+		<if "$authResult===Auth::OK_LOGGED_OUT&&Core\HTTP::isAjax()">
+			<span data-user-reload="1"></span>
+		<elseif "$authResult">
+			You're not connected
+		</if>
+	</case>
+	<case "default">
 		<if "!$identity">
 			<form method="post" class="login" action="./Signin?action=login">
 				<h2>Login</h2>
@@ -99,9 +90,8 @@ switch($action){
 				<input type="submit" value="Register">
 			</form>
 		<else>
-			You are allready logged as "<?=$identity['name']?>"<br>
+			You are logged as "<?=$identity['name']?>"<br>
 			<a href="Signin?action=logout">Logout</a>
 		</if>
-	<?
-	break;
-}
+	</case>
+</switch>
