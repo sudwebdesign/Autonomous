@@ -5,27 +5,39 @@
 	<js+css form>
 	<write main>
 		<form id="mon_compte" action="<?=$HREF?>" method="POST" enctype="multipart/form-data" role="form">
-			<h1>Mon Compte</h1>
+			<h1>My Account</h1>
 			<fieldset>
 				<legend>Email</legend>
-				<input type="email" name="email" value="" required="" />
+				<input type="email" name="email" value="" required>
 			</fieldset>
 			<fieldset>
-				<legend>Site Web</legend>
+				<legend>Login</legend>
+				<input type="login" name="login" value="">
+			</fieldset>
+			<fieldset>
+				<legend>Public Name</legend>
+				<input type="name" name="name" value="">
+			</fieldset>
+			<fieldset>
+				<legend>Website</legend>
 				<input type="url" name="url" value="">
 			</fieldset>
 			<fieldset>
-				<legend>Téléphone</legend>
-				<input type="tel" name="tel" maxlength="20" value="">
+				<legend>Phone Number</legend>
+				<input type="tel" name="tel" pattern="^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$" value="">
+				<include "form-select-tel-i18n.btml">
 			</fieldset>
 			<fieldset>
-				<legend>Personne physique ou morale</legend>
-					<select name="entite" db-cast="enum">
-						<option value="Association">Association</option>
-						<option value="Collectivité">Collectivité</option>
-						<option value="Collectivité">Particulier</option>
-						<option value="Collectivité">Pro</option>
-					</select>
+				<legend>Password</legend>
+				<input type="password" name="password" value="">
+			</fieldset>
+			<fieldset>
+				<legend>Password Confirm</legend>
+				<input type="password_confirm" name="password_confirm" value="">
+			</fieldset>
+			<fieldset>
+				<legend>Old Password</legend>
+				<input type="password_old" name="password_old" value="">
 			</fieldset>
 		</form>
 	</write>

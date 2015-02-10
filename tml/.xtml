@@ -18,7 +18,7 @@
 			<input type="submit" value="Search">
 		</form>
 		<ul is="dropdown">
-			<li data-user-href="identity">
+			<li data-href="identity" data-load="user">
 				<include "identity">
 			</li>
 		</ul>

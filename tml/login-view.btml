@@ -36,59 +36,27 @@ if($authResult&&!is_bool($authResult)){
 	</case>
 	<case "login">
 		<span><?=$authMsg?></span>
-		<if "$authResult===Auth::OK_LOGGED_IN&&Core\HTTP::isAjax()">
-			<span data-user-reload="1"></span>
+		<if "$authResult===Auth::OK_LOGGED_IN">
+			<if "Core\HTTP::isAjax()">
+				<span data-reload="user"></span>
+			</if>
+		<else>
+			<include "login-form-login.btml">
 		</if>
 	</case>
 	<case "logout">
 		<span><?=$authMsg?></span>
-		<if "$authResult===Auth::OK_LOGGED_OUT&&Core\HTTP::isAjax()">
-			<span data-user-reload="1"></span>
+		<if "$authResult===Auth::OK_LOGGED_OUT">
+			<if "Core\HTTP::isAjax()">
+				<span data-reload="user"></span>
+			</if>
 		<elseif "$authResult">
 			You're not connected
 		</if>
 	</case>
 	<case "default">
 		<if "!$identity">
-			<form method="post" class="login" action="./Signin?action=login">
-				<h2>Login</h2>
-				<label for="login">Login or email</label>
-				<input name="login" autocomplete="on" type="text">
-				<label for="password">Password</label>
-				<input name="password" value="" type="password">
-				
-				<fieldset class="remember">
-					<label for="remember">Remember me</label>
-					<input type="checkbox" name="remember" value="1" checked>
-					<select name="lifetime">
-						<option value="day">One Day</option>
-						<option value="week">One Week</option>
-						<option value="month">One Month</option>
-						<option value="year">One Year</option>
-					</select>
-				</fieldset>
-				<p>
-					<a class="persona login" data-sitename="Autonomous" data-bgcolor="#93a72d" href="#">
-						Login with Mozilla-Persona <small>(by Gmail,Yahoo,Hotmail,MSN)</small>
-					</a>
-				</p>
-				<p><a href="./Signin?action=resetreq">Forgot your password?</a></p>
-				<input type="submit" value="Login">
-			</form>
-			<form method="post" class="signin" action="./Signin?action=register">
-				<h2>Register</h2>
-				<label class="email">Email</label>
-				<input name="email" autocomplete="on" type="text" required>
-				<label for="login">Login</label>
-				<input name="login" autocomplete="on" type="text">
-				<label for="name">Public name</label>
-				<input name="name" autocomplete="on" type="text">
-				<label class="password">Password</label>
-				<input name="password" value="" type="password" required>
-				<label for="confirm">Password Confirmation</label>
-				<input name="confirm" value="" type="password" required>
-				<input type="submit" value="Register">
-			</form>
+			<include "login-form.btml">
 		<else>
 			You are logged as "<?=$identity['name']?>"<br>
 			<a href="Signin?action=logout">Logout</a>

@@ -5,7 +5,7 @@
 	<write main>
 		<article>
 			<h1>User</h1>
-			<div class="login-dialog">
+			<div class="login-dialog" data-load="user" data-href="login-box">
 				<include "login-view.btml">
 			</div>
 		</article>

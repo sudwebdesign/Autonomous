@@ -32,13 +32,17 @@ $js([
 			$.post(url,form.serialize(),function(html){
 				dialog.html(html);
 				hanldeForm();
-				if($(html).find('*[data-user-reload="1"]').length){
-					$('*[data-user-href').each(function(){
-						$(this).load($(this).attr('data-user-href'));
+				if($('*[data-reload]',dialog).length){
+					$('*[data-reload]',dialog).each(function(){
+						var load = $(this).attr('data-reload');
+						$('*[data-load="'+load+'"][data-href]').each(function(){
+							var href = $(this).attr('data-href');
+							$(this).load(href);
+						});
 					});
 					setTimeout(function(){
 						dialog.dialog('close');
-					},3000);
+					},500);
 				}
 			});
 			return false;
