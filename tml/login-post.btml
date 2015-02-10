@@ -1,4 +1,5 @@
 <?
+$authResult = null;
 if(isset($_GET['action'])&&($action=$_GET['action'])){
 	$auth = new Tool\Auth();
 	$authServer = new Tool\AuthServer($auth);

@@ -100,7 +100,6 @@ body>header{
 		}
 	}
 	>ul[is=dropdown]{
-		text-align:right;
 		margin-top:0.3em;
 		padding-right:0.3em;
 		@media(min-width:960px){
@@ -122,28 +121,16 @@ body>header{
 			}
 		}
 	}
-	a[href="Account"]{
-		@?include icon(user);
-	}
+	a[href="Account"],
+	a.logger,
 	span.user-std{
 		@?include icon(user);
 	}
 	a.logout{
 		@?include icon(power-off);
 	}
-	a[is=loginbox]{
-		display:none;
-		float:right;
-		@?include icon(user);
-		&.persona-connected:before{
-			content:"";
-		}
-		>span{
-			padding-left: 5px;
-			padding-top: 2px;
-		}
-		>img{
-			
-		}
+	a[is="login-box"]{
+		min-width:160px;
+		text-align:left;
 	}
 }

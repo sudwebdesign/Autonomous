@@ -1,11 +1,15 @@
-<if "isset($authResult)&&$authResult">
-	<?=$authServer->getMessage($authResult,true);?>
-</if>
 <?
+use Tool\Auth;
+$identity = Core\Session::get('_AUTH_');
 $action = isset($_GET['action'])?$_GET['action']:null;
+$authMsg = null;
+if($authResult&&!is_bool($authResult)){
+	$authMsg = $authServer->getMessage($authResult,true);
+}
 switch($action){
 	case 'register':
 	?>
+		<?=$authMsg?>
 		<p><a href="./Signin?action=resendactivate">Resend Activation</a></p>
 	<?
 	break;
@@ -16,60 +20,88 @@ switch($action){
 			<label class="email">Email</label>
 			<input name="email" autocomplete="on" type="text" required>
 			<input type="submit" value="Resend">
+			<?=$authMsg?>
 		</form>
 	<?
 	break;
 	case 'resetreq':
-	?>
-		<form method="post" class="login" action="./Signin?action=<?=$action?>">
-			<h2>Forgot password</h2>
-			<label class="email">Email</label>
-			<input name="email" autocomplete="on" type="text" required>
-			<input type="submit" value="Send">
-		</form>
+	?>	
+		<if "$authMsg">
+			<?=$authMsg?>
+		<else>
+			<form method="post" class="login" action="./Signin?action=<?=$action?>">
+				<h2>Forgot password</h2>
+				<label class="email">Email</label>
+				<input name="email" autocomplete="on" type="text" required>
+				<input type="submit" value="Send">
+				<?=$authMsg?>
+			</form>
+		</if>
 	<?
 	break;
+	case 'login':
+		echo $authMsg;
+		if($authResult===Auth::OK_LOGGED_IN&&Core\HTTP::isAjax()){
+			echo ' <span data-user-reload="1"></span>';
+		}
+	break;
 	case 'logout':
-		
+		echo $authMsg;
+		if($authResult===Auth::OK_LOGGED_OUT){
+			if(Core\HTTP::isAjax()){
+				echo ' <span data-user-reload="1"></span>';
+			}
+		}
+		elseif($authResult){
+			?>You're not connected<?
+		}
 	break;
 	default:
-	?>		
-		<form method="post" class="login" action="./Signin?action=login">
-			<h2>Login</h2>
-			<label for="name">Username or email</label>
-			<input name="name" autocomplete="on" type="text">
-			<label for="password">Password</label>
-			<input name="password" value="" type="password">
-			
-			<fieldset>
-				<label for="remember">Remember me</label>
-				<input type="checkbox" name="remember" value="1">
-				<select name="lifetime">
-					<option value="day">One Day</option>
-					<option value="week" selected>One Week</option>
-					<option value="month">One Month</option>
-					<option value="year">One Year</option>
-				</select>
-			</fieldset>
-			
-			<input type="submit" value="Login">
-			<p>
-				<a class="persona login" data-sitename="Autonomous" data-bgcolor="#93a72d" href="#">Login with Mozilla-Persona</a>
-			</p>
-			<p><a href="./Signin?action=resetreq">Forgot your password?</a></p>
-		</form>
-		<form method="post" class="signin" action="./Signin?action=register">
-			<h2>Register</h2>
-			<label class="email">Email</label>
-			<input name="email" autocomplete="on" type="text" required>
-			<label for="name">Username</label>
-			<input name="name" autocomplete="on" type="text">
-			<label class="password">Password</label>
-			<input name="password" value="" type="password" required>
-			<label for="confirm">Password Confirmation</label>
-			<input name="confirm" value="" type="password" required>
-			<input type="submit" value="Register">
-		</form>
+	?>
+		<if "!$identity">
+			<form method="post" class="login" action="./Signin?action=login">
+				<h2>Login</h2>
+				<label for="login">Login or email</label>
+				<input name="login" autocomplete="on" type="text">
+				<label for="password">Password</label>
+				<input name="password" value="" type="password">
+				
+				<fieldset class="remember">
+					<label for="remember">Remember me</label>
+					<input type="checkbox" name="remember" value="1" checked>
+					<select name="lifetime">
+						<option value="day">One Day</option>
+						<option value="week">One Week</option>
+						<option value="month">One Month</option>
+						<option value="year">One Year</option>
+					</select>
+				</fieldset>
+				<p>
+					<a class="persona login" data-sitename="Autonomous" data-bgcolor="#93a72d" href="#">
+						Login with Mozilla-Persona <small>(by Gmail,Yahoo,Hotmail,MSN)</small>
+					</a>
+				</p>
+				<p><a href="./Signin?action=resetreq">Forgot your password?</a></p>
+				<input type="submit" value="Login">
+			</form>
+			<form method="post" class="signin" action="./Signin?action=register">
+				<h2>Register</h2>
+				<label class="email">Email</label>
+				<input name="email" autocomplete="on" type="text" required>
+				<label for="login">Login</label>
+				<input name="login" autocomplete="on" type="text">
+				<label for="name">Public name</label>
+				<input name="name" autocomplete="on" type="text">
+				<label class="password">Password</label>
+				<input name="password" value="" type="password" required>
+				<label for="confirm">Password Confirmation</label>
+				<input name="confirm" value="" type="password" required>
+				<input type="submit" value="Register">
+			</form>
+		<else>
+			You are allready logged as "<?=$identity['name']?>"<br>
+			<a href="Signin?action=logout">Logout</a>
+		</if>
 	<?
 	break;
 }

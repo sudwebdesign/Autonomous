@@ -1,0 +1,22 @@
+<?
+	$identity = Core\Session::get('_AUTH_');
+	$email = isset($identity['email'])&&$identity['email'];
+?>
+<a href="Signin" is="login-box" class="login <?=$identity?'logged':'logger'?>">
+	<if "$identity">
+		<if "$email">
+			<img src="http://www.gravatar.com/avatar/<?=md5($identity['email']);?>?s=24" width="24" height="24" />							
+		</if>
+		<span class="username <?=$email?'':' user-std'?>"><?=$identity['name']?></span>
+	<else>
+		Login / Register
+	</if>
+</a>
+<ul <?=$identity?'':'class="disabled"'?>>
+	<li>
+		<a class="logout" href="Signin?action=logout">Logout</a>
+	</li>
+	<li>
+		<a href="Account">My Account</a>
+	</li>
+</ul>

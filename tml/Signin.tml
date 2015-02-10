@@ -4,7 +4,7 @@
 	<attr selector="main" addClass="login">
 	<write main>
 		<article>
-			<h1>Login</h1>
+			<h1>User</h1>
 			<div class="login-dialog">
 				<include "login-view.btml">
 			</div>

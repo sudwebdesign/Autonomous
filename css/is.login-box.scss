@@ -8,10 +8,24 @@
 		&.login{
 			@?include grid(*, 1-98-1);
 			@?include grid(1-98-1, 1-48-1, 1-48-1, 1-48-1, 1-48-1, 1-98-1,  480px);
+			fieldset.remember{
+				@?include grid(*, 0-32-1);
+				@?include grid(0-40-1, 1-6-1, 2-48-0,  480px);
+				label[for="remember"]{
+					float:left;
+				}
+				input[name="remember"]{
+					float:left;
+				}
+				select{
+					float:left;
+					display:block;
+				}
+			}
 		}
 		&.signin{
 			@?include grid(*, 1-98-1);
-			@?include grid(1-98-1, 1-48-1, 1-48-1, 1-48-1, 1-48-1, 1-48-1, 1-48-1, 1-48-1, 1-48-1, 1-98-1, 480px);
+			@?include grid(1-98-1, 1-48-1, 1-48-1, 1-48-1, 1-48-1, 1-48-1, 1-48-1, 1-48-1, 1-48-1, 1-48-1, 1-48-1, 1-98-1, 480px);
 		}
 	}
 	input{
