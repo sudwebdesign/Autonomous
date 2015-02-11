@@ -22,6 +22,9 @@
 					display:block;
 				}
 			}
+			a.login.persona{
+				display:none;
+			}
 		}
 		&.signin{
 			@?include grid(*, 1-98-1);

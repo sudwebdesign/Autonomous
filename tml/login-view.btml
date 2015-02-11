@@ -38,7 +38,7 @@ if($authResult&&!is_bool($authResult)){
 		<span><?=$authMsg?></span>
 		<if "$authResult===Auth::OK_LOGGED_IN">
 			<if "Core\HTTP::isAjax()">
-				<span data-reload="user"></span>
+				<js-ev data-launch="login" data-reload="user"></js-ev>
 			</if>
 		<else>
 			<include "login-form-login.btml">
@@ -48,7 +48,7 @@ if($authResult&&!is_bool($authResult)){
 		<span><?=$authMsg?></span>
 		<if "$authResult===Auth::OK_LOGGED_OUT">
 			<if "Core\HTTP::isAjax()">
-				<span data-reload="user"></span>
+				<js-ev data-launch="logout" data-reload="user"></js-ev>
 			</if>
 		<elseif "$authResult">
 			You're not connected
@@ -59,7 +59,7 @@ if($authResult&&!is_bool($authResult)){
 			<include "login-form.btml">
 		<else>
 			You are logged as "<?=$identity['name']?>"<br>
-			<a href="Signin?action=logout">Logout</a>
+			<a href="Signin?action=logout" class="logout">Logout</a>
 		</if>
 	</case>
 </switch>

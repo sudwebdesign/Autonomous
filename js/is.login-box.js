@@ -7,22 +7,32 @@ $js([
 	'jquery-ui/core',
 	'jquery-ui/widget',
 	'jquery-ui/button',
-	'jquery-ui/dialog'
+	'jquery-ui/dialog',
+	'reload',
+	'launch'
 ],true,function(){
-	var loaded,login,dialog,loadDialog,hanldeForm;
+	var loaded,login,dialog,loadDialog,hanldeDialog,loadPersona,loggedOn,loggedOff,loginInit;
 	login = $('<div class="login-dialog" title="Login / Register"></div>').appendTo('body');
 	loadDialog = function(){
 		$.get('login-box',function(html){
+			loginInit = html;
 			dialog = login.dialog({
 				modal:true,
-				width:'85%'
+				width:'85%',
+				close:function(){
+					dialog.html(loginInit);
+				}
 			});
-			dialog.html(html);
-			hanldeForm();
+			dialog.on('login',loggedOn);
+			dialog.on('logout',loggedOff);
+			hanldeDialog(html);
+			loadPersona();
 			loaded = true;
 		});
 	};
-	hanldeForm = function(){
+	hanldeDialog = function(html){
+		dialog.html(html);
+		dialog.launch();
 		dialog.find('form').submit(function(e){
 			e.preventDefault();
 			var form,url;
@@ -30,25 +40,76 @@ $js([
 			url = 'login-box';
 			url += '?'+form.attr('action').split('?')[1];
 			$.post(url,form.serialize(),function(html){
+				hanldeDialog(html);
+			});
+			return false;
+		});
+		dialog.find('a[href]').click(function(e){
+			e.preventDefault();
+			$.get($(this).attr('href'),function(html){
 				dialog.html(html);
-				hanldeForm();
-				if($('*[data-reload]',dialog).length){
-					$('*[data-reload]',dialog).each(function(){
-						var load = $(this).attr('data-reload');
-						$('*[data-load="'+load+'"][data-href]').each(function(){
-							var href = $(this).attr('data-href');
-							$(this).load(href);
-						});
-					});
-					setTimeout(function(){
-						dialog.dialog('close');
-					},500);
-				}
+				hanldeDialog(html);
 			});
 			return false;
 		});
 	};
-	$('a.login').click(function(e){
+	loggedChange = function(){
+		dialog.reload('body');
+		setTimeout(function(){
+			dialog.dialog('close');
+		},500);
+	};
+	loggedOn = function(){
+		console.log('loggedOn');
+		loggedChange();
+	};
+	loggedOff = function(){
+		console.log('loggedOff');
+		loggedChange();
+	};
+	loadPersona = function(){
+		var loginBTN = $('a.login.persona'),
+			logoutBTN = $('a.logout')
+			persona = false;
+		loginBTN.show().click(function(e){
+			$js('https://login.persona.org/include.js',function(){
+				navigator.id.watch({
+					onlogin: function(as){
+						if(!out){
+							$.post('service/auth/persona',{assertion:as},function(login){
+								if(login.status==='okay'){
+									persona = true;
+									loggedOn();
+								}
+							});
+						}
+					},
+					onlogout: function(){
+						if(out||!init){
+							$.get('service/auth/logout',function(res){
+								if(res=='ok'){
+									logoffCALL();
+									out = false;
+								}
+							});
+						}
+					},
+					onready: function(){
+						loginBTN.on('click',loginCALL);
+						logoutBTN.on('click',function(){
+							navigator.id.logout()
+						});
+						if(out)
+							navigator.id.logout();
+						if(launch)
+							loginBTN.click();
+						init = false;
+					}
+				});
+			});
+		});
+	};
+	$('a[is="login-box"]').click(function(e){
 		if($(this).hasClass('logged'))
 			return;
 		e.preventDefault();
@@ -60,10 +121,10 @@ $js([
 		}
 		return false;
 	});
+	loadPersona();
+	
 	
 	/*
-	var loginBTN = ,
-		logoutBTN = $('a.logout');
 	var loginCALL = function(e){
 		return navigator.id.request({
 			siteName: loginBTN.attr('data-sitename'), //Plain text name of your site to show in the login dialog. Unicode and whitespace are allowed, but markup is not.
