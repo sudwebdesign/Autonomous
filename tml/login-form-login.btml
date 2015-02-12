@@ -1,10 +1,15 @@
 <form method="post" class="login" action="./Signin?action=login">
 	<h2>Login</h2>
-	<label for="login">Login or email</label>
-	<input name="login" autocomplete="on" type="text">
-	<label for="password">Password</label>
-	<input name="password" value="" type="password">
-	
+	<fieldset class="login">
+		<label for="login">Login or email</label>
+		<input name="login" autocomplete="on" type="text">
+		<label for="password">Password</label>
+		<input name="password" value="" type="password">
+	</fieldset>
+	<fieldset class="email">
+		<label for="email">Email</label>
+		<input name="email" type="text" readonly>
+	</fieldset>
 	<fieldset class="remember">
 		<label for="remember">Remember me</label>
 		<input type="checkbox" name="remember" value="1" checked>
@@ -15,11 +20,13 @@
 			<option value="year">One Year</option>
 		</select>
 	</fieldset>
-	<p>
-		<a class="persona login" data-sitename="Autonomous" data-bgcolor="#93a72d" href="#">
-			Login with Mozilla-Persona <small>(by Gmail,Yahoo,Hotmail,MSN)</small>
-		</a>
-	</p>
-	<p><a href="./Signin?action=resetreq">Forgot your password?</a></p>
+	<div class="links">
+		<p>
+			<a class="persona login" data-sitename="Autonomous" data-bgcolor="#93a72d" href="#">
+				Login with Mozilla-Persona <small>(by Gmail,Yahoo,Hotmail,MSN)</small>
+			</a>
+		</p>
+		<p><a href="./Signin?action=resetreq">Forgot your password?</a></p>
+	</div>
 	<input type="submit" value="Login">
 </form>

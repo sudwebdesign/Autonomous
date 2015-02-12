@@ -10,9 +10,9 @@ if($authResult&&!is_bool($authResult)){
 <switch "$action">
 	<case "register">
 		<?=$authMsg?>
-		<p><a href="./Signin?action=resendactivate">Resend Activation</a></p>
+		<p><a href="./Signin?action=resendActivation">Resend Activation</a></p>
 	</case>
-	<case "resendactivate">
+	<case "resendActivation">
 		<form method="post" class="login" action="./Signin?action=<?=$action?>">
 			<h2>Resend activation mail</h2>
 			<label class="email">Email</label>

@@ -1,0 +1,11 @@
+button:focus,
+input[type=button]:focus,
+input[type=submit]:focus,
+button:active:focus,
+input[type=button]:active:focus,
+input[type=submit]:active:focus,
+button.active:focus,
+input[type=button].active:focus,
+input[type=submit].active:focus{
+	outline:0 none;
+}
