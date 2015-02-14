@@ -1,7 +1,8 @@
 body>header{
-	@?include grid( 100, 4-92-4, 100);
-	@?include grid( 20,  5-40-5,  30, 768px);
-	@?include grid( 15,  5-50-5,  25, 960px);
+	@?include grid( 100, 3-92-3, 100);
+	@?include grid( 2-20-2,  0-45-2,  25, 768px);
+/*	@?include grid( 2-20-2,  0-50-2,  20, 768px);
+	@?include grid( 2-20-2,  0-45-2,  25, 960px);*/
 	position: relative;
 	@include clearfix();
 	@include gradient-vertical(#3c3c3c,#222222);
@@ -9,6 +10,9 @@ body>header{
 	padding-top:0.2em;
 	padding-left:0.8em;
 	padding-bottom:0.4em;
+	>a:first-child>img{
+		padding-top:2px;
+	}
 	>[is=dropdown]>li{
 		position: relative;
 		>a:focus{
@@ -23,7 +27,7 @@ body>header{
 	}
 	>form[role=search]{
 		margin-top:0.5em;
-		height:2.2em;
+		height:2.4em;
 		border-radius: 5px;
 		background: #fff;
 		padding-left:0.5em;
@@ -33,7 +37,7 @@ body>header{
 		
 		@?include grid( 72, 18, 10);
 		@?include grid( 74, 16, 10, 768px);
-		@?include grid( 82, 8, 10, 1024px);
+		@?include grid( 76, 14, 10, 1024px);
 		
 		select{
 			height:100%;
@@ -53,26 +57,6 @@ body>header{
 				height:100%;
 				width:100%;
 				display:block;
-				/*
-				&[value="Événements"]{
-					@?include icon(calendar);
-				}
-				&[value="Ressources"]{
-					@?include icon(cog);
-				}
-				&[value="Projets"]{
-					@?include icon(star);
-				}
-				&[value="Associations"]{
-					@?include icon(group);
-				}
-				&[value="Annonces"]{
-					@?include icon(exchange);
-				}
-				&[value="Médiathèques"]{
-					@?include icon(book);
-				}
-				*/
 			}
 		}
 		input[type=submit]{
@@ -119,14 +103,18 @@ body>header{
 	}
 	>ul[is=dropdown]{
 		text-align:right;
-		padding-right:2em;
-		margin-top:1em;
-		float:right;
+		margin-top:0.3em;
+		padding-right:0.3em;
+		@media(min-width:960px){
+			padding-right:2em;
+			margin-top:0.5em;
+		}
 		>li{
 			float:right;
 			&:nth-child(1)>a{
 				@?include icon(user);
 			}
+			word-break: break-all;
 			>ul{
 				&.disabled{
 					display:none;
@@ -139,7 +127,28 @@ body>header{
 			}
 		}
 	}
-	a[is=persona]{
+	a[href="Mon-compte"]{
+		@?include icon(user);
+	}
+	span.user-std{
+		@?include icon(user);
+	}
+	a.logout{
+		@?include icon(power-off);
+	}
+	a[is=loginbox]{
 		display:none;
+		float:right;
+		@?include icon(user);
+		&.persona-connected:before{
+			content:"";
+		}
+		>span{
+			padding-left: 5px;
+			padding-top: 2px;
+		}
+		>img{
+			
+		}
 	}
 }

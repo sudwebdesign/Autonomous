@@ -55,12 +55,15 @@ body>main{
 	ul.tags{
 		//@?include icon(tags);
 		@?include icon(cloud);
-		&:before{
-			float:left;
-		}
+//		&::before{
+			//float:left;
+//		}
+//		&::after{
+			//clear:both;
+//		}
 		&>li{
-			float:left;
-			//display:inline-block;
+			//float:left;
+			display:inline-block;
 			margin:0;
 			>h5>a{//frontenda.com/snipped/viewSnip.php?snip=simple-ecommerce-template
 				//@?include icon(tag);

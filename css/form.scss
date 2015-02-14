@@ -5,10 +5,16 @@
 @import 'jquery-ui/slider';
 @import 'jquery-ui/themes/trontastic';
 @import 'form-dom';
+
 .help-block{
 	color:red;
 }
-body>main>form,body>main>article>form{
+body>main form{
+        >img{
+                float: right;
+                width: 33%;
+                margin-left: -33%;
+        }
 	>fieldset{
 		@?include grid( *, 100 );
 		@?include grid( 4-24-2 , 2-64-4, 32-64-4, 768px );
