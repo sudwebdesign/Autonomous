@@ -7,6 +7,60 @@
 .o{@?include icon(sun-o);}
 .e{@?include icon(comment-o);}
 .s{@?include icon(save);}
+
+/*
+@keyframes plus-in{
+	0%{background-position:-100% 0}
+	100%{background-position:right 0}
+}
+@keyframes plus-out{
+	0%{background-position:right 0}
+	100%{background-position:-100% 0}
+}*/
+/* FUNky
+@-moz-keyframes plus-in{
+	0%{background-position:-100% 0}
+	50%{background-position:-50% 0}
+	100%{background-position:right 0}
+}
+@-moz-keyframes plus-out{
+	0%{background-position:right 0}
+	50%{background-position:-50% 0}
+	100%{background-position:-100% 0}
+}
+* */
+@-moz-keyframes plus-in{
+	0%{background-position:-1000% 0}
+	100%{background-position:right 0}
+}
+@-moz-keyframes plus-out{
+	0%{background-position:right 0}
+	100%{background-position:-1000% 0}
+}
+@-webkit-keyframes plus-in{
+	0%{background-position:-100% 0}
+	100%{background-position:right 0}
+}
+@-webkit-keyframes plus-out{
+	0%{background-position:right 0}
+	100%{background-position:-1500px 0}
+}
+@-ms-keyframes plus-in{
+	0%{background-position:-100% 0}
+	100%{background-position:right 0}
+}
+@-ms-keyframes plus-out{
+	0%{background-position:right 0}
+	100%{background-position:-1500px 0}
+}
+@-o-keyframes plus-in{
+	0%{background-position:-100% 0}
+	100%{background-position:right 0}
+}
+@-o-keyframes plus-out{
+	0%{background-position:right 0}
+	100%{background-position:-1500px 0}
+}
 body>main{
 	@?include grid(*,2-96-2);
     @include clearfix();
@@ -30,8 +84,8 @@ body>main{
 	>form{
 		overflow:hidden;
 	}
-	h1{
-		margin:-0.3em;
+	h1,aside>h3{
+/*		margin:-0.3em;
 		margin-bottom:0.5em;
 		border-bottom:solid 1px #ccc;
 		font-size:1.4em;
@@ -43,6 +97,35 @@ body>main{
 		color: #ccc;
 		background-color:#222222;
 		@include gradient-vertical(#3c3c3c,#222222);
+		width: 100%;
+*/	/*d+*/
+		color: #ccc;
+		height: 30px;
+		margin:-0.3em -0.3em 0.6em -0.4em;
+		display: block;
+		line-height: 27px;
+		font-size: 1.4em;
+		font-weight:bold;
+		text-indent: 0.5em;
+//		text-transform: uppercase;
+		background-color:#666;
+		background-image: url("../img/sprites.png");
+		background-repeat: no-repeat;
+		background-position: right 0px;
+		animation:plus-in 1.648s;
+		-webkit-animation:plus-in 1.648s;
+		-moz-animation:plus-in 1.648s;
+		-ms-animation:plus-in 1.648s;
+		-o-animation:plus-in 1.648s;
+		&:hover {
+			background-position:-1000% 0;
+			animation:plus-out 1.648s;
+			-webkit-animation:plus-out 1.648s;
+			-moz-animation:plus-out 1.648s;
+			-ms-animation:plus-out 1.648s;
+			-o-animation:plus-out 1s;
+			color:#222;
+		}
 	}
 	&.home{
 /*
@@ -72,6 +155,9 @@ body>main{
 		@?include icon(tags);
 		&:before{
 			float:left;
+		}
+		&:after{//entest
+			clear:both;
 		}
 		&>li{
 			float:left;
