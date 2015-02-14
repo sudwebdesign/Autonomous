@@ -9,6 +9,7 @@ final class TableGeopoint extends Table{
 		$this->setPoint($this->lat,$this->lon);
 		if($this->radius){
 			$this->radius = (float)$this->radius;
+			$this->radius = round($this->radius,3,PHP_ROUND_HALF_UP);
 			$this->setBounds($this->lat,$this->lon,$this->radius);
 		}
 	}

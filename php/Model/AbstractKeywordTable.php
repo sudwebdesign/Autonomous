@@ -3,6 +3,9 @@ use Model\Query;
 use Core\STR;
 abstract class AbstractKeywordTable extends Table{
 	protected static $loadUniq = 'name';
+	static function prefix() {
+		parent::prefix();
+	}
 	static function findRewrite($find,&$rewrite){
 		$table = R::getClassModel(get_called_class());
 		$row = (new Query($table))

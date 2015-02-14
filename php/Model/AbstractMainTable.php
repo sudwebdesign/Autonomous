@@ -12,6 +12,9 @@ abstract class AbstractMainTable extends Table{
 		'geopoint		>	label		/B',
 		'user			<	email		/C',
 	];
+	static function prefix() {
+		parent::prefix();
+	}
 	function onValidate(){
 		if(!Ruler::minchar($this->title,$this->minTitreLength))
 			$this->error('title','Le titre doit comporter minimum '.$this->minTitreLength.' caractères');
@@ -24,6 +27,7 @@ abstract class AbstractMainTable extends Table{
 		$this->presentationHtml = $this->presentation;
 		$this->presentation = html_entity_decode(strip_tags($this->presentationHtml));
 		$this->titleHref = (new Faceted())->filterParam($this->title);
+        #var_dump($this->queryWriter,$this->user);exit;$this->groupBy='"user"."email"';
 	}
 	function onUpdate(){
 		$this->modified = date('Y-m-d H:i:s');
