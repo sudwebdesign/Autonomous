@@ -35,6 +35,8 @@ class deleter{
 		if(FS::rmdir($dir)){
 			if($callback&&is_callable($callback))
 				call_user_func($callback,$dir);
+			if(is_dir($dir))
+				rmdir($dir);
 			return true;
 		}
 	}
