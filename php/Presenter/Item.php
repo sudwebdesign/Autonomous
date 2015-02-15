@@ -5,7 +5,7 @@ use Model;
 use Model\Query;
 use Core\Session;
 use Core\Dev;
-class Item extends Basic{
+class Item extends Presenter{
 	function assign(){
 		parent::assign();
 		$this->taxonomy = lcfirst(end($this->presentNamespaces));

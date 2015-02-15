@@ -15,7 +15,7 @@ use Core\Uploader;
 use Tool\Geocoding;
 use Model\Exception_Validation;
 use Core\Dev;
-class Modifier extends Basic{
+class Modifier extends Presenter{
 	function assign(){
 		parent::assign();
 		$this->taxonomy = lcfirst(end($this->presentNamespaces));

@@ -4,7 +4,7 @@ use Model\Table;
 use Model\TableTaxonomy;
 use Presenter\Truncating;
 use Route\Finder_ByTml;
-class Basic extends \Surikat\Presenter\Presenter{
+class Presenter extends \Surikat\Presenter\Presenter{
 	protected $URI;
 	function assign(){
 		$this->URI = $this->getView()->getController()->getRouter();
@@ -38,7 +38,7 @@ class Basic extends \Surikat\Presenter\Presenter{
 		$this->h1		= $this->title;
 		#$title & $this->taxo's vars inexists in assign or dynamic in homepage
 		#var_dump('<h1>zen-mode</h1>',(($u=$this->URI[0])?$u.' - ':'').'Autonomie et Partage');exit;
-		#[solved] added <Presenter:Basic /> in .tml 
+		#[solved] added <Presenter:Presenter /> in .tml 
 		#dorénavant appellé a l'accueil du site ;)	
 	}
 }

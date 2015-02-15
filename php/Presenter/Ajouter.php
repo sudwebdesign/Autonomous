@@ -14,7 +14,7 @@ use Core\Post;
 use Core\Filter;
 use Core\Uploader;
 use Model\Exception_Validation;
-class Ajouter extends Basic{
+class Ajouter extends Presenter{
 	function assign(){
 		parent::assign();
 		$this->action = $this->URI[0];

@@ -6,7 +6,7 @@ use Model\R;
 use View;
 use View\Exception as View_Exception;
 use Tool\Geocoding;
-class Liste extends Basic{
+class Liste extends Presenter{
 	use Mixin_Pagination;
 	protected $limitation				= 5;
 	protected $truncation				= 369;

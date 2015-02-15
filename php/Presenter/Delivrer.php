@@ -15,7 +15,7 @@ use Tool\deleter;
 use Tool\Geocoding;
 use Model\Exception_Validation;
 use Core\Dev;
-class Delivrer extends Basic{
+class Delivrer extends Presenter{
 	function assign(){
 		parent::assign();
 		$this->taxonomy = lcfirst(end($this->presentNamespaces));
