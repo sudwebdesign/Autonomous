@@ -15,6 +15,11 @@ class ServiceAutocomplete {
 	const NorthEastLatOfMainBound = 42.91854;
 	const NorthEastLongOfMainBound = 3.177833;
 	
+	protected static function json($r){
+		header('Content-Type:application/json; charset=utf-8');
+		echo json_encode($r,JSON_UNESCAPED_UNICODE);
+	}
+
 	protected static function getGeoname($complete=true){
 		$results = [];
 		if(isset($_GET['term'])){
@@ -42,36 +47,28 @@ class ServiceAutocomplete {
 		return $results;
 	}
 	protected static function getTaxonomy(){
-		$results = [];
-		if(isset($_GET['term'])&&strlen($term=trim($_GET['term']))>=1){
-			if(isset($_GET['name'])&&($name=trim($_GET['name']))){
-				$name = rtrim($name,'s');
-				$results = (new Query('tag'))
-					->select('tag.name')
-					->joinOn('taxonomy')
-					->where('tag.name LIKE ? AND taxonomy.name=?',[str_replace('%','',$term).'%',$name,])
-					->limit(10)
-					->getCol()
-				;
-			};
-		}
-		return $results;
+		$term = isset($_GET['term'])?trim($_GET['term']):false;
+		$q = (new Query('tag'))
+			->select('name')
+			->limit(10)
+			->orderBy('created')
+			->sort('DESC')
+		;
+		if($term)
+			$q->where('name LIKE ?',[str_replace('%','',$term).'%']);
+		return $q->getCol();
 	}
 	static function geoname(){
-		header('Content-Type:application/json; charset=utf-8');
-		echo json_encode(self::getGeoname(),JSON_UNESCAPED_UNICODE);
+		self::json(self::getGeoname());
 	}
 	static function taxonomy(){
-		header('Content-Type:application/json; charset=utf-8');
-		echo json_encode(self::getTaxonomy(),JSON_UNESCAPED_UNICODE);
+		self::json(self::getTaxonomy());
 	}
 	static function searchbox(){
-		header('Content-Type:application/json; charset=utf-8');
-		echo json_encode(array_merge(self::getTaxonomy(),self::getGeoname(false)),JSON_UNESCAPED_UNICODE);
+		self::json(array_merge(self::getTaxonomy(),self::getGeoname(false)));
 	}
 	static function geoinit(){
-		header('Content-Type:application/json; charset=utf-8');
-		echo json_encode([
+		self::json([
 			'centerLatMainBound'=>self::CenterLatOfMainBound,
 			'centerLngMainBound'=>self::CenterLongOfMainBound,
 			'southWestLatMainBound'=>self::SouthWestLatOfMainBound,
@@ -80,6 +77,6 @@ class ServiceAutocomplete {
 			'northEastLngMainBound'=>self::NorthEastLongOfMainBound,
 			'country'=>self::DEFAULT_COUNTRY_CODE,
 			'region'=>self::DEFAULT_COUNTRY_CODE
-		],JSON_UNESCAPED_UNICODE);
+		]);
 	}
 }
