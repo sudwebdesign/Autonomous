@@ -87,7 +87,7 @@
 			<li><a href="Projets">Projets</a></li>
 		</ul>
 	</nav>
-	<main></main>
+	<main></main><include "surikat-powered.btml">
 	<footer>
 		<a href="Autonomie-et-Partage">Qui sommes nous ?</a>
 		<a href="Newsletter">Newsletter</a>
@@ -95,16 +95,16 @@
 		<a href="Contact">Nous Contacter</a>
 	</footer>
 	<script type="text/javascript" src="js/js-is.pack.js"></script>
-	<script type="text/javascript"><?use Surikat\Core\Dev;?>
-		<?if(Dev::has(Dev::CSS)):?>
+	<script type="text/javascript">
+		<?if(Core\Dev::has(Core\Dev::CSS)):?>
 			$css().dev=true;
-			$js('window-size-bookmarklet');
+			//$js('window-size-bookmarklet');
 		<?endif;?>
-		<?if(Dev::has(Dev::JS)):?>$js().dev=true;<?endif;?>
+		<?if(Core\Dev::has(Core\Dev::JS)):?>$js().dev=true;<?endif;?>
 		$js().min = false
 		$css().min = false;
 		$js('script');
-		<?if(Dev::has(Dev::CONTROL)):?>if(console) console.info('Server <?=$timeCompiled===$time?'Compilation+':''?>Exec: <?=Core\Chrono::get()?> -  Exec <?=@date('jMY-H:m:s',$time)?> - Compiled <?=@date('jMY-H:m:s',$timeCompiled)?>');<?endif;?>
+		<?if(Core\Dev::has(Core\Dev::CONTROL)):?>if(console) console.info('Server <?=$timeCompiled===$time?'Compilation+':''?>Exec: <?=Core\Chrono::get()?> -  Exec <?=@date('jMY-H:m:s',$time)?> - Compiled <?=@date('jMY-H:m:s',$timeCompiled)?>');<?endif;?>
 	</script>
 </body>
 </html>
