@@ -1,8 +1,9 @@
-<?php namespace present;
+<?php namespace Presenter;
 use Uri;
 use View;
 use Model;
 use Model\Query;
+use Model\RedBeanPHP\Database;
 use Model\R;
 use Tool\FS;
 use Tool\PHP;

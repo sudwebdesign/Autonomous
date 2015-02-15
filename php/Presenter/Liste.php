@@ -19,7 +19,6 @@ class Liste extends Basic{
 	}
 	function dynamic(){
 		parent::dynamic();
-		
 		//Dev::on(Dev::MODEL);
 		
 		$uri = $this->URI;
@@ -56,13 +55,13 @@ class Liste extends Basic{
 				$this->groupingByAnd = true;
 				$Query->openHavingAnd();
 				foreach($tag as $subTag){
-					$Query->joinWhere('{$prefix}tag.name = ? ',[$subTag]);
+					$Query->joinWhere($this->prefix.'tag.name = ? ',[$subTag]);
 					$this->thematics[] = $subTag;
 				}
 				$Query->closeHaving();
 			}
 			else{
-				$Query->joinWhere('{$prefix}tag.name = ? ',[$tag]);
+				$Query->joinWhere($this->prefix.'tag.name = ? ',[$tag]);
 				$this->thematics[] = $tag;
 			}
 		}
@@ -71,13 +70,13 @@ class Liste extends Basic{
 		$rad = null;
 		$lat = null;
 		$lon = null;
-		if($uri->geo||($uri->lat&&$uri->lon)){
+	if($uri->geo||($uri->lat&&$uri->lon)){/**/
 			$rad = (float)$uri->rad;
 			if($uri->lat&&$uri->lon){
 				$lat = (float)$uri->lat;
 				$lon = (float)$uri->lon;
 			}
-			else{
+				else{
 				$point = R::findOne('geoname','WHERE name LIKE ?',[str_replace('%','',$uri->geo).'%']);
 				if($point){
 					$lat = (float)$point->latitude;
@@ -88,23 +87,25 @@ class Liste extends Basic{
 			}
 			if($lat!==null&&$lon!==null)
 				$Query
-					->groupBy('{$prefix}geopoint.lat')
-					->groupBy('{$prefix}geopoint.lon')
-					->groupBy('{$prefix}geopoint.radius')
-					->select('geodistance({$prefix}geopoint.lat,{$prefix}geopoint.lon,?,?) as distance',[$lat,$lon])
+->from($this->prefix.'geopoint')
+					->groupBy($this->prefix.'geopoint.lat')
+					->groupBy($this->prefix.'geopoint.lon')
+					->groupBy($this->prefix.'geopoint.radius')
+					->select('geodistance('.$this->prefix.'geopoint.lat,'.$this->prefix.'geopoint.lon,?,?) as distance',[$lat,$lon])
 					->orderBy('distance')
 					->sort('ASC')
 				;
 			if($rad)
 				$Query
-					->select('(geodistance({$prefix}geopoint.lat,{$prefix}geopoint.lon,?,?)+COALESCE({$prefix}geopoint.radius,0)) as distance2inc',[$lat,$lon])
-					->select('(geodistance({$prefix}geopoint.lat,{$prefix}geopoint.lon,?,?)-COALESCE({$prefix}geopoint.radius,0)) as distance2touch',[$lat,$lon])
+					->select('(geodistance('.$this->prefix.'geopoint.lat,'.$this->prefix.'geopoint.lon,?,?)+COALESCE('.$this->prefix.'geopoint.radius,0)) as distance2inc',[$lat,$lon])
+					->select('(geodistance('.$this->prefix.'geopoint.lat,'.$this->prefix.'geopoint.lon,?,?)-COALESCE('.$this->prefix.'geopoint.radius,0)) as distance2touch',[$lat,$lon])
+->from($this->prefix.'geopoint')
 				;
 		}
 		if($uri->phonemic){
 			$Query
 				->whereFullText('document',$uri->phonemic,'french')
-				->selectFullTextHighlite('presentation',$uri->phonemic,$this->truncation,'french')
+				->selectFullTextHighlightTruncated('presentation',$uri->phonemic,$this->truncation,'french')
 				->orderByFullTextRank('document',$uri->phonemic,'french') 
 			;
 		}
@@ -125,60 +126,67 @@ class Liste extends Basic{
 				->groupBy('url')
 				->groupBy('created')
 				->groupBy('presentation')
-				->groupBy('"{$prefix}user"."id"')
-				->groupBy('"{$prefix}user"."email"')
+				->groupBy('"'.$this->prefix.'user"."id"')
+				->groupBy('"'.$this->prefix.'user"."email"')
 			;
 		}
 		
 		if($uri->phonemic)
-			$Query->groupBy('document');
+			$Query
+				->groupBy('document')
+				->groupBy('user_id')
+				->groupBy('id')
+		;
 		
 		if($this->thematics->count())
 			$Query
-				->select('COUNT(DISTINCT({$prefix}thematic.name)) as count_tag_rank')
-				//->where('{$prefix}thematic.name IN ?',[$this->thematics->getArray()])
-				->where('{$prefix}thematic.name IN :thematic')
-				->set('thematic',$this->thematics->getArray())
+				->select('COUNT(DISTINCT('.$this->prefix.'tag.name)) as count_tag_rank')
+				->from('tag')
+				//->where($this->prefix.'thematic.name IN ?',[$this->thematics->getArray()])
+				->where($this->prefix.'tag.name IN :thematic')
+				->set($this->prefix.'tag',$this->thematics->getArray())
+				->groupBy($this->prefix.''.$this->taxonomy.'.id')
 				->orderBy('count_tag_rank')
 				->sort('DESC')
 			;
 
 		$Query
-			->orderBy('{$prefix}'.$this->taxonomy.'.created')
+			->orderBy($this->prefix.''.$this->taxonomy.'.created')
 			->sort('DESC')
 		;
 
-		if($rad){
+		if($rad){//exit($lat);
 			list($minlon, $minlat, $maxlon, $maxlat) = Geocoding::getBoundingBox([$lat,$lon],$rad,Geocoding::getEarthRadius('km'));
 			if($uri->proxima){
 				$distance2 = 'touch';
 				$Query
 					->openWhereOr()
-					->where('{$prefix}geopoint.minlat BETWEEN ? AND ?',[$minlat,$maxlat])
-					->where('{$prefix}geopoint.minlon BETWEEN ? AND ?',[$minlon,$maxlon])
-					->where('{$prefix}geopoint.maxlat BETWEEN ? AND ?',[$minlat,$maxlat])
-					->where('{$prefix}geopoint.maxlon BETWEEN ? AND ?',[$minlon,$maxlon])
+					->where($this->prefix.'geopoint.minlat BETWEEN ? AND ?',[$minlat,$maxlat])
+					->where($this->prefix.'geopoint.minlon BETWEEN ? AND ?',[$minlon,$maxlon])
+					->where($this->prefix.'geopoint.maxlat BETWEEN ? AND ?',[$minlat,$maxlat])
+					->where($this->prefix.'geopoint.maxlon BETWEEN ? AND ?',[$minlon,$maxlon])
 					->closeWhere()
 				;
 			}
 			else{
 				$distance2 = 'inc';
 				$Query
-					->where('{$prefix}geopoint.minlat>=? AND {$prefix}geopoint.maxlat<=? AND {$prefix}geopoint.minlon>=? AND {$prefix}geopoint.maxlon<=?',[$minlat,$maxlat,$minlon,$maxlon])
+#					->where($this->prefix.'geopoint.minlat>=? AND '.$this->prefix.'geopoint.maxlat<=? AND '.$this->prefix.'geopoint.minlon>=? AND '.$this->prefix.'geopoint.maxlon<=?',[$minlat,$maxlat,$minlon,$maxlon])
+					->where('"'.$this->prefix.'geopoint"."minlat">=? AND "'.$this->prefix.'geopoint"."maxlat"<=? AND "'.$this->prefix.'geopoint"."minlon">=? AND "'.$this->prefix.'geopoint"."maxlon"<=?',[$minlat,$maxlat,$minlon,$maxlon])
 				;
 			}
 			
 			//mysql - so simple - non sql standard
 			//$Query->joinWhere("distance2{$distance2} <= ?",[$rad]);
-
+#var_dump($Query->getQuery());
 			//pgsql - more complex - non sql standard
-			$Query = (new Query())
-				->with('{$prefix}view AS ('.$Query.')',$Query->getParams())
+			$Query = (new Query($this->taxonomy))
+				->with($this->prefix.'view AS ('.$Query.')',$Query->getParams())
 				->select('*')
 				->from('view')
 				->where("distance2{$distance2} <= ?",[$rad])
 				->limit($this->limit,$this->offset)
-			;
+			;#var_dump($Query->getQuery());
 		}
 		else{
 			$Query
@@ -186,7 +194,8 @@ class Liste extends Basic{
 			;
 		}
 		
-		$this->count = $Query->countAll();
+		$this->count = $Query->countMD();
+#bg		$this->count = $Query->count4D();
 		//$this->count = R::count($this->taxonomy);
 		
 		$this->pagination();
@@ -230,12 +239,12 @@ class Liste extends Basic{
 				->select(['id','pg_class.relname AS table','title','created'])
 				->limit($this->limitation2)
 				->from('"pg_class"')
-				->where('"{$prefix}'.$cat.'".tableoid = pg_class.oid')
+				->where('"'.$this->prefix.$cat.'".tableoid = pg_class.oid')
 			;
 			if($full)
 				$Query2
 					->whereFullText('document',$uri->phonemic,'french')
-					->selectFullTextHighlite('presentation',$full,$this->truncation2,'french',['StartSel' => '"<b>"', 'StopSel' => '"</b>"'])
+					->selectFullTextHighlightTruncated('presentation',$full,$this->truncation2,'french',['StartSel' => '"<b>"', 'StopSel' => '"</b>"'])
 				;
 			else
 				$Query2->selectTruncation('presentation',$this->truncation2);
@@ -255,6 +264,6 @@ class Liste extends Basic{
 			$this->h1 .= ' - page '.$this->page;
 	}
 	function imageByItem($item){
-		return '/content/'.$this->taxonomy.'/'.$item->id.'/'.$this->URI->filterParam($item->title).'.png';
+		return 'content/'.$this->taxonomy.'/'.$item->id.'/'.$this->URI->filterParam($item->title).'.png';
 	}
 }

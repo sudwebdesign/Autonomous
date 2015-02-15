@@ -37,7 +37,24 @@ class Modifier extends Basic{
 		$this->Query = (new Query($this->taxonomy))
 			->where('"'.$this->taxonomy.'"'.'.id=?',[$uri[2]])
 		;
+		
+#row4D soluce 4D rework
+/*
+$leTablEau = $this->Query->row();
+$this->item = $leTablEau[0];
+$user = R::findOne('user','id='.$this->item->user_id);
+$this->item->user = $user;
+#var_dump('<h1>$this->Query->row4D() sol </h1>',$this->item->titleHref,$this->item->id,$this->item->user->email);exit;
+*/
+	#	$this->item = $this->Query->row();#rowObject()row()::yep but is protected #rowRw()::toolargeinfo!no::getTable()
+	#	$this->item = $this->item;
+//		$this->item = $this->Query->row4D();
+#		$this->item = R::findAll($this->taxonomy,' LIMIT '.$this->limitation.' OFFSET '.$this->offset);
+		
 		$this->item = $this->Query->row4D();
+		#var_dump($this->item->tag,$this->item->presentationHtml);exit;
+		
+		
 		if(!$this->item->titleHref)
 			$this->item->titleHref = $this->URI->filterParam($this->item->title);
 		if($uri[1]!=$this->item->titleHref)
@@ -45,18 +62,22 @@ class Modifier extends Basic{
 		$this->img = $this->imageByItem();
 		$this->files = $this->filesByItem();
 		$this->item->atitle = htmlspecialchars($this->item->title, ENT_COMPAT);
+                $this->item->presentation = $this->item->presentationHtml;
 	}
 	function imageByItem($item=null){
 		if(!isset($item))
 			$item = $this->item;
-		return '/content/'.$this->taxonomy.'/'.$item->id.'/'.$this->URI->filterParam($item->title).'.png';
+		return 'content/'.$this->taxonomy.'/'.$item->id.'/'.$this->URI->filterParam($item->title).'.png';
 	}
 	function filesByItem(){
 		if(!isset($item))
 			$item = $this->item;
-		$files = glob('content/'.$this->taxonomy.'/'.$item->id.'/*', GLOB_BRACE);
-		if(($i=array_search($this->imageByItem($item),$files))!==false)
+		$files = glob('content/'.$this->taxonomy.'/'.$item->id.'/*', GLOB_BRACE);#var_dump($files);#exit;
+		if(($i=array_search($this->imageByItem($item),$files))!==false){
+			#var_dump($files[$i]);
 			unset($files[$i]);
+		}
+		#var_dump($files);exit;
 		return $files;
 	}
 	function redirect($location=null,$location2=null){
@@ -82,7 +103,7 @@ class Modifier extends Basic{
 		exit;
 	}	
 /*#adupdate*/
-	function POST($id){
+	function POST($id){#var_dump(Post::getObject());exit;
 		if(!count($this->presentNamespaces)>count(explode('\\',__CLASS__))||empty($_POST))
 			return;
 		$this->formPosted = true;
@@ -91,7 +112,8 @@ class Modifier extends Basic{
 			$entry = $this->POST_Common($type,$id);
 			if(method_exists($this,'POST_Specifications'))
 				$this->POST_Specifications($entry);
-			R::store($entry);
+			//var_dump($entry,$this,$bean->xownDate);
+                        R::store($entry);
 			Post::clearPersistance();
 		}
 		catch(Exception_Validation $e){
@@ -100,31 +122,35 @@ class Modifier extends Basic{
 		}
 	}
 	function POST_Common($type,$id){
-		//	public function updateRecord( $type, $updatevalues, $id = NULL );
 		$entry = R::findOne($type,'id='.$id);//R::updateRecord($type);#create
-		$entry->on('updated',function($entry)use($type){
+		$this->maxFileSize = Uploader::file_upload_max_size();#var_dump($this->URI->filterParam($entry->title),$entry->title,$maxFileSize);exit;
+		$that =& $this; // Assign by reference here!
+		$entry->on('updated',function($entry)use($type,$that){
+			$maxFileSize = $that->maxFileSize;#var_dump($maxFileSize);
+			Uploader::files('content/'.$type.'/'.$entry->id.'/','files',null,$maxFileSize);
 			Uploader::image(array(
 				'dir'=>'content/'.$type.'/'.$entry->id.'/',
 				'key'=>'image',
 				'width'=>'90',
 				'height'=>'90',
 				//'rename'=>true, //image by default
-				'rename'=>$this->URI->filterParam($entry->title),
+				'rename'=>$entry->titleHref,#$this->URI->filterParam($entry->title),
 				'extensions'=>array('png','jpg'),
-				'conversion'=>'png'
+				'conversion'=>'png',
+				'maxFileSize'=>$maxFileSize
 			));
-			Uploader::files('content/'.$type.'/'.$entry->id.'/','files');
 		});
-/*ForLocalDeBug*/#var_export($entry->user_id);exit;
-		$user = Session::get('email');
+/*ForLocalDeBug*/#var_export($entry->user_id);
+		$user = Session::get('email');#$user='ciit@free.fr';
 		if($user&&$entry->user_id){#FLDB($user){#FOOL
-			$user = R::findOne('user','id='.$entry->user_id);#FLDB
-#			$user = R::findOne('user',array('email'=>$user));#FOOL@ire
+			$user = R::findOne('user','id='.$entry->user_id);#FoulDawaComeÇa? pitetre
+#			$user = R::findOne('user',['email'=>$user]);
 			$entry->user = $user;
 		}
 		else
 			$entry->error('user','required',true);
 #		$user = R::findOne('user','id=1');#FLDB
+#var_dump($entry->user->email,$entry->user->id);exit;
 		$P = Post::getObject();
 		$entry->title = strip_tags($P->title);
 		$entry->tel = $P->tel;

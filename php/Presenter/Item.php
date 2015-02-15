@@ -29,15 +29,17 @@ class Item extends Basic{
 			exit;
 		}
 		$this->Query = (new Query($this->taxonomy))
-			->where('"{$prefix}'.$this->taxonomy.'"'.'.id=?',[$uri[2]])
+			->where('"'.$this->prefix.$this->taxonomy.'"'.'.id=?',[$uri[2]])
 		;
-		$this->item = $this->Query->row4D();
+		$this->item = $this->Query->row4D();#2 warnings & 404 if no tag & geopoint linked with item else OK
+		
 		if(empty($this->item))
 			$this->getView()->getController()->error(404);
 		if(!$this->item->titleHref){
 			$this->item->titleHref = $this->URI->filterParam($this->item->title);
 		}
 		if($uri[1]!=$this->item->titleHref){
+			#var_dump('<h1>unlimited redirected loop detected</h1>',$uri[1],$this->item->titleHref);exit;
 			$this->redirect($this->item->titleHref);
 		}
 		$this->img = $this->imageByItem();
@@ -47,7 +49,7 @@ class Item extends Basic{
 	function imageByItem($item=null){
 		if(!isset($item))
 			$item = $this->item;
-		return '/content/'.$this->taxonomy.'/'.$item->id.'/'.$this->URI->filterParam($item->title).'.png';
+		return 'content/'.$this->taxonomy.'/'.$item->id.'/'.$this->URI->filterParam($item->title).'.png';
 	}
 	function filesByItem(){
 		if(!isset($item))
