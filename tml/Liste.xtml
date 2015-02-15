@@ -1,4 +1,9 @@
 <extend>
+	<after "head>meta:last">
+		<if "!empty($tags)||$URI->geo||$URI->geohash||$URI->start||$URI->end">
+			<meta name="robots" content="noindex,follow" />
+		</if>
+	</after>
 	<css+js liste>
 	<attr selector="main" addClass="present-liste">
 	<write main>

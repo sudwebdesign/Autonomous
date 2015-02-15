@@ -33,6 +33,12 @@
 					</if>
 				</ul>
 			</if>
+			<if "$files"><p><i>Document(s) joint(s) : </i></p><ul>
+				<foreach "$files as $fil">
+						<li><h5><a href="<?=$fil?>"><?=$fil?></a></h5></li>
+				</foreach>
+				</ul>	
+			</if>
 		</article>
 		<extend "Sidebar"></extend>
 	</write>

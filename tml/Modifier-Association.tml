@@ -1,2 +1,9 @@
 <Presenter:modifier:association uri="dynamic" TAXONOMY="Association" />
-	<extend "Modifier"></extend>
+    <extend "Modifier">
+	<after selector="main form fieldset:has([name=title])">
+		<fieldset>
+			<legend>Raison</legend>
+			<input type="text" name="raison" value="" placeholder="Raison sociale">
+		</fieldset>
+	</after>
+    </extend>

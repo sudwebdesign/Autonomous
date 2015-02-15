@@ -38,6 +38,12 @@
 					</if>
 				</ul>
 			</if>
+			<if "$files"><p><i>Document(s) joint(s) : </i></p><ul>
+				<foreach "$files as $fil">
+						<li><h5><a href="<?=$fil?>"><?=$fil?></a></h5></li>
+				</foreach>
+				</ul>	
+			</if>
 			<apply "forms.tpl">
 				<form modelRules="<?=$taxonomy?>" id="<?=$THIS->taxonomy?>" method="POST" enctype="multipart/form-data" role="form" <?=isset($formPosted)?'class="form-posted"':''?>>
 					<if "isset($formPosted)">
@@ -70,28 +76,32 @@
 						<textarea name="presentation" placeholder="" is="ckeditor"></textarea>
 					</fieldset>
 					<fieldset>
-						<legend>Ajouter Thématiques</legend><?$gats='';?>
-						<foreach "$item->tag as $gat">
-							<if "$gat">
-								<?$gats.=$gat->name.' ';?>
+						<legend>Ajouter Thématiques</legend>
+						<ul class="tags">
+						<foreach "$item->tag as $gat"><?#var_dump($gat->name);exit;var_export($gat->name,0)?>
+                                                    <if "$gat->name">
+                                                        <li><h5><a href="<?=$type.'s+'.$tag->name?>"><?=$gat->name?></a></h5></li>
+								<?#$gat->name.' ';?>
 							</if>
 						</foreach>
+                                                </ul>
 						<input name="sharedTag[name]" type="text" value="" placeholder="" is="tagsinput" data-url="service/autocomplete/taxonomy?name=<?=$presentAttributes->TAXONOMY?>" data-minchar="4" data-maxchar="25" data-max="5" />
 						<?$dynVar='taxonomy'.ucfirst($taxonomy);?>
 						<if "isset($$dynVar)">
-							<span class="tags-suggests">Suggestions:
+							<span class="tags-suggests">Suggestions:<?#var_dump($$dynVar);exit;?>
 								<foreach "$$dynVar as $key=>$val" cacheSync="model.taxonomy"><?=$val?> </foreach>
 							</span>
 						</if>
 					</fieldset>
+	                                <if "$img"><img src="<?=$img?>" alt="<?=$item->atitle?>" title="<?=$item->atitle?>" /></if>
 					<fieldset>
-						<legend>Changer l'image principale</legend>
+						<legend><if "$img">Changer <else>Joindre </if>l'image principale</legend>
 						<input is="inputimg" type="file" name="image" accept="image/*" />
-					</fieldset>
+                			</fieldset>
 					<fieldset>
 						<legend>Ajouter des fichiers <small>(images ou documents)</small></legend>
 						<input type="file" name="files[]" accept="application/*,text/*,image/*" title="Sélectionner des Fichiers" multiple />
-					</fieldset>
+                			</fieldset>
 					<fieldset>
 						<legend>Ajouter un emplacement <small>(commune,lieu ou adresse)</small></legend>
 						<geo-completer>
