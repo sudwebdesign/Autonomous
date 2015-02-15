@@ -1,3 +1,4 @@
+<Presenter:Basic />
 <extend>
 	<attr selector="main" addClass="home">
 	<write main>

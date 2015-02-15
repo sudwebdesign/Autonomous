@@ -1,6 +1,7 @@
 <?use Core\STR;?>
 <?use Core\Post;?>
 <?use Core\Session;?>
+<Presenter:Basic />
 <extend>
 	<js+css form>
 	<write main>
