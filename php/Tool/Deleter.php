@@ -1,6 +1,6 @@
 <?php namespace Tool;
-use Core\FS;
-class deleter{
+use FileSystem\FS;
+class Deleter{
 	static function alls($conf){
 		$conf = array_merge([
 			'dir'=>'',

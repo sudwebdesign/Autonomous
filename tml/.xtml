@@ -94,17 +94,6 @@
 		<a href="Partenaires">Partenaires</a>
 		<a href="Contact">Nous Contacter</a>
 	</footer>
-	<script type="text/javascript" src="js/js-is.pack.js"></script>
-	<script type="text/javascript">
-		<?if(Core\Dev::has(Core\Dev::CSS)):?>
-			$css().dev=true;
-			//$js('window-size-bookmarklet');
-		<?endif;?>
-		<?if(Core\Dev::has(Core\Dev::JS)):?>$js().dev=true;<?endif;?>
-		$js().min = false
-		$css().min = false;
-		$js('script');
-		<?if(Core\Dev::has(Core\Dev::CONTROL)):?>if(console) console.info('Server <?=$timeCompiled===$time?'Compilation+':''?>Exec: <?=Core\Chrono::get()?> -  Exec <?=@date('jMY-H:m:s',$time)?> - Compiled <?=@date('jMY-H:m:s',$timeCompiled)?>');<?endif;?>
-	</script>
+	<include "scriptLazyJS.btml">
 </body>
 </html>
