@@ -17,7 +17,7 @@
 				<fieldset>
 					<fieldset>
 						<legend>Thématiques</legend>
-						<input name="thematic" type="text" value="<?=$thematics->implode(' ')?>" placeholder="" is="tagsinput" data-url="service/autocomplete/taxonomy?name=<?=$presentAttributes->TAXONOMY?>" data-minchar="4" data-maxchar="25" data-max="5" autocomplete="off" />
+						<input name="thematic" type="text" value="<?/*=$thematics->implode(' ')*/?>" placeholder="" is="tagsinput" data-url="service/autocomplete/taxonomy?name=<?=$presentAttributes->TAXONOMY?>" data-minchar="4" data-maxchar="25" data-max="5" autocomplete="off" />
 						<?$subTaxonomy='taxonomy'.ucfirst($taxonomy);?>
 						<if "isset($$subTaxonomy)">
 							<span class="tags-suggests">Suggestions:
