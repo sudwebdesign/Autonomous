@@ -1,15 +1,14 @@
 <?php namespace Presenter\Modifier;
 use Model;
 use Model\R;
-use Tool\Dates;
-use Core\Filter;
+use DateTime\Dates;
+use Validation\Filter;
 final class Evenement extends \Presenter\Modifier{
 	function POST_Specifications($bean){
 		$this->POST_Dates($bean);
 	}
-	
 	var $datetimeCombine = true;
-	function POST_Dates($bean){//var_dump($_POST['xownDate'],$bean->xownDate[$bean->id]);#exit;
+	function POST_Dates($bean){
 		static $vars = array('date_start','date_end','time_start','time_end');
 		if(!isset($_POST['xownDate']))
 			return;
@@ -38,24 +37,14 @@ final class Evenement extends \Presenter\Modifier{
 						$bean->error('xownDate.date_start','missing or invalid format');
 					if($date['end']&&!Dates::validate_datetime($date['end']))
 						$bean->error('xownDate.date_end','missing or invalid format');
-					//var_dump($date);exit;
 				}
 				else{
 					$date = array();
 					foreach($vars as $k)
 						$date[$k] = isset(${$k}[$i])?${$k}[$i]:null;
 				}
-                            #    var_dump(R::update('date',['id'=>$bean->id,'set'=>$date]));exit;
-//var_dump($bean->getType().'_id='.$bean->id,$date,$multi,$bean->id,$bean->getType(),$bean,$this);exit;
-			#	$bean->xownDate[] = R::update('date',$date);
-                                $bean->xownDate[$bean->id]->import($date);#importRow
-      #                          $bean->xownDate[] = R::update('date',['id'=>$bean->id],$date);
-            #                    $bean->xownDate[] = R::update('date',[update,'id'=>$bean->id,$bean->getType().'_id='.$bean->id]);
-//var_dump($bean->xownDate[] = R::update('date',[$date,'id'=>$bean->id]),$date,$multi,$bean->id,$this);exit;
-                //$entry = R::findOne('date','id='.$bean->id);//R::updateRecord($type);#create
-                //$entry->update($date);
-              // $entry->on('updated',function($entry)use($type){	});
-}
+                $bean->import($date);
+			}
 		}
 		else{
 			if($this->datetimeCombine){
@@ -69,13 +58,7 @@ final class Evenement extends \Presenter\Modifier{
 				foreach($vars as $k)
 					$date[$k] = $$k;
 			}
-		#	$bean->xownDate[] = R::update('date',$date);
-                        $bean->xownDate[$bean->id]->import($date);
-                       // $bean->xownDate[] = R::update('date',[$date,'id'=>$bean->id,$bean->getType().'_id='.$bean->id]);
-                       // $entry = R::findOne('date','id='.$bean->id);//R::updateRecord($type);#create
-                       // $entry->update($date);
+			$bean->import($date);
 		}
-                //var_dump($bean->xownDate[$bean->id]);#exit;importRow
 	}
-	
 }

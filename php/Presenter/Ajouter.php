@@ -1,19 +1,18 @@
 <?php namespace Presenter;
-use Uri;
-use View;
+use FileSystem\FS;
+use FileSystem\Uploader;
 use Model;
+use Model\R;
 use Model\Query;
 use Model\Control_Geocoding;
 use Model\AbstractMainTable;
-use Model\R;
-use Tool\str;
-use Tool\FS;
-use Tool\PHP;
-use Core\Session;
-use Core\Post;
-use Core\Filter;
-use Core\Uploader;
 use Model\Exception_Validation;
+use SourceCode\PHP;
+use Uri;
+use User\Post;
+use User\Session;
+use Validation\Filter;
+use Vars\STR;
 class Ajouter extends Presenter{
 	function assign(){
 		parent::assign();
@@ -22,7 +21,6 @@ class Ajouter extends Presenter{
 	}
 	function dynamic(){
 		parent::dynamic();
-		Session::start(); //session auto start when get a key, if output not bufferised but direct flushed, have to start first
 		$this->POST();
 	}
 	function POST(){#var_dump(Post::getObject());exit;
@@ -48,7 +46,7 @@ class Ajouter extends Presenter{
 	}
 	function POST_Common($type){
 		$entry = R::create($type);#AbstractMainTable::
-		$user = Session::get('email');
+		$user = $this->userSessionEmail;
 		if($user)
                     $entry->user = R::findOrNewOne('user',array('email'=>$user));
 		else

@@ -1,29 +1,26 @@
 <?php namespace Presenter;
-use Uri;
-use View;
+use DependencyInjection\Registry;
+use FileSystem\FS;
+use FileSystem\Uploader;
+use Geo\Geocoding;
 use Model;
+use Model\R;
 use Model\Query;
 use Model\RedBeanPHP\Database;
-use Model\R;
-use Tool\FS;
-use Tool\PHP;
-use Core\Session;
-use Core\Post;
-use Tool\filter;
-use Tool\uploader;
-use Tool\deleter;
-use Tool\Geocoding;
 use Model\Exception_Validation;
-use Core\Dev;
+use SourceCode\PHP;
+use Tool\Deleter;
+use Uri;
+use User\Post;
+use User\Session;
+use Validation\Filter;
 class Delivrer extends Presenter{
 	function assign(){
 		parent::assign();
 		$this->taxonomy = lcfirst(end($this->presentNamespaces));
-		#var_export($this);exit;
 	}
 	function dynamic(){
 		parent::dynamic();
-		Session::start(); //session auto start when get a key, if output not bufferised but direct flushed, have to start first
 		$uri = $this->URI;
 		if(!filter_var($uri[2],FILTER_VALIDATE_INT)){
 			$q = new Query($this->taxonomy);
@@ -32,7 +29,6 @@ class Delivrer extends Presenter{
 			elseif($redirect = $q->select('id')->where('"titleHref"=?',[$uri[1]])->getCell())
 				$this->redirect($redirect);
 			exit;
-
 		}
 		$this->Query = (new Query($this->taxonomy))
 			->where('"'.$this->taxonomy.'"'.'.id=?',[$uri[2]])
@@ -51,7 +47,7 @@ class Delivrer extends Presenter{
 	function imageByItem($item=null){
 		if(!isset($item))
 			$item = $this->item;
-		return '/content/'.$this->taxonomy.'/'.$item->id.'/'.$this->URI->filterParam($item->title).'.png';
+		return 'content/'.$this->taxonomy.'/'.$item->id.'/'.$this->URI->filterParam($item->title).'.png';
 	}
 	function filesByItem(){
 		if(!isset($item))
@@ -77,13 +73,12 @@ class Delivrer extends Presenter{
 				$title = $location2;
 		}
 		$redirect = $this->URI[0].'+'.$title.'+'.$id;
-		if(!Dev::has(Dev::ROUTE))
+		if(!$this->getDependency('Dev\Level')->ROUTE)
 			header('Location: '.$redirect,true,301);
 		else
 			echo 'Location: '.$redirect;
 		exit;
-	}	
-/*#addelete*/
+	}
 	function POST($id){
 		if(!count($this->presentNamespaces)>count(explode('\\',__CLASS__))||empty($_POST))
 			return;
@@ -91,15 +86,15 @@ class Delivrer extends Presenter{
 		$this->postDeleted = true;
 		$type = $this->taxonomy;#
 		try{
-			$entry = $this->POST_Common($type,$id);;
+			$entry = $this->POST_Common($type,$id);
 			if(method_exists($this,'POST_Specifications'))
 				$this->POST_Specifications($entry);
 			if($entry){
 				R::trash($entry);
-				deleter::alls(array(
+				Deleter::alls([
 					'dir'=>'content/'.$type.'/'.$id,
 					'deletion'=>true
-				));
+				]);
 			}
 			Post::clearPersistance();
 		}
@@ -110,18 +105,15 @@ class Delivrer extends Presenter{
 		}
 	}
 	function POST_Common($type,$id){
-		//	public function deleteRecord( $type, $id);
 		$entry = R::findOne($type,'id='.$id);
-/*ForLocalDeBug*/#var_export($entry->user_id);exit;
-		$user = Session::get('email');#origin(ajouter)
-		if($user&&$entry->user_id){#()#FLDB
-			$user = R::findOne('user','id='.$entry->user_id);#FLDB
-			#$user = R::findOne('user',array('email'=>$user));#FOOL@
+		$user = $this->userSessionEmail;
+		if($user&&$entry->user_id){
+			#$user = R::findOne('user','id='.$entry->user_id);FLDB
+			$user = R::findOne('user','email='.$user);
 			$entry->user = $user;
 		}
 		else
 			$entry->error('user','required',true);
-#		$entry->user = R::findOne('user','id=1');#FLDB
 		$P = Post::getObject();
 		$entry->deletion = $P->deletion;
 		$entry->validated = $P->validate;

@@ -3,12 +3,12 @@
 	<hr>
 	<p>Auteur: <?=$item->user->email?></p>
 	<hr>
-<!--<p>utilisateur: <?=Session::get('email')?></p>
-	<hr>-->
+<!--<p>utilisateur: <?=$userSessionEmail?></p>-->
+	<hr>
 	<p>
-		<if "$item->user->email == Session::get('email')">
+		<if "$item->user->email == $userSessionEmail">
 			<i class='c'><a href='Ajouter-<?=$type?>'><?=$item->type?> créer.</a></i><hr>
-			<i class='r'><a href='<?=$type?>+<?=$item->id?>'><?=$item->type?> regarder.</a></i><hr>  
+			<i class='r'><a href='<?=$type?>+<?=$item->id?>'><?=$item->type?> regarder.</a></i><hr>
 			<i class='u'><a href='Modifier-<?=$type?>+<?=$item->id?>'><?=$item->type?> unifier.</a></i><hr>
 			<i class='d'><a href='Délivrer-<?=$type?>+<?=$item->id?>'><?=$item->type?> délivrer.</a><?=$item->type?></i><hr>
 		</if>
@@ -26,4 +26,3 @@
 	</p>
 	<h3 style="margin-top:16px;">Flux d'autres articles</h3>
 </aside>
-

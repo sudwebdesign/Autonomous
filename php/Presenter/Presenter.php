@@ -1,9 +1,9 @@
 <?php namespace Presenter;
-use Surikat\Tool\session;
 use Model\Table;
 use Model\TableTaxonomy;
 use Presenter\Truncating;
 use Route\Finder_ByTml;
+use User\Session;
 class Presenter extends \Surikat\Presenter\Presenter{
 	protected $URI;
 	function assign(){
@@ -32,6 +32,9 @@ class Presenter extends \Surikat\Presenter\Presenter{
 */
 	}
 	function dynamic(){
+		$this->session = new Session();
+		$this->session->start();
+		$this->userSessionEmail = $this->session->get('email');
 		$this->prefix=Table::prefix();
 		$this->URI = $this->getView()->getController()->getRouter();
 		$this->title	= (($u=$this->URI[0])?$u.' - ':'').'Autonomie et Partage';

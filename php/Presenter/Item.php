@@ -1,10 +1,9 @@
 <?php namespace Presenter;
-use Uri;
-use View;
+use DependencyInjection\Registry;
 use Model;
 use Model\Query;
-use Core\Session;
-use Core\Dev;
+use Uri;
+use User\Session;
 class Item extends Presenter{
 	function assign(){
 		parent::assign();
@@ -12,7 +11,6 @@ class Item extends Presenter{
 	}
 	function dynamic(){
 		parent::dynamic();
-		Session::start(); //session auto start when get a key, if output not bufferised but direct flushed, have to start first
 		$uri = $this->URI;
 		if(!filter_var($uri[2],FILTER_VALIDATE_INT)){
 			$q = new Query($this->taxonomy);
@@ -75,7 +73,7 @@ class Item extends Presenter{
 				$title = $location2;
 		}
 		$redirect = $this->URI[0].'+'.$title.'+'.$id;
-		if(!Dev::has(Dev::ROUTE))
+		if(!$this->getDependency('Dev\Level')->ROUTE)
 			header('Location: '.$redirect,true,301);
 		else
 			echo 'Location: '.$redirect;

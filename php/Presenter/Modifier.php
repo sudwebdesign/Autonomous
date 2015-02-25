@@ -1,20 +1,18 @@
 <?php namespace Presenter;
-use Uri;
-use View;
+use DependencyInjection\Registry;
+use Geo\Geocoding;
 use Model;
 use Model\Query;
 use Model\R;
-use Tool;
-use Tool\str;
-use Tool\FS;
-use Tool\PHP;
-use Core\Session;
-use Core\Post;
-use Core\Filter;
-use Core\Uploader;
-use Tool\Geocoding;
 use Model\Exception_Validation;
-use Core\Dev;
+use FileSystem\FS;
+use FileSystem\Uploader;
+use SourceCode\PHP;
+use User\Post;
+use User\Session;
+use Uri;
+use Validation\Filter;
+use Vars\STR;
 class Modifier extends Presenter{
 	function assign(){
 		parent::assign();
@@ -22,7 +20,6 @@ class Modifier extends Presenter{
 	}
 	function dynamic(){
 		parent::dynamic();
-		Session::start(); //session auto start when get a key, if output not bufferised but direct flushed, have to start first
 		$uri = $this->URI;
 		if(!filter_var($uri[2],FILTER_VALIDATE_INT)){
 			$q = new Query($this->taxonomy);
@@ -96,7 +93,7 @@ $this->item->user = $user;
 				$title = $location2;
 		}
 		$redirect = $this->URI[0].'+'.$title.'+'.$id;
-		if(!Dev::has(Dev::ROUTE))
+		if(!$this->getDependency('Dev\Level')->ROUTE)
 			header('Location: '.$redirect,true,301);
 		else
 			echo 'Location: '.$redirect;
@@ -141,9 +138,9 @@ $this->item->user = $user;
 			));
 		});
 /*ForLocalDeBug*/#var_export($entry->user_id);
-		$user = Session::get('email');#$user='ciit@free.fr';
-		if($user&&$entry->user_id){#FLDB($user){#FOOL
-			$user = R::findOne('user','id='.$entry->user_id);#FoulDawaComeÇa? pitetre
+		$user = $this->userSessionEmail;///session->get('email');#Session::get('email');#$user='ciit@free.fr';
+		if($user&&$entry->user_id){
+			$user = R::findOne('user','id='.$entry->user_id);#FLDB
 #			$user = R::findOne('user',['email'=>$user]);
 			$entry->user = $user;
 		}
