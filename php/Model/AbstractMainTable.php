@@ -1,5 +1,5 @@
 <?php namespace Model;
-use Core\Ruler;
+use Validation\Ruler;
 use Route\Faceted;
 abstract class AbstractMainTable extends Table{
 	protected $minTitreLength = 8;

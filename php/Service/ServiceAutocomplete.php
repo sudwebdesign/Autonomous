@@ -1,8 +1,8 @@
 <?php namespace service;
 use Model\R;
 use Model\Query;
-use Tool\JSON;
-use Core\STR;
+use Vars\JSON;
+use Vars\STR;
 class ServiceAutocomplete {
 	const DEFAULT_LG_CODE = 'fr';
 	const DEFAULT_COUNTRY_CODE = 'fr';

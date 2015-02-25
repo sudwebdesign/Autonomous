@@ -1,11 +1,13 @@
 <?php namespace Presenter;
-use Core\Dev;
-use Core\Domain;
+use DependencyInjection\Registry;
+use HTTP\Domain;
+use Exception\View as View_Exception;
+use Geo\Geocoding;
 use Model\Query;
 use Model\R;
-use View;
-use View\Exception as View_Exception;
-use Tool\Geocoding;
+use User\Session;
+//$this->getDependency('Dev\Level')->on('SQL');
+//$this->getDependency('Dev\Level')->on('DBSPEED');
 class Liste extends Presenter{
 	use Mixin_Pagination;
 	protected $limitation				= 5;
@@ -19,8 +21,7 @@ class Liste extends Presenter{
 	}
 	function dynamic(){
 		parent::dynamic();
-		//Dev::on(Dev::MODEL);
-		
+		//Registry::instance('Dev\Level')->MODEL();
 		$uri = $this->URI;
 		$this->page = $uri->page;
 		$this->limit = $this->limitation;

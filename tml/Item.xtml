@@ -1,5 +1,4 @@
-<?use Core\STR;?>
-<?use Core\Session;?>
+<?use Vars\STR;?>
 <extend>
 	<css item>
 	<attr selector="main" addClass="present-item">

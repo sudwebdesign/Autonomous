@@ -1,5 +1,5 @@
 <?php namespace Model;
-use Surikat\Core\Ruler;
+use Surikat\Validation\Ruler;
 final class TableTag extends AbstractKeywordTable{
 	protected $minLabelLength = 4;
 	protected $maxLabelLength = 25;

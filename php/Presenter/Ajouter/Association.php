@@ -1,7 +1,7 @@
 <?php namespace Presenter\Ajouter;
 use Model;
 use Model\R;
-use Tool\filter;
+use Validation\Filter;
 final class Association extends \Presenter\Ajouter{
 	function POST_Specifications($bean){
 		if(isset($_POST['raison'])){

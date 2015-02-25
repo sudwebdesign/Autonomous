@@ -1,8 +1,8 @@
 <?php namespace Presenter\Ajouter;
 use Model;
 use Model\R;
-use Tool\Dates;
-use Core\Filter;
+use DateTime\Dates;
+use Validation\Filter;
 final class Evenement extends \Presenter\Ajouter{
 	function POST_Specifications($bean){
 		$this->POST_Dates($bean);
@@ -63,5 +63,4 @@ final class Evenement extends \Presenter\Ajouter{
 			$bean->xownDate[] = R::newOne('date',$date);
 		}
 	}
-	
 }

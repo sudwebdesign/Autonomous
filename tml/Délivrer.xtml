@@ -1,8 +1,7 @@
-<?use Core\STR;?>
-<?use Core\Session;?>
+<?use Vars\STR;?>
 <extend>
 	<css item>
-	<css form>
+	<js+css form>
 	<attr selector="main" addClass="present-item present-delivrer">
 	<append title> <?=$mode?> <?=$type?></append>
 	<write main>

@@ -1,6 +1,6 @@
 <?php namespace service;
-use Surikat\Tool\Geocoder\RadiusFinder;
-use Surikat\Tool\CsvImporter;
+use Surikat\Geo\Geocoder\RadiusFinder;
+use Surikat\Model\CsvImporter;
 use Surikat\Model\R;
 class ServiceSetup {
 	static function method(){

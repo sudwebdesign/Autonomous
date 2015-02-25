@@ -1,6 +1,6 @@
 <?php namespace Model;
 use Model\Query;
-use Core\STR;
+use Vars\STR;
 abstract class AbstractKeywordTable extends Table{
 	protected static $loadUniq = 'name';
 	static function prefix() {

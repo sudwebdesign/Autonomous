@@ -1,6 +1,5 @@
-<?use Core\STR;?>
-<?use Core\Post;?>
-<?use Core\Session;?>
+<?use Vars\STR;?>
+<?use User\Post;?>
 <Presenter:Presenter />
 <extend>
 	<js+css form>

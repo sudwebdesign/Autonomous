@@ -1,7 +1,6 @@
-<?use Core\STR;?>
-<?use Core\Post;?>
-<?use Core\Session;?>
-<extend>	
+<?use Vars\STR;?>
+<?use User\Post;?>
+<extend>
 	<css item>
 	<js+css form>
 	<attr selector="main" addClass="present-modifier">
