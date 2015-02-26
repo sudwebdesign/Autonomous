@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="utf-8">
-    <title><?=$title?></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+	<meta charset="utf-8">
+	<title><?=$title?></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
 	<base href="<?=$BASE_HREF?>">
 	<link href="css/style.css" rel="stylesheet" type="text/css">
 </head>
@@ -54,17 +54,17 @@
 					<li><a href="Ajouter-Association">Association</a></li>
 					<li><a href="Ajouter-Annonce">Annonce</a></li>
 					<li><a href="Ajouter-Médiathèque">Médiathèque</a></li>
-				</ul> 				
+				</ul>
 			</li>
 			<li>
-				<a href="Annonces">Annonces</a>	    				
+				<a href="Annonces">Annonces</a>
 				<ul>
 					<li><a href="Annonces+Offres">Offres</a></li>
 					<li><a href="Annonces+Demandes">Demandes</a></li>
 					<foreach "$taxonomyAnnonce as $key=>$val" cacheSync="model.taxonomy">
 						<li><a href="Annonces+<?=$val?>"><?=$val?></a></li>
 					</foreach>
-				</ul> 	
+				</ul>
 			</li>
 			<li><a href="Médiathèques">Médiathèque</a></li>
 			<li>
@@ -73,7 +73,7 @@
 					<foreach "$taxonomyEvenement as $key=>$val" cacheSync="model.taxonomy">
 						<li><a href="Événements+<?=$val?>"><?=$val?></a></li>
 					</foreach>
-				</ul> 	
+				</ul>
 			</li>
 			<li>
 				<a href="Ressources">Ressources</a>
